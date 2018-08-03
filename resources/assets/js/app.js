@@ -22,6 +22,7 @@ Vue.use(Vuetify);
 
 Vue.use(VueAuth, {
     tokenDefaultName: 'sas_accounting_auth_token',
+    parseUserData: data => data || {},
     auth: {
         request: function (req, token) {
             this.options.http._setHeaders.call(this, req, {Authorization: 'Bearer ' + token});
@@ -32,10 +33,10 @@ Vue.use(VueAuth, {
     },
     http: require('@websanova/vue-auth/drivers/http/axios.1.x'),
     router: require('@websanova/vue-auth/drivers/router/vue-router.2.x'),
-    loginData: { url: `${process.env.MIX_APP_BASE_URL}oauth/token`, method: 'POST', redirect: '/test', fetchUser: true },
+    loginData: { url: `${process.env.MIX_APP_BASE_URL}oauth/token`, method: 'POST', redirect: '/', fetchUser: true },
     // registerData: { url: `${Vue.http.options.root}/user/signup`, method: 'POST', redirect: '/login', fetchUser: false },
     refreshData: { url: 'auth/refresh', method: 'GET', enabled: false, interval: 0 },
-    fetchData: { url: 'user', method: 'GET', enabled: false }
+    fetchData: { url: 'user', method: 'GET', enabled: true }
 });
 
 /**
