@@ -17,3 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// TODO ADD AUTH MIDDLEWARES
+Route::get('/users/{id}', 'UserController@getUserById');
+
+Route::get('/users', 'UserController@gatAllUsers');
+
+Route::post('/users', 'UserController@registerUser');
