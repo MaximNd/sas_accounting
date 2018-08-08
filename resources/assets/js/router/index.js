@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Login from './../containers/auth/login/Login.vue';
+import ForgotPassword from './../containers/auth/reset/ForgotPassword.vue';
+import ResetPassword from './../containers/auth/reset/ResetPassword.vue';
 import Profile from './../containers/profile/Profile.vue';
 
 Vue.use(Router);
@@ -12,6 +14,16 @@ export default new Router({
         path: '/login',
         name: 'login',
         component: Login
+    },
+    {
+        path: '/password/forgot',
+        name: 'forgot-password',
+        component: ForgotPassword
+    },
+    {
+        path: '/password/reset/:token',
+        name: 'reset-password',
+        component: ResetPassword
     },
     {
         path: '/profile/:id',

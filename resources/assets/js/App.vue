@@ -43,6 +43,12 @@ export default {
 
 <style>
 
-
+    .bg-primary {
+        width: 100%;
+        height: 100vh;
+        background: rgb(8,54,94);
+        background: linear-gradient(40deg, rgba(8,54,94,1) 0%, rgba(32,100,151,1) 100%);
+        background-size: cover;
+    }
 
 </style>

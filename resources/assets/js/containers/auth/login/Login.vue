@@ -1,5 +1,5 @@
 <template>
-    <v-container class="bg-login" fluid v-if="$auth.ready()">
+    <v-container class="bg-primary" fluid v-if="$auth.ready()">
         <v-layout row fill-height align-center justify-center>
             <v-flex sm12 md5 lg4 xl3>
                 <v-card class="pl-3 pr-3 pb-4 pt-2">
@@ -11,6 +11,9 @@
                             </v-flex>
                             <v-flex xs12>
                                 <v-text-field v-model="loginData.password" label="Password" type="password" required></v-text-field>
+                            </v-flex>
+                            <v-flex xs12>
+                                <router-link class="forgot-password" to="/password/forgot">Забыли пароль?</router-link>
                             </v-flex>
                         </v-card-text>
                         <v-card-actions>
@@ -64,11 +67,14 @@
 </script>
 
 <style scoped>
-    .bg-login {
-        width: 100%;
-        height: 100vh;
-        background: rgb(8,54,94);
-        background: linear-gradient(40deg, rgba(8,54,94,1) 0%, rgba(32,100,151,1) 100%);
-        background-size: cover;
+    .forgot-password {
+        text-decoration: none;
+        color: #1976d2;
+        font-size: 12px;
     }
+
+    .forgot-password:active {
+        color: #1976d2;
+    }
+
 </style>
