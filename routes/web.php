@@ -11,15 +11,15 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/{any}', function () {
     return view('index');
-});
+})->where('any', '.*');
 
-Route::group(['middleware' => ['web', 'guest']], function() {
-    // Forgot Password
-    Route::get('/password/reset', ['as' => 'password.request', 'uses' => 'Auth\ForgotPasswordController@showLinkRequestForm']);
-    Route::post('/password/email', ['as' => 'password.email', 'uses' => 'Auth\ForgotPasswordController@sendResetLinkEmail']);
-    // Reset Password
-    Route::get('/password/reset/{token}', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@showResetForm']);
-    Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
-});
+// Route::group(['middleware' => ['web', 'guest']], function() {
+//     // Forgot Password
+//     Route::get('/password/reset', ['as' => 'password.request', 'uses' => 'Auth\ForgotPasswordController@showLinkRequestForm']);
+//     Route::post('/password/email', ['as' => 'password.email', 'uses' => 'Auth\ForgotPasswordController@sendResetLinkEmail']);
+//     // Reset Password
+//     Route::get('/password/reset/{token}', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@showResetForm']);
+//     Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
+// });

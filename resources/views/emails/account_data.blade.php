@@ -8,6 +8,7 @@
     <title>Document</title>
 </head>
 <body>
+    <p>Your login: {{ $email }}</p>
     <p>Your password: {{ $password }}</p>
 </body>
 </html>

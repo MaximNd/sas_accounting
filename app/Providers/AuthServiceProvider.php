@@ -26,6 +26,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('update-user', function($userWhichUpdates, $userIDWhomUpdates) {
+            return ($userWhichUpdates->id === intval($userIDWhomUpdates)) || ($userWhichUpdates->role === 'admin');
+        });
+
         Passport::routes();
     }
 }

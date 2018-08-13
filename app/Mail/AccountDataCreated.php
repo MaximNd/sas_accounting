@@ -11,7 +11,7 @@ class AccountDataCreated extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-
+    public $email;
     public $password;
     /**
      * Create a new message instance.
@@ -19,8 +19,9 @@ class AccountDataCreated extends Mailable implements ShouldQueue
      * @return void
      */
 
-    public function __construct($password)
+    public function __construct($email, $password)
     {
+        $this->email = $email;
         $this->password = $password;
     }
 

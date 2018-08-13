@@ -27,8 +27,12 @@ Route::group(['middleware' => ['guest']], function() {
 });
 
 // TODO ADD AUTH MIDDLEWARES
-Route::get('/users/{id}', 'UserController@getUserById');
+Route::group(['middleware' => ['auth:api']], function() {
+    Route::get('/users/{id}', 'UserController@getUserById');
 
-Route::get('/users', 'UserController@gatAllUsers');
+    Route::get('/users', 'UserController@gatAllUsers');
 
-Route::post('/users', 'UserController@registerUser');
+    Route::post('/users', 'UserController@registerUser');
+
+    Route::put('/users/{id}', 'UserController@updateUser');
+});
