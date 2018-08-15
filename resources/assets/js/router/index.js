@@ -26,7 +26,7 @@ export default new Router({
         component: ResetPassword
     },
     {
-        path: '/profile/:id',
+        path: '/profile',
         name: 'profile',
         component: Profile
     },
