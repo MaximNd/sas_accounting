@@ -38,13 +38,14 @@ class UserController extends Controller
             'password' => 'confirmed'
         ]);
         $updatedData = $request->all();
-        if ($user->id !== $id && $user->role === 'admin') {
+        if ($user->id !== intval($id) && $user->role === 'admin') {
             unset($updatedData['email']);
             unset($updatedData['password']);
         }
         if ($user->role === 'user') {
             unset($updatedData['role']);
         }
+
         if (isset($updatedData['password']) && isset($updatedData['password_confirmation'])) {
             $updatedData['password'] = Hash::make($updatedData['password']);
         }
@@ -53,7 +54,11 @@ class UserController extends Controller
             $updatedData['image'] = $this->storeUserImage($request);
         }
         unset($updatedData['password_confirmation']);
-        return User::where('id', $id)->update($updatedData);
+        $res = User::where('id', $id)->update($updatedData);
+        if (isset($updatedData['image']))
+            return $updatedData['image'];
+        else
+            return $res;
     }
 
     function registerUser(Request $request) {
