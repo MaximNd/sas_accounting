@@ -19,7 +19,7 @@ class UserController extends Controller
     }
 
     function gatAllUsers() {
-        return User::all();
+        return User::orderBy('role')->get();
     }
 
     function updateUser(Request $request, $id) {
@@ -83,7 +83,7 @@ class UserController extends Controller
             $imageName = $this->storeUserImage($request);
         }
         $password = bin2hex(random_bytes(10));
-//        Mail::to($request->email)->send(new AccountDataCreated($request->email, $password));
+        Mail::to($request->email)->send(new AccountDataCreated($request->email, $password));
         $hashed_password = Hash::make($password);
         $user = new User([
             'role' => $request->role,
@@ -97,6 +97,7 @@ class UserController extends Controller
             'password' => $hashed_password
         ]);
         $user->save();
+        return $user;
     }
 
     function deleteUser(Request $request, $id) {

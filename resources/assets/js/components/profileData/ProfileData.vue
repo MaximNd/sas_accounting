@@ -20,13 +20,13 @@
         <v-card-actions>
             <v-layout wrap>
                 <v-flex xs12 :sm6="!isSelf" v-if="isSelf || $auth.user().role === 'admin'">
-                    <v-btn @click="openDialog" style="font-size: 20px;" flat block color="info">
+                    <v-btn @click="openDialog('updateDialog')" style="font-size: 20px;" flat block color="info">
                         <v-icon left>edit</v-icon>
                         Изменить
                     </v-btn>
                 </v-flex>
                 <v-flex xs12 sm6 v-if="$auth.user().role === 'admin' && !isSelf">
-                    <v-btn @click="deleteUser" style="font-size: 20px;" flat block color="error">
+                    <v-btn @click="openDialog('deleteDialog')" style="font-size: 20px;" flat block color="error">
                         <v-icon left>delete</v-icon>
                         Удалить
                     </v-btn>
@@ -34,20 +34,27 @@
             </v-layout>
             <appUpdateProfileData
                 :oldUserData="user"
-                :dialog="dialog"
-                @dialogClosed="closeDialog"
+                :dialog="updateDialog"
+                @dialogClosed="closeDialog('updateDialog')"
                 @userDataUpdated="updateUserData"></appUpdateProfileData>
+            <appDeleteUser
+                :user="user"
+                :dialog="deleteDialog"
+                @dialogClosed="closeDialog('deleteDialog')"
+                @userDeleted="deleteUser"></appDeleteUser>
         </v-card-actions>
     </v-card>
 </template>
 
 <script>
 import UpdateProfileData from './updateProfileData/UpdateProfileData';
+import DeleteUser from './deleteUser/DeleteUser';
 
 export default {
     data() {
         return {
-            dialog: false
+            updateDialog: false,
+            deleteDialog: false
         };
     },
     props: {
@@ -65,18 +72,22 @@ export default {
         }
     },
     methods: {
-        openDialog() {
-            this.dialog = true;
+        openDialog(which) {
+            this[which] = true;
         },
-        closeDialog() {
-            this.dialog = false;
+        closeDialog(which) {
+            this[which] = false;
         },
         updateUserData(user) {
             this.$emit('updatedUserData', user);
+        },
+        deleteUser() {
+            this.$emit('deleteUser');
         }
     },
     components: {
-        appUpdateProfileData: UpdateProfileData
+        appUpdateProfileData: UpdateProfileData,
+        appDeleteUser: DeleteUser
     }
 }
 </script>

@@ -4,7 +4,8 @@
             <v-flex xs12 sm6 md4 v-for="(user, index) in users" :key="`user-${index}`">
                 <appProfileData
                     :user="user"
-                    @updatedUserData="updateUser($event, index)"></appProfileData>
+                    @updatedUserData="updateUser($event, index)"
+                    @deleteUser="deleteUser(index)"></appProfileData>
             </v-flex>
         </v-layout>
     </v-container>
@@ -37,6 +38,9 @@ export default {
                 return a.id - b.id;
             });
             this.users = [...mappedUsers.admins, ...mappedUsers.users];
+        },
+        deleteUser(index) {
+            this.users.splice(index, 1);
         }
     },
     created() {
