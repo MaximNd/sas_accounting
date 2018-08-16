@@ -4,7 +4,7 @@
             <v-list v-if="xsOnly">
                 <v-list-tile avatar>
                     <v-list-tile-avatar>
-                        <img :src="`/storage/${$auth.user().image}`" alt="avatar">
+                        <img style="object-fit: cover;width: 40px;height: 40px;" :src="`/storage/${$auth.user().image}`" alt="avatar">
                     </v-list-tile-avatar>
                     <v-list-tile-content>
                         <v-list-tile-title>{{ `${$auth.user().last_name} ${$auth.user().first_name} ${$auth.user().mid_name}` }}</v-list-tile-title>
@@ -33,7 +33,7 @@
                     <v-avatar
                         :size="40"
                         color="grey lighten-4" >
-                        <img :src="`/storage/${$auth.user().image}`" alt="avatar">
+                        <img style="object-fit: cover;width: 40px;height: 40px;" :src="`/storage/${$auth.user().image}`" alt="avatar">
                     </v-avatar>
                 </v-btn>
             </v-toolbar-items>
@@ -69,7 +69,8 @@ export default {
             this.menuItems = [
                 { title: 'Профиль', icon: 'mdi-account-box-outline', link: `/profile` },
                 { title: 'Заказы', icon: 'event', link: `/test` },
-                { title: 'Добавить аккаунт', icon: 'person_add', link: '/create-account' }
+                { title: 'Добавить аккаунт', icon: 'person_add', link: '/create-account' },
+                { title: 'Сотрудники', icon: 'account_circle', link: '/users' }
             ];
         },
         logOut() {
@@ -82,15 +83,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
     .menu-active {
         color: #000 !important;
         background-color: #fff !important;
-    }
-
-    img {
-        object-fit: cover;
-        width: 40px;
-        height: 40px;
     }
 </style>

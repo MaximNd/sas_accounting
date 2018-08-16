@@ -6,6 +6,7 @@ import ForgotPassword from './../containers/auth/reset/ForgotPassword.vue';
 import ResetPassword from './../containers/auth/reset/ResetPassword.vue';
 import Profile from './../containers/profile/Profile.vue';
 import CreateAccount from './../containers/createAccount/CreateAccount.vue';
+import Users from './../containers/users/Users.vue';
 
 Vue.use(Router);
 
@@ -35,6 +36,11 @@ export default new Router({
         path: '/create-account',
         name: 'create-account',
         component: CreateAccount
+    },
+    {
+        path: '/users',
+        name: 'users',
+        component: Users
     },
     {
         path: '',

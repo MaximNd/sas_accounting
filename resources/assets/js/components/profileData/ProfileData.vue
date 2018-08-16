@@ -13,15 +13,25 @@
                 <v-flex class="userData" xs6>ФИО:</v-flex><v-flex class="userData" xs6>{{ fullName }}</v-flex>
                 <v-flex class="userData" xs6>Должность:</v-flex><v-flex class="userData" xs6>{{ user.position }}</v-flex>
                 <v-flex class="userData" xs6>Role:</v-flex><v-flex class="userData" xs6>{{ user.role }}</v-flex>
-                <v-flex class="userData" xs6>Email:</v-flex><v-flex class="userData" xs6></v-flex>
+                <v-flex class="userData" xs6>Email:</v-flex><v-flex class="userData" xs6>{{ user.email }}</v-flex>
                 <v-flex class="userData" xs6>Тел:</v-flex><v-flex class="userData" xs6>{{ user.telephone }}</v-flex>
             </v-layout>
         </v-card-text>
         <v-card-actions>
-            <v-btn @click="openDialog" class="edit-btn" flat block large color="info">
-                <v-icon left medium>edit</v-icon>
-                Изменить
-            </v-btn>
+            <v-layout wrap>
+                <v-flex xs12 :sm6="!isSelf" v-if="isSelf || $auth.user().role === 'admin'">
+                    <v-btn @click="openDialog" style="font-size: 20px;" flat block color="info">
+                        <v-icon left>edit</v-icon>
+                        Изменить
+                    </v-btn>
+                </v-flex>
+                <v-flex xs12 sm6 v-if="$auth.user().role === 'admin' && !isSelf">
+                    <v-btn @click="deleteUser" style="font-size: 20px;" flat block color="error">
+                        <v-icon left>delete</v-icon>
+                        Удалить
+                    </v-btn>
+                </v-flex>
+            </v-layout>
             <appUpdateProfileData
                 :oldUserData="user"
                 :dialog="dialog"
@@ -49,6 +59,9 @@ export default {
     computed: {
         fullName() {
             return `${this.user.last_name} ${this.user.first_name} ${this.user.mid_name}`;
+        },
+        isSelf() {
+            return this.$auth.user().id === this.user.id;
         }
     },
     methods: {
@@ -70,13 +83,9 @@ export default {
 
 <style scoped>
     .userData {
-        font-size: 22px;
-        font-weight: 500;
+        font-size: 18px;
+        /* font-weight: 400; */
         margin-bottom: 20px;
-    }
-
-    .edit-btn {
-        font-size: 22px;
     }
 
     img {

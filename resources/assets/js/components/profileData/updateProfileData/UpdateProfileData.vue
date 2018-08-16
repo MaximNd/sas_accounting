@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" persistent max-width="500px">
+    <v-dialog v-model="dialog" persistent max-width="550px">
       <v-card>
         <v-card-title>
           <span class="headline">User Profile</span>
@@ -11,7 +11,7 @@
                     <v-avatar
                         @click="onPickFile"
                         raised
-                        size="180">
+                        size="200">
                         <img :src="avatarPreview === '' ? uploadAvatarImage : avatarPreview" alt="avatar">
                     </v-avatar>
                     <input @change="onFilePicked($event)" style="display:none;" type="file" ref="newAvatar">
@@ -186,8 +186,8 @@ export default {
     img {
         cursor: pointer;
         object-fit: cover;
-        width: 180px;
-        height: 180px;
+        width: 200px;
+        height: 200px;
         transition: transform 1s;
     }
 
