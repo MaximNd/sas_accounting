@@ -51,9 +51,18 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" flat @click.native="closeDialog">Close</v-btn>
-          <v-btn color="success" flat @click.native="save">Save</v-btn>
+          <v-btn :disabled="pending" :loading="pending" color="error" flat @click.native="closeDialog">Close</v-btn>
+          <v-btn :disabled="pending" :loading="pending" color="success" flat @click.native="save">Save</v-btn>
         </v-card-actions>
+        <v-snackbar
+            absolute
+            v-model="snackbar"
+            :timeout="2000"
+            :color="statusColor"
+            auto-height
+            right>
+            {{ statusText }}
+        </v-snackbar>
       </v-card>
     </v-dialog>
 </template>
@@ -72,6 +81,10 @@ export default {
     },
     data() {
         return {
+            statusColor: '',
+            statusText: '',
+            snackbar: false,
+            pending: false,
             authUser: '',
             userID: '',
             isNewAvatarSelected: false,
@@ -88,7 +101,7 @@ export default {
                 password_confirmation: ''
             },
             avatarPreview: '',
-            uploadAvatarImage: '/storage/no-avatar.png'
+            uploadAvatarImage: '/storage/upload-foto.png'
         };
     },
     computed: {
@@ -120,6 +133,7 @@ export default {
                 formData.append('password', this.newUserData.password);
                 formData.append('password_confirmation', this.newUserData.password_confirmation);
             }
+            this.pending = true;
 
             this.axios.post(`/users/${this.userID}`, formData)
                 .then(({data}) => {
@@ -128,10 +142,20 @@ export default {
                     if (this.isNewAvatarSelected) {
                         user.image = data;
                     }
+                    this.pending = false;
+                    this.snackbar = true;
+                    this.statusColor = 'success';
+                    this.statusText = 'Профиль обновлен!';
                     this.$emit('userDataUpdated', user);
                     this.$emit('dialogClosed');
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    this.pending = false;
+                    this.snackbar = true;
+                    this.statusColor = 'error';
+                    this.statusText = 'Ошибка!';
+                    console.log(err);
+                });
         },
         closeDialog() {
             this.$emit('dialogClosed');

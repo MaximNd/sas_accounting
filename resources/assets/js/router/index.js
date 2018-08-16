@@ -5,6 +5,7 @@ import Login from './../containers/auth/login/Login.vue';
 import ForgotPassword from './../containers/auth/reset/ForgotPassword.vue';
 import ResetPassword from './../containers/auth/reset/ResetPassword.vue';
 import Profile from './../containers/profile/Profile.vue';
+import CreateAccount from './../containers/createAccount/CreateAccount.vue';
 
 Vue.use(Router);
 
@@ -31,6 +32,11 @@ export default new Router({
         component: Profile
     },
     {
+        path: '/create-account',
+        name: 'create-account',
+        component: CreateAccount
+    },
+    {
         path: '',
         name: 'home',
         beforeEnter: function() {
@@ -38,7 +44,7 @@ export default new Router({
                 Vue.router.push('/login');
                 return;
             } else {
-                Vue.router.replace(`/profile/${Vue.auth.user().id}`);
+                Vue.router.replace('/profile');
                 return;
             }
         }

@@ -69,7 +69,7 @@ export default {
             this.menuItems = [
                 { title: 'Профиль', icon: 'mdi-account-box-outline', link: `/profile` },
                 { title: 'Заказы', icon: 'event', link: `/test` },
-                { title: 'Добавить аккаунт', icon: 'person_add', link: '/test2' }
+                { title: 'Добавить аккаунт', icon: 'person_add', link: '/create-account' }
             ];
         },
         logOut() {
