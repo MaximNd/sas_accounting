@@ -70,7 +70,8 @@ export default {
                 { title: 'Профиль', icon: 'mdi-account-box-outline', link: `/profile` },
                 { title: 'Заказы', icon: 'event', link: `/test` },
                 { title: 'Добавить аккаунт', icon: 'person_add', link: '/create-account' },
-                { title: 'Сотрудники', icon: 'account_circle', link: '/users' }
+                { title: 'Сотрудники', icon: 'account_circle', link: '/users' },
+                { title: 'Клиенты', icon: 'work', link: '/clients' },
             ];
         },
         logOut() {

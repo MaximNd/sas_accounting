@@ -7,6 +7,7 @@ import ResetPassword from './../containers/auth/reset/ResetPassword.vue';
 import Profile from './../containers/profile/Profile.vue';
 import CreateAccount from './../containers/createAccount/CreateAccount.vue';
 import Users from './../containers/users/Users.vue';
+import Clients from './../containers/clients/Clients.vue';
 
 Vue.use(Router);
 
@@ -41,6 +42,11 @@ export default new Router({
         path: '/users',
         name: 'users',
         component: Users
+    },
+    {
+        path: '/clients',
+        name: 'clients',
+        component: Clients
     },
     {
         path: '',
