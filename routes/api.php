@@ -28,6 +28,7 @@ Route::group(['middleware' => ['guest']], function() {
 
 // TODO ADD AUTH MIDDLEWARES
 Route::group(['middleware' => ['auth:api']], function() {
+    // USERS
     Route::get('/users/{id}', 'UserController@getUserById');
 
     Route::get('/users', 'UserController@gatAllUsers');
@@ -38,7 +39,15 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::delete('/users/{id}', 'UserController@deleteUser');
 
+    // CLIENTS
     Route::get('/clients', 'ClientController@getClients');
 
     Route::post('/clients', 'ClientController@createClient');
+
+    // PRISE_LIST
+    Route::get('/price-list', 'PriceListController@getAll');
+
+    Route::post('/price-list', 'PriceListController@create');
+
+    Route::put('/price-list/{id}', 'PriceListController@update');
 });
