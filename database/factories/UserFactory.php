@@ -14,8 +14,10 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\User::class, function (Faker $faker) {
+    $roles = ['admin', 'user'];
+    $role = $roles[array_rand($roles)];
     return [
-        'role' => 'admin',
+        'role' => $role,
         'position' => 'director',
         'last_name' => $faker->lastName,
         'first_name' => $faker->firstName,

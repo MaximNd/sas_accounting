@@ -16,6 +16,9 @@ class CreateGPSDatasTable extends Migration
         Schema::create('g_p_s_datas', function (Blueprint $table) {
             $table->increments('id');
 
+            $table->integer('order_id')->unsigned();
+            $table->foreign('order_id')->references('id')->on('orders');
+
             $table->string('image');
             $table->string('mark');
             $table->string('model');

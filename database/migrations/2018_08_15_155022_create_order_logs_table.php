@@ -19,7 +19,13 @@ class CreateOrderLogsTable extends Migration
             $table->integer('order_id')->unsigned();
             $table->foreign('order_id')->references('id')->on('orders');
 
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+
             $table->string('type');
+
+            $table->json('before');
+            $table->json('after');
 
             $table->timestamps();
         });
