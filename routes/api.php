@@ -50,4 +50,6 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::post('/price-list', 'PriceListController@create');
 
     Route::put('/price-list/{id}', 'PriceListController@update');
+
+    Route::delete('/price-list/{id}', 'PriceListController@delete');
 });

@@ -22,6 +22,7 @@ $factory->define(App\PriceList::class, function (Faker $faker) {
         'incoming_price' => $faker->randomFloat(2, 10, 500),
         'price' => $faker->randomFloat(2, 10, 500),
         'installation_price' => $faker->randomFloat(2, 10, 500),
+        'description' => $faker->text(20),
         'type' => $type
     ];
 });

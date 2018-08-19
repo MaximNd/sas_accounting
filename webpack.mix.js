@@ -1,5 +1,10 @@
 let mix = require('laravel-mix');
-
+mix.webpackConfig({
+    output: {
+        publicPath: '/',
+        chunkFilename: 'js/[name].[chunkhash].js'
+    }
+});
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management

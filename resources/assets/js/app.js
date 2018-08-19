@@ -7,6 +7,7 @@
 
 require('./bootstrap');
 import Vue from 'vue';
+import { store } from './store/store';
 import VueAuth from '@websanova/vue-auth';
 import Vuetify from 'vuetify';
 import VueAxios from 'vue-axios';
@@ -21,6 +22,7 @@ Vue.use(VueAxios, axios)
 Vue.use(Vuetify);
 
 Vue.use(VueAuth, {
+    rolesVar: 'role',
     tokenDefaultName: 'sas_accounting_auth_token',
     parseUserData: data => data || {},
     auth: {
@@ -50,5 +52,6 @@ Vue.component('app', require('./App.vue'));
 const app = new Vue({
     el: '#app',
     router,
+    store,
     template: '<app/>'
 });

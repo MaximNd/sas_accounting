@@ -25,6 +25,7 @@ class PriceListController extends Controller
             'incoming_price' => 'required|numeric',
             'price' => 'required|numeric',
             'installation_price' => 'required|numeric',
+            'description' => 'string',
             'type' => ['required', Rule::in(['GPS-трекеры', 'Датчики уровня топлива', 'Расходомеры топлива', 'Идентификация', 'Дополнительное оборудование'])]
         ]);
 
@@ -33,10 +34,12 @@ class PriceListController extends Controller
             $equipment->save();
 
             $log = new PriceListLog([
-                'type' => 'Создание'
+                'type' => 'Создание',
+                'user_id' => $request->user()->id,
+                'before' => "[]",
+                'after' => "[]"
             ]);
             $equipment->logs()->save($log);
-            $equipment->logs = [$log];
             return $equipment;
         });
 
@@ -53,6 +56,7 @@ class PriceListController extends Controller
             'equipment.incoming_price' => 'numeric',
             'equipment.price' => 'numeric',
             'equipment.installation_price' => 'numeric',
+            'equipment.description' => 'string',
             'equipment.type' => Rule::in(['GPS-трекеры', 'Датчики уровня топлива', 'Расходомеры топлива', 'Идентификация', 'Дополнительное оборудование']),
             'log.before' => 'required|string',
             'log.after' => 'required|string'
@@ -65,6 +69,25 @@ class PriceListController extends Controller
                 'type' => 'Обновление',
                 'before' => $request->input('log.before'),
                 'after' => $request->input('log.after')
+            ]);
+            $priceListLog->save();
+        });
+    }
+
+    public function delete(Request $request, $id) {
+        if ($request->user()->role !== 'admin') {
+            return response()->json([
+                'message' => 'You are not allowed to register new user'
+            ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
+        }
+        DB::transaction(function () use ($request, $id) {
+            PriceList::destroy($id);
+            $priceListLog = new PriceListLog([
+                'price_list_id' => $id,
+                'user_id' => $request->user()->id,
+                'type' => 'Удаление',
+                'before' => "[]",
+                'after' => "[]"
             ]);
             $priceListLog->save();
         });

@@ -20,8 +20,7 @@
                             append-icon="search"
                             label="Search"
                             single-line
-                            hide-details
-                            ref="search">
+                            hide-details>
                         </v-text-field>
                     </v-card-title>
                     <v-data-table
@@ -55,7 +54,9 @@ export default {
             totalClients: 0,
             clients: [],
             loading: true,
-            pagination: {},
+            pagination: {
+                rowsPerPage: 10
+            },
             headers: [
                 {
                     text: 'Контактное лицо',

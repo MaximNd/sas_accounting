@@ -33,7 +33,7 @@ class UserController extends Controller
         $this->validate($request, [
             'role' => Rule::in(['admin', 'user']),
             'email' => 'email|unique:users',
-            'image' => 'file|max:'.$max_size,
+            'image' => 'image|max:'.$max_size,
             'telephone' => 'max:20',
             'password' => 'confirmed'
         ]);
@@ -75,7 +75,7 @@ class UserController extends Controller
             'first_name' => 'required|max:30',
             'mid_name' => 'required|max:30',
             'email' => 'required|email|unique:users',
-            'image' => 'file|max:'.$max_size,
+            'image' => 'image|max:'.$max_size,
             'telephone' => 'required|max:20'
         ]);
         $imageName = 'no-avatar.png';

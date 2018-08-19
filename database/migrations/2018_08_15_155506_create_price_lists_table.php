@@ -21,6 +21,8 @@ class CreatePriceListsTable extends Migration
             $table->double('price');
             $table->double('installation_price');
             $table->string('type');
+            $table->text('description');
+            $table->softDeletes();
 
             $table->timestamps();
         });
