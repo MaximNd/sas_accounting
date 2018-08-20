@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
 {
+    public function getAllClients() {
+        return Client::orderBy('person_full_name')->get();
+    }
+
     public function getClients(Request $request) {
         $params = $request->query();
         $query = Client::query();

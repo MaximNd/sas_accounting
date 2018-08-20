@@ -42,6 +42,8 @@ Route::group(['middleware' => ['auth:api']], function() {
     // CLIENTS
     Route::get('/clients', 'ClientController@getClients');
 
+    Route::get('/clients/all', 'ClientController@getAllClients');
+
     Route::post('/clients', 'ClientController@createClient');
 
     // PRISE_LIST
