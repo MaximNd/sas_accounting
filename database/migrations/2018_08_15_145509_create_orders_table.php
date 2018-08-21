@@ -30,15 +30,7 @@ class CreateOrdersTable extends Migration
             $table->string('route');
 
             $table->json('users');
-
-            $table->boolean('electronic_cards');
-            $table->boolean('gps_tracking');
-            $table->boolean('drones');
-            $table->boolean('chemical_soil_analysis');
-            $table->boolean('land_bank_registrations');
-            $table->boolean('consulting');
-            $table->boolean('differentiated_application');
-            $table->boolean('auto_meteorolo_station');
+            $table->json('services');
 
             $table->timestamps();
         });

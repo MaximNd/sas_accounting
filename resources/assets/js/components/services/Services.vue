@@ -1,23 +1,22 @@
 <template>
     <v-card>
-        <appEditEquipmentDialog
+        <appEditServiceDialog
             v-if="$auth.check('admin')"
             :editDialog="dialogs.editDialog"
-            :equipment="editedEquipment"
+            :service="editedService"
             @editDialogClosed="closeDialog">
-        </appEditEquipmentDialog>
-        <appCreateEquipmentDialog
+        </appEditServiceDialog>
+        <appCreateServiceDialog
             v-if="$auth.check('admin')"
             :createDialog="dialogs.createDialog"
-            :type="type"
             @createDialogClosed="closeDialog">
-        </appCreateEquipmentDialog>
-        <appDeleteEquipmentDialog
+        </appCreateServiceDialog>
+        <appDeleteServiceDialog
             v-if="$auth.check('admin')"
             :deleteDialog="dialogs.deleteDialog"
-            :equipment="deletedEquipment"
+            :service="deletedService"
             @deleteDialogClosed="closeDialog">
-        </appDeleteEquipmentDialog>
+        </appDeleteServiceDialog>
         <v-card-title>
             <v-btn v-if="$auth.check('admin')" color="primary" @click="openDialog('createDialog')">Создать</v-btn>
             <v-spacer></v-spacer>
@@ -32,14 +31,12 @@
         <v-data-table
             :loading="loading"
             :headers="headers"
-            :items="equipment"
+            :items="services"
             :search="search">
             <template slot="items" slot-scope="props">
                 <td>{{ props.item.name }}</td>
-                <td class="text-xs-right">{{ props.item.incoming_price }}</td>
                 <td class="text-xs-right">{{ props.item.price }}</td>
-                <td class="text-xs-right">{{ props.item.installation_price }}</td>
-                <td class="text-xs-right">{{ props.item.description }}</td>
+                <td class="text-xs-right">{{ props.item.created_at }}</td>
                 <td v-if="$auth.check('admin')" class="justify-end layout px-0">
                     <v-btn
                         icon
@@ -59,17 +56,13 @@
 </template>
 
 <script>
-import EditEquipmentDialog from './editEquipment/EditEquipment';
-import CreateEquipmentDialog from './createEquipment/CreateEquipment';
-import DeleteEquipmentDialog from './deleteEquipment/DeleteEquipment';
+import EditServiceDialog from './editService/EditService';
+import CreateServiceDialog from './createService/CreateService';
+import DeleteServiceDialog from './deleteService/DeleteService';
 
 export default {
     props: {
-        type: {
-            type: String,
-            required: true
-        },
-        equipment: {
+        services: {
             type: Array,
             required: true
         }
@@ -83,28 +76,25 @@ export default {
                 editDialog: false,
                 deleteDialog: false
             },
-            editedEquipment: {
+            editedService: {
                 name: '',
-                incoming_price: '',
-                price: '',
-                installation_price: '',
-                description: ''
+                price: ''
             },
-            deletedEquipment: {}
+            deletedService: {}
         };
     },
     computed: {
         loading() {
-            return this.equipment.length === 0;
+            return this.services.length === 0;
         }
     },
     methods: {
-        setEditData(equipment) {
-            this.editedEquipment = { ...equipment };
+        setEditData(service) {
+            this.editedService = { ...service };
             this.openDialog('editDialog');
         },
-        setDeleteData(equipment) {
-            this.deletedEquipment = { ...equipment };
+        setDeleteData(service) {
+            this.deletedService = { ...service };
             this.openDialog('deleteDialog');
         },
         openDialog(which) {
@@ -116,11 +106,9 @@ export default {
     },
     created() {
         let headers = [
-            { text: 'Модель', align: 'left', value: 'name' },
-            { text: 'Входящая цена $', align: 'right', value: 'incoming_price' },
+            { text: 'Название', align: 'left', value: 'name' },
             { text: 'Цена $', align: 'right', value: 'price' },
-            { text: 'Стоимость монтажа $', align: 'right', value: 'installation_price' },
-            { text: 'Описание', align: 'right', value: 'description' }
+            { text: 'Дата создания', align: 'right', value: 'created_at' }
         ];
         if (this.$auth.check('admin')) {
             headers.push({ text: 'Действия', align: 'right', value: 'name', sortable: false });
@@ -128,9 +116,9 @@ export default {
         this.headers = headers;
     },
     components: {
-        appEditEquipmentDialog: EditEquipmentDialog,
-        appCreateEquipmentDialog: CreateEquipmentDialog,
-        appDeleteEquipmentDialog: DeleteEquipmentDialog
+        appEditServiceDialog: EditServiceDialog,
+        appCreateServiceDialog: CreateServiceDialog,
+        appDeleteServiceDialog: DeleteServiceDialog
     }
 }
 </script>

@@ -8,7 +8,7 @@
                 <v-container grid-list-md>
                     <v-layout wrap>
                         <v-flex xs12>
-                            <v-text-field v-model="editedEquipment.model" label="Модель"></v-text-field>
+                            <v-text-field v-model="editedEquipment.name" label="Модель"></v-text-field>
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field v-model="editedEquipment.incoming_price" append-icon="attach_money" label="Входящая цена"></v-text-field>
@@ -62,8 +62,9 @@ export default {
             this.pending = true;
             const payload = {
                 id: this.equipment.id,
+                isService: false,
                 equipment: {
-                    model: this.editedEquipment.model,
+                    name: this.editedEquipment.name,
                     incoming_price: this.editedEquipment.incoming_price,
                     price: this.editedEquipment.price,
                     installation_price: this.editedEquipment.installation_price,

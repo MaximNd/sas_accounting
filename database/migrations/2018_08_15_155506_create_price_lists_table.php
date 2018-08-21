@@ -16,12 +16,12 @@ class CreatePriceListsTable extends Migration
         Schema::create('price_lists', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('model');
-            $table->double('incoming_price');
+            $table->string('name');
+            $table->double('incoming_price')->nullable();
             $table->double('price');
-            $table->double('installation_price');
+            $table->double('installation_price')->nullable();
             $table->string('type');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->softDeletes();
 
             $table->timestamps();

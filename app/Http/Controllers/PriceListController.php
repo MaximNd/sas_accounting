@@ -21,13 +21,25 @@ class PriceListController extends Controller
             ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
         }
         $this->validate($request, [
-            'model' => 'required',
-            'incoming_price' => 'required|numeric',
-            'price' => 'required|numeric',
-            'installation_price' => 'required|numeric',
-            'description' => 'string',
-            'type' => ['required', Rule::in(['GPS-трекеры', 'Датчики уровня топлива', 'Расходомеры топлива', 'Идентификация', 'Дополнительное оборудование'])]
+            'type' => ['required', Rule::in(['GPS-трекеры', 'Датчики уровня топлива', 'Расходомеры топлива', 'Идентификация', 'Дополнительное оборудование', 'Услуга'])]
         ]);
+
+        if ($request->input('type') === 'Услуга') {
+            $this->validate($request, [
+                'name' => 'required',
+                'price' => 'required|numeric'
+            ]);
+        } else {
+            $this->validate($request, [
+                'name' => 'required',
+                'incoming_price' => 'required|numeric',
+                'price' => 'required|numeric',
+                'installation_price' => 'required|numeric',
+                'description' => 'string'
+            ]);
+        }
+
+
 
         $result = DB::transaction(function() use ($request) {
             $equipment = new PriceList($request->all());
@@ -36,8 +48,8 @@ class PriceListController extends Controller
             $log = new PriceListLog([
                 'type' => 'Создание',
                 'user_id' => $request->user()->id,
-                'before' => "[]",
-                'after' => "[]"
+                'before' => "{}",
+                'after' => $equipment->toJson()
             ]);
             $equipment->logs()->save($log);
             return $equipment;
@@ -52,17 +64,25 @@ class PriceListController extends Controller
                 'message' => 'You are not allowed to register new user'
             ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
         }
+
         $this->validate($request, [
+            'isService' => 'required|boolean',
             'equipment.incoming_price' => 'numeric',
             'equipment.price' => 'numeric',
             'equipment.installation_price' => 'numeric',
             'equipment.description' => 'string',
             'equipment.type' => Rule::in(['GPS-трекеры', 'Датчики уровня топлива', 'Расходомеры топлива', 'Идентификация', 'Дополнительное оборудование']),
+            'service.price' => 'numeric',
+            'service.type' => Rule::in(['Услуга']),
             'log.before' => 'required|string',
             'log.after' => 'required|string'
         ]);
         DB::transaction(function () use ($request, $id) {
-            PriceList::where('id', $id)->update($request->input('equipment'));
+            if ($request->input('isService')) {
+                PriceList::where('id', $id)->update($request->input('service'));
+            } else {
+                PriceList::where('id', $id)->update($request->input('equipment'));
+            }
             $priceListLog = new PriceListLog([
                 'price_list_id' => $id,
                 'user_id' => $request->user()->id,
@@ -86,8 +106,8 @@ class PriceListController extends Controller
                 'price_list_id' => $id,
                 'user_id' => $request->user()->id,
                 'type' => 'Удаление',
-                'before' => "[]",
-                'after' => "[]"
+                'before' => "{}",
+                'after' => "{}"
             ]);
             $priceListLog->save();
         });

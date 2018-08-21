@@ -4,11 +4,11 @@
             <v-card-title
                 class="headline error white--text"
                 primary-title>
-                Удалить оборудование: {{ equipment.name }}?
+                Удалить услугу: {{ service.name }}?
             </v-card-title>
             <v-card-actions>
                 <v-btn :loading="pending" :disabled="pending" color="error" flat block @click.native="closeDialog">Нет</v-btn>
-                <v-btn :loading="pending" :disabled="pending" color="success" flat block @click.native="deleteEquipment">Да</v-btn>
+                <v-btn :loading="pending" :disabled="pending" color="success" flat block @click.native="deleteService">Да</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -21,7 +21,7 @@ export default {
             type: Boolean,
             required: true
         },
-        equipment: {
+        service: {
             type: Object,
             required: true
         }
@@ -32,9 +32,9 @@ export default {
         };
     },
     methods: {
-        deleteEquipment() {
+        deleteService() {
             this.pending = true;
-            this.$store.dispatch('deleteEquipment', this.equipment.id)
+            this.$store.dispatch('deleteEquipment', this.service.id)
                 .then((data) => {
                     this.$emit('deleteDialogClosed', 'deleteDialog');
                 })

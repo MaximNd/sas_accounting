@@ -23,8 +23,8 @@ $factory->define(App\PriceListLog::class, function (Faker $faker){
             return factory(App\PriceList::class)->create()->id;
         },
         'user_id' => $user_id,
-        'before' => '[]',
-        'after' => '[]',
+        'before' => '{}',
+        'after' => '{}',
         'type' => $type
     ];
 });

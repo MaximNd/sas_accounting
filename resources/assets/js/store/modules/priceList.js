@@ -19,6 +19,9 @@ const getters = {
     },
     optionalEquipment(state) {
         return state.equipmentList.filter(equipment => equipment.type === 'Дополнительное оборудование');
+    },
+    services(state) {
+        return state.equipmentList.filter(service => service.type === 'Услуга');
     }
 };
 
@@ -30,10 +33,15 @@ const mutations = {
         state.equipmentList.push(payload);
     },
     EDIT_EQUIPMENT(state, payload) {
-        const { id, ...editedData } = payload;
+        const { id, isService, ...editedData } = payload;
         const index = state.equipmentList.findIndex(equipment => parseInt(equipment.id) === parseInt(id));
-        const newEquipment = { ...state.equipmentList[index], ...editedData.equipment };
-        state.equipmentList.splice(index, 1, newEquipment);
+        if (isService) {
+            const newService = { ...state.equipmentList[index], ...editedData.service };
+            state.equipmentList.splice(index, 1, newService);
+        } else {
+            const newEquipment = { ...state.equipmentList[index], ...editedData.equipment };
+            state.equipmentList.splice(index, 1, newEquipment);
+        }
     },
     DELETE_EQUIPMENT(state, payload) {
         const index = state.equipmentList.findIndex(equipment => parseInt(equipment.id) === parseInt(payload));

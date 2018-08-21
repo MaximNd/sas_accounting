@@ -10,7 +10,7 @@ class PriceList extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'model',
+        'name',
         'incoming_price',
         'price',
         'installation_price',
