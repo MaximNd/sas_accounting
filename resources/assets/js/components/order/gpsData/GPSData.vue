@@ -44,89 +44,147 @@
                             </v-avatar>
                             <input @change="onFilePicked($event, props.index)" style="display:none;" type="file" :ref="`image-${props.index}`">
                         </td>
-                        <td>
-                            <!-- <v-edit-dialog @click.self.stop="()=>{}" ref="dialog" :return-value.sync="props.item.mark" lazy @save="save" @cancel="cancel" @open="open('dialog')">
-                                {{ props.item.mark }} -->
-                                <v-text-field
-                                    style="width: 100%; margin: 0;"
+                        <td
+                            :ref="`td-${props.index}-${0}`"
+                            @click="selectCell($event, { index: props.index, column: 'mark', value: props.item.mark })"
+                            @dblclick="switchCellMode(props.index, 0, `mark-${props.index}-${0}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'mark', value: props.item.mark })">
+                            <template v-if="!editModCells[props.index][0]">
+                                {{ props.item.mark }}
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`mark-${props.index}-${0}`"
                                     :value="props.item.mark"
-                                    @input="$emit('update:orderGPSData', $event, props.index, 'mark')"
-                                    label="Edit"
+                                    @change="setCellValue($event, props.index, 0, 'mark', `td-${props.index}-${0}`)"
+                                    :items="cachedDataTest"
+                                    hide-selected
+                                    label="Вибирете марку"
                                     single-line>
-                                </v-text-field>
-                            <!-- </v-edit-dialog> -->
+                                </v-combobox>
+                            </template>
                         </td>
-                        <td>
-                            <v-edit-dialog :return-value.sync="props.item.model" lazy @save="save" @cancel="cancel">
+                        <td
+                            :ref="`td-${props.index}-${1}`"
+                            @click="selectCell($event, { index: props.index, column: 'model', value: props.item.model })"
+                            @dblclick="switchCellMode(props.index, 1, `model-${props.index}-${1}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'model', value: props.item.model })">
+                            <template v-if="!editModCells[props.index][1]">
                                 {{ props.item.model }}
-                                <v-text-field
-                                    slot="input"
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`model-${props.index}-${1}`"
                                     :value="props.item.model"
-                                    @input="$emit('update:orderGPSData', $event, props.index, 'model')"
-                                    label="Edit"
+                                    @change="setCellValue($event, props.index, 1, 'model', `td-${props.index}-${1}`)"
+                                    :items="cachedDataTest"
+                                    hide-selected
+                                    label="Вибирете модель"
                                     single-line>
-                                </v-text-field>
-                            </v-edit-dialog>
+                                </v-combobox>
+                            </template>
                         </td>
-                        <td>
-                            <v-edit-dialog :return-value.sync="props.item.year_of_issue" lazy @save="save" @cancel="cancel">
+                        <td
+                            :ref="`td-${props.index}-${2}`"
+                            @click="selectCell($event, { index: props.index, column: 'year_of_issue', value: props.item.year_of_issue })"
+                            @dblclick="switchCellMode(props.index, 2, `year_of_issue-${props.index}-${2}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'year_of_issue', value: props.item.year_of_issue })">
+                            <template v-if="!editModCells[props.index][2]">
                                 {{ props.item.year_of_issue }}
-                                <v-text-field
-                                    slot="input"
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`year_of_issue-${props.index}-${2}`"
                                     :value="props.item.year_of_issue"
-                                    @input="$emit('update:orderGPSData', $event, props.index, 'year_of_issue')"
-                                    label="Edit"
+                                    @change="setCellValue($event, props.index, 2, 'year_of_issue', `td-${props.index}-${2}`)"
+                                    :items="Array.from({length: 150}, (_, i) => 1950 + i)"
+                                    hide-selected
+                                    label="Вибирете год выпуска"
                                     single-line>
-                                </v-text-field>
-                            </v-edit-dialog>
+                                </v-combobox>
+                            </template>
                         </td>
-                        <td>
-                            <v-edit-dialog :return-value.sync="props.item.fuel_type" lazy @save="save" @cancel="cancel">
+                        <td
+                            :ref="`td-${props.index}-${3}`"
+                            @click="selectCell($event, { index: props.index, column: 'fuel_type', value: props.item.fuel_type })"
+                            @dblclick="switchCellMode(props.index, 3, `fuel_type-${props.index}-${3}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_type', value: props.item.fuel_type })">
+                            <template v-if="!editModCells[props.index][3]">
                                 {{ props.item.fuel_type }}
-                                <v-text-field
-                                    slot="input"
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`fuel_type-${props.index}-${3}`"
                                     :value="props.item.fuel_type"
-                                    @input="$emit('update:orderGPSData', $event, props.index, 'fuel_type')"
-                                    label="Edit"
+                                    @change="setCellValue($event, props.index, 3, 'fuel_type', `td-${props.index}-${3}`)"
+                                    :items="cachedDataTest"
+                                    hide-selected
+                                    label="Вибирете Тип топлива"
                                     single-line>
-                                </v-text-field>
-                            </v-edit-dialog>
+                                </v-combobox>
+                            </template>
                         </td>
-                        <td>
-                            <v-edit-dialog :return-value.sync="props.item.power" lazy @save="save" @cancel="cancel">
+                        <td
+                            :ref="`td-${props.index}-${4}`"
+                            @click="selectCell($event, { index: props.index, column: 'power', value: props.item.power })"
+                            @dblclick="switchCellMode(props.index, 4, `power-${props.index}-${4}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'power', value: props.item.power })">
+                            <template v-if="!editModCells[props.index][4]">
                                 {{ props.item.power }}
-                                <v-text-field
-                                    slot="input"
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`power-${props.index}-${4}`"
                                     :value="props.item.power"
-                                    @input="$emit('update:orderGPSData', $event, props.index, 'power')"
-                                    label="Edit"
+                                    @change="setCellValue($event, props.index, 4, 'power', `td-${props.index}-${4}`)"
+                                    :items="cachedDataTest"
+                                    hide-selected
+                                    label="Вибирете мощность"
                                     single-line>
-                                </v-text-field>
-                            </v-edit-dialog>
+                                </v-combobox>
+                            </template>
                         </td>
-                        <td>
-                            <v-edit-dialog :return-value.sync="props.item.number" lazy @save="save" @cancel="cancel">
+                        <td
+                            :ref="`td-${props.index}-${5}`"
+                            @click="selectCell($event, { index: props.index, column: 'number', value: props.item.number })"
+                            @dblclick="switchCellMode(props.index, 5, `number-${props.index}-${5}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'number', value: props.item.number })">
+                            <template v-if="!editModCells[props.index][5]">
                                 {{ props.item.number }}
-                                <v-text-field
-                                    slot="input"
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`number-${props.index}-${5}`"
                                     :value="props.item.number"
-                                    @input="$emit('update:orderGPSData', $event, props.index, 'number')"
-                                    label="Edit"
+                                    @change="setCellValue($event, props.index, 5, 'number', `td-${props.index}-${5}`)"
+                                    :items="cachedDataTest"
+                                    hide-selected
+                                    label="Вибирете гос. номер"
                                     single-line>
-                                </v-text-field>
-                            </v-edit-dialog>
+                                </v-combobox>
+                            </template>
                         </td>
-                        <td @click="selectCell">
-                            <!-- <v-autocomplete
-                                :value="props.item.gps_tracker"
-                                @change="$emit('update:orderGPSData', $event, props.index, 'gps_tracker')"
-                                :items="gpsTrackers"
-                                item-text="name"
-                                hide-selected
-                                label="Вибирете GPS-трекер"
-                                single-line
-                                return-object>
-                            </v-autocomplete> -->
+                        <td
+                            :ref="`td-${props.index}-${6}`"
+                            @click="selectCell($event, { index: props.index, column: 'gps_tracker', value: props.item.gps_tracker })"
+                            @dblclick="switchCellMode(props.index, 6, `gps_tracker-${props.index}-${6}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker', value: props.item.gps_tracker })">
+                            <template v-if="!editModCells[props.index][6]">
+                                {{ props.item.gps_tracker.name }}
+                            </template>
+                            <template v-else>
+                                <v-autocomplete
+                                    :ref="`gps_tracker-${props.index}-${6}`"
+                                    :value="props.item.gps_tracker"
+                                    @change="setCellValue($event, props.index, 6, 'gps_tracker', `td-${props.index}-${6}`)"
+                                    :items="gpsTrackers"
+                                    item-text="name"
+                                    hide-selected
+                                    label="Вибирете GPS-трекер"
+                                    single-line
+                                    return-object>
+                                </v-autocomplete>
+                            </template>
                         </td>
                         <td>
                             {{ props.item.gps_tracker.price || 0 }}$
@@ -366,8 +424,11 @@ export default {
                     styles: { height: '10px', width: '10px', border: '1px solid rgb(255, 255, 255)', display: 'block', top: '0px', left: '0px' }
                 }
             },
+            cachedDataTest: ['number1', 'number2', 'number3', 'number4'],
             isCornerFocused: false,
+            copyList: [],
             selected: [],
+            editModCells: [],
             snackTimeout: 1500,
             search: '',
             rowsPerPageItems: [10, 15, 20, 25, 30, 50],
@@ -375,8 +436,8 @@ export default {
                 rowsPerPage: 20
             },
             snack: false,
-            snackColor: "",
-            snackText: "",
+            snackColor: '',
+            snackText: '',
             headers: [
                 { text: '#', align: 'left', sortable: false },
                 { text: 'Изображение', align: 'left', sortable: false, value: 'image' },
@@ -413,6 +474,7 @@ export default {
         addRow() {
             this.$emit('rowAdded');
             this.imagesPreviews.push('');
+            this.editModCells.push([false, false, false, false, false, false, false]);
         },
         onPickFile(ref) {
             this.$refs[ref].click();
@@ -423,8 +485,8 @@ export default {
         },
         cornerMoved(moveEvent) {
             // moveEvent.preventDefault();
-            console.log(moveEvent);
-            console.log('Moved');
+            // console.log(moveEvent);
+            // console.log('Moved');
         },
         cornerFocused(event) {
             this.tableBody.addEventListener('mousemove', this.cornerMoved, false);
@@ -444,7 +506,10 @@ export default {
             this.bordersSelectData[position].el = document.createElement('div');
             this.bordersSelectData[position].el.classList.add('border');
             this.bordersSelectData[position].el.classList.add('current');
-            if (isCorner) this.bordersSelectData[position].el.classList.add('corner');
+            if (isCorner) {
+                this.bordersSelectData[position].el.classList.add('corner');
+                this.bordersSelectData[position].el.addEventListener('mousedown', this.cornerFocused, false);
+            }
             this.bordersWrapper.appendChild(this.bordersSelectData[position].el);
             this.setStyles(this.bordersSelectData[position].el, this.bordersSelectData[position].styles);
         },
@@ -501,9 +566,83 @@ export default {
             this.bordersSelectData.corner.styles.left = `${anchorCoords.left + anchor.offsetWidth - 6}px`;
             this.setStyles(this.bordersSelectData.corner.el, this.bordersSelectData.corner.styles);
         },
-        selectCell(event) {
-            const cell = event.target;
+        selectCell(event, data) {
+            console.log('Selected');
+            this.selectCellToCopyList(event, data, true);
+            let index = 0;
+            for (let i = 0; event.path[i].tagName != 'TD'; ++i) {
+                ++index;
+            }
+            const cell = index === 0 ? event.target : event.path[index];
             this.positionBorders(cell);
+        },
+        selectCellToCopyList(event, newCell, reset = false) {
+            if (reset) {
+                console.log('Reseted');
+                this.copyList = [ [newCell] ];
+                // this.$forceUpdate();
+            } else {
+                if (!this.isCornerFocused) return;
+                let isColumnExist = false;
+                let isMoreToAllIndicesOfStartData = true;
+                let isEqualToAllIndicesOfStartData = true;
+                for (let i = 0; i < this.copyList.length; ++i) {
+                    isEqualToAllIndicesOfStartData = this.copyList[i][0].index === newCell.index && isEqualToAllIndicesOfStartData;
+                    isMoreToAllIndicesOfStartData = newCell.index > this.copyList[i][0].index && isMoreToAllIndicesOfStartData;
+                    if (!isColumnExist) {
+                        isColumnExist = this.copyList[i][0].column === newCell.column;
+                    }
+                }
+                if (isEqualToAllIndicesOfStartData && !isColumnExist) {
+                    // Create start data
+                    this.copyList.push([newCell]);
+                } else if (isMoreToAllIndicesOfStartData) {
+                    if (isColumnExist) {
+                        console.log('1');
+                        // Cells in which need to insert the copy value
+                        for (let i = 0; i < this.copyList.length; ++i) {
+                            this.$set(this.copyList[i], this.copyList[i].length, { index: newCell.index, column: this.copyList[i][0].column });
+                        }
+                    } else {
+                        // Create start data
+                        console.log('Create start data');
+                        let index = this.copyList[0][0].index;
+                        const column = newCell.column;
+                        this.copyList.push([{ index, column, value: this.orderGPSData[index][column] }]);
+                        const copyListLen = this.copyList.length;
+                        for (let i = 1; i < this.copyList[0].length; ++i) {
+                            ++index;
+                            this.copyList[copyListLen-1].push({ index, column });
+                        }
+                        if (newCell.index > this.copyList[0][this.copyList[0].length-1].index) {
+                            console.log('2');
+                            // Cells in which need to insert the copy value
+                            for (let i = 0; i < this.copyList.length; ++i) {
+                                this.$set(this.copyList[i], this.copyList[i].length, { index: newCell.index, column: this.copyList[i][0].column });
+                                // this.copyList[i].push({ index: newCell.index, column: this.copyList[i][0].column });
+                            }
+                        }
+                    }
+                }
+            }
+            console.log('this.copyList: ', this.copyList);
+        },
+        switchCellMode(row, cell, refName) {
+            this.$set(this.editModCells[row], cell, !this.editModCells[row][cell]);
+            if (this.editModCells[row][cell]) {
+                this.$nextTick(() => {
+                    this.$refs[refName].$el.querySelector('input').click();
+                });
+            }
+        },
+        setCellValue(event, row, cell, name, td) {
+            this.$emit('update:orderGPSData', event, row, name);
+            this.switchCellMode(row, cell);
+            if (td) {
+                this.$nextTick(() => {
+                    this.$refs[td].click();
+                });
+            }
         },
         open(name) {
             // console.log('Before:', this.$refs[name]);
