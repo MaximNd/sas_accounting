@@ -46,9 +46,9 @@
                         </td>
                         <td
                             :ref="`td-${props.index}-${0}`"
-                            @click="selectCell($event, { index: props.index, column: 'mark', value: props.item.mark })"
+                            @click="selectCell($event, { index: props.index, column: 'mark', columnIndex: 1, value: props.item.mark })"
                             @dblclick="switchCellMode(props.index, 0, `mark-${props.index}-${0}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'mark', value: props.item.mark })">
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'mark', columnIndex: 0, value: props.item.mark })">
                             <template v-if="!editModCells[props.index][0]">
                                 {{ props.item.mark }}
                             </template>
@@ -66,9 +66,9 @@
                         </td>
                         <td
                             :ref="`td-${props.index}-${1}`"
-                            @click="selectCell($event, { index: props.index, column: 'model', value: props.item.model })"
+                            @click="selectCell($event, { index: props.index, column: 'model', columnIndex: 1, value: props.item.model })"
                             @dblclick="switchCellMode(props.index, 1, `model-${props.index}-${1}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'model', value: props.item.model })">
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'model', columnIndex: 1, value: props.item.model })">
                             <template v-if="!editModCells[props.index][1]">
                                 {{ props.item.model }}
                             </template>
@@ -86,9 +86,9 @@
                         </td>
                         <td
                             :ref="`td-${props.index}-${2}`"
-                            @click="selectCell($event, { index: props.index, column: 'year_of_issue', value: props.item.year_of_issue })"
+                            @click="selectCell($event, { index: props.index, column: 'year_of_issue', columnIndex: 2, value: props.item.year_of_issue })"
                             @dblclick="switchCellMode(props.index, 2, `year_of_issue-${props.index}-${2}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'year_of_issue', value: props.item.year_of_issue })">
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'year_of_issue', columnIndex: 2, value: props.item.year_of_issue })">
                             <template v-if="!editModCells[props.index][2]">
                                 {{ props.item.year_of_issue }}
                             </template>
@@ -106,9 +106,9 @@
                         </td>
                         <td
                             :ref="`td-${props.index}-${3}`"
-                            @click="selectCell($event, { index: props.index, column: 'fuel_type', value: props.item.fuel_type })"
+                            @click="selectCell($event, { index: props.index, column: 'fuel_type', columnIndex: 3, value: props.item.fuel_type })"
                             @dblclick="switchCellMode(props.index, 3, `fuel_type-${props.index}-${3}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_type', value: props.item.fuel_type })">
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_type', columnIndex: 3, value: props.item.fuel_type })">
                             <template v-if="!editModCells[props.index][3]">
                                 {{ props.item.fuel_type }}
                             </template>
@@ -126,9 +126,9 @@
                         </td>
                         <td
                             :ref="`td-${props.index}-${4}`"
-                            @click="selectCell($event, { index: props.index, column: 'power', value: props.item.power })"
+                            @click="selectCell($event, { index: props.index, column: 'power', columnIndex: 4, value: props.item.power })"
                             @dblclick="switchCellMode(props.index, 4, `power-${props.index}-${4}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'power', value: props.item.power })">
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'power', columnIndex: 4, value: props.item.power })">
                             <template v-if="!editModCells[props.index][4]">
                                 {{ props.item.power }}
                             </template>
@@ -146,9 +146,9 @@
                         </td>
                         <td
                             :ref="`td-${props.index}-${5}`"
-                            @click="selectCell($event, { index: props.index, column: 'number', value: props.item.number })"
+                            @click="selectCell($event, { index: props.index, column: 'number', columnIndex: 5, value: props.item.number })"
                             @dblclick="switchCellMode(props.index, 5, `number-${props.index}-${5}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'number', value: props.item.number })">
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'number', columnIndex: 5, value: props.item.number })">
                             <template v-if="!editModCells[props.index][5]">
                                 {{ props.item.number }}
                             </template>
@@ -166,9 +166,9 @@
                         </td>
                         <td
                             :ref="`td-${props.index}-${6}`"
-                            @click="selectCell($event, { index: props.index, column: 'gps_tracker', value: props.item.gps_tracker })"
+                            @click="selectCell($event, { index: props.index, column: 'gps_tracker', columnIndex: 6, value: props.item.gps_tracker })"
                             @dblclick="switchCellMode(props.index, 6, `gps_tracker-${props.index}-${6}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker', value: props.item.gps_tracker })">
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker', columnIndex: 6, value: props.item.gps_tracker })">
                             <template v-if="!editModCells[props.index][6]">
                                 {{ props.item.gps_tracker.name }}
                             </template>
@@ -583,6 +583,8 @@ export default {
                 // this.$forceUpdate();
             } else {
                 if (!this.isCornerFocused) return;
+                if (newCell.index < this.copyList[0][0].index || newCell.columnIndex < this.copyList[0][0].columnIndex) return;
+                const isAddition = ((newCell.index > this.copyList[0][this.copyList[0].length - 1].index) || (newCell.columnIndex > this.copyList[this.copyList.length - 1][0].columnIndex));
                 let isColumnExist = false;
                 let isMoreToAllIndicesOfStartData = true;
                 let isEqualToAllIndicesOfStartData = true;
@@ -595,13 +597,22 @@ export default {
                 }
                 if (isEqualToAllIndicesOfStartData && !isColumnExist) {
                     // Create start data
-                    this.copyList.push([newCell]);
+                    let columnIndex = this.copyList[this.copyList.length - 1][0].columnIndex + 1;
+                    while (columnIndex <= newCell.columnIndex) {
+                        let column = this.headers[columnIndex+2].value;
+                        this.copyList.push([{ index: newCell.index, column, columnIndex, value: this.orderGPSData[newCell.index][column] }]);
+                        ++columnIndex;
+                    }
                 } else if (isMoreToAllIndicesOfStartData) {
                     if (isColumnExist) {
                         console.log('1');
                         // Cells in which need to insert the copy value
                         for (let i = 0; i < this.copyList.length; ++i) {
-                            this.$set(this.copyList[i], this.copyList[i].length, { index: newCell.index, column: this.copyList[i][0].column });
+                            let index = this.copyList[i][this.copyList[i].length-1].index + 1;
+                            while (index <= newCell.index) {
+                                this.$set(this.copyList[i], this.copyList[i].length, { index, column: this.copyList[i][0].column });
+                                ++index;
+                            }
                         }
                     } else {
                         // Create start data
