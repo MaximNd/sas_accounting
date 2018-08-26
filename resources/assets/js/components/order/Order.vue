@@ -53,6 +53,7 @@
             <v-expansion-panel-content>
                 <div slot="header" class="gps-tracking-header">GPS-трекинг</div>
                 <appGPSData
+                    ref="GPSData"
                     :orderGPSData="orderData.GPSData"
                     :gpsTrackers="gpsTrackers"
                     :fuelLevelSensors="fuelLevelSensors"
@@ -60,6 +61,7 @@
                     :identification="identification"
                     :optionalEquipment="optionalEquipment"
                     @update:orderGPSData="updateOrderGPSData"
+                    @copy-values:orderGPSData="copySelectedInOrderGPSData"
                     @drag-n-drop-gps-data="dragNDropGPSData"
                     @rowAdded="addRowToOrderGPSData">
                 </appGPSData>
@@ -161,6 +163,28 @@ export default {
             console.log(val, index, path);
             this.orderData.GPSData[index][path] = val;
             // this.$set(this.orderData.GPSData[index], path, val);
+        },
+        copySelectedInOrderGPSData(copyList) {
+            for (let i = 0; i < copyList.length; ++i) {
+                let value = copyList[i][0].value;
+                for (let j = 1; j < copyList[i].length; ++j) {
+                    let index = copyList[i][j].index;
+                    let column = copyList[i][j].column;
+                    console.log('INDEX: ', index);
+                    console.log('COLUMN: ', column);
+
+                    if (column === 'image') {
+                        this.$set(this.orderData.GPSData[index], column, this.orderData.GPSData[copyList[i][0].index][column]);
+                        if (this.orderData.GPSData[copyList[i][0].index][column] !== '') {
+                            setTimeout(() => {
+                                this.$refs.GPSData.setPreview(index);
+                            }, 1000);
+                        }
+                    } else {
+                        this.$set(this.orderData.GPSData[index], column, value);
+                    }
+                }
+            }
         },
         addRowToOrderGPSData() {
             this.orderData.GPSData.push({ ...this.initialGPSRowData });
