@@ -35,9 +35,12 @@
                         <td class="handle">
                             ::
                         </td>
-                        <td>
+                        <td
+                            :ref="`td-${props.index}-${0}`"
+                            @click="selectCell($event, { index: props.index, column: 'image', columnIndex: 0, value: props.item.image })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'image', columnIndex: 0, value: props.item.image })">
                             <v-avatar
-                                @click="onPickFile(`image-${props.index}`)"
+                                @dblclick="onPickFile(`image-${props.index}`)"
                                 size="40"
                                 tile>
                                 <img :style="{cursor: 'pointer','object-fit': 'cover',width: '40px',height: '40px'}" :src="imagesPreviews[props.index] === '' ? uploadImage : imagesPreviews[props.index]" alt="image">
@@ -45,18 +48,18 @@
                             <input @change="onFilePicked($event, props.index)" style="display:none;" type="file" :ref="`image-${props.index}`">
                         </td>
                         <td
-                            :ref="`td-${props.index}-${0}`"
+                            :ref="`td-${props.index}-${1}`"
                             @click="selectCell($event, { index: props.index, column: 'mark', columnIndex: 1, value: props.item.mark })"
-                            @dblclick="switchCellMode(props.index, 0, `mark-${props.index}-${0}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'mark', columnIndex: 0, value: props.item.mark })">
-                            <template v-if="!editModCells[props.index][0]">
+                            @dblclick="switchCellMode(props.index, 1, `mark-${props.index}-${1}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'mark', columnIndex: 1, value: props.item.mark })">
+                            <template v-if="!editModCells[props.index][1]">
                                 {{ props.item.mark }}
                             </template>
                             <template v-else>
                                 <v-combobox
-                                    :ref="`mark-${props.index}-${0}`"
+                                    :ref="`mark-${props.index}-${1}`"
                                     :value="props.item.mark"
-                                    @change="setCellValue($event, props.index, 0, 'mark', `td-${props.index}-${0}`)"
+                                    @change="setCellValue($event, props.index, 1, 'mark', `td-${props.index}-${1}`)"
                                     :items="cachedDataTest"
                                     hide-selected
                                     label="Вибирете марку"
@@ -65,18 +68,18 @@
                             </template>
                         </td>
                         <td
-                            :ref="`td-${props.index}-${1}`"
-                            @click="selectCell($event, { index: props.index, column: 'model', columnIndex: 1, value: props.item.model })"
-                            @dblclick="switchCellMode(props.index, 1, `model-${props.index}-${1}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'model', columnIndex: 1, value: props.item.model })">
-                            <template v-if="!editModCells[props.index][1]">
+                            :ref="`td-${props.index}-${2}`"
+                            @click="selectCell($event, { index: props.index, column: 'model', columnIndex: 2, value: props.item.model })"
+                            @dblclick="switchCellMode(props.index, 2, `model-${props.index}-${2}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'model', columnIndex: 2, value: props.item.model })">
+                            <template v-if="!editModCells[props.index][2]">
                                 {{ props.item.model }}
                             </template>
                             <template v-else>
                                 <v-combobox
-                                    :ref="`model-${props.index}-${1}`"
+                                    :ref="`model-${props.index}-${2}`"
                                     :value="props.item.model"
-                                    @change="setCellValue($event, props.index, 1, 'model', `td-${props.index}-${1}`)"
+                                    @change="setCellValue($event, props.index, 2, 'model', `td-${props.index}-${2}`)"
                                     :items="cachedDataTest"
                                     hide-selected
                                     label="Вибирете модель"
@@ -85,18 +88,18 @@
                             </template>
                         </td>
                         <td
-                            :ref="`td-${props.index}-${2}`"
-                            @click="selectCell($event, { index: props.index, column: 'year_of_issue', columnIndex: 2, value: props.item.year_of_issue })"
-                            @dblclick="switchCellMode(props.index, 2, `year_of_issue-${props.index}-${2}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'year_of_issue', columnIndex: 2, value: props.item.year_of_issue })">
-                            <template v-if="!editModCells[props.index][2]">
+                            :ref="`td-${props.index}-${3}`"
+                            @click="selectCell($event, { index: props.index, column: 'year_of_issue', columnIndex: 3, value: props.item.year_of_issue })"
+                            @dblclick="switchCellMode(props.index, 3, `year_of_issue-${props.index}-${3}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'year_of_issue', columnIndex: 3, value: props.item.year_of_issue })">
+                            <template v-if="!editModCells[props.index][3]">
                                 {{ props.item.year_of_issue }}
                             </template>
                             <template v-else>
                                 <v-combobox
-                                    :ref="`year_of_issue-${props.index}-${2}`"
+                                    :ref="`year_of_issue-${props.index}-${3}`"
                                     :value="props.item.year_of_issue"
-                                    @change="setCellValue($event, props.index, 2, 'year_of_issue', `td-${props.index}-${2}`)"
+                                    @change="setCellValue($event, props.index, 3, 'year_of_issue', `td-${props.index}-${3}`)"
                                     :items="Array.from({length: 150}, (_, i) => 1950 + i)"
                                     hide-selected
                                     label="Вибирете год выпуска"
@@ -105,18 +108,18 @@
                             </template>
                         </td>
                         <td
-                            :ref="`td-${props.index}-${3}`"
-                            @click="selectCell($event, { index: props.index, column: 'fuel_type', columnIndex: 3, value: props.item.fuel_type })"
-                            @dblclick="switchCellMode(props.index, 3, `fuel_type-${props.index}-${3}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_type', columnIndex: 3, value: props.item.fuel_type })">
-                            <template v-if="!editModCells[props.index][3]">
+                            :ref="`td-${props.index}-${4}`"
+                            @click="selectCell($event, { index: props.index, column: 'fuel_type', columnIndex: 4, value: props.item.fuel_type })"
+                            @dblclick="switchCellMode(props.index, 4, `fuel_type-${props.index}-${4}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_type', columnIndex: 4, value: props.item.fuel_type })">
+                            <template v-if="!editModCells[props.index][4]">
                                 {{ props.item.fuel_type }}
                             </template>
                             <template v-else>
                                 <v-combobox
-                                    :ref="`fuel_type-${props.index}-${3}`"
+                                    :ref="`fuel_type-${props.index}-${4}`"
                                     :value="props.item.fuel_type"
-                                    @change="setCellValue($event, props.index, 3, 'fuel_type', `td-${props.index}-${3}`)"
+                                    @change="setCellValue($event, props.index, 4, 'fuel_type', `td-${props.index}-${4}`)"
                                     :items="cachedDataTest"
                                     hide-selected
                                     label="Вибирете Тип топлива"
@@ -125,18 +128,18 @@
                             </template>
                         </td>
                         <td
-                            :ref="`td-${props.index}-${4}`"
-                            @click="selectCell($event, { index: props.index, column: 'power', columnIndex: 4, value: props.item.power })"
-                            @dblclick="switchCellMode(props.index, 4, `power-${props.index}-${4}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'power', columnIndex: 4, value: props.item.power })">
-                            <template v-if="!editModCells[props.index][4]">
+                            :ref="`td-${props.index}-${5}`"
+                            @click="selectCell($event, { index: props.index, column: 'power', columnIndex: 5, value: props.item.power })"
+                            @dblclick="switchCellMode(props.index, 5, `power-${props.index}-${5}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'power', columnIndex: 5, value: props.item.power })">
+                            <template v-if="!editModCells[props.index][5]">
                                 {{ props.item.power }}
                             </template>
                             <template v-else>
                                 <v-combobox
-                                    :ref="`power-${props.index}-${4}`"
+                                    :ref="`power-${props.index}-${5}`"
                                     :value="props.item.power"
-                                    @change="setCellValue($event, props.index, 4, 'power', `td-${props.index}-${4}`)"
+                                    @change="setCellValue($event, props.index, 5, 'power', `td-${props.index}-${5}`)"
                                     :items="cachedDataTest"
                                     hide-selected
                                     label="Вибирете мощность"
@@ -145,18 +148,18 @@
                             </template>
                         </td>
                         <td
-                            :ref="`td-${props.index}-${5}`"
-                            @click="selectCell($event, { index: props.index, column: 'number', columnIndex: 5, value: props.item.number })"
-                            @dblclick="switchCellMode(props.index, 5, `number-${props.index}-${5}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'number', columnIndex: 5, value: props.item.number })">
-                            <template v-if="!editModCells[props.index][5]">
+                            :ref="`td-${props.index}-${6}`"
+                            @click="selectCell($event, { index: props.index, column: 'number', columnIndex: 6, value: props.item.number })"
+                            @dblclick="switchCellMode(props.index, 6, `number-${props.index}-${6}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'number', columnIndex: 6, value: props.item.number })">
+                            <template v-if="!editModCells[props.index][6]">
                                 {{ props.item.number }}
                             </template>
                             <template v-else>
                                 <v-combobox
-                                    :ref="`number-${props.index}-${5}`"
+                                    :ref="`number-${props.index}-${6}`"
                                     :value="props.item.number"
-                                    @change="setCellValue($event, props.index, 5, 'number', `td-${props.index}-${5}`)"
+                                    @change="setCellValue($event, props.index, 6, 'number', `td-${props.index}-${6}`)"
                                     :items="cachedDataTest"
                                     hide-selected
                                     label="Вибирете гос. номер"
@@ -165,18 +168,18 @@
                             </template>
                         </td>
                         <td
-                            :ref="`td-${props.index}-${6}`"
-                            @click="selectCell($event, { index: props.index, column: 'gps_tracker', columnIndex: 6, value: props.item.gps_tracker })"
-                            @dblclick="switchCellMode(props.index, 6, `gps_tracker-${props.index}-${6}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker', columnIndex: 6, value: props.item.gps_tracker })">
-                            <template v-if="!editModCells[props.index][6]">
+                            :ref="`td-${props.index}-${7}`"
+                            @click="selectCell($event, { index: props.index, column: 'gps_tracker', columnIndex: 7, value: props.item.gps_tracker })"
+                            @dblclick="switchCellMode(props.index, 7, `gps_tracker-${props.index}-${7}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker', columnIndex: 7, value: props.item.gps_tracker })">
+                            <template v-if="!editModCells[props.index][7]">
                                 {{ props.item.gps_tracker.name }}
                             </template>
                             <template v-else>
                                 <v-autocomplete
-                                    :ref="`gps_tracker-${props.index}-${6}`"
+                                    :ref="`gps_tracker-${props.index}-${7}`"
                                     :value="props.item.gps_tracker"
-                                    @change="setCellValue($event, props.index, 6, 'gps_tracker', `td-${props.index}-${6}`)"
+                                    @change="setCellValue($event, props.index, 7, 'gps_tracker', `td-${props.index}-${7}`)"
                                     :items="gpsTrackers"
                                     item-text="name"
                                     hide-selected
@@ -355,6 +358,7 @@
 </template>
 
 <script>
+import dcopy from 'deep-copy';
 import Sortable from 'sortablejs';
 import setStyles from './../../../mixins/stylesMixins.js';
 // require('../node_modules/handsontable/dist/handsontable.full.min.css');
@@ -402,7 +406,6 @@ export default {
             },
             tableBody: null,
             bordersWrapper: null,
-            prevCell: null,
             bordersSelectData: {
                 top: {
                     el: null,
@@ -475,7 +478,7 @@ export default {
         addRow() {
             this.$emit('rowAdded');
             this.imagesPreviews.push('');
-            this.editModCells.push([false, false, false, false, false, false, false]);
+            this.editModCells.push([false, false, false, false, false, false, false, false]);
         },
         onPickFile(ref) {
             this.$refs[ref].click();
@@ -597,7 +600,10 @@ export default {
                 // this.$forceUpdate();
             } else {
                 if (!this.isCornerFocused) return;
+                console.log('newCell: ', newCell);
+                console.log('this.copyList:', dcopy(this.copyList));
                 if (newCell.index < this.copyList[0][0].index || newCell.columnIndex < this.copyList[0][0].columnIndex) return;
+                console.log('0');
                 const isAddition = ((newCell.index > this.copyList[0][this.copyList[0].length - 1].index) || (newCell.columnIndex > this.copyList[this.copyList.length - 1][0].columnIndex));
                 const isDeleteion = ((newCell.index < this.copyList[0][this.copyList[0].length - 1].index) || (newCell.columnIndex < this.copyList[this.copyList.length - 1][0].columnIndex));
                 let isColumnExist = false;
@@ -613,82 +619,126 @@ export default {
                 const currentCell = this.findTDEl(event);
                 const currentCellCoords = this.getCoords(currentCell);
                 if (isAddition) {
-                    this.prevCell = currentCell;
                     console.log('ADDITION');
+                    console.log('isEqualToAllIndicesOfStartData: ', isEqualToAllIndicesOfStartData);
+                    console.log('isColumnExist: ', isColumnExist);
                     if (isEqualToAllIndicesOfStartData && !isColumnExist) {
-                        this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) + currentCellCoords.width}px`;
-                        this.bordersSelectData.right.styles.left = `${currentCellCoords.left + currentCell.offsetWidth-2}px`;
-                        this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) + currentCellCoords.width}px`;
-
+                        console.log('isEqualToAllIndicesOfStartData && !isColumnExist');
+                        // Reset
+                        for (let i = 0; i < this.copyList.length; ++i) {
+                            this.copyList[i] = [this.copyList[i][0]];
+                        }
+                        this.bordersSelectData.bottom.styles.top = `${currentCellCoords.top + currentCell.offsetHeight}px`;
+                        this.bordersSelectData.left.styles.height = `${currentCellCoords.height}px`;
+                        this.bordersSelectData.right.styles.height = `${currentCellCoords.height}px`;
                         // Create start data
                         let columnIndex = this.copyList[this.copyList.length - 1][0].columnIndex + 1;
                         while (columnIndex <= newCell.columnIndex) {
-                            let column = this.headers[columnIndex+2].value;
+                            // set styles
+                            let currentCell = this.$refs[`td-${newCell.index}-${columnIndex}`];
+                            let currentCellCoords = this.getCoords(currentCell);
+                            this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) + currentCellCoords.width}px`;
+                            this.bordersSelectData.right.styles.left = `${currentCellCoords.left + currentCell.offsetWidth-2}px`;
+                            this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) + currentCellCoords.width}px`;
+                            // fill with values
+                            let column = this.headers[columnIndex+1].value;
                             this.copyList.push([{ index: newCell.index, column, columnIndex, value: this.orderGPSData[newCell.index][column] }]);
                             ++columnIndex;
                         }
                     } else if (isMoreToAllIndicesOfStartData) {
+                        console.log('isMoreToAllIndicesOfStartData');
                         if (isColumnExist) {
-                            console.log('1');
-                            this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) + currentCellCoords.height}px`;
+                            console.log('isColumnExist');
+                            let isLeftAndRightStylesSet = false;
                             this.bordersSelectData.bottom.styles.top = `${currentCellCoords.top + currentCell.offsetHeight}px`;
-                            this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) + currentCellCoords.height}px`;
                             // Cells in which need to insert the copy value
                             for (let i = 0; i < this.copyList.length; ++i) {
                                 let index = this.copyList[i][this.copyList[i].length-1].index + 1;
                                 while (index <= newCell.index) {
-                                    this.$set(this.copyList[i], this.copyList[i].length, { index, column: this.copyList[i][0].column });
+                                    this.copyList[i].push({ index, column: this.copyList[i][0].column });
+                                    if (!isLeftAndRightStylesSet) {
+                                        let currentCell = this.$refs[`td-${index}-${newCell.columnIndex}`];
+                                        let currentCellCoords = this.getCoords(currentCell);
+                                        this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) + currentCellCoords.height}px`;
+                                        this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) + currentCellCoords.height}px`;
+                                    }
+                                    ++index;
+                                }
+                                isLeftAndRightStylesSet = true;
+                            }
+                        } else {
+                            console.log('!isColumnExist');
+                            this.bordersSelectData.right.styles.left = `${currentCellCoords.left + currentCell.offsetWidth-2}px`;
+                            // Create start data
+                            console.log('Create start data');
+                            let columnIndex = this.copyList[this.copyList.length-1][0].columnIndex + 1;
+                            while (columnIndex <= newCell.columnIndex) {
+                                let index = this.copyList[0][0].index;
+                                let column = this.headers[columnIndex+1].value;
+                                let currentCell = this.$refs[`td-${index}-${columnIndex}`];
+                                let currentCellCoords = this.getCoords(currentCell);
+                                this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) + currentCellCoords.width}px`;
+                                this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) + currentCellCoords.width}px`;
+                                this.copyList.push([{ index, column, columnIndex, value: this.orderGPSData[index][column] }]);
+                                for (let i = 1; i < this.copyList[0].length; ++i) {
+                                    ++index;
+                                    this.copyList[this.copyList.length-1].push({ index, column });
+                                }
+                                ++columnIndex;
+                            }
+                            if (newCell.index > this.copyList[0][this.copyList[0].length-1].index) {
+                                this.bordersSelectData.bottom.styles.top = `${currentCellCoords.top + currentCell.offsetHeight}px`;
+                                console.log('newCell.index > this.copyList[0][this.copyList[0].length-1].index');
+                                // Cells in which need to insert the copy value
+                                let index = this.copyList[0][this.copyList[0].length-1].index + 1;
+                                while (index <= newCell.index) {
+                                    let currentCell = this.$refs[`td-${index}-${newCell.columnIndex}`];
+                                    let currentCellCoords = this.getCoords(currentCell);
+                                    this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) + currentCellCoords.height}px`;
+                                    this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) + currentCellCoords.height}px`;
+                                    for (let i = 0; i < this.copyList.length; ++i) {
+                                        this.copyList[i].push({ index, column: this.copyList[i][0].column });
+                                    }
                                     ++index;
                                 }
                             }
-                        } else {
-                            this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) + currentCellCoords.width}px`;
-                            this.bordersSelectData.right.styles.left = `${currentCellCoords.left + currentCell.offsetWidth-2}px`;
-                            this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) + currentCellCoords.width}px`;
-                            // Create start data
-                            console.log('Create start data');
-                            let index = this.copyList[0][0].index;
-                            const column = newCell.column;
-                            this.copyList.push([{ index, column, columnIndex: newCell.columnIndex, value: this.orderGPSData[index][column] }]);
-                            const copyListLen = this.copyList.length;
-                            for (let i = 1; i < this.copyList[0].length; ++i) {
-                                ++index;
-                                this.copyList[copyListLen-1].push({ index, column });
-                            }
-                            if (newCell.index > this.copyList[0][this.copyList[0].length-1].index) {
-                                this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) + currentCellCoords.height}px`;
-                                this.bordersSelectData.bottom.styles.top = `${currentCellCoords.top + currentCell.offsetHeight}px`;
-                                this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) + currentCellCoords.height}px`;
-                                console.log('2');
-                                // Cells in which need to insert the copy value
-                                for (let i = 0; i < this.copyList.length; ++i) {
-                                    this.$set(this.copyList[i], this.copyList[i].length, { index: newCell.index, column: this.copyList[i][0].column });
-                                    // this.copyList[i].push({ index: newCell.index, column: this.copyList[i][0].column });
-                                }
-                            }
                         }
                     }
-                } else if (isDeleteion) {
-                    const prevCell = this.prevCell;
-                    const prevCellCoords = this.getCoords(prevCell);
+                }
+                if (isDeleteion) {
                     console.log('DELETION');
                     if (newCell.index < this.copyList[0][this.copyList[0].length-1].index) {
-                        this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) - prevCellCoords.height}px`;
-                        this.bordersSelectData.bottom.styles.top = `${prevCellCoords.top}px`;
-                        this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) - prevCellCoords.height}px`;
-                        for (let i = 0; i < this.copyList.length; ++i) {
-                            this.copyList[i].splice(this.copyList[i].length-1, 1);
+                        this.bordersSelectData.bottom.styles.top = `${currentCellCoords.top + currentCell.offsetHeight}px`;
+
+                        let index = this.copyList[0][this.copyList[0].length-1].index;
+                        while (index > newCell.index) {
+                            let currentCell = this.$refs[`td-${index}-${newCell.columnIndex}`];
+                            let currentCellCoords = this.getCoords(currentCell);
+                            this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) - currentCellCoords.height}px`;
+                            this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) - currentCellCoords.height}px`;
+                            for (let i = 0; i < this.copyList.length; ++i) {
+                                this.copyList[i].splice(this.copyList[i].length-1, 1);
+                            }
+                            --index;
                         }
                     }
                     if (newCell.columnIndex < this.copyList[this.copyList.length - 1][0].columnIndex) {
-                        this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) - prevCellCoords.width}px`;
-                        this.bordersSelectData.right.styles.left = `${prevCellCoords.left-2}px`;
-                        this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) - prevCellCoords.width}px`;
+                        this.bordersSelectData.right.styles.left = `${currentCellCoords.left + currentCell.offsetWidth-2}px`;
                         // Delete column
                         // const indexForDeletion = this.copyList.findIndex((copies) => copies[0].columnIndex === newCell.columnIndex + 1);
-                        this.copyList.splice(this.copyList.length - 1, 1);
+                        let columnIndex = this.copyList[this.copyList.length - 1][0].columnIndex;
+                        while (columnIndex > newCell.columnIndex) {
+                            let currentCell = this.$refs[`td-${newCell.index}-${columnIndex}`];
+                            let currentCellCoords = this.getCoords(currentCell);
+                            this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) - currentCellCoords.width}px`;
+                            this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) - currentCellCoords.width}px`;
+                            this.copyList.splice(this.copyList.length - 1, 1);
+                            --columnIndex;
+                        }
                     }
-                    this.prevCell = currentCell;
+                }
+                if (!isAddition && !isDeleteion) {
+                    console.log('SOMETHING ELSE');
                 }
                 this.normalizeCorner(currentCellCoords, currentCell);
                 this.normalizeStylesSelectBordersAndCorner();
