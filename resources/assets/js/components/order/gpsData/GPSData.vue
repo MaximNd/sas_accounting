@@ -585,6 +585,7 @@ export default {
                 if (!this.isCornerFocused) return;
                 if (newCell.index < this.copyList[0][0].index || newCell.columnIndex < this.copyList[0][0].columnIndex) return;
                 const isAddition = ((newCell.index > this.copyList[0][this.copyList[0].length - 1].index) || (newCell.columnIndex > this.copyList[this.copyList.length - 1][0].columnIndex));
+                const isDeleteion = ((newCell.index < this.copyList[0][this.copyList[0].length - 1].index) || (newCell.columnIndex < this.copyList[this.copyList.length - 1][0].columnIndex));
                 let isColumnExist = false;
                 let isMoreToAllIndicesOfStartData = true;
                 let isEqualToAllIndicesOfStartData = true;
@@ -595,44 +596,59 @@ export default {
                         isColumnExist = this.copyList[i][0].column === newCell.column;
                     }
                 }
-                if (isEqualToAllIndicesOfStartData && !isColumnExist) {
-                    // Create start data
-                    let columnIndex = this.copyList[this.copyList.length - 1][0].columnIndex + 1;
-                    while (columnIndex <= newCell.columnIndex) {
-                        let column = this.headers[columnIndex+2].value;
-                        this.copyList.push([{ index: newCell.index, column, columnIndex, value: this.orderGPSData[newCell.index][column] }]);
-                        ++columnIndex;
-                    }
-                } else if (isMoreToAllIndicesOfStartData) {
-                    if (isColumnExist) {
-                        console.log('1');
-                        // Cells in which need to insert the copy value
-                        for (let i = 0; i < this.copyList.length; ++i) {
-                            let index = this.copyList[i][this.copyList[i].length-1].index + 1;
-                            while (index <= newCell.index) {
-                                this.$set(this.copyList[i], this.copyList[i].length, { index, column: this.copyList[i][0].column });
-                                ++index;
-                            }
-                        }
-                    } else {
+                if (isAddition) {
+                    console.log('ADDITION');
+                    if (isEqualToAllIndicesOfStartData && !isColumnExist) {
                         // Create start data
-                        console.log('Create start data');
-                        let index = this.copyList[0][0].index;
-                        const column = newCell.column;
-                        this.copyList.push([{ index, column, value: this.orderGPSData[index][column] }]);
-                        const copyListLen = this.copyList.length;
-                        for (let i = 1; i < this.copyList[0].length; ++i) {
-                            ++index;
-                            this.copyList[copyListLen-1].push({ index, column });
+                        let columnIndex = this.copyList[this.copyList.length - 1][0].columnIndex + 1;
+                        while (columnIndex <= newCell.columnIndex) {
+                            let column = this.headers[columnIndex+2].value;
+                            this.copyList.push([{ index: newCell.index, column, columnIndex, value: this.orderGPSData[newCell.index][column] }]);
+                            ++columnIndex;
                         }
-                        if (newCell.index > this.copyList[0][this.copyList[0].length-1].index) {
-                            console.log('2');
+                    } else if (isMoreToAllIndicesOfStartData) {
+                        if (isColumnExist) {
+                            console.log('1');
                             // Cells in which need to insert the copy value
                             for (let i = 0; i < this.copyList.length; ++i) {
-                                this.$set(this.copyList[i], this.copyList[i].length, { index: newCell.index, column: this.copyList[i][0].column });
-                                // this.copyList[i].push({ index: newCell.index, column: this.copyList[i][0].column });
+                                let index = this.copyList[i][this.copyList[i].length-1].index + 1;
+                                while (index <= newCell.index) {
+                                    this.$set(this.copyList[i], this.copyList[i].length, { index, column: this.copyList[i][0].column });
+                                    ++index;
+                                }
+                            }
+                        } else {
+                            // Create start data
+                            console.log('Create start data');
+                            let index = this.copyList[0][0].index;
+                            const column = newCell.column;
+                            this.copyList.push([{ index, column, columnIndex: newCell.columnIndex, value: this.orderGPSData[index][column] }]);
+                            const copyListLen = this.copyList.length;
+                            for (let i = 1; i < this.copyList[0].length; ++i) {
+                                ++index;
+                                this.copyList[copyListLen-1].push({ index, column });
+                            }
+                            if (newCell.index > this.copyList[0][this.copyList[0].length-1].index) {
+                                console.log('2');
+                                // Cells in which need to insert the copy value
+                                for (let i = 0; i < this.copyList.length; ++i) {
+                                    this.$set(this.copyList[i], this.copyList[i].length, { index: newCell.index, column: this.copyList[i][0].column });
+                                    // this.copyList[i].push({ index: newCell.index, column: this.copyList[i][0].column });
+                                }
                             }
                         }
+                    }
+                } else if (isDeleteion) {
+                    console.log('DELETION');
+                    if (newCell.index < this.copyList[0][this.copyList[0].length-1].index) {
+                        for (let i = 0; i < this.copyList.length; ++i) {
+                            this.copyList[i].splice(this.copyList[i].length-1, 1);
+                        }
+                    }
+                    if (newCell.columnIndex < this.copyList[this.copyList.length - 1][0].columnIndex) {
+                        // Delete column
+                        // const indexForDeletion = this.copyList.findIndex((copies) => copies[0].columnIndex === newCell.columnIndex + 1);
+                        this.copyList.splice(this.copyList.length - 1, 1);
                     }
                 }
             }
