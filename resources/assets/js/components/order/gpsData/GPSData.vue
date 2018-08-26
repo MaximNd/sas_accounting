@@ -402,6 +402,7 @@ export default {
             },
             tableBody: null,
             bordersWrapper: null,
+            prevCell: null,
             bordersSelectData: {
                 top: {
                     el: null,
@@ -524,6 +525,34 @@ export default {
                 left: box.left - table.left
             };
         },
+        normalizeCorner(anchorCoords, anchor) {
+            this.bordersSelectData.corner.styles.top = `${anchorCoords.top + anchor.offsetHeight - 5}px`;
+            this.bordersSelectData.corner.styles.left = `${anchorCoords.left + anchor.offsetWidth - 6}px`;
+        },
+        normalizeSelectBorders(anchorCoords, anchor) {
+            this.bordersSelectData.top.styles.top = `${anchorCoords.top - this.bordersSelectData.top.el.offsetHeight}px`;
+            this.bordersSelectData.top.styles.left = `${anchorCoords.left}px`;
+            this.bordersSelectData.top.styles.width = `${anchorCoords.width}px`;
+
+            this.bordersSelectData.left.styles.top = `${anchorCoords.top}px`;
+            this.bordersSelectData.left.styles.left = `${anchorCoords.left}px`;
+            this.bordersSelectData.left.styles.height = `${anchorCoords.height}px`;
+
+            this.bordersSelectData.bottom.styles.top = `${anchorCoords.top + anchor.offsetHeight}px`;
+            this.bordersSelectData.bottom.styles.left = `${anchorCoords.left}px`;
+            this.bordersSelectData.bottom.styles.width = `${anchorCoords.width}px`;
+
+            this.bordersSelectData.right.styles.top = `${anchorCoords.top}px`;
+            this.bordersSelectData.right.styles.left = `${anchorCoords.left + anchor.offsetWidth-2}px`;
+            this.bordersSelectData.right.styles.height = `${anchorCoords.height}px`;
+        },
+        normalizeStylesSelectBordersAndCorner() {
+            this.setStyles(this.bordersSelectData.top.el, this.bordersSelectData.top.styles);
+            this.setStyles(this.bordersSelectData.left.el, this.bordersSelectData.left.styles);
+            this.setStyles(this.bordersSelectData.bottom.el, this.bordersSelectData.bottom.styles);
+            this.setStyles(this.bordersSelectData.right.el, this.bordersSelectData.right.styles);
+            this.setStyles(this.bordersSelectData.corner.el, this.bordersSelectData.corner.styles);
+        },
         positionBorders(anchor) {
             const anchorCoords = this.getCoords(anchor);
             if (this.bordersSelectData.top.el === null) {
@@ -542,44 +571,29 @@ export default {
                 this.createBorder('corner', true);
             }
 
-            this.bordersSelectData.top.styles.top = `${anchorCoords.top - this.bordersSelectData.top.el.offsetHeight}px`;
-            this.bordersSelectData.top.styles.left = `${anchorCoords.left}px`;
-            this.bordersSelectData.top.styles.width = `${anchorCoords.width}px`;
-            this.setStyles(this.bordersSelectData.top.el, this.bordersSelectData.top.styles);
+            this.normalizeSelectBorders(anchorCoords, anchor);
+            this.normalizeCorner(anchorCoords, anchor);
+            this.normalizeStylesSelectBordersAndCorner();
 
-            this.bordersSelectData.left.styles.top = `${anchorCoords.top}px`;
-            this.bordersSelectData.left.styles.left = `${anchorCoords.left}px`;
-            this.bordersSelectData.left.styles.height = `${anchorCoords.height}px`;
-            this.setStyles(this.bordersSelectData.left.el, this.bordersSelectData.left.styles);
-
-            this.bordersSelectData.bottom.styles.top = `${anchorCoords.top + anchor.offsetHeight}px`;
-            this.bordersSelectData.bottom.styles.left = `${anchorCoords.left}px`;
-            this.bordersSelectData.bottom.styles.width = `${anchorCoords.width}px`;
-            this.setStyles(this.bordersSelectData.bottom.el, this.bordersSelectData.bottom.styles);
-
-            this.bordersSelectData.right.styles.top = `${anchorCoords.top}px`;
-            this.bordersSelectData.right.styles.left = `${anchorCoords.left + anchor.offsetWidth-2}px`;
-            this.bordersSelectData.right.styles.height = `${anchorCoords.height}px`;
-            this.setStyles(this.bordersSelectData.right.el, this.bordersSelectData.right.styles);
-
-            this.bordersSelectData.corner.styles.top = `${anchorCoords.top + anchor.offsetHeight - 5}px`;
-            this.bordersSelectData.corner.styles.left = `${anchorCoords.left + anchor.offsetWidth - 6}px`;
-            this.setStyles(this.bordersSelectData.corner.el, this.bordersSelectData.corner.styles);
         },
-        selectCell(event, data) {
-            console.log('Selected');
-            this.selectCellToCopyList(event, data, true);
+        findTDEl(event) {
             let index = 0;
             for (let i = 0; event.path[i].tagName != 'TD'; ++i) {
                 ++index;
             }
-            const cell = index === 0 ? event.target : event.path[index];
+            return index === 0 ? event.target : event.path[index];
+        },
+        selectCell(event, data) {
+            console.log('Selected');
+            this.selectCellToCopyList(event, data, true);
+            const cell = this.findTDEl(event);
             this.positionBorders(cell);
         },
         selectCellToCopyList(event, newCell, reset = false) {
             if (reset) {
                 console.log('Reseted');
                 this.copyList = [ [newCell] ];
+                return;
                 // this.$forceUpdate();
             } else {
                 if (!this.isCornerFocused) return;
@@ -596,9 +610,16 @@ export default {
                         isColumnExist = this.copyList[i][0].column === newCell.column;
                     }
                 }
+                const currentCell = this.findTDEl(event);
+                const currentCellCoords = this.getCoords(currentCell);
                 if (isAddition) {
+                    this.prevCell = currentCell;
                     console.log('ADDITION');
                     if (isEqualToAllIndicesOfStartData && !isColumnExist) {
+                        this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) + currentCellCoords.width}px`;
+                        this.bordersSelectData.right.styles.left = `${currentCellCoords.left + currentCell.offsetWidth-2}px`;
+                        this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) + currentCellCoords.width}px`;
+
                         // Create start data
                         let columnIndex = this.copyList[this.copyList.length - 1][0].columnIndex + 1;
                         while (columnIndex <= newCell.columnIndex) {
@@ -609,6 +630,9 @@ export default {
                     } else if (isMoreToAllIndicesOfStartData) {
                         if (isColumnExist) {
                             console.log('1');
+                            this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) + currentCellCoords.height}px`;
+                            this.bordersSelectData.bottom.styles.top = `${currentCellCoords.top + currentCell.offsetHeight}px`;
+                            this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) + currentCellCoords.height}px`;
                             // Cells in which need to insert the copy value
                             for (let i = 0; i < this.copyList.length; ++i) {
                                 let index = this.copyList[i][this.copyList[i].length-1].index + 1;
@@ -618,6 +642,9 @@ export default {
                                 }
                             }
                         } else {
+                            this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) + currentCellCoords.width}px`;
+                            this.bordersSelectData.right.styles.left = `${currentCellCoords.left + currentCell.offsetWidth-2}px`;
+                            this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) + currentCellCoords.width}px`;
                             // Create start data
                             console.log('Create start data');
                             let index = this.copyList[0][0].index;
@@ -629,6 +656,9 @@ export default {
                                 this.copyList[copyListLen-1].push({ index, column });
                             }
                             if (newCell.index > this.copyList[0][this.copyList[0].length-1].index) {
+                                this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) + currentCellCoords.height}px`;
+                                this.bordersSelectData.bottom.styles.top = `${currentCellCoords.top + currentCell.offsetHeight}px`;
+                                this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) + currentCellCoords.height}px`;
                                 console.log('2');
                                 // Cells in which need to insert the copy value
                                 for (let i = 0; i < this.copyList.length; ++i) {
@@ -639,18 +669,29 @@ export default {
                         }
                     }
                 } else if (isDeleteion) {
+                    const prevCell = this.prevCell;
+                    const prevCellCoords = this.getCoords(prevCell);
                     console.log('DELETION');
                     if (newCell.index < this.copyList[0][this.copyList[0].length-1].index) {
+                        this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) - prevCellCoords.height}px`;
+                        this.bordersSelectData.bottom.styles.top = `${prevCellCoords.top}px`;
+                        this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) - prevCellCoords.height}px`;
                         for (let i = 0; i < this.copyList.length; ++i) {
                             this.copyList[i].splice(this.copyList[i].length-1, 1);
                         }
                     }
                     if (newCell.columnIndex < this.copyList[this.copyList.length - 1][0].columnIndex) {
+                        this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) - prevCellCoords.width}px`;
+                        this.bordersSelectData.right.styles.left = `${prevCellCoords.left-2}px`;
+                        this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) - prevCellCoords.width}px`;
                         // Delete column
                         // const indexForDeletion = this.copyList.findIndex((copies) => copies[0].columnIndex === newCell.columnIndex + 1);
                         this.copyList.splice(this.copyList.length - 1, 1);
                     }
+                    this.prevCell = currentCell;
                 }
+                this.normalizeCorner(currentCellCoords, currentCell);
+                this.normalizeStylesSelectBordersAndCorner();
             }
             console.log('this.copyList: ', this.copyList);
         },
@@ -789,6 +830,9 @@ export default {
         position: absolute;
         font-size: 0;
         background-color: rgb(75, 135, 255);
+        transition-property: left, top, width, height;
+        transition-duration: 0.1s, 0.1s, 0.1s, 0.1s;
+        transition-timing-function: cubic-bezier(.89,1.2,.85,.94);
     }
     .border .hidden {
         display: none !important;
