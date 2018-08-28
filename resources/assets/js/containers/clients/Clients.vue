@@ -34,6 +34,9 @@
                         <template slot="items" slot-scope="props">
                             <td>{{ props.item.person_full_name }}</td>
                             <td>{{ props.item.company_name }}</td>
+                            <td>{{ props.item.area }}</td>
+                            <td>{{ props.item.telephone }}</td>
+                            <td>{{ props.item.comment }}</td>
                             <td class="text-xs-right"><v-btn color="info">Подробнее</v-btn></td>
                         </template>
                     </v-data-table>
@@ -64,6 +67,9 @@ export default {
                     value: 'person_full_name'
                 },
                 { text: 'Компания', value: 'company_name' },
+                { text: 'Площадь', value: 'area', width: '15px' },
+                { text: 'Телефон', value: 'telephone' },
+                { text: 'Коментарий', value: 'comment' },
                 { text: '', value: '', sortable: false }
             ]
         };
@@ -93,7 +99,7 @@ export default {
             this.axios.get('/clients', { params })
                 .then(({data}) => {
                     this.totalClients = data.total;
-                    this.clients = data.data;
+                    this.clients = data.data.map(client => ({...client, area: parseFloat(client.area)}));
                 })
                 .catch(err => {
                     console.log(err);

@@ -21,7 +21,11 @@ class ClientController extends Controller
         }
 
         if (isset($params['query'])) {
-            $query->where('person_full_name', 'like', '%'.$params['query'].'%')->orWhere('company_name', 'like', '%'.$params['query'].'%');
+            $value = '%'.$params['query'].'%';
+            $query
+                ->where('person_full_name', 'like', $value)
+                ->orWhere('company_name', 'like', $value)
+                ->orWhere('telephone', 'like', $value);
         }
 
         if (isset($params['sortBy']) && isset($params['direction'])) {
@@ -34,7 +38,9 @@ class ClientController extends Controller
     public function createClient(Request $request) {
         $this->validate($request, [
             'person_full_name' => 'required',
-            'company_name' => 'required'
+            'company_name' => 'required',
+            'area' => 'required',
+            'telephone' => 'required'
         ]);
 
         $client = new Client($request->all());

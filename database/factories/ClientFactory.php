@@ -16,6 +16,9 @@ use Faker\Generator as Faker;
 $factory->define(App\Client::class, function (Faker $faker) {
     return [
         'person_full_name' => $faker->lastName.' '.$faker->firstName.' '.$faker->lastName,
-        'company_name' => 'company:'.$faker->name.'-'.$faker->numberBetween(1,100)
+        'company_name' => 'company:'.$faker->company,
+        'area' => $faker->numberBetween(50, 500),
+        'telephone' => $faker->phoneNumber,
+        'comment' => $faker->text(50)
     ];
 });

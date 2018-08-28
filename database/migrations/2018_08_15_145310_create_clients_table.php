@@ -17,6 +17,9 @@ class CreateClientsTable extends Migration
             $table->increments('id');
             $table->string('person_full_name');
             $table->string('company_name');
+            $table->double('area');
+            $table->string('telephone');
+            $table->text('comment');
             $table->timestamps();
         });
     }

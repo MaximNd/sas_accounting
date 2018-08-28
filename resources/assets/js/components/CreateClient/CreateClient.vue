@@ -33,6 +33,15 @@
                     <v-flex xs12>
                         <v-text-field v-model="clientData.company_name" label="Компания" required></v-text-field>
                     </v-flex>
+                    <v-flex xs12>
+                        <v-text-field v-model="clientData.area" label="Площадь" required></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-text-field v-model="clientData.telephone" label="Телефон" required></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-textarea v-model="clientData.comment" label="Коментарий" required></v-textarea>
+                    </v-flex>
                 </v-layout>
             </v-container>
         </v-card-text>
@@ -67,7 +76,10 @@ export default {
             similarClients: [],
             clientData: {
                 person_full_name: '',
-                company_name: ''
+                company_name: '',
+                area: '',
+                telephone: '',
+                comment: ''
             }
         };
     },
