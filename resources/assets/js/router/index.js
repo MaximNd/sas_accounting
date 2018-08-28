@@ -5,7 +5,6 @@ import Login from './../containers/auth/login/Login.vue';
 import ForgotPassword from './../containers/auth/reset/ForgotPassword.vue';
 import ResetPassword from './../containers/auth/reset/ResetPassword.vue';
 import Profile from './../containers/profile/Profile.vue';
-import CreateAccount from './../containers/createAccount/CreateAccount.vue';
 import Users from './../containers/users/Users.vue';
 import Clients from './../containers/clients/Clients.vue';
 import PriceList from './../containers/priceList/PriceList.vue';
@@ -34,11 +33,6 @@ export default new Router({
         path: '/profile',
         name: 'profile',
         component: Profile
-    },
-    {
-        path: '/create-account',
-        name: 'create-account',
-        component: CreateAccount
     },
     {
         path: '/users',

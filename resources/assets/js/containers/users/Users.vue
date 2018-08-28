@@ -1,6 +1,12 @@
 <template>
     <v-container fluid grid-list-lg>
         <v-layout wrap>
+            <v-flex xs12>
+                <appCreateAccount
+                    @account:created="addUser"
+                    @account:error="setSnackBar('error', 'Ошибка!');">
+                </appCreateAccount>
+            </v-flex>
             <v-flex xs12 sm6 md4 v-for="(user, index) in users" :key="`user-${index}`">
                 <appProfileData
                     :user="user"
@@ -8,22 +14,33 @@
                     @deleteUser="deleteUser(index)"></appProfileData>
             </v-flex>
         </v-layout>
+        <v-snackbar
+            v-model="snackbar"
+            :timeout="2000"
+            :color="statusColor"
+            auto-height
+            right>
+            {{ statusText }}
+        </v-snackbar>
     </v-container>
 </template>
 
 <script>
+import CreateAccount from './../../components/createAccount/CreateAccount';
 import ProfileData from './../../components/profileData/ProfileData';
 
 export default {
     data() {
         return {
+            statusText: '',
+            statusColor: '',
+            snackbar: false,
             users: []
         };
     },
     methods: {
-        updateUser(user, index) {
-            this.users.splice(index, 1, user);
-            const mappedUsers = this.users.reduce((all, user) => {
+        getUsersMappedByRole() {
+            return this.users.reduce((all, user) => {
                 if (user.role === 'admin') {
                     all.admins.push(user);
                 } else if (user.role === 'user') {
@@ -31,16 +48,37 @@ export default {
                 }
                 return all;
             }, { admins: [], users: [] });
-            mappedUsers.admins.sort((a, b) => {
-                return a.id - b.id;
-            });
-            mappedUsers.users.sort((a, b) => {
-                return a.id - b.id;
-            });
+        },
+        sortUsersById(users) {
+            return users.sort((a, b) => a.id - b.id);
+        },
+        addUser(user) {
+            const mappedUsers = this.getUsersMappedByRole();
+            if (user.role === 'admin') {
+                mappedUsers.admins.push(user);
+                mappedUsers.admins = this.sortUsersById(mappedUsers.admins);
+            } else if (user.role === 'user') {
+                mappedUsers.users.push(user);
+                mappedUsers.users = this.sortUsersById(mappedUsers.users);
+            }
+            this.users = [...mappedUsers.admins, ...mappedUsers.users];
+            this.snackbar = true;
+            this.setSnackBar('success', 'Аккаунт создан!');
+        },
+        updateUser(user, index) {
+            this.users.splice(index, 1, user);
+            const mappedUsers = this.getUsersMappedByRole();
+            mappedUsers.admins = this.sortUsersById(mappedUsers.admins);
+            mappedUsers.users = this.sortUsersById(mappedUsers.users);
             this.users = [...mappedUsers.admins, ...mappedUsers.users];
         },
         deleteUser(index) {
             this.users.splice(index, 1);
+        },
+        setSnackBar(statusColor, statusText) {
+            this.snackbar = true;
+            this.statusColor = statusColor;
+            this.statusText = statusText;
         }
     },
     created() {
@@ -50,7 +88,8 @@ export default {
             });
     },
     components: {
-        appProfileData: ProfileData
+        appProfileData: ProfileData,
+        appCreateAccount: CreateAccount
     }
 }
 </script>
