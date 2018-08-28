@@ -29,8 +29,10 @@
         default:
             $color = 'blue';
     }
-    $pos = strpos($actionUrl, '/password');
-    $passwordResetUrl = substr($actionUrl, 0, $pos).'/#'.substr($actionUrl, $pos);
+    $pass_pos = strpos($actionUrl, '/password');
+    $passwordResetUrl = substr($actionUrl, 0, $pass_pos).'/#'.substr($actionUrl, $pass_pos);
+    $api_pos = strpos($passwordResetUrl, '/api');
+    $passwordResetUrl = substr($passwordResetUrl, 0, $api_pos).substr($passwordResetUrl, $api_pos + 4);
 ?>
 @component('mail::button', ['url' => $passwordResetUrl, 'color' => $color])
 {{ $actionText }}
