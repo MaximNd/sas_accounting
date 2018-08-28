@@ -36,6 +36,9 @@ class CreateGPSDatasTable extends Migration
             $table->integer('can_reader');
             $table->integer('deaerator');
             $table->json('additional_equipment');
+            $table->json('cn03');
+            $table->json('rs01');
+
 
             $table->timestamps();
         });

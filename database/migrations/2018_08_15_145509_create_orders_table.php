@@ -20,16 +20,16 @@ class CreateOrdersTable extends Migration
             $table->foreign('client_id')->references('id')->on('clients');
 
             $table->string('name');
-            $table->string('area');
+            $table->double('area');
 
             $table->integer('days');
-            $table->double('price_for_days');
+            $table->double('price_for_day');
 
-            $table->double('transportation_per_km');
+            $table->double('price_for_transportation_per_km');
             $table->integer('number_of_trips');
+            $table->double('transportation_kms');
             $table->string('route');
 
-            $table->json('users');
             $table->json('services');
 
             $table->timestamps();
