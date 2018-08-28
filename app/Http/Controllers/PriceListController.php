@@ -34,7 +34,7 @@ class PriceListController extends Controller
                 'name' => 'required',
                 'incoming_price' => 'required|numeric',
                 'price' => 'required|numeric',
-                'installation_price' => 'required|numeric',
+                'installation_price_for_one' => 'required|numeric',
                 'description' => 'string'
             ]);
         }
@@ -69,7 +69,9 @@ class PriceListController extends Controller
             'isService' => 'required|boolean',
             'equipment.incoming_price' => 'numeric',
             'equipment.price' => 'numeric',
-            'equipment.installation_price' => 'numeric',
+            'equipment.installation_price_for_one' => 'numeric',
+            'equipment.installation_price_for_two' => 'numeric',
+            'equipment.installation_price_for_three' => 'numeric',
             'equipment.description' => 'string',
             'equipment.type' => Rule::in(['GPS-трекеры', 'Датчики уровня топлива', 'Расходомеры топлива', 'Идентификация', 'Дополнительное оборудование']),
             'service.price' => 'numeric',

@@ -20,19 +20,25 @@ $factory->define(App\PriceList::class, function (Faker $faker) {
     $isService = $type === 'Услуга';
     $name = 'Model:'.$faker->randomNumber();
     $incoming_price = $faker->randomFloat(2, 10, 500);
-    $installation_price = $faker->randomFloat(2, 10, 500);
+    $installation_price_for_one = $faker->randomFloat(2, 400, 1000);
+    $installation_price_for_two = $installation_price_for_one - 150;
+    $installation_price_for_three = $installation_price_for_one - 200;
     $description = $faker->text(40);
     if ($isService) {
         $name = 'Service:'.$faker->randomNumber();
         $incoming_price = null;
         $installation_price = null;
+        $installation_price_for_two = null;
+        $installation_price_for_three = null;
         $description = null;
     }
     return [
         'name' => $name,
         'incoming_price' => $incoming_price,
         'price' => $faker->randomFloat(2, 10, 500),
-        'installation_price' => $installation_price,
+        'installation_price_for_one' => $installation_price_for_one,
+        'installation_price_for_two' => $installation_price_for_two,
+        'installation_price_for_three' => $installation_price_for_three,
         'description' => $description,
         'type' => $type
     ];

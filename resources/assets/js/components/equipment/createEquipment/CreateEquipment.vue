@@ -17,7 +17,13 @@
                             <v-text-field v-model="newEquipment.price" append-icon="attach_money" label="Цена"></v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                            <v-text-field v-model="newEquipment.installation_price" append-icon="attach_money" label="Стоимость монтажа"></v-text-field>
+                            <v-text-field v-model="newEquipment.installation_price_for_one" append-icon="₴" label="Стоимость монтажа 1шт."></v-text-field>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-text-field v-model="newEquipment.installation_price_for_two" append-icon="₴" label="Стоимость монтажа 2шт."></v-text-field>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-text-field v-model="newEquipment.installation_price_for_three" append-icon="₴" label="Стоимость монтажа 3шт."></v-text-field>
                         </v-flex>
                         <v-flex xs12>
                             <v-textarea v-model="newEquipment.description" label="Описание"></v-textarea>
@@ -53,7 +59,9 @@ export default {
                 name: '',
                 incoming_price: '',
                 price: '',
-                installation_price: '',
+                installation_price_for_one: '',
+                installation_price_for_two: '',
+                installation_price_for_three: '',
                 description: '',
                 type: ''
             }

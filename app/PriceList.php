@@ -13,7 +13,9 @@ class PriceList extends Model
         'name',
         'incoming_price',
         'price',
-        'installation_price',
+        'installation_price_for_one',
+        'installation_price_for_two',
+        'installation_price_for_three',
         'description',
         'type'
     ];

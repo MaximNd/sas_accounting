@@ -38,7 +38,9 @@
                 <td>{{ props.item.name }}</td>
                 <td class="text-xs-right">{{ props.item.incoming_price }}</td>
                 <td class="text-xs-right">{{ props.item.price }}</td>
-                <td class="text-xs-right">{{ props.item.installation_price }}</td>
+                <td v-if="isShowInstallationPrice.forOne" class="text-xs-right">{{ props.item.installation_price_for_one }}</td>
+                <td v-if="isShowInstallationPrice.forTwo" class="text-xs-right">{{ props.item.installation_price_for_two }}</td>
+                <td v-if="isShowInstallationPrice.forThree" class="text-xs-right">{{ props.item.installation_price_for_three }}</td>
                 <td class="text-xs-right">{{ props.item.description }}</td>
                 <td v-if="$auth.check('admin')" class="justify-end layout px-0">
                     <v-btn
@@ -77,7 +79,6 @@ export default {
     data() {
         return {
             search: '',
-            headers: [],
             dialogs: {
                 createDialog: false,
                 editDialog: false,
@@ -87,7 +88,9 @@ export default {
                 name: '',
                 incoming_price: '',
                 price: '',
-                installation_price: '',
+                installation_price_for_one: '',
+                installation_price_for_two: '',
+                installation_price_for_three: '',
                 description: ''
             },
             deletedEquipment: {}
@@ -96,6 +99,36 @@ export default {
     computed: {
         loading() {
             return this.equipment.length === 0;
+        },
+        isShowInstallationPrice() {
+            return this.equipment.reduce((isShow, equipment) => {
+                return {
+                    forOne: isShow.forOne || (equipment.installation_price_for_one !== null && equipment.installation_price_for_one !== ''),
+                    forTwo: isShow.forTwo || (equipment.installation_price_for_two !== null && equipment.installation_price_for_two !== ''),
+                    forThree: isShow.forThree || (equipment.installation_price_for_three !== null && equipment.installation_price_for_three !== ''),
+                };
+            }, { forOne: false, forTwo: false, forThree: false });
+        },
+        headers() {
+            let headers = [
+                { text: 'Модель', align: 'left', value: 'name' },
+                { text: 'Входящая цена $', align: 'right', value: 'incoming_price' },
+                { text: 'Цена $', align: 'right', value: 'price' }
+            ];
+            if (this.isShowInstallationPrice.forOne) {
+                headers.push({ text: 'Монтаж 1шт. ₴', align: 'right', value: 'installation_price_for_one' });
+            }
+            if (this.isShowInstallationPrice.forTwo) {
+                headers.push({ text: 'Монтаж 2шт. ₴', align: 'right', value: 'installation_price_for_two' });
+            }
+            if(this.isShowInstallationPrice.forThree) {
+                headers.push({ text: 'Монтаж 3шт. ₴', align: 'right', value: 'installation_price_for_three' });
+            }
+            headers.push({ text: 'Описание', align: 'right', value: 'description' });
+            if (this.$auth.check('admin')) {
+                headers.push({ text: 'Действия', align: 'right', value: 'name', sortable: false });
+            }
+            return headers;
         }
     },
     methods: {
@@ -113,19 +146,6 @@ export default {
         closeDialog(which) {
             this.dialogs[which] = false;
         }
-    },
-    created() {
-        let headers = [
-            { text: 'Модель', align: 'left', value: 'name' },
-            { text: 'Входящая цена $', align: 'right', value: 'incoming_price' },
-            { text: 'Цена $', align: 'right', value: 'price' },
-            { text: 'Стоимость монтажа $', align: 'right', value: 'installation_price' },
-            { text: 'Описание', align: 'right', value: 'description' }
-        ];
-        if (this.$auth.check('admin')) {
-            headers.push({ text: 'Действия', align: 'right', value: 'name', sortable: false });
-        }
-        this.headers = headers;
     },
     components: {
         appEditEquipmentDialog: EditEquipmentDialog,

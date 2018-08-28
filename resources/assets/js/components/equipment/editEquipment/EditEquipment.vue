@@ -17,7 +17,13 @@
                             <v-text-field v-model="editedEquipment.price" append-icon="attach_money" label="Цена"></v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                            <v-text-field v-model="editedEquipment.installation_price" append-icon="attach_money" label="Стоимость монтажа"></v-text-field>
+                            <v-text-field v-model="editedEquipment.installation_price_for_one" append-icon="₴" label="Стоимость монтажа 1шт."></v-text-field>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-text-field v-model="editedEquipment.installation_price_for_two" append-icon="₴" label="Стоимость монтажа 2шт."></v-text-field>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-text-field v-model="editedEquipment.installation_price_for_three" append-icon="₴" label="Стоимость монтажа 3шт"></v-text-field>
                         </v-flex>
                         <v-flex xs12>
                             <v-textarea v-model="editedEquipment.description" label="Описание"></v-textarea>
@@ -67,7 +73,9 @@ export default {
                     name: this.editedEquipment.name,
                     incoming_price: this.editedEquipment.incoming_price,
                     price: this.editedEquipment.price,
-                    installation_price: this.editedEquipment.installation_price,
+                    installation_price_for_one: this.editedEquipment.installation_price_for_one,
+                    installation_price_for_two: this.editedEquipment.installation_price_for_two,
+                    installation_price_for_three: this.editedEquipment.installation_price_for_three,
                     description: this.editedEquipment.description,
                     type: this.editedEquipment.type
                 },
