@@ -61,6 +61,8 @@
                     :identification="identification"
                     :optionalEquipment="optionalEquipment"
                     @update:orderGPSData="updateOrderGPSData"
+                    @add-nested-data:orderGPSData="addNestedDataInOrderGPSData"
+                    @delete-nested-data:orderGPSData="deleteNestedDataInOrderGPSData"
                     @copy-values:orderGPSData="copySelectedInOrderGPSData"
                     @drag-n-drop-gps-data="dragNDropGPSData"
                     @rowAdded="addRowToOrderGPSData">
@@ -74,6 +76,7 @@
 import { mapGetters } from 'vuex';
 import CreateClient from './../CreateClient/CreateClient';
 import GPSData from './gpsData/GPSData';
+import dcopy from 'deep-copy';
 
 export default {
     props: {
@@ -95,14 +98,16 @@ export default {
                 power: '',
                 number: '',
                 gps_tracker: '',
-                fuel_gauge: '',
+                fuel_gauge: [],
                 counter: '',
                 rf_id: '',
                 reader_of_trailed_equipment: '',
                 connect_module: '',
                 can_reader: '',
                 deaerator: '',
-                additional_equipment: ''
+                additional_equipment: '',
+                cn03: '',
+                rs01: ''
             },
             orderData: {
                 name: '',
@@ -159,10 +164,19 @@ export default {
         getClientWithTextValue(client) {
             return { ...client, text: `${client.person_full_name} (${client.company_name})` }
         },
-        updateOrderGPSData(val, index, path) {
-            console.log(val, index, path);
-            this.orderData.GPSData[index][path] = val;
-            // this.$set(this.orderData.GPSData[index], path, val);
+        updateOrderGPSData(val, index, path, nestedPath = false) {
+            console.log('updateOrderGPSData: ', arguments);
+            if (nestedPath !== false) {
+                this.orderData.GPSData[index][path][nestedPath] = val;
+            } else {
+                this.orderData.GPSData[index][path] = val;
+            }
+        },
+        addNestedDataInOrderGPSData(row, column) {
+            this.orderData.GPSData[row][column].push(undefined);
+        },
+        deleteNestedDataInOrderGPSData(row, column, index) {
+            this.orderData.GPSData[row][column].splice(index, 1);
         },
         copySelectedInOrderGPSData(copyList) {
             for (let i = 0; i < copyList.length; ++i) {
@@ -180,14 +194,14 @@ export default {
                                 this.$refs.GPSData.setPreview(index);
                             }, 1000);
                         }
-                    } else {
-                        this.$set(this.orderData.GPSData[index], column, value);
+                    } else if (!column.endsWith('price')) {
+                        this.$set(this.orderData.GPSData[index], column, dcopy(value));
                     }
                 }
             }
         },
         addRowToOrderGPSData() {
-            this.orderData.GPSData.push({ ...this.initialGPSRowData });
+            this.orderData.GPSData.push({ ...this.initialGPSRowData, fuel_gauge: Array.apply(null, { length: 2 }) });
             ++this.initialGPSRowData.id;
         },
         dragNDropGPSData(newIndex, oldIndex) {

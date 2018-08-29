@@ -20,6 +20,16 @@
         else return this.parentElement.closest(selector)
       };
 }(Element.prototype));
+(function(e) {
+    if (!e.endsWith) {
+        e.endsWith = function(search, this_len) {
+            if (this_len === undefined || this_len > this.length) {
+                this_len = this.length;
+            }
+            return this.substring(this_len - search.length, this_len) === search;
+        };
+    }
+}(String.prototype));
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

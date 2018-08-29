@@ -10,12 +10,10 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "dependencies": {
-        "@handsontable/vue": "^2.0.0",
         "@websanova/vue-auth": "^2.21.14-beta",
         "axios": "^0.18",
         "deep-copy": "^1.4.2",
         "deep-diff": "^1.0.2",
-        "handsontable": "^5.0.1",
         "sortablejs": "^1.7.0",
         "string-similarity": "^1.2.0",
         "vue": "^2.5.7",
