@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 58);
+/******/ 	return __webpack_require__(__webpack_require__.s = 59);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -180,7 +180,7 @@ module.exports = function normalizeComponent (
 
 
 var bind = __webpack_require__(33);
-var isBuffer = __webpack_require__(62);
+var isBuffer = __webpack_require__(63);
 
 /*global toString:true*/
 
@@ -631,7 +631,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(98)
+var listToStyles = __webpack_require__(99)
 
 /*
 type StyleObject = {
@@ -843,8 +843,8 @@ function applyToTag (styleElement, obj) {
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsNative = __webpack_require__(167),
-    getValue = __webpack_require__(170);
+var baseIsNative = __webpack_require__(168),
+    getValue = __webpack_require__(171);
 
 /**
  * Gets the native function at `key` of `object`.
@@ -11826,15 +11826,15 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(79).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(80).setImmediate))
 
 /***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(9),
-    getRawTag = __webpack_require__(142),
-    objectToString = __webpack_require__(143);
+    getRawTag = __webpack_require__(143),
+    objectToString = __webpack_require__(144);
 
 /** `Object#toString` result references. */
 var nullTag = '[object Null]',
@@ -12016,11 +12016,11 @@ module.exports = isObject;
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var listCacheClear = __webpack_require__(157),
-    listCacheDelete = __webpack_require__(158),
-    listCacheGet = __webpack_require__(159),
-    listCacheHas = __webpack_require__(160),
-    listCacheSet = __webpack_require__(161);
+var listCacheClear = __webpack_require__(158),
+    listCacheDelete = __webpack_require__(159),
+    listCacheGet = __webpack_require__(160),
+    listCacheHas = __webpack_require__(161),
+    listCacheSet = __webpack_require__(162);
 
 /**
  * Creates an list cache object.
@@ -12093,7 +12093,7 @@ module.exports = nativeCreate;
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isKeyable = __webpack_require__(179);
+var isKeyable = __webpack_require__(180);
 
 /**
  * Gets the data for `map`.
@@ -12183,7 +12183,7 @@ module.exports = toKey;
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(1);
-var normalizeHeaderName = __webpack_require__(64);
+var normalizeHeaderName = __webpack_require__(65);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -13228,8 +13228,8 @@ var index_esm = {
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseForOwn = __webpack_require__(136),
-    createBaseEach = __webpack_require__(152);
+var baseForOwn = __webpack_require__(137),
+    createBaseEach = __webpack_require__(153);
 
 /**
  * The base implementation of `_.forEach` without support for iteratee shorthands.
@@ -13248,8 +13248,8 @@ module.exports = baseEach;
 /* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayLikeKeys = __webpack_require__(139),
-    baseKeys = __webpack_require__(148),
+var arrayLikeKeys = __webpack_require__(140),
+    baseKeys = __webpack_require__(149),
     isArrayLike = __webpack_require__(12);
 
 /**
@@ -13291,7 +13291,7 @@ module.exports = keys;
 /* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsArguments = __webpack_require__(141),
+var baseIsArguments = __webpack_require__(142),
     isObjectLike = __webpack_require__(10);
 
 /** Used for built-in method references. */
@@ -13405,11 +13405,11 @@ module.exports = isLength;
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseMatches = __webpack_require__(155),
-    baseMatchesProperty = __webpack_require__(205),
+var baseMatches = __webpack_require__(156),
+    baseMatchesProperty = __webpack_require__(206),
     identity = __webpack_require__(47),
     isArray = __webpack_require__(2),
-    property = __webpack_require__(215);
+    property = __webpack_require__(216);
 
 /**
  * The base implementation of `_.iteratee`.
@@ -13498,11 +13498,11 @@ module.exports = Map;
 /* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var mapCacheClear = __webpack_require__(171),
-    mapCacheDelete = __webpack_require__(178),
-    mapCacheGet = __webpack_require__(180),
-    mapCacheHas = __webpack_require__(181),
-    mapCacheSet = __webpack_require__(182);
+var mapCacheClear = __webpack_require__(172),
+    mapCacheDelete = __webpack_require__(179),
+    mapCacheGet = __webpack_require__(181),
+    mapCacheHas = __webpack_require__(182),
+    mapCacheSet = __webpack_require__(183);
 
 /**
  * Creates a map cache object to store key-value pairs.
@@ -13571,7 +13571,7 @@ module.exports = isKey;
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(61);
+module.exports = __webpack_require__(62);
 
 /***/ }),
 /* 33 */
@@ -13789,12 +13789,12 @@ process.umask = function() { return 0; };
 
 
 var utils = __webpack_require__(1);
-var settle = __webpack_require__(65);
-var buildURL = __webpack_require__(67);
-var parseHeaders = __webpack_require__(68);
-var isURLSameOrigin = __webpack_require__(69);
+var settle = __webpack_require__(66);
+var buildURL = __webpack_require__(68);
+var parseHeaders = __webpack_require__(69);
+var isURLSameOrigin = __webpack_require__(70);
 var createError = __webpack_require__(36);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(70);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(71);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -13891,7 +13891,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(71);
+      var cookies = __webpack_require__(72);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -13975,7 +13975,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(66);
+var enhanceError = __webpack_require__(67);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -14101,13 +14101,13 @@ module.exports = (function () {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(109)
+  __webpack_require__(110)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(111)
+var __vue_script__ = __webpack_require__(112)
 /* template */
-var __vue_template__ = __webpack_require__(120)
+var __vue_template__ = __webpack_require__(121)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -14152,9 +14152,9 @@ module.exports = Component.exports
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(132)
+var __vue_script__ = __webpack_require__(133)
 /* template */
-var __vue_template__ = __webpack_require__(229)
+var __vue_template__ = __webpack_require__(230)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -14208,7 +14208,7 @@ module.exports = freeGlobal;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(4),
-    stubFalse = __webpack_require__(144);
+    stubFalse = __webpack_require__(145);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -14280,9 +14280,9 @@ module.exports = function(module) {
 /* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsTypedArray = __webpack_require__(145),
-    baseUnary = __webpack_require__(146),
-    nodeUtil = __webpack_require__(147);
+var baseIsTypedArray = __webpack_require__(146),
+    baseUnary = __webpack_require__(147),
+    nodeUtil = __webpack_require__(148);
 
 /* Node.js helper references. */
 var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
@@ -14411,11 +14411,11 @@ module.exports = arrayMap;
 /***/ (function(module, exports, __webpack_require__) {
 
 var ListCache = __webpack_require__(14),
-    stackClear = __webpack_require__(162),
-    stackDelete = __webpack_require__(163),
-    stackGet = __webpack_require__(164),
-    stackHas = __webpack_require__(165),
-    stackSet = __webpack_require__(166);
+    stackClear = __webpack_require__(163),
+    stackDelete = __webpack_require__(164),
+    stackGet = __webpack_require__(165),
+    stackHas = __webpack_require__(166),
+    stackSet = __webpack_require__(167);
 
 /**
  * Creates a stack cache object to store key-value pairs.
@@ -14475,7 +14475,7 @@ module.exports = toSource;
 /* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsEqualDeep = __webpack_require__(183),
+var baseIsEqualDeep = __webpack_require__(184),
     isObjectLike = __webpack_require__(10);
 
 /**
@@ -14509,9 +14509,9 @@ module.exports = baseIsEqual;
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var SetCache = __webpack_require__(184),
-    arraySome = __webpack_require__(187),
-    cacheHas = __webpack_require__(188);
+var SetCache = __webpack_require__(185),
+    arraySome = __webpack_require__(188),
+    cacheHas = __webpack_require__(189);
 
 /** Used to compose bitmasks for value comparisons. */
 var COMPARE_PARTIAL_FLAG = 1,
@@ -14703,8 +14703,8 @@ module.exports = baseGet;
 
 var isArray = __webpack_require__(2),
     isKey = __webpack_require__(31),
-    stringToPath = __webpack_require__(207),
-    toString = __webpack_require__(210);
+    stringToPath = __webpack_require__(208),
+    toString = __webpack_require__(211);
 
 /**
  * Casts `value` to a path array if it's not one.
@@ -14728,30 +14728,115 @@ module.exports = castPath;
 /* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(59);
-module.exports = __webpack_require__(286);
+
+;(function (name, root, factory) {
+  if (true) {
+    module.exports = factory()
+  }
+  /* istanbul ignore next */
+  else if (typeof define === 'function' && define.amd) {
+    define(factory)
+  }
+  else {
+    root[name] = factory()
+  }
+}('dcopy', this, function () {
+  /**
+   * Deep copy objects and arrays
+   *
+   * @param {Object/Array} target
+   * @return {Object/Array} copy
+   * @api public
+   */
+
+  return function (target) {
+    if (/number|string|boolean/.test(typeof target)) {
+      return target
+    }
+    if (target instanceof Date) {
+      return new Date(target.getTime())
+    }
+
+    var copy = (target instanceof Array) ? [] : {}
+    walk(target, copy)
+    return copy
+
+    function walk (target, copy) {
+      for (var key in target) {
+        var obj = target[key]
+        if (obj instanceof Date) {
+          var value = new Date(obj.getTime())
+          add(copy, key, value)
+        }
+        else if (obj instanceof Function) {
+          var value = obj
+          add(copy, key, value)
+        }
+        else if (obj instanceof Array) {
+          var value = []
+          var last = add(copy, key, value)
+          walk(obj, last)
+        }
+        else if (obj instanceof Object) {
+          var value = {}
+          var last = add(copy, key, value)
+          walk(obj, last)
+        }
+        else {
+          var value = obj
+          add(copy, key, value)
+        }
+      }
+    }
+  }
+
+  /**
+   * Adds a value to the copy object based on its type
+   *
+   * @api private
+   */
+
+  function add (copy, key, value) {
+    if (copy instanceof Array) {
+      copy.push(value)
+      return copy[copy.length - 1]
+    }
+    else if (copy instanceof Object) {
+      copy[key] = value
+      return copy[key]
+    }
+  }
+}))
 
 
 /***/ }),
 /* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(60);
+module.exports = __webpack_require__(286);
+
+
+/***/ }),
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_store__ = __webpack_require__(81);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__websanova_vue_auth__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_store__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__websanova_vue_auth__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__websanova_vue_auth___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__websanova_vue_auth__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuetify__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuetify__ = __webpack_require__(88);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuetify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vuetify__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_axios__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_axios__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vuetify_dist_vuetify_min_css__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vuetify_dist_vuetify_min_css__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vuetify_dist_vuetify_min_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_vuetify_dist_vuetify_min_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__router__ = __webpack_require__(93);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__router__ = __webpack_require__(94);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -14759,7 +14844,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(60);
+__webpack_require__(61);
 
 
 
@@ -14813,7 +14898,7 @@ var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 });
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -14892,7 +14977,7 @@ if (token) {
 // });
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14900,7 +14985,7 @@ if (token) {
 
 var utils = __webpack_require__(1);
 var bind = __webpack_require__(33);
-var Axios = __webpack_require__(63);
+var Axios = __webpack_require__(64);
 var defaults = __webpack_require__(20);
 
 /**
@@ -14935,14 +15020,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(38);
-axios.CancelToken = __webpack_require__(77);
+axios.CancelToken = __webpack_require__(78);
 axios.isCancel = __webpack_require__(37);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(78);
+axios.spread = __webpack_require__(79);
 
 module.exports = axios;
 
@@ -14951,7 +15036,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports) {
 
 /*!
@@ -14978,7 +15063,7 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14986,8 +15071,8 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(20);
 var utils = __webpack_require__(1);
-var InterceptorManager = __webpack_require__(72);
-var dispatchRequest = __webpack_require__(73);
+var InterceptorManager = __webpack_require__(73);
+var dispatchRequest = __webpack_require__(74);
 
 /**
  * Create a new instance of Axios
@@ -15064,7 +15149,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15083,7 +15168,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15116,7 +15201,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15144,7 +15229,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15217,7 +15302,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15277,7 +15362,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15352,7 +15437,7 @@ module.exports = (
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15395,7 +15480,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15455,7 +15540,7 @@ module.exports = (
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15514,18 +15599,18 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var transformData = __webpack_require__(74);
+var transformData = __webpack_require__(75);
 var isCancel = __webpack_require__(37);
 var defaults = __webpack_require__(20);
-var isAbsoluteURL = __webpack_require__(75);
-var combineURLs = __webpack_require__(76);
+var isAbsoluteURL = __webpack_require__(76);
+var combineURLs = __webpack_require__(77);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -15607,7 +15692,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15634,7 +15719,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15655,7 +15740,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15676,7 +15761,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15740,7 +15825,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15774,7 +15859,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -15830,7 +15915,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(80);
+__webpack_require__(81);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -15844,7 +15929,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -16037,7 +16122,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(34)))
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16045,7 +16130,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_priceList__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_priceList__ = __webpack_require__(83);
 
 
 
@@ -16059,7 +16144,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 });
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16206,10 +16291,10 @@ var actions = {
 });
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Auth = __webpack_require__(84)();
+var Auth = __webpack_require__(85)();
 
 module.exports = (function () {
 
@@ -16250,11 +16335,11 @@ module.exports = (function () {
 })();
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __utils  = __webpack_require__(85),
-    __token  = __webpack_require__(86),
+var __utils  = __webpack_require__(86),
+    __token  = __webpack_require__(87),
     __cookie = __webpack_require__(39)
 
 module.exports = function () {
@@ -16964,7 +17049,7 @@ module.exports = function () {
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports) {
 
 module.exports = (function (){
@@ -17046,7 +17131,7 @@ module.exports = (function (){
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __cookie = __webpack_require__(39);
@@ -17126,7 +17211,7 @@ module.exports = (function () {
 })();
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -37243,7 +37328,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_vue__;
 //# sourceMappingURL=vuetify.js.map
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37251,13 +37336,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var _typeof="fun
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)):window.Vue&&window.axios&&Vue.use(o,window.axios)}();
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(90);
+var content = __webpack_require__(91);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -37265,7 +37350,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(91)(content, options);
+var update = __webpack_require__(92)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -37282,7 +37367,7 @@ if(false) {
 }
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(3)(false);
@@ -37296,7 +37381,7 @@ exports.push([module.i, "@keyframes shake{59%{margin-left:0}60%,80%{margin-left:
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -37342,7 +37427,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(92);
+var	fixUrls = __webpack_require__(93);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -37655,7 +37740,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports) {
 
 
@@ -37750,28 +37835,28 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__containers_auth_login_Login_vue__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__containers_auth_login_Login_vue__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__containers_auth_login_Login_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__containers_auth_login_Login_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__containers_auth_reset_ForgotPassword_vue__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__containers_auth_reset_ForgotPassword_vue__ = __webpack_require__(102);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__containers_auth_reset_ForgotPassword_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__containers_auth_reset_ForgotPassword_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__containers_auth_reset_ResetPassword_vue__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__containers_auth_reset_ResetPassword_vue__ = __webpack_require__(105);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__containers_auth_reset_ResetPassword_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__containers_auth_reset_ResetPassword_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__containers_profile_Profile_vue__ = __webpack_require__(107);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__containers_profile_Profile_vue__ = __webpack_require__(108);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__containers_profile_Profile_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__containers_profile_Profile_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__containers_users_Users_vue__ = __webpack_require__(122);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__containers_users_Users_vue__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__containers_users_Users_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__containers_users_Users_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__containers_clients_Clients_vue__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__containers_clients_Clients_vue__ = __webpack_require__(131);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__containers_clients_Clients_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__containers_clients_Clients_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__containers_priceList_PriceList_vue__ = __webpack_require__(231);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__containers_priceList_PriceList_vue__ = __webpack_require__(232);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__containers_priceList_PriceList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__containers_priceList_PriceList_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue__ = __webpack_require__(258);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue__ = __webpack_require__(259);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue__);
 
 
@@ -37836,7 +37921,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 }));
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40466,19 +40551,19 @@ if (inBrowser && window.Vue) {
 
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(96)
+  __webpack_require__(97)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(99)
+var __vue_script__ = __webpack_require__(100)
 /* template */
-var __vue_template__ = __webpack_require__(100)
+var __vue_template__ = __webpack_require__(101)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -40517,13 +40602,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(97);
+var content = __webpack_require__(98);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -40543,7 +40628,7 @@ if(false) {
 }
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(3)(false);
@@ -40557,7 +40642,7 @@ exports.push([module.i, "\n.forgot-password[data-v-722f3bbd] {\n    text-decorat
 
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ (function(module, exports) {
 
 /**
@@ -40590,7 +40675,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40666,7 +40751,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -40852,15 +40937,15 @@ if (false) {
 }
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(102)
+var __vue_script__ = __webpack_require__(103)
 /* template */
-var __vue_template__ = __webpack_require__(103)
+var __vue_template__ = __webpack_require__(104)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -40899,7 +40984,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40961,7 +41046,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -41114,15 +41199,15 @@ if (false) {
 }
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(105)
+var __vue_script__ = __webpack_require__(106)
 /* template */
-var __vue_template__ = __webpack_require__(106)
+var __vue_template__ = __webpack_require__(107)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -41161,7 +41246,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41235,7 +41320,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -41431,15 +41516,15 @@ if (false) {
 }
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(108)
+var __vue_script__ = __webpack_require__(109)
 /* template */
-var __vue_template__ = __webpack_require__(121)
+var __vue_template__ = __webpack_require__(122)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -41478,7 +41563,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41525,13 +41610,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(110);
+var content = __webpack_require__(111);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -41551,7 +41636,7 @@ if(false) {
 }
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(3)(false);
@@ -41565,14 +41650,14 @@ exports.push([module.i, "\n.userData[data-v-327f9b63] {\n    font-size: 18px;\n 
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__updateProfileData_UpdateProfileData__ = __webpack_require__(112);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__updateProfileData_UpdateProfileData__ = __webpack_require__(113);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__updateProfileData_UpdateProfileData___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__updateProfileData_UpdateProfileData__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__deleteUser_DeleteUser__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__deleteUser_DeleteUser__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__deleteUser_DeleteUser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__deleteUser_DeleteUser__);
 //
 //
@@ -41669,19 +41754,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(113)
+  __webpack_require__(114)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(115)
+var __vue_script__ = __webpack_require__(116)
 /* template */
-var __vue_template__ = __webpack_require__(116)
+var __vue_template__ = __webpack_require__(117)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -41720,13 +41805,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(114);
+var content = __webpack_require__(115);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -41746,7 +41831,7 @@ if(false) {
 }
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(3)(false);
@@ -41760,7 +41845,7 @@ exports.push([module.i, "\nimg[data-v-0f91bd68] {\n    cursor: pointer;\n    -o-
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41957,7 +42042,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 });
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -42327,15 +42412,15 @@ if (false) {
 }
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(118)
+var __vue_script__ = __webpack_require__(119)
 /* template */
-var __vue_template__ = __webpack_require__(119)
+var __vue_template__ = __webpack_require__(120)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -42374,7 +42459,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42441,7 +42526,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -42540,7 +42625,7 @@ if (false) {
 }
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -42729,7 +42814,7 @@ if (false) {
 }
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -42775,15 +42860,15 @@ if (false) {
 }
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(123)
+var __vue_script__ = __webpack_require__(124)
 /* template */
-var __vue_template__ = __webpack_require__(129)
+var __vue_template__ = __webpack_require__(130)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -42822,12 +42907,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_createAccount_CreateAccount__ = __webpack_require__(124);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_createAccount_CreateAccount__ = __webpack_require__(125);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_createAccount_CreateAccount___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_createAccount_CreateAccount__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_profileData_ProfileData__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_profileData_ProfileData___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_profileData_ProfileData__);
@@ -42936,19 +43021,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 });
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(125)
+  __webpack_require__(126)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(127)
+var __vue_script__ = __webpack_require__(128)
 /* template */
-var __vue_template__ = __webpack_require__(128)
+var __vue_template__ = __webpack_require__(129)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -42987,13 +43072,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(126);
+var content = __webpack_require__(127);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -43013,7 +43098,7 @@ if(false) {
 }
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(3)(false);
@@ -43027,7 +43112,7 @@ exports.push([module.i, "\nimg[data-v-b89e2042] {\n    cursor: pointer;\n    -o-
 
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43161,7 +43246,7 @@ function initialData() {
 });
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43459,7 +43544,7 @@ if (false) {
 }
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43548,15 +43633,15 @@ if (false) {
 }
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(131)
+var __vue_script__ = __webpack_require__(132)
 /* template */
-var __vue_template__ = __webpack_require__(230)
+var __vue_template__ = __webpack_require__(231)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43595,7 +43680,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43739,12 +43824,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 });
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_string_similarity__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_string_similarity__ = __webpack_require__(134);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_string_similarity___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_string_similarity__);
 //
 //
@@ -43882,14 +43967,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _forEach = __webpack_require__(134);
-var _map = __webpack_require__(154);
-var _every = __webpack_require__(219);
-var _maxBy = __webpack_require__(223);
-var _flattenDeep = __webpack_require__(226);
+var _forEach = __webpack_require__(135);
+var _map = __webpack_require__(155);
+var _every = __webpack_require__(220);
+var _maxBy = __webpack_require__(224);
+var _flattenDeep = __webpack_require__(227);
 
 exports.compareTwoStrings = compareTwoStrings;
 exports.findBestMatch = findBestMatch;
@@ -44008,12 +44093,12 @@ function findBestMatch(mainString, targetStrings) {
 
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayEach = __webpack_require__(135),
+var arrayEach = __webpack_require__(136),
     baseEach = __webpack_require__(22),
-    castFunction = __webpack_require__(153),
+    castFunction = __webpack_require__(154),
     isArray = __webpack_require__(2);
 
 /**
@@ -44055,7 +44140,7 @@ module.exports = forEach;
 
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ (function(module, exports) {
 
 /**
@@ -44083,10 +44168,10 @@ module.exports = arrayEach;
 
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseFor = __webpack_require__(137),
+var baseFor = __webpack_require__(138),
     keys = __webpack_require__(23);
 
 /**
@@ -44105,10 +44190,10 @@ module.exports = baseForOwn;
 
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var createBaseFor = __webpack_require__(138);
+var createBaseFor = __webpack_require__(139);
 
 /**
  * The base implementation of `baseForOwn` which iterates over `object`
@@ -44127,7 +44212,7 @@ module.exports = baseFor;
 
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, exports) {
 
 /**
@@ -44158,10 +44243,10 @@ module.exports = createBaseFor;
 
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseTimes = __webpack_require__(140),
+var baseTimes = __webpack_require__(141),
     isArguments = __webpack_require__(24),
     isArray = __webpack_require__(2),
     isBuffer = __webpack_require__(43),
@@ -44213,7 +44298,7 @@ module.exports = arrayLikeKeys;
 
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, exports) {
 
 /**
@@ -44239,7 +44324,7 @@ module.exports = baseTimes;
 
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(8),
@@ -44263,7 +44348,7 @@ module.exports = baseIsArguments;
 
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(9);
@@ -44315,7 +44400,7 @@ module.exports = getRawTag;
 
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -44343,7 +44428,7 @@ module.exports = objectToString;
 
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports) {
 
 /**
@@ -44367,7 +44452,7 @@ module.exports = stubFalse;
 
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(8),
@@ -44433,7 +44518,7 @@ module.exports = baseIsTypedArray;
 
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ (function(module, exports) {
 
 /**
@@ -44453,7 +44538,7 @@ module.exports = baseUnary;
 
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(42);
@@ -44490,11 +44575,11 @@ module.exports = nodeUtil;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(44)(module)))
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isPrototype = __webpack_require__(149),
-    nativeKeys = __webpack_require__(150);
+var isPrototype = __webpack_require__(150),
+    nativeKeys = __webpack_require__(151);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -44526,7 +44611,7 @@ module.exports = baseKeys;
 
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -44550,10 +44635,10 @@ module.exports = isPrototype;
 
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var overArg = __webpack_require__(151);
+var overArg = __webpack_require__(152);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeKeys = overArg(Object.keys, Object);
@@ -44562,7 +44647,7 @@ module.exports = nativeKeys;
 
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports) {
 
 /**
@@ -44583,7 +44668,7 @@ module.exports = overArg;
 
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArrayLike = __webpack_require__(12);
@@ -44621,7 +44706,7 @@ module.exports = createBaseEach;
 
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var identity = __webpack_require__(47);
@@ -44641,12 +44726,12 @@ module.exports = castFunction;
 
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayMap = __webpack_require__(48),
     baseIteratee = __webpack_require__(27),
-    baseMap = __webpack_require__(218),
+    baseMap = __webpack_require__(219),
     isArray = __webpack_require__(2);
 
 /**
@@ -44700,11 +44785,11 @@ module.exports = map;
 
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsMatch = __webpack_require__(156),
-    getMatchData = __webpack_require__(204),
+var baseIsMatch = __webpack_require__(157),
+    getMatchData = __webpack_require__(205),
     matchesStrictComparable = __webpack_require__(55);
 
 /**
@@ -44728,7 +44813,7 @@ module.exports = baseMatches;
 
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Stack = __webpack_require__(49),
@@ -44796,7 +44881,7 @@ module.exports = baseIsMatch;
 
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports) {
 
 /**
@@ -44815,7 +44900,7 @@ module.exports = listCacheClear;
 
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(15);
@@ -44856,7 +44941,7 @@ module.exports = listCacheDelete;
 
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(15);
@@ -44881,7 +44966,7 @@ module.exports = listCacheGet;
 
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(15);
@@ -44903,7 +44988,7 @@ module.exports = listCacheHas;
 
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(15);
@@ -44935,7 +45020,7 @@ module.exports = listCacheSet;
 
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ListCache = __webpack_require__(14);
@@ -44956,7 +45041,7 @@ module.exports = stackClear;
 
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, exports) {
 
 /**
@@ -44980,7 +45065,7 @@ module.exports = stackDelete;
 
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports) {
 
 /**
@@ -45000,7 +45085,7 @@ module.exports = stackGet;
 
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports) {
 
 /**
@@ -45020,7 +45105,7 @@ module.exports = stackHas;
 
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ListCache = __webpack_require__(14),
@@ -45060,11 +45145,11 @@ module.exports = stackSet;
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isFunction = __webpack_require__(46),
-    isMasked = __webpack_require__(168),
+    isMasked = __webpack_require__(169),
     isObject = __webpack_require__(13),
     toSource = __webpack_require__(50);
 
@@ -45113,10 +45198,10 @@ module.exports = baseIsNative;
 
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var coreJsData = __webpack_require__(169);
+var coreJsData = __webpack_require__(170);
 
 /** Used to detect methods masquerading as native. */
 var maskSrcKey = (function() {
@@ -45139,7 +45224,7 @@ module.exports = isMasked;
 
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(4);
@@ -45151,7 +45236,7 @@ module.exports = coreJsData;
 
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, exports) {
 
 /**
@@ -45170,10 +45255,10 @@ module.exports = getValue;
 
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Hash = __webpack_require__(172),
+var Hash = __webpack_require__(173),
     ListCache = __webpack_require__(14),
     Map = __webpack_require__(29);
 
@@ -45197,14 +45282,14 @@ module.exports = mapCacheClear;
 
 
 /***/ }),
-/* 172 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var hashClear = __webpack_require__(173),
-    hashDelete = __webpack_require__(174),
-    hashGet = __webpack_require__(175),
-    hashHas = __webpack_require__(176),
-    hashSet = __webpack_require__(177);
+var hashClear = __webpack_require__(174),
+    hashDelete = __webpack_require__(175),
+    hashGet = __webpack_require__(176),
+    hashHas = __webpack_require__(177),
+    hashSet = __webpack_require__(178);
 
 /**
  * Creates a hash object.
@@ -45235,7 +45320,7 @@ module.exports = Hash;
 
 
 /***/ }),
-/* 173 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(16);
@@ -45256,7 +45341,7 @@ module.exports = hashClear;
 
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ (function(module, exports) {
 
 /**
@@ -45279,7 +45364,7 @@ module.exports = hashDelete;
 
 
 /***/ }),
-/* 175 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(16);
@@ -45315,7 +45400,7 @@ module.exports = hashGet;
 
 
 /***/ }),
-/* 176 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(16);
@@ -45344,7 +45429,7 @@ module.exports = hashHas;
 
 
 /***/ }),
-/* 177 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(16);
@@ -45373,7 +45458,7 @@ module.exports = hashSet;
 
 
 /***/ }),
-/* 178 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(17);
@@ -45397,7 +45482,7 @@ module.exports = mapCacheDelete;
 
 
 /***/ }),
-/* 179 */
+/* 180 */
 /***/ (function(module, exports) {
 
 /**
@@ -45418,7 +45503,7 @@ module.exports = isKeyable;
 
 
 /***/ }),
-/* 180 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(17);
@@ -45440,7 +45525,7 @@ module.exports = mapCacheGet;
 
 
 /***/ }),
-/* 181 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(17);
@@ -45462,7 +45547,7 @@ module.exports = mapCacheHas;
 
 
 /***/ }),
-/* 182 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(17);
@@ -45490,14 +45575,14 @@ module.exports = mapCacheSet;
 
 
 /***/ }),
-/* 183 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Stack = __webpack_require__(49),
     equalArrays = __webpack_require__(52),
-    equalByTag = __webpack_require__(189),
-    equalObjects = __webpack_require__(193),
-    getTag = __webpack_require__(199),
+    equalByTag = __webpack_require__(190),
+    equalObjects = __webpack_require__(194),
+    getTag = __webpack_require__(200),
     isArray = __webpack_require__(2),
     isBuffer = __webpack_require__(43),
     isTypedArray = __webpack_require__(45);
@@ -45579,12 +45664,12 @@ module.exports = baseIsEqualDeep;
 
 
 /***/ }),
-/* 184 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var MapCache = __webpack_require__(30),
-    setCacheAdd = __webpack_require__(185),
-    setCacheHas = __webpack_require__(186);
+    setCacheAdd = __webpack_require__(186),
+    setCacheHas = __webpack_require__(187);
 
 /**
  *
@@ -45612,7 +45697,7 @@ module.exports = SetCache;
 
 
 /***/ }),
-/* 185 */
+/* 186 */
 /***/ (function(module, exports) {
 
 /** Used to stand-in for `undefined` hash values. */
@@ -45637,7 +45722,7 @@ module.exports = setCacheAdd;
 
 
 /***/ }),
-/* 186 */
+/* 187 */
 /***/ (function(module, exports) {
 
 /**
@@ -45657,7 +45742,7 @@ module.exports = setCacheHas;
 
 
 /***/ }),
-/* 187 */
+/* 188 */
 /***/ (function(module, exports) {
 
 /**
@@ -45686,7 +45771,7 @@ module.exports = arraySome;
 
 
 /***/ }),
-/* 188 */
+/* 189 */
 /***/ (function(module, exports) {
 
 /**
@@ -45705,15 +45790,15 @@ module.exports = cacheHas;
 
 
 /***/ }),
-/* 189 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(9),
-    Uint8Array = __webpack_require__(190),
+    Uint8Array = __webpack_require__(191),
     eq = __webpack_require__(28),
     equalArrays = __webpack_require__(52),
-    mapToArray = __webpack_require__(191),
-    setToArray = __webpack_require__(192);
+    mapToArray = __webpack_require__(192),
+    setToArray = __webpack_require__(193);
 
 /** Used to compose bitmasks for value comparisons. */
 var COMPARE_PARTIAL_FLAG = 1,
@@ -45823,7 +45908,7 @@ module.exports = equalByTag;
 
 
 /***/ }),
-/* 190 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(4);
@@ -45835,7 +45920,7 @@ module.exports = Uint8Array;
 
 
 /***/ }),
-/* 191 */
+/* 192 */
 /***/ (function(module, exports) {
 
 /**
@@ -45859,7 +45944,7 @@ module.exports = mapToArray;
 
 
 /***/ }),
-/* 192 */
+/* 193 */
 /***/ (function(module, exports) {
 
 /**
@@ -45883,10 +45968,10 @@ module.exports = setToArray;
 
 
 /***/ }),
-/* 193 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getAllKeys = __webpack_require__(194);
+var getAllKeys = __webpack_require__(195);
 
 /** Used to compose bitmasks for value comparisons. */
 var COMPARE_PARTIAL_FLAG = 1;
@@ -45978,11 +46063,11 @@ module.exports = equalObjects;
 
 
 /***/ }),
-/* 194 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetAllKeys = __webpack_require__(195),
-    getSymbols = __webpack_require__(196),
+var baseGetAllKeys = __webpack_require__(196),
+    getSymbols = __webpack_require__(197),
     keys = __webpack_require__(23);
 
 /**
@@ -46000,7 +46085,7 @@ module.exports = getAllKeys;
 
 
 /***/ }),
-/* 195 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayPush = __webpack_require__(53),
@@ -46026,11 +46111,11 @@ module.exports = baseGetAllKeys;
 
 
 /***/ }),
-/* 196 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayFilter = __webpack_require__(197),
-    stubArray = __webpack_require__(198);
+var arrayFilter = __webpack_require__(198),
+    stubArray = __webpack_require__(199);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -46062,7 +46147,7 @@ module.exports = getSymbols;
 
 
 /***/ }),
-/* 197 */
+/* 198 */
 /***/ (function(module, exports) {
 
 /**
@@ -46093,7 +46178,7 @@ module.exports = arrayFilter;
 
 
 /***/ }),
-/* 198 */
+/* 199 */
 /***/ (function(module, exports) {
 
 /**
@@ -46122,14 +46207,14 @@ module.exports = stubArray;
 
 
 /***/ }),
-/* 199 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var DataView = __webpack_require__(200),
+var DataView = __webpack_require__(201),
     Map = __webpack_require__(29),
-    Promise = __webpack_require__(201),
-    Set = __webpack_require__(202),
-    WeakMap = __webpack_require__(203),
+    Promise = __webpack_require__(202),
+    Set = __webpack_require__(203),
+    WeakMap = __webpack_require__(204),
     baseGetTag = __webpack_require__(8),
     toSource = __webpack_require__(50);
 
@@ -46186,7 +46271,7 @@ module.exports = getTag;
 
 
 /***/ }),
-/* 200 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(6),
@@ -46199,7 +46284,7 @@ module.exports = DataView;
 
 
 /***/ }),
-/* 201 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(6),
@@ -46212,7 +46297,7 @@ module.exports = Promise;
 
 
 /***/ }),
-/* 202 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(6),
@@ -46225,7 +46310,7 @@ module.exports = Set;
 
 
 /***/ }),
-/* 203 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(6),
@@ -46238,7 +46323,7 @@ module.exports = WeakMap;
 
 
 /***/ }),
-/* 204 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isStrictComparable = __webpack_require__(54),
@@ -46268,12 +46353,12 @@ module.exports = getMatchData;
 
 
 /***/ }),
-/* 205 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsEqual = __webpack_require__(51),
-    get = __webpack_require__(206),
-    hasIn = __webpack_require__(212),
+    get = __webpack_require__(207),
+    hasIn = __webpack_require__(213),
     isKey = __webpack_require__(31),
     isStrictComparable = __webpack_require__(54),
     matchesStrictComparable = __webpack_require__(55),
@@ -46307,7 +46392,7 @@ module.exports = baseMatchesProperty;
 
 
 /***/ }),
-/* 206 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGet = __webpack_require__(56);
@@ -46346,10 +46431,10 @@ module.exports = get;
 
 
 /***/ }),
-/* 207 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var memoizeCapped = __webpack_require__(208);
+var memoizeCapped = __webpack_require__(209);
 
 /** Used to match property names within property paths. */
 var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
@@ -46379,10 +46464,10 @@ module.exports = stringToPath;
 
 
 /***/ }),
-/* 208 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var memoize = __webpack_require__(209);
+var memoize = __webpack_require__(210);
 
 /** Used as the maximum memoize cache size. */
 var MAX_MEMOIZE_SIZE = 500;
@@ -46411,7 +46496,7 @@ module.exports = memoizeCapped;
 
 
 /***/ }),
-/* 209 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var MapCache = __webpack_require__(30);
@@ -46490,10 +46575,10 @@ module.exports = memoize;
 
 
 /***/ }),
-/* 210 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseToString = __webpack_require__(211);
+var baseToString = __webpack_require__(212);
 
 /**
  * Converts `value` to a string. An empty string is returned for `null`
@@ -46524,7 +46609,7 @@ module.exports = toString;
 
 
 /***/ }),
-/* 211 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(9),
@@ -46567,11 +46652,11 @@ module.exports = baseToString;
 
 
 /***/ }),
-/* 212 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseHasIn = __webpack_require__(213),
-    hasPath = __webpack_require__(214);
+var baseHasIn = __webpack_require__(214),
+    hasPath = __webpack_require__(215);
 
 /**
  * Checks if `path` is a direct or inherited property of `object`.
@@ -46607,7 +46692,7 @@ module.exports = hasIn;
 
 
 /***/ }),
-/* 213 */
+/* 214 */
 /***/ (function(module, exports) {
 
 /**
@@ -46626,7 +46711,7 @@ module.exports = baseHasIn;
 
 
 /***/ }),
-/* 214 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var castPath = __webpack_require__(57),
@@ -46671,11 +46756,11 @@ module.exports = hasPath;
 
 
 /***/ }),
-/* 215 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseProperty = __webpack_require__(216),
-    basePropertyDeep = __webpack_require__(217),
+var baseProperty = __webpack_require__(217),
+    basePropertyDeep = __webpack_require__(218),
     isKey = __webpack_require__(31),
     toKey = __webpack_require__(19);
 
@@ -46709,7 +46794,7 @@ module.exports = property;
 
 
 /***/ }),
-/* 216 */
+/* 217 */
 /***/ (function(module, exports) {
 
 /**
@@ -46729,7 +46814,7 @@ module.exports = baseProperty;
 
 
 /***/ }),
-/* 217 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGet = __webpack_require__(56);
@@ -46751,7 +46836,7 @@ module.exports = basePropertyDeep;
 
 
 /***/ }),
-/* 218 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseEach = __webpack_require__(22),
@@ -46779,14 +46864,14 @@ module.exports = baseMap;
 
 
 /***/ }),
-/* 219 */
+/* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayEvery = __webpack_require__(220),
-    baseEvery = __webpack_require__(221),
+var arrayEvery = __webpack_require__(221),
+    baseEvery = __webpack_require__(222),
     baseIteratee = __webpack_require__(27),
     isArray = __webpack_require__(2),
-    isIterateeCall = __webpack_require__(222);
+    isIterateeCall = __webpack_require__(223);
 
 /**
  * Checks if `predicate` returns truthy for **all** elements of `collection`.
@@ -46841,7 +46926,7 @@ module.exports = every;
 
 
 /***/ }),
-/* 220 */
+/* 221 */
 /***/ (function(module, exports) {
 
 /**
@@ -46870,7 +46955,7 @@ module.exports = arrayEvery;
 
 
 /***/ }),
-/* 221 */
+/* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseEach = __webpack_require__(22);
@@ -46897,7 +46982,7 @@ module.exports = baseEvery;
 
 
 /***/ }),
-/* 222 */
+/* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var eq = __webpack_require__(28),
@@ -46933,11 +47018,11 @@ module.exports = isIterateeCall;
 
 
 /***/ }),
-/* 223 */
+/* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseExtremum = __webpack_require__(224),
-    baseGt = __webpack_require__(225),
+var baseExtremum = __webpack_require__(225),
+    baseGt = __webpack_require__(226),
     baseIteratee = __webpack_require__(27);
 
 /**
@@ -46973,7 +47058,7 @@ module.exports = maxBy;
 
 
 /***/ }),
-/* 224 */
+/* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isSymbol = __webpack_require__(18);
@@ -47011,7 +47096,7 @@ module.exports = baseExtremum;
 
 
 /***/ }),
-/* 225 */
+/* 226 */
 /***/ (function(module, exports) {
 
 /**
@@ -47031,10 +47116,10 @@ module.exports = baseGt;
 
 
 /***/ }),
-/* 226 */
+/* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseFlatten = __webpack_require__(227);
+var baseFlatten = __webpack_require__(228);
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
@@ -47062,11 +47147,11 @@ module.exports = flattenDeep;
 
 
 /***/ }),
-/* 227 */
+/* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayPush = __webpack_require__(53),
-    isFlattenable = __webpack_require__(228);
+    isFlattenable = __webpack_require__(229);
 
 /**
  * The base implementation of `_.flatten` with support for restricting flattening.
@@ -47106,7 +47191,7 @@ module.exports = baseFlatten;
 
 
 /***/ }),
-/* 228 */
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(9),
@@ -47132,7 +47217,7 @@ module.exports = isFlattenable;
 
 
 /***/ }),
-/* 229 */
+/* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -47434,7 +47519,7 @@ if (false) {
 }
 
 /***/ }),
-/* 230 */
+/* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -47579,15 +47664,15 @@ if (false) {
 }
 
 /***/ }),
-/* 231 */
+/* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(232)
+var __vue_script__ = __webpack_require__(233)
 /* template */
-var __vue_template__ = __webpack_require__(257)
+var __vue_template__ = __webpack_require__(258)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47626,15 +47711,15 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 232 */
+/* 233 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_equipment_Equipment__ = __webpack_require__(233);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_equipment_Equipment__ = __webpack_require__(234);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_equipment_Equipment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_equipment_Equipment__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_services_Services__ = __webpack_require__(245);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_services_Services__ = __webpack_require__(246);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_services_Services___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_services_Services__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -47679,15 +47764,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 });
 
 /***/ }),
-/* 233 */
+/* 234 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(234)
+var __vue_script__ = __webpack_require__(235)
 /* template */
-var __vue_template__ = __webpack_require__(244)
+var __vue_template__ = __webpack_require__(245)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47726,16 +47811,16 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 234 */
+/* 235 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__editEquipment_EditEquipment__ = __webpack_require__(235);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__editEquipment_EditEquipment__ = __webpack_require__(236);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__editEquipment_EditEquipment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__editEquipment_EditEquipment__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__createEquipment_CreateEquipment__ = __webpack_require__(238);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__createEquipment_CreateEquipment__ = __webpack_require__(239);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__createEquipment_CreateEquipment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__createEquipment_CreateEquipment__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__deleteEquipment_DeleteEquipment__ = __webpack_require__(241);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__deleteEquipment_DeleteEquipment__ = __webpack_require__(242);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__deleteEquipment_DeleteEquipment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__deleteEquipment_DeleteEquipment__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -47893,15 +47978,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 });
 
 /***/ }),
-/* 235 */
+/* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(236)
+var __vue_script__ = __webpack_require__(237)
 /* template */
-var __vue_template__ = __webpack_require__(237)
+var __vue_template__ = __webpack_require__(238)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47940,7 +48025,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 236 */
+/* 237 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48051,7 +48136,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 });
 
 /***/ }),
-/* 237 */
+/* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -48329,15 +48414,15 @@ if (false) {
 }
 
 /***/ }),
-/* 238 */
+/* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(239)
+var __vue_script__ = __webpack_require__(240)
 /* template */
-var __vue_template__ = __webpack_require__(240)
+var __vue_template__ = __webpack_require__(241)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -48376,7 +48461,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 239 */
+/* 240 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48472,7 +48557,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 240 */
+/* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -48745,15 +48830,15 @@ if (false) {
 }
 
 /***/ }),
-/* 241 */
+/* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(242)
+var __vue_script__ = __webpack_require__(243)
 /* template */
-var __vue_template__ = __webpack_require__(243)
+var __vue_template__ = __webpack_require__(244)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -48792,7 +48877,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 242 */
+/* 243 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48851,7 +48936,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 243 */
+/* 244 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -48950,7 +49035,7 @@ if (false) {
 }
 
 /***/ }),
-/* 244 */
+/* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -49127,15 +49212,15 @@ if (false) {
 }
 
 /***/ }),
-/* 245 */
+/* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(246)
+var __vue_script__ = __webpack_require__(247)
 /* template */
-var __vue_template__ = __webpack_require__(256)
+var __vue_template__ = __webpack_require__(257)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -49174,16 +49259,16 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 246 */
+/* 247 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__editService_EditService__ = __webpack_require__(247);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__editService_EditService__ = __webpack_require__(248);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__editService_EditService___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__editService_EditService__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__createService_CreateService__ = __webpack_require__(250);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__createService_CreateService__ = __webpack_require__(251);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__createService_CreateService___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__createService_CreateService__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__deleteService_DeleteService__ = __webpack_require__(253);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__deleteService_DeleteService__ = __webpack_require__(254);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__deleteService_DeleteService___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__deleteService_DeleteService__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -49310,15 +49395,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 });
 
 /***/ }),
-/* 247 */
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(248)
+var __vue_script__ = __webpack_require__(249)
 /* template */
-var __vue_template__ = __webpack_require__(249)
+var __vue_template__ = __webpack_require__(250)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -49357,7 +49442,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 248 */
+/* 249 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49448,7 +49533,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 });
 
 /***/ }),
-/* 249 */
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -49597,15 +49682,15 @@ if (false) {
 }
 
 /***/ }),
-/* 250 */
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(251)
+var __vue_script__ = __webpack_require__(252)
 /* template */
-var __vue_template__ = __webpack_require__(252)
+var __vue_template__ = __webpack_require__(253)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -49644,7 +49729,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 251 */
+/* 252 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49715,7 +49800,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 252 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -49862,15 +49947,15 @@ if (false) {
 }
 
 /***/ }),
-/* 253 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(254)
+var __vue_script__ = __webpack_require__(255)
 /* template */
-var __vue_template__ = __webpack_require__(255)
+var __vue_template__ = __webpack_require__(256)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -49909,7 +49994,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 254 */
+/* 255 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49968,7 +50053,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 255 */
+/* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -50067,7 +50152,7 @@ if (false) {
 }
 
 /***/ }),
-/* 256 */
+/* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -50222,7 +50307,7 @@ if (false) {
 }
 
 /***/ }),
-/* 257 */
+/* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -50283,13 +50368,13 @@ if (false) {
 }
 
 /***/ }),
-/* 258 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(259)
+var __vue_script__ = __webpack_require__(260)
 /* template */
 var __vue_template__ = __webpack_require__(273)
 /* template functional */
@@ -50330,12 +50415,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 259 */
+/* 260 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_order_Order__ = __webpack_require__(260);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_order_Order__ = __webpack_require__(261);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_order_Order___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_order_Order__);
 //
 //
@@ -50357,17 +50442,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 260 */
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(261)
+  __webpack_require__(262)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(263)
+var __vue_script__ = __webpack_require__(264)
 /* template */
 var __vue_template__ = __webpack_require__(272)
 /* template functional */
@@ -50408,13 +50493,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 261 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(262);
+var content = __webpack_require__(263);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -50434,7 +50519,7 @@ if(false) {
 }
 
 /***/ }),
-/* 262 */
+/* 263 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(3)(false);
@@ -50442,13 +50527,13 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.bg-card[data-v-4c323b99] {\n    background-color: transparent;\n}\n.gps-tracking-header[data-v-4c323b99] {\n    font-size: 28px;\n    text-align: center;\n}\n", ""]);
+exports.push([module.i, "\n.bg-card[data-v-4c323b99] {\n    background-color: transparent;\n}\n.gps-tracking-header[data-v-4c323b99] {\n    font-size: 28px !important;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 263 */
+/* 264 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50456,10 +50541,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__CreateClient_CreateClient__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__CreateClient_CreateClient___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__CreateClient_CreateClient__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gpsData_GPSData__ = __webpack_require__(264);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gpsData_GPSData__ = __webpack_require__(265);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gpsData_GPSData___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__gpsData_GPSData__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_deep_copy__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_deep_copy__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_deep_copy___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_deep_copy__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_utils_js__ = __webpack_require__(288);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -50536,6 +50622,120 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -50543,6 +50743,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins_utils_js__["a" /* default */]],
     props: {
         isCreation: {
             type: Boolean,
@@ -50552,6 +50753,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     },
     data: function data() {
         return {
+            isDollarRateEditing: false,
+            snack: false,
+            snackColor: '',
+            snackText: '',
+            snackTimeout: 1500,
             initialGPSRowData: {
                 id: 1,
                 image: '',
@@ -50569,14 +50775,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 connect_module: '',
                 can_reader: '',
                 deaerator: '',
-                additional_equipment: '',
-                cn03: '',
-                rs01: ''
+                additional_equipment: [],
+                cn03: [],
+                rs01: []
             },
             orderData: {
                 name: '',
                 client: null,
                 area: '',
+                dollar_rate: 0.00,
+                days: '',
+                price_for_day: 720,
+                price_for_transportation_per_km: '',
+                number_of_trips: 2,
+                transportation_kms: '',
+                route: '',
                 services: [],
                 GPSData: []
             },
@@ -50594,6 +50807,72 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return this.orderData.services.reduce(function (price, service) {
                 return service.value ? price + service.price * area : price;
             }, 0);
+        },
+        priceForDays: function priceForDays() {
+            return this.multiplyTwoFloats(this.orderData.days, this.orderData.price_for_day);
+        },
+        transportationPrice: function transportationPrice() {
+            return this.multiplyTwoFloats(this.multiplyTwoFloats(this.orderData.price_for_transportation_per_km, this.orderData.transportation_kms), this.orderData.number_of_trips);
+        },
+        pricesForEquipment: function pricesForEquipment() {
+            var _this = this;
+
+            return this.orderData.GPSData.reduce(function (prices, row, index) {
+                prices.equipmentPrices.push({});
+                prices.installationPrices[index] = 0.00;
+                Object.keys(row).forEach(function (key) {
+                    var value = row[key];
+                    var priceKey = key + '_price';
+                    if (_this.isObject(value) && !(value instanceof File)) {
+                        console.log('object: ', value);
+                        prices.equipmentPrices[index][priceKey] = row[key].price;
+                        prices.installationPrices[index] = _this.addTwoFloats(prices.installationPrices[index], row[key].installation_price_for_one);
+                    } else if (Array.isArray(value)) {
+                        console.log('array: ', value);
+                        prices.equipmentPrices[index][priceKey] = 0.00;
+                        value.filter(function (el) {
+                            return !_this.isUndefined(el);
+                        }).forEach(function (el, _, arr) {
+                            prices.equipmentPrices[index][priceKey] = _this.addTwoFloats(prices.equipmentPrices[index][priceKey], el.price);
+                            var arrLen = arr.length;
+                            if (arrLen >= 3) {
+                                if (el.installation_price_for_three) {
+                                    prices.installationPrices[index] = _this.addTwoFloats(prices.installationPrices[index] + el.installation_price_for_three);
+                                } else if (el.installation_price_for_two) {
+                                    prices.installationPrices[index] = _this.addTwoFloats(prices.installationPrices[index] + el.installation_price_for_two);
+                                } else {
+                                    prices.installationPrices[index] = _this.addTwoFloats(prices.installationPrices[index] + el.installation_price_for_one);
+                                }
+                            } else if (arrLen === 2) {
+                                if (el.installation_price_for_two) {
+                                    prices.installationPrices[index] = _this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_two);
+                                } else {
+                                    prices.installationPrices[index] = _this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
+                                }
+                            } else if (arrLen === 1) {
+                                prices.installationPrices[index] = _this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
+                            }
+                        });
+                    }
+                });
+                return prices;
+            }, { equipmentPrices: [], installationPrices: [] });
+        },
+        allEquipmentPrice: function allEquipmentPrice() {
+            var _this2 = this;
+
+            return this.multiplyTwoFloats(this.pricesForEquipment.equipmentPrices.reduce(function (price, el) {
+                return _this2.addTwoFloats(price, Object.keys(el).reduce(function (price, key) {
+                    return _this2.addTwoFloats(price, el[key]);
+                }, 0.00));
+            }, 0.00), this.orderData.dollar_rate);
+        },
+        allInstallationPrice: function allInstallationPrice() {
+            var _this3 = this;
+
+            return this.pricesForEquipment.installationPrices.reduce(function (price, el) {
+                return _this3.addTwoFloats(price, el);
+            }, 0.00);
         }
     }),
     watch: {
@@ -50605,15 +50884,26 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     },
     methods: {
         getClients: function getClients() {
-            var _this = this;
+            var _this4 = this;
 
             this.axios.get('/clients/all').then(function (_ref) {
                 var data = _ref.data;
 
                 var clients = data.map(function (client) {
-                    return _this.getClientWithTextValue(client);
+                    return _this4.getClientWithTextValue(client);
                 });
-                _this.clients = clients;
+                _this4.clients = clients;
+            }).catch(function (err) {
+                return console.log(err);
+            });
+        },
+        getDollarRate: function getDollarRate() {
+            var _this5 = this;
+
+            this.axios.get('/order/dollar-rate').then(function (_ref2) {
+                var data = _ref2.data;
+
+                _this5.orderData.dollar_rate = data[0].rate;
             }).catch(function (err) {
                 return console.log(err);
             });
@@ -50636,7 +50926,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             console.log('updateOrderGPSData: ', arguments);
             if (nestedPath !== false) {
-                this.orderData.GPSData[index][path][nestedPath] = val;
+                // const equipmentList = dcopy(this.orderData.GPSData[index][path]);
+                // equipmentList[nestedPath] = val;
+                this.$set(this.orderData.GPSData[index][path], nestedPath, val);
             } else {
                 this.orderData.GPSData[index][path] = val;
             }
@@ -50648,7 +50940,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.orderData.GPSData[row][column].splice(index, 1);
         },
         copySelectedInOrderGPSData: function copySelectedInOrderGPSData(copyList) {
-            var _this2 = this;
+            var _this6 = this;
 
             for (var i = 0; i < copyList.length; ++i) {
                 var value = copyList[i][0].value;
@@ -50660,14 +50952,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     console.log('COLUMN: ', column);
 
                     if (column === 'image') {
-                        _this2.$set(_this2.orderData.GPSData[index], column, _this2.orderData.GPSData[copyList[i][0].index][column]);
-                        if (_this2.orderData.GPSData[copyList[i][0].index][column] !== '') {
+                        _this6.$set(_this6.orderData.GPSData[index], column, _this6.orderData.GPSData[copyList[i][0].index][column]);
+                        if (_this6.orderData.GPSData[copyList[i][0].index][column] !== '') {
                             setTimeout(function () {
-                                _this2.$refs.GPSData.setPreview(index);
+                                _this6.$refs.GPSData.setPreview(index);
                             }, 1000);
                         }
                     } else if (!column.endsWith('price')) {
-                        _this2.$set(_this2.orderData.GPSData[index], column, __WEBPACK_IMPORTED_MODULE_3_deep_copy___default()(value));
+                        _this6.$set(_this6.orderData.GPSData[index], column, __WEBPACK_IMPORTED_MODULE_3_deep_copy___default()(value));
                     }
                 };
 
@@ -50676,9 +50968,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 }
             }
         },
-        addRowToOrderGPSData: function addRowToOrderGPSData() {
-            this.orderData.GPSData.push(_extends({}, this.initialGPSRowData, { fuel_gauge: Array.apply(null, { length: 2 }) }));
-            ++this.initialGPSRowData.id;
+        addRowToOrderGPSData: function addRowToOrderGPSData(count) {
+            for (var i = 0; i < count; ++i) {
+                this.orderData.GPSData.push(_extends({}, this.initialGPSRowData, {
+                    fuel_gauge: Array.apply(null, { length: 2 }),
+                    additional_equipment: Array.apply(null, { length: 2 }),
+                    cn03: Array.apply(null, { length: 2 }),
+                    rs01: Array.apply(null, { length: 2 })
+                }));
+                ++this.initialGPSRowData.id;
+            }
         },
         dragNDropGPSData: function dragNDropGPSData(newIndex, oldIndex) {
             var rowSelected = this.orderData.GPSData.splice(oldIndex, 1)[0];
@@ -50686,6 +50985,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     },
     created: function created() {
+        this.getDollarRate();
         this.getClients();
         this.$store.dispatch('getPriseList');
     },
@@ -50697,17 +50997,17 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 });
 
 /***/ }),
-/* 264 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(265)
+  __webpack_require__(266)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(267)
+var __vue_script__ = __webpack_require__(268)
 /* template */
 var __vue_template__ = __webpack_require__(271)
 /* template functional */
@@ -50748,13 +51048,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 265 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(266);
+var content = __webpack_require__(267);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -50774,7 +51074,7 @@ if(false) {
 }
 
 /***/ }),
-/* 266 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(3)(false);
@@ -50788,18 +51088,129 @@ exports.push([module.i, "\n.gps-data-table-no-select-text table {\n    -webkit-u
 
 
 /***/ }),
-/* 267 */
+/* 268 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_deep_copy__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_deep_copy__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_deep_copy___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_deep_copy__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_sortablejs__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_sortablejs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_sortablejs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_stylesMixins_js__ = __webpack_require__(270);
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -51393,6 +51804,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         optionalEquipment: {
             type: Array,
             required: true
+        },
+        pricesForEquipment: {
+            type: Object,
+            required: true
         }
     },
     data: function data() {
@@ -51426,16 +51841,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             copyList: [],
             selected: [],
             editModCells: [],
-            snackTimeout: 1500,
-            search: '',
             rowsPerPageItems: [10, 15, 20, 25, 30, 50],
             pagination: {
                 rowsPerPage: 20
             },
-            snack: false,
-            snackColor: '',
-            snackText: '',
-            headers: [{ text: '#', align: 'left', sortable: false }, { text: 'Изображение', align: 'left', sortable: false, value: 'image' }, { text: 'Марка', value: 'mark' }, { text: 'Модель', value: 'model' }, { text: 'Год выпуска', value: 'year_of_issue' }, { text: 'Тип топлива', value: 'fuel_type' }, { text: 'Мощность', value: 'power' }, { text: 'Гос. номер', value: 'number' }, { text: 'GPS-трекер', value: 'gps_tracker' }, { text: 'Цена $ ', value: 'gps_tracker_price' }, { text: 'ДУТ', value: 'fuel_gauge' }, { text: 'Цена $  ', value: 'fuel_gauge_price' }, { text: 'Счетчик', value: 'counter' }, { text: 'Цена $   ', value: 'counter_price' }, { text: 'RFID', value: 'rf_id' }, { text: 'Цена $    ', value: 'rf_id_price' }, { text: 'Cчитыватель прицепного оборудования', value: 'reader_of_trailed_equipment' }, { text: 'Цена $     ', value: 'reader_of_trailed_equipment_price' }, { text: 'Модуль конект', value: 'connect_module' }, { text: 'Цена $      ', value: 'connect_module_price' }, { text: 'CAN', value: 'can_reader' }, { text: 'Цена $       ', value: 'can_reader_price' }, { text: 'Деаэратор', value: 'deaerator' }, { text: 'Цена $        ', value: 'deaerator_price' }, { text: 'CN03', value: 'cn03' }, { text: 'Цена $         ', value: 'cn03_price' }, { text: 'RS01', value: 'rs01' }, { text: 'Цена $          ', value: 'rs01_price' }, { text: 'Дополнительное оборудование', value: 'additional_equipment' }, { text: 'Цена $           ', value: 'additional_equipment_price' }, { text: 'Монтаж оборудования ₴', value: 'installation_of_equipment_price' }],
+            headers: [{ text: '#', align: 'left', sortable: false }, { text: 'Изображение', align: 'left', sortable: false, value: 'image' }, { text: 'Марка', value: 'mark', sortable: false }, { text: 'Модель', value: 'model', sortable: false }, { text: 'Год выпуска', value: 'year_of_issue', sortable: false }, { text: 'Тип топлива', value: 'fuel_type', sortable: false }, { text: 'Мощность', value: 'power', sortable: false }, { text: 'Гос. номер', value: 'number', sortable: false }, { text: 'GPS-трекер', value: 'gps_tracker', sortable: false }, { text: 'Цена $ ', value: 'gps_tracker_price', sortable: false }, { text: 'ДУТ', value: 'fuel_gauge', sortable: false }, { text: 'Цена $  ', value: 'fuel_gauge_price', sortable: false }, { text: 'Счетчик', value: 'counter', sortable: false }, { text: 'Цена $   ', value: 'counter_price', sortable: false }, { text: 'RFID', value: 'rf_id', sortable: false }, { text: 'Цена $    ', value: 'rf_id_price', sortable: false }, { text: 'Cчитыватель прицепного оборудования', value: 'reader_of_trailed_equipment', sortable: false }, { text: 'Цена $     ', value: 'reader_of_trailed_equipment_price', sortable: false }, { text: 'Модуль конект', value: 'connect_module', sortable: false }, { text: 'Цена $      ', value: 'connect_module_price', sortable: false }, { text: 'CAN', value: 'can_reader', sortable: false }, { text: 'Цена $       ', value: 'can_reader_price', sortable: false }, { text: 'Деаэратор', value: 'deaerator', sortable: false }, { text: 'Цена $        ', value: 'deaerator_price', sortable: false }, { text: 'CN03', value: 'cn03', sortable: false }, { text: 'Цена $         ', value: 'cn03_price', sortable: false }, { text: 'RS01', value: 'rs01', sortable: false }, { text: 'Цена $          ', value: 'rs01_price', sortable: false }, { text: 'Дополнительное оборудование', value: 'additional_equipment', sortable: false }, { text: 'Цена $           ', value: 'additional_equipment_price', sortable: false }, { text: 'Монтаж оборудования ₴', value: 'installation_of_equipment_price', sortable: false }],
             uploadImage: '/storage/upload-foto.png',
             imagesPreviews: [],
             cellsPosition: []
@@ -51455,11 +51865,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     },
     methods: {
         addRow: function addRow() {
-            this.$emit('rowAdded');
-            this.imagesPreviews.push('');
-            this.editModCells.push(Array.apply(null, { length: this.headers.length - 1 }).map(function () {
-                return false;
-            }));
+            var count = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+            this.$emit('rowAdded', count);
+            for (var i = 0; i < count; ++i) {
+                this.imagesPreviews.push('');
+                this.editModCells.push(Array.apply(null, { length: this.headers.length - 1 }).map(function () {
+                    return false;
+                }));
+            }
         },
         onPickFile: function onPickFile(ref) {
             this.$refs[ref].click();
@@ -51470,20 +51884,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             this.$refs['td-' + index + '-0'].click();
         },
         setPreview: function setPreview(index) {
-            var _this = this;
-
-            console.log('SET PREVIEW: ', this.orderGPSData[index].image);
-            setTimeout(function () {
-                _this.$set(_this.imagesPreviews, index, URL.createObjectURL(_this.orderGPSData[index].image));
-            }, 1000);
-        },
-        cornerMoved: function cornerMoved(moveEvent) {
-            // moveEvent.preventDefault();
-            // console.log(moveEvent);
-            // console.log('Moved');
+            var reader = new FileReader();
+            var _self = this;
+            reader.onload = function (e) {
+                _self.$set(_self.imagesPreviews, index, e.target.result);
+            };
+            reader.readAsDataURL(this.orderGPSData[index].image);
         },
         cornerFocused: function cornerFocused(event) {
-            // this.tableBody.addEventListener('mousemove', this.cornerMoved, false);
             this.tableBody.addEventListener('mouseup', this.cornerBlurred, false);
             this.isCornerFocused = true;
             console.log('Focused');
@@ -51493,10 +51901,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             if (this.isReadyToCopy) {
                 this.$emit('copy-values:orderGPSData', this.copyList);
             }
-            this.clickOnTD(this.findTDEl(event));
             console.log('Blurred');
         },
-        getInitialCellsPosition: function getInitialCellsPosition() {},
         hideBordersAndCorner: function hideBordersAndCorner() {
             if (this.bordersSelectData.top.el && this.bordersSelectData.left.el && this.bordersSelectData.bottom.el && this.bordersSelectData.right.el && this.bordersSelectData.corner.el) {
                 this.bordersSelectData.top.styles.display = 'none';
@@ -51736,27 +52142,27 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             this.normalizeStylesSelectBordersAndCorner();
             console.log('copyList: ', this.copyList);
         },
-        switchCellMode: function switchCellMode(row, cell, refName, event) {
-            var _this2 = this;
+        switchCellMode: function switchCellMode(row, cell, mode, refName, event) {
+            var _this = this;
 
-            var autofocus = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
+            var autofocus = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : true;
 
-            this.$set(this.editModCells[row], cell, !this.editModCells[row][cell]);
+            this.$set(this.editModCells[row], cell, mode);
             if (autofocus && this.editModCells[row][cell]) {
                 this.$nextTick(function () {
-                    _this2.$refs[refName].$el.querySelector('input').click();
+                    _this.$refs[refName].$el.querySelector('input').click();
                 });
             } else if (!autofocus && event) {
                 this.clickOnTD(this.findTDEl(event));
             }
         },
-        setCellValue: function setCellValue(event, row, cell, name, td) {
+        setCellValue: function setCellValue(data, row, cell, name, td) {
             var nestedPath = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
             var forceSwitchMode = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : true;
 
             console.log('setCellValue: ', arguments);
-            this.$emit('update:orderGPSData', event, row, name, nestedPath);
-            if (forceSwitchMode) this.switchCellMode(row, cell);
+            this.$emit('update:orderGPSData', data, row, name, nestedPath);
+            if (forceSwitchMode) this.switchCellMode(row, cell, false);
             if (td) {
                 this.clickOnTD(this.$refs[td]);
             }
@@ -51768,26 +52174,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         deleteOrderNestedData: function deleteOrderNestedData(event, row, column, index) {
             this.$emit('delete-nested-data:orderGPSData', row, column, index);
             this.clickOnTD(this.findTDEl(event));
-        },
-        open: function open(name) {
-            // console.log('Before:', this.$refs[name]);
-            // this.$refs[name].$el.style.display = "none";
-            // this.$set(this.$refs[name]._data, 'isActive', false);
-            // console.log('After:', this.$refs[name]);
-            // this.$forceUpdate();
-            // .isActive = false
-            // console.log();
-        },
-        testTDClick: function testTDClick(event) {},
-        save: function save() {
-            this.snackColor = "success";
-            this.snackText = "Данные сохранены";
-            this.snack = true;
-        },
-        cancel: function cancel() {
-            this.snackColor = "error";
-            this.snackText = "Действие отменено";
-            this.snack = true;
         },
         close: function close(ref) {
             this.$refs[ref].blur();
@@ -51803,7 +52189,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
     },
     created: function created() {
-        this.addRow();
+        this.addRow(10);
     },
     mounted: function mounted() {
         var tableBody = document.querySelector('#gps-data-table .v-datatable tbody');
@@ -51832,91 +52218,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         tableOverflow.appendChild(borders);
     }
 });
-
-/***/ }),
-/* 268 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-;(function (name, root, factory) {
-  if (true) {
-    module.exports = factory()
-  }
-  /* istanbul ignore next */
-  else if (typeof define === 'function' && define.amd) {
-    define(factory)
-  }
-  else {
-    root[name] = factory()
-  }
-}('dcopy', this, function () {
-  /**
-   * Deep copy objects and arrays
-   *
-   * @param {Object/Array} target
-   * @return {Object/Array} copy
-   * @api public
-   */
-
-  return function (target) {
-    if (/number|string|boolean/.test(typeof target)) {
-      return target
-    }
-    if (target instanceof Date) {
-      return new Date(target.getTime())
-    }
-
-    var copy = (target instanceof Array) ? [] : {}
-    walk(target, copy)
-    return copy
-
-    function walk (target, copy) {
-      for (var key in target) {
-        var obj = target[key]
-        if (obj instanceof Date) {
-          var value = new Date(obj.getTime())
-          add(copy, key, value)
-        }
-        else if (obj instanceof Function) {
-          var value = obj
-          add(copy, key, value)
-        }
-        else if (obj instanceof Array) {
-          var value = []
-          var last = add(copy, key, value)
-          walk(obj, last)
-        }
-        else if (obj instanceof Object) {
-          var value = {}
-          var last = add(copy, key, value)
-          walk(obj, last)
-        }
-        else {
-          var value = obj
-          add(copy, key, value)
-        }
-      }
-    }
-  }
-
-  /**
-   * Adds a value to the copy object based on its type
-   *
-   * @api private
-   */
-
-  function add (copy, key, value) {
-    if (copy instanceof Array) {
-      copy.push(value)
-      return copy[copy.length - 1]
-    }
-    else if (copy instanceof Object) {
-      copy[key] = value
-      return copy[key]
-    }
-  }
-}))
-
 
 /***/ }),
 /* 269 */
@@ -53498,6 +53799,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-card",
+    { staticClass: "elevation-0" },
     [
       _c(
         "v-card-title",
@@ -53506,36 +53808,19 @@ var render = function() {
             _vm._v("Добавить")
           ]),
           _vm._v(" "),
-          _c("v-spacer"),
-          _vm._v(" "),
-          _c("v-text-field", {
-            attrs: {
-              "append-icon": "search",
-              label: "Поиск",
-              "single-line": "",
-              "hide-details": ""
-            },
-            model: {
-              value: _vm.search,
-              callback: function($$v) {
-                _vm.search = $$v
-              },
-              expression: "search"
-            }
-          })
+          _c("v-spacer")
         ],
         1
       ),
       _vm._v(" "),
       _c(
         "v-card-text",
-        { attrs: { id: "text-test" } },
+        { staticClass: "ma-0 pa-0", attrs: { id: "text-test" } },
         [
           _c("v-data-table", {
             class: { "gps-data-table-no-select-text": _vm.isCornerFocused },
             attrs: {
               "item-key": "id",
-              search: _vm.search,
               id: "gps-data-table",
               headers: _vm.headers,
               items: _vm.orderGPSData,
@@ -53572,11 +53857,7 @@ var render = function() {
                         staticClass: "handle",
                         on: { mousedown: _vm.hideBordersAndCorner }
                       },
-                      [
-                        _vm._v(
-                          "\n                        ::\n                    "
-                        )
-                      ]
+                      [_vm._v("\n                    ::\n                ")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -53650,6 +53931,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 1,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -53663,6 +53945,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               1,
+                              true,
                               "mark-" + props.index + "-" + 1
                             )
                           },
@@ -53680,9 +53963,9 @@ var render = function() {
                         !_vm.editModCells[props.index][1]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.mark) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -53691,7 +53974,6 @@ var render = function() {
                                 attrs: {
                                   value: props.item.mark,
                                   items: _vm.cachedDataTest,
-                                  "hide-selected": "",
                                   label: "Вибирете марку",
                                   "single-line": ""
                                 },
@@ -53706,7 +53988,31 @@ var render = function() {
                                     )
                                   }
                                 }
-                              })
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "info", small: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.switchCellMode(
+                                        props.index,
+                                        1,
+                                        false,
+                                        "mark-" + props.index + "-" + 1,
+                                        $event,
+                                        false
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Закрыть редактирование\n                        "
+                                  )
+                                ]
+                              )
                             ]
                       ],
                       2
@@ -53716,6 +54022,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 2,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -53729,6 +54036,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               2,
+                              true,
                               "model-" + props.index + "-" + 2
                             )
                           },
@@ -53746,9 +54054,9 @@ var render = function() {
                         !_vm.editModCells[props.index][2]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.model) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -53782,6 +54090,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 3,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -53795,6 +54104,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               3,
+                              true,
                               "year_of_issue-" + props.index + "-" + 3
                             )
                           },
@@ -53812,9 +54122,9 @@ var render = function() {
                         !_vm.editModCells[props.index][3]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.year_of_issue) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -53822,12 +54132,11 @@ var render = function() {
                                 ref: "year_of_issue-" + props.index + "-" + 3,
                                 attrs: {
                                   value: props.item.year_of_issue,
-                                  items: Array.from({ length: 150 }, function(
-                                    _,
-                                    i
-                                  ) {
-                                    return 1950 + i
-                                  }),
+                                  items: Array.apply(null, { length: 100 }).map(
+                                    function(_, i) {
+                                      return 1950 + i
+                                    }
+                                  ),
                                   "hide-selected": "",
                                   label: "Вибирете год выпуска",
                                   "single-line": ""
@@ -53853,6 +54162,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 4,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -53866,6 +54176,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               4,
+                              true,
                               "fuel_type-" + props.index + "-" + 4
                             )
                           },
@@ -53883,9 +54194,9 @@ var render = function() {
                         !_vm.editModCells[props.index][4]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.fuel_type) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -53919,6 +54230,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 5,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -53932,6 +54244,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               5,
+                              true,
                               "power-" + props.index + "-" + 5
                             )
                           },
@@ -53949,9 +54262,9 @@ var render = function() {
                         !_vm.editModCells[props.index][5]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.power) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -53985,6 +54298,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 6,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -53998,6 +54312,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               6,
+                              true,
                               "number-" + props.index + "-" + 6
                             )
                           },
@@ -54015,9 +54330,9 @@ var render = function() {
                         !_vm.editModCells[props.index][6]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.number) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -54051,6 +54366,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 7,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54064,6 +54380,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               7,
+                              true,
                               "gps_tracker-" + props.index + "-" + 7
                             )
                           },
@@ -54081,9 +54398,9 @@ var render = function() {
                         !_vm.editModCells[props.index][7]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.gps_tracker.name) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -54119,6 +54436,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 8,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54140,9 +54458,17 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        " +
-                            _vm._s(props.item.gps_tracker.price || 0) +
-                            "$\n                    "
+                          "\n                    " +
+                            _vm._s(
+                              _vm.pricesForEquipment.equipmentPrices[
+                                props.index
+                              ]
+                                ? _vm.pricesForEquipment.equipmentPrices[
+                                    props.index
+                                  ]["gps_tracker_price"] || 0
+                                : 0
+                            ) +
+                            "$\n                "
                         )
                       ]
                     ),
@@ -54151,6 +54477,9 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 9,
+                        class: {
+                          "text-xs-center": !_vm.editModCells[props.index][9]
+                        },
                         style: {
                           "min-width": _vm.editModCells[props.index][9]
                             ? "300px"
@@ -54169,6 +54498,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               9,
+                              true,
                               "fuel_gauge-" + props.index + "-" + 9,
                               $event,
                               false
@@ -54212,9 +54542,9 @@ var render = function() {
                                                     [
                                                       _c("v-list-tile-title", [
                                                         _vm._v(
-                                                          "\n                                                " +
+                                                          "\n                                            " +
                                                             _vm._s(item.name) +
-                                                            "\n                                            "
+                                                            "\n                                        "
                                                         )
                                                       ])
                                                     ],
@@ -54355,7 +54685,7 @@ var render = function() {
                                         },
                                         [
                                           _vm._v(
-                                            "\n                                        Добавить\n                                    "
+                                            "\n                                    Добавить\n                                "
                                           )
                                         ]
                                       )
@@ -54376,6 +54706,7 @@ var render = function() {
                                               _vm.switchCellMode(
                                                 props.index,
                                                 9,
+                                                false,
                                                 "fuel_gauge-" +
                                                   props.index +
                                                   "-" +
@@ -54388,7 +54719,7 @@ var render = function() {
                                         },
                                         [
                                           _vm._v(
-                                            "\n                                        Закрыть редактирование\n                                    "
+                                            "\n                                    Закрыть редактирование\n                                "
                                           )
                                         ]
                                       )
@@ -54407,6 +54738,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 10,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54428,7 +54760,17 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        price\n                    "
+                          "\n                    " +
+                            _vm._s(
+                              _vm.pricesForEquipment.equipmentPrices[
+                                props.index
+                              ]
+                                ? _vm.pricesForEquipment.equipmentPrices[
+                                    props.index
+                                  ]["fuel_gauge_price"] || 0
+                                : 0
+                            ) +
+                            "$\n                "
                         )
                       ]
                     ),
@@ -54437,6 +54779,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 11,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54450,6 +54793,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               11,
+                              true,
                               "counter-" + props.index + "-" + 11
                             )
                           },
@@ -54467,9 +54811,9 @@ var render = function() {
                         !_vm.editModCells[props.index][11]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.counter.name) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -54505,6 +54849,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 12,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54526,7 +54871,17 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        price\n                    "
+                          "\n                    " +
+                            _vm._s(
+                              _vm.pricesForEquipment.equipmentPrices[
+                                props.index
+                              ]
+                                ? _vm.pricesForEquipment.equipmentPrices[
+                                    props.index
+                                  ]["counter_price"] || 0
+                                : 0
+                            ) +
+                            "$\n                "
                         )
                       ]
                     ),
@@ -54535,6 +54890,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 13,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54548,6 +54904,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               13,
+                              true,
                               "rf_id-" + props.index + "-" + 13
                             )
                           },
@@ -54565,9 +54922,9 @@ var render = function() {
                         !_vm.editModCells[props.index][13]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.rf_id.name) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -54603,6 +54960,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 14,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54624,7 +54982,17 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        price\n                    "
+                          "\n                    " +
+                            _vm._s(
+                              _vm.pricesForEquipment.equipmentPrices[
+                                props.index
+                              ]
+                                ? _vm.pricesForEquipment.equipmentPrices[
+                                    props.index
+                                  ]["rf_id_price"] || 0
+                                : 0
+                            ) +
+                            "$\n                "
                         )
                       ]
                     ),
@@ -54633,6 +55001,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 15,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54646,6 +55015,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               15,
+                              true,
                               "reader_of_trailed_equipment-" +
                                 props.index +
                                 "-" +
@@ -54666,11 +55036,11 @@ var render = function() {
                         !_vm.editModCells[props.index][15]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(
                                     props.item.reader_of_trailed_equipment.name
                                   ) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -54711,6 +55081,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 16,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54732,7 +55103,17 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        price\n                    "
+                          "\n                    " +
+                            _vm._s(
+                              _vm.pricesForEquipment.equipmentPrices[
+                                props.index
+                              ]
+                                ? _vm.pricesForEquipment.equipmentPrices[
+                                    props.index
+                                  ]["reader_of_trailed_equipment_price"] || 0
+                                : 0
+                            ) +
+                            "$\n                "
                         )
                       ]
                     ),
@@ -54741,6 +55122,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 17,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54754,6 +55136,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               17,
+                              true,
                               "connect_module-" + props.index + "-" + 17
                             )
                           },
@@ -54771,9 +55154,9 @@ var render = function() {
                         !_vm.editModCells[props.index][17]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.connect_module.name) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -54809,6 +55192,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 18,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54830,7 +55214,17 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        price\n                    "
+                          "\n                    " +
+                            _vm._s(
+                              _vm.pricesForEquipment.equipmentPrices[
+                                props.index
+                              ]
+                                ? _vm.pricesForEquipment.equipmentPrices[
+                                    props.index
+                                  ]["connect_module_price"] || 0
+                                : 0
+                            ) +
+                            "$\n                "
                         )
                       ]
                     ),
@@ -54839,6 +55233,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 19,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54852,6 +55247,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               19,
+                              true,
                               "can_reader-" + props.index + "-" + 19
                             )
                           },
@@ -54869,9 +55265,9 @@ var render = function() {
                         !_vm.editModCells[props.index][19]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.can_reader.name) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -54907,6 +55303,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 20,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54928,7 +55325,17 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        price\n                    "
+                          "\n                    " +
+                            _vm._s(
+                              _vm.pricesForEquipment.equipmentPrices[
+                                props.index
+                              ]
+                                ? _vm.pricesForEquipment.equipmentPrices[
+                                    props.index
+                                  ]["can_reader_price"] || 0
+                                : 0
+                            ) +
+                            "$\n                "
                         )
                       ]
                     ),
@@ -54937,6 +55344,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 21,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -54950,6 +55358,7 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               21,
+                              true,
                               "deaerator-" + props.index + "-" + 21
                             )
                           },
@@ -54967,9 +55376,9 @@ var render = function() {
                         !_vm.editModCells[props.index][21]
                           ? [
                               _vm._v(
-                                "\n                            " +
+                                "\n                        " +
                                   _vm._s(props.item.deaerator.name) +
-                                  "\n                        "
+                                  "\n                    "
                               )
                             ]
                           : [
@@ -55005,6 +55414,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 22,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -55026,7 +55436,17 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        price\n                    "
+                          "\n                    " +
+                            _vm._s(
+                              _vm.pricesForEquipment.equipmentPrices[
+                                props.index
+                              ]
+                                ? _vm.pricesForEquipment.equipmentPrices[
+                                    props.index
+                                  ]["deaerator_price"] || 0
+                                : 0
+                            ) +
+                            "$\n                "
                         )
                       ]
                     ),
@@ -55035,6 +55455,14 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 23,
+                        class: {
+                          "text-xs-center": !_vm.editModCells[props.index][23]
+                        },
+                        style: {
+                          "min-width": _vm.editModCells[props.index][23]
+                            ? "300px"
+                            : "10px"
+                        },
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -55048,7 +55476,10 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               23,
-                              "cn03-" + props.index + "-" + 23
+                              true,
+                              "cn03-" + props.index + "-" + 23,
+                              $event,
+                              false
                             )
                           },
                           mouseover: function($event) {
@@ -55064,36 +55495,210 @@ var render = function() {
                       [
                         !_vm.editModCells[props.index][23]
                           ? [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(props.item.cn03.name) +
-                                  "\n                        "
-                              )
+                              props.item.cn03.some(function(el) {
+                                return typeof el !== "undefined"
+                              })
+                                ? _c(
+                                    "v-list",
+                                    [
+                                      _vm._l(props.item.cn03, function(
+                                        item,
+                                        textIndex
+                                      ) {
+                                        return [
+                                          typeof item !== "undefined"
+                                            ? _c(
+                                                "v-list-tile",
+                                                {
+                                                  key: "cn03_text-" + textIndex
+                                                },
+                                                [
+                                                  _c(
+                                                    "v-list-tile-content",
+                                                    [
+                                                      _c("v-list-tile-title", [
+                                                        _vm._v(
+                                                          "\n                                            " +
+                                                            _vm._s(item.name) +
+                                                            "\n                                        "
+                                                        )
+                                                      ])
+                                                    ],
+                                                    1
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _vm.isShowDivider(
+                                            textIndex,
+                                            props.item.cn03
+                                          )
+                                            ? _c("v-divider", {
+                                                key: "cn03_divider-" + textIndex
+                                              })
+                                            : _vm._e()
+                                        ]
+                                      })
+                                    ],
+                                    2
+                                  )
+                                : _vm._e()
                             ]
                           : [
-                              _c("v-autocomplete", {
-                                ref: "cn03-" + props.index + "-" + 23,
-                                attrs: {
-                                  value: props.item.cn03,
-                                  items: _vm.allEquipment,
-                                  "item-text": "name",
-                                  "hide-selected": "",
-                                  label: "Вибирете cn03",
-                                  "single-line": "",
-                                  "return-object": ""
-                                },
-                                on: {
-                                  change: function($event) {
-                                    _vm.setCellValue(
-                                      $event,
-                                      props.index,
-                                      23,
-                                      "cn03",
-                                      "td-" + props.index + "-" + 23
-                                    )
-                                  }
-                                }
-                              })
+                              _c(
+                                "v-layout",
+                                { attrs: { wrap: "" } },
+                                [
+                                  _vm._l(props.item.cn03.length, function(
+                                    _,
+                                    inputIndex
+                                  ) {
+                                    return [
+                                      _c(
+                                        "v-flex",
+                                        {
+                                          key: "cn03_input-" + inputIndex,
+                                          attrs: { xs10: "" }
+                                        },
+                                        [
+                                          _c("v-autocomplete", {
+                                            ref:
+                                              "cn03-" + props.index + "-" + 23,
+                                            refInFor: true,
+                                            attrs: {
+                                              value:
+                                                props.item.cn03[inputIndex],
+                                              items: _vm.allEquipment,
+                                              "item-text": "name",
+                                              clearable: "",
+                                              "hide-selected": "",
+                                              label: "Вибирете CN03",
+                                              "single-line": "",
+                                              "return-object": ""
+                                            },
+                                            on: {
+                                              change: function($event) {
+                                                _vm.setCellValue(
+                                                  $event,
+                                                  props.index,
+                                                  23,
+                                                  "cn03",
+                                                  "td-" +
+                                                    props.index +
+                                                    "-" +
+                                                    23,
+                                                  inputIndex,
+                                                  false
+                                                )
+                                              }
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-flex",
+                                        {
+                                          key: "cn03_delete_btn-" + inputIndex,
+                                          staticClass:
+                                            "layout align-center justify-center",
+                                          attrs: { xs2: "" }
+                                        },
+                                        [
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: { small: "", icon: "" },
+                                              on: {
+                                                click: function($event) {
+                                                  _vm.deleteOrderNestedData(
+                                                    $event,
+                                                    props.index,
+                                                    "cn03",
+                                                    inputIndex
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [_c("v-icon", [_vm._v("delete")])],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { xs12: "" } },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "success",
+                                            small: ""
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.addNestedData(
+                                                $event,
+                                                props.index,
+                                                "cn03"
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    Добавить\n                                "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { xs12: "" } },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { color: "info", small: "" },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.switchCellMode(
+                                                props.index,
+                                                23,
+                                                false,
+                                                "cn03-" +
+                                                  props.index +
+                                                  "-" +
+                                                  23,
+                                                $event,
+                                                false
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    Закрыть редактирование\n                                "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                2
+                              )
                             ]
                       ],
                       2
@@ -55103,6 +55708,7 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 24,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -55124,7 +55730,17 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        price\n                    "
+                          "\n                    " +
+                            _vm._s(
+                              _vm.pricesForEquipment.equipmentPrices[
+                                props.index
+                              ]
+                                ? _vm.pricesForEquipment.equipmentPrices[
+                                    props.index
+                                  ]["cn03_price"] || 0
+                                : 0
+                            ) +
+                            "$\n                "
                         )
                       ]
                     ),
@@ -55133,6 +55749,14 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 25,
+                        class: {
+                          "text-xs-center": !_vm.editModCells[props.index][25]
+                        },
+                        style: {
+                          "min-width": _vm.editModCells[props.index][25]
+                            ? "300px"
+                            : "10px"
+                        },
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -55146,7 +55770,10 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               25,
-                              "rs01-" + props.index + "-" + 25
+                              true,
+                              "rs01-" + props.index + "-" + 25,
+                              $event,
+                              false
                             )
                           },
                           mouseover: function($event) {
@@ -55162,36 +55789,210 @@ var render = function() {
                       [
                         !_vm.editModCells[props.index][25]
                           ? [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(props.item.rs01.name) +
-                                  "\n                        "
-                              )
+                              props.item.rs01.some(function(el) {
+                                return typeof el !== "undefined"
+                              })
+                                ? _c(
+                                    "v-list",
+                                    [
+                                      _vm._l(props.item.rs01, function(
+                                        item,
+                                        textIndex
+                                      ) {
+                                        return [
+                                          typeof item !== "undefined"
+                                            ? _c(
+                                                "v-list-tile",
+                                                {
+                                                  key: "rs01_text-" + textIndex
+                                                },
+                                                [
+                                                  _c(
+                                                    "v-list-tile-content",
+                                                    [
+                                                      _c("v-list-tile-title", [
+                                                        _vm._v(
+                                                          "\n                                            " +
+                                                            _vm._s(item.name) +
+                                                            "\n                                        "
+                                                        )
+                                                      ])
+                                                    ],
+                                                    1
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _vm.isShowDivider(
+                                            textIndex,
+                                            props.item.rs01
+                                          )
+                                            ? _c("v-divider", {
+                                                key: "rs01_divider-" + textIndex
+                                              })
+                                            : _vm._e()
+                                        ]
+                                      })
+                                    ],
+                                    2
+                                  )
+                                : _vm._e()
                             ]
                           : [
-                              _c("v-autocomplete", {
-                                ref: "rs01-" + props.index + "-" + 25,
-                                attrs: {
-                                  value: props.item.rs01,
-                                  items: _vm.allEquipment,
-                                  "item-text": "name",
-                                  "hide-selected": "",
-                                  label: "Вибирете rs01",
-                                  "single-line": "",
-                                  "return-object": ""
-                                },
-                                on: {
-                                  change: function($event) {
-                                    _vm.setCellValue(
-                                      $event,
-                                      props.index,
-                                      25,
-                                      "rs01",
-                                      "td-" + props.index + "-" + 25
-                                    )
-                                  }
-                                }
-                              })
+                              _c(
+                                "v-layout",
+                                { attrs: { wrap: "" } },
+                                [
+                                  _vm._l(props.item.rs01.length, function(
+                                    _,
+                                    inputIndex
+                                  ) {
+                                    return [
+                                      _c(
+                                        "v-flex",
+                                        {
+                                          key: "rs01_input-" + inputIndex,
+                                          attrs: { xs10: "" }
+                                        },
+                                        [
+                                          _c("v-autocomplete", {
+                                            ref:
+                                              "rs01-" + props.index + "-" + 25,
+                                            refInFor: true,
+                                            attrs: {
+                                              value:
+                                                props.item.rs01[inputIndex],
+                                              items: _vm.allEquipment,
+                                              "item-text": "name",
+                                              clearable: "",
+                                              "hide-selected": "",
+                                              label: "Вибирете RS01",
+                                              "single-line": "",
+                                              "return-object": ""
+                                            },
+                                            on: {
+                                              change: function($event) {
+                                                _vm.setCellValue(
+                                                  $event,
+                                                  props.index,
+                                                  25,
+                                                  "rs01",
+                                                  "td-" +
+                                                    props.index +
+                                                    "-" +
+                                                    25,
+                                                  inputIndex,
+                                                  false
+                                                )
+                                              }
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-flex",
+                                        {
+                                          key: "rs01_delete_btn-" + inputIndex,
+                                          staticClass:
+                                            "layout align-center justify-center",
+                                          attrs: { xs2: "" }
+                                        },
+                                        [
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: { small: "", icon: "" },
+                                              on: {
+                                                click: function($event) {
+                                                  _vm.deleteOrderNestedData(
+                                                    $event,
+                                                    props.index,
+                                                    "rs01",
+                                                    inputIndex
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [_c("v-icon", [_vm._v("delete")])],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { xs12: "" } },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "success",
+                                            small: ""
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.addNestedData(
+                                                $event,
+                                                props.index,
+                                                "rs01"
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    Добавить\n                                "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { xs12: "" } },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { color: "info", small: "" },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.switchCellMode(
+                                                props.index,
+                                                25,
+                                                false,
+                                                "rs01-" +
+                                                  props.index +
+                                                  "-" +
+                                                  25,
+                                                $event,
+                                                false
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    Закрыть редактирование\n                                "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                2
+                              )
                             ]
                       ],
                       2
@@ -55201,11 +56002,12 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 26,
+                        staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
                               index: props.index,
-                              column: "cn03_price",
+                              column: "rs01_price",
                               columnIndex: 26,
                               value: false
                             })
@@ -55213,7 +56015,7 @@ var render = function() {
                           mouseover: function($event) {
                             _vm.selectCellToCopyList($event, {
                               index: props.index,
-                              column: "cn03_price",
+                              column: "rs01_price",
                               columnIndex: 26,
                               value: false
                             })
@@ -55222,7 +56024,17 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        price\n                    "
+                          "\n                    " +
+                            _vm._s(
+                              _vm.pricesForEquipment.equipmentPrices[
+                                props.index
+                              ]
+                                ? _vm.pricesForEquipment.equipmentPrices[
+                                    props.index
+                                  ]["rs01_price"] || 0
+                                : 0
+                            ) +
+                            "$\n                "
                         )
                       ]
                     ),
@@ -55231,6 +56043,14 @@ var render = function() {
                       "td",
                       {
                         ref: "td-" + props.index + "-" + 27,
+                        class: {
+                          "text-xs-center": !_vm.editModCells[props.index][27]
+                        },
+                        style: {
+                          "min-width": _vm.editModCells[props.index][27]
+                            ? "300px"
+                            : "10px"
+                        },
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
@@ -55244,7 +56064,10 @@ var render = function() {
                             _vm.switchCellMode(
                               props.index,
                               27,
-                              "additional_equipment-" + props.index + "-" + 27
+                              true,
+                              "additional_equipment-" + props.index + "-" + 27,
+                              $event,
+                              false
                             )
                           },
                           mouseover: function($event) {
@@ -55260,54 +56083,262 @@ var render = function() {
                       [
                         !_vm.editModCells[props.index][27]
                           ? [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(props.item.additional_equipment.name) +
-                                  "\n                        "
-                              )
+                              props.item.additional_equipment.some(function(
+                                el
+                              ) {
+                                return typeof el !== "undefined"
+                              })
+                                ? _c(
+                                    "v-list",
+                                    [
+                                      _vm._l(
+                                        props.item.additional_equipment,
+                                        function(item, textIndex) {
+                                          return [
+                                            typeof item !== "undefined"
+                                              ? _c(
+                                                  "v-list-tile",
+                                                  {
+                                                    key:
+                                                      "additional_equipment_text-" +
+                                                      textIndex
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "v-list-tile-content",
+                                                      [
+                                                        _c(
+                                                          "v-list-tile-title",
+                                                          [
+                                                            _vm._v(
+                                                              "\n                                            " +
+                                                                _vm._s(
+                                                                  item.name
+                                                                ) +
+                                                                "\n                                        "
+                                                            )
+                                                          ]
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            _vm.isShowDivider(
+                                              textIndex,
+                                              props.item.additional_equipment
+                                            )
+                                              ? _c("v-divider", {
+                                                  key:
+                                                    "additional_equipment_divider-" +
+                                                    textIndex
+                                                })
+                                              : _vm._e()
+                                          ]
+                                        }
+                                      )
+                                    ],
+                                    2
+                                  )
+                                : _vm._e()
                             ]
                           : [
-                              _c("v-autocomplete", {
-                                ref:
-                                  "additional_equipment-" +
-                                  props.index +
-                                  "-" +
-                                  27,
-                                attrs: {
-                                  value: props.item.additional_equipment,
-                                  items: _vm.optionalEquipment,
-                                  "item-text": "name",
-                                  "hide-selected": "",
-                                  label: "Вибирете доп. оборудование",
-                                  "single-line": "",
-                                  "return-object": ""
-                                },
-                                on: {
-                                  change: function($event) {
-                                    _vm.setCellValue(
-                                      $event,
-                                      props.index,
-                                      27,
-                                      "additional_equipment",
-                                      "td-" + props.index + "-" + 27
-                                    )
-                                  }
-                                }
-                              })
+                              _c(
+                                "v-layout",
+                                { attrs: { wrap: "" } },
+                                [
+                                  _vm._l(
+                                    props.item.additional_equipment.length,
+                                    function(_, inputIndex) {
+                                      return [
+                                        _c(
+                                          "v-flex",
+                                          {
+                                            key:
+                                              "additional_equipment_input-" +
+                                              inputIndex,
+                                            attrs: { xs10: "" }
+                                          },
+                                          [
+                                            _c("v-autocomplete", {
+                                              ref:
+                                                "additional_equipment-" +
+                                                props.index +
+                                                "-" +
+                                                27,
+                                              refInFor: true,
+                                              attrs: {
+                                                value:
+                                                  props.item
+                                                    .additional_equipment[
+                                                    inputIndex
+                                                  ],
+                                                items: _vm.optionalEquipment,
+                                                "item-text": "name",
+                                                clearable: "",
+                                                "hide-selected": "",
+                                                label:
+                                                  "Вибирете доп. оборудование",
+                                                "single-line": "",
+                                                "return-object": ""
+                                              },
+                                              on: {
+                                                change: function($event) {
+                                                  _vm.setCellValue(
+                                                    $event,
+                                                    props.index,
+                                                    27,
+                                                    "additional_equipment",
+                                                    "td-" +
+                                                      props.index +
+                                                      "-" +
+                                                      27,
+                                                    inputIndex,
+                                                    false
+                                                  )
+                                                }
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-flex",
+                                          {
+                                            key:
+                                              "additional_equipment_delete_btn-" +
+                                              inputIndex,
+                                            staticClass:
+                                              "layout align-center justify-center",
+                                            attrs: { xs2: "" }
+                                          },
+                                          [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                attrs: { small: "", icon: "" },
+                                                on: {
+                                                  click: function($event) {
+                                                    _vm.deleteOrderNestedData(
+                                                      $event,
+                                                      props.index,
+                                                      "additional_equipment",
+                                                      inputIndex
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("v-icon", [_vm._v("delete")])
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ]
+                                    }
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { xs12: "" } },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "success",
+                                            small: ""
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.addNestedData(
+                                                $event,
+                                                props.index,
+                                                "additional_equipment"
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    Добавить\n                                "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { xs12: "" } },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { color: "info", small: "" },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.switchCellMode(
+                                                props.index,
+                                                27,
+                                                false,
+                                                "additional_equipment-" +
+                                                  props.index +
+                                                  "-" +
+                                                  27,
+                                                $event,
+                                                false
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    Закрыть редактирование\n                                "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                2
+                              )
                             ]
                       ],
                       2
                     ),
                     _vm._v(" "),
-                    _c("td", [
+                    _c("td", { staticClass: "text-xs-center" }, [
                       _vm._v(
-                        "\n                        price\n                    "
+                        "\n                    " +
+                          _vm._s(
+                            _vm.pricesForEquipment.equipmentPrices[props.index]
+                              ? _vm.pricesForEquipment.equipmentPrices[
+                                  props.index
+                                ]["additional_equipment_price"] || 0
+                              : 0
+                          ) +
+                          "$\n                "
                       )
                     ]),
                     _vm._v(" "),
-                    _c("td", [
+                    _c("td", { staticClass: "text-xs-center" }, [
                       _vm._v(
-                        "\n                        price\n                    "
+                        "\n                    " +
+                          _vm._s(
+                            _vm.pricesForEquipment.installationPrices[
+                              props.index
+                            ]
+                          ) +
+                          "$\n                "
                       )
                     ])
                   ]
@@ -55364,6 +56395,77 @@ var render = function() {
                     "v-container",
                     { attrs: { "grid-list-md": "" } },
                     [
+                      _c(
+                        "v-layout",
+                        { attrs: { "justify-center": "" } },
+                        [
+                          _c(
+                            "v-flex",
+                            { attrs: { xs2: "", "offset-xs2": "" } },
+                            [
+                              _c(
+                                "v-text-field",
+                                {
+                                  attrs: {
+                                    label: "Курс Долара",
+                                    readonly: !_vm.isDollarRateEditing
+                                  },
+                                  model: {
+                                    value: _vm.orderData.dollar_rate,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.orderData,
+                                        "dollar_rate",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "orderData.dollar_rate"
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-slide-x-reverse-transition",
+                                    {
+                                      attrs: {
+                                        slot: "append-outer",
+                                        mode: "out-in"
+                                      },
+                                      slot: "append-outer"
+                                    },
+                                    [
+                                      _c("v-icon", {
+                                        key: "icon-" + _vm.isDollarRateEditing,
+                                        attrs: {
+                                          color: _vm.isDollarRateEditing
+                                            ? "success"
+                                            : "info"
+                                        },
+                                        domProps: {
+                                          textContent: _vm._s(
+                                            _vm.isDollarRateEditing
+                                              ? "mdi-check-outline"
+                                              : "mdi-circle-edit-outline"
+                                          )
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            _vm.isDollarRateEditing = !_vm.isDollarRateEditing
+                                          }
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-layout",
                         { attrs: { wrap: "", "justify-center": "" } },
@@ -55543,22 +56645,22 @@ var render = function() {
       ),
       _vm._v(" "),
       _c(
-        "v-expansion-panel",
-        { staticClass: "mt-3 mb-5", attrs: { value: 0 } },
+        "v-card",
+        { staticClass: "mt-3 mb-5" },
         [
           _c(
-            "v-expansion-panel-content",
+            "v-card-title",
+            { staticClass: "justify-center", attrs: { "primary-title": "" } },
             [
-              _c(
-                "div",
-                {
-                  staticClass: "gps-tracking-header",
-                  attrs: { slot: "header" },
-                  slot: "header"
-                },
-                [_vm._v("GPS-трекинг")]
-              ),
-              _vm._v(" "),
+              _c("div", { staticClass: "headline gps-tracking-header" }, [
+                _vm._v("GPS-трекинг")
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-text",
+            [
               _c("appGPSData", {
                 ref: "GPSData",
                 attrs: {
@@ -55567,7 +56669,10 @@ var render = function() {
                   fuelLevelSensors: _vm.fuelLevelSensors,
                   fuelFlowmeters: _vm.fuelFlowmeters,
                   identification: _vm.identification,
-                  optionalEquipment: _vm.optionalEquipment
+                  optionalEquipment: _vm.optionalEquipment,
+                  pricesForEquipment: _vm.pricesForEquipment,
+                  allEquipmentPrice: _vm.allEquipmentPrice,
+                  allInstallationPrice: _vm.allInstallationPrice
                 },
                 on: {
                   "update:orderGPSData": _vm.updateOrderGPSData,
@@ -55582,9 +56687,254 @@ var render = function() {
               })
             ],
             1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-text",
+            [
+              _c(
+                "v-layout",
+                { attrs: { wrap: "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", sm6: "" } },
+                    [
+                      _c(
+                        "v-container",
+                        { attrs: { fluid: "", "grid-list-xs": "" } },
+                        [
+                          _c(
+                            "v-layout",
+                            { attrs: { wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { xs4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Монтаж оборудования",
+                                      readonly: "",
+                                      value: _vm.allEquipmentPrice,
+                                      "append-icon": "₴"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-flex", { attrs: { xs8: "" } }),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Оборудование",
+                                      readonly: "",
+                                      value: _vm.allInstallationPrice,
+                                      "append-icon": "₴"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-flex", { attrs: { xs8: "" } }),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Дней командировки",
+                                      hint: "Фиксированая цена 720 грн/день",
+                                      "persistent-hint": ""
+                                    },
+                                    model: {
+                                      value: _vm.orderData.days,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.orderData, "days", $$v)
+                                      },
+                                      expression: "orderData.days"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-flex", { attrs: { xs8: "" } }),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Командировки / проживание",
+                                      readonly: "",
+                                      value: _vm.priceForDays,
+                                      "append-icon": "₴"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-flex", { attrs: { xs8: "" } }),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Цена за 1км",
+                                      "append-icon": "₴"
+                                    },
+                                    model: {
+                                      value:
+                                        _vm.orderData
+                                          .price_for_transportation_per_km,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.orderData,
+                                          "price_for_transportation_per_km",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "orderData.price_for_transportation_per_km"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-flex", { attrs: { xs8: "" } }),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "Растояние км" },
+                                    model: {
+                                      value: _vm.orderData.transportation_kms,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.orderData,
+                                          "transportation_kms",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "orderData.transportation_kms"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-flex", { attrs: { xs8: "" } }),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "Количество поездок" },
+                                    model: {
+                                      value: _vm.orderData.number_of_trips,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.orderData,
+                                          "number_of_trips",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "orderData.number_of_trips"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-flex", { attrs: { xs8: "" } }),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "Маршрут" },
+                                    model: {
+                                      value: _vm.orderData.route,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.orderData, "route", $$v)
+                                      },
+                                      expression: "orderData.route"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-flex", { attrs: { xs8: "" } }),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Транспортные расходы",
+                                      readonly: "",
+                                      value: _vm.transportationPrice,
+                                      "append-icon": "₴"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-flex", { attrs: { xs8: "" } })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-flex", { attrs: { xs12: "", sm6: "" } })
+                ],
+                1
+              )
+            ],
+            1
           )
         ],
         1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-snackbar",
+        {
+          attrs: { timeout: _vm.snackTimeout, color: _vm.snackColor },
+          model: {
+            value: _vm.snack,
+            callback: function($$v) {
+              _vm.snack = $$v
+            },
+            expression: "snack"
+          }
+        },
+        [_vm._v("\n        " + _vm._s(_vm.snackText) + "\n    ")]
       )
     ],
     1
@@ -56341,6 +57691,44 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 287 */,
+/* 288 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    methods: {
+        /**
+         *
+         * @param {HTMLElement} elem
+         * @param {Object} styles
+         */
+        // Returns if a value is an object
+        isObject: function isObject(value) {
+            return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object;
+        },
+
+        // Returns if a value is null
+        isNull: function isNull(value) {
+            return value === null;
+        },
+
+        // Returns if a value is undefined
+        isUndefined: function isUndefined(value) {
+            return typeof value === 'undefined';
+        },
+        addTwoFloats: function addTwoFloats(fl1, fl2) {
+            return parseFloat((fl1 + fl2).toFixed(2));
+        },
+        multiplyTwoFloats: function multiplyTwoFloats(fl1, fl2) {
+            return parseFloat((fl1 * fl2).toFixed(2));
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

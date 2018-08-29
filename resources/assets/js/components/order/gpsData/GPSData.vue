@@ -1,562 +1,673 @@
 <template>
-    <v-card>
+    <v-card class="elevation-0">
          <v-card-title>
             <v-btn @click="addRow" color="info">Добавить</v-btn>
             <v-spacer></v-spacer>
-            <v-text-field
-                v-model="search"
-                append-icon="search"
-                label="Поиск"
-                single-line
-                hide-details>
-            </v-text-field>
         </v-card-title>
-        <v-card-text id="text-test">
-            <!-- <div style="position: relative; top: 0px; left: 0px;"> -->
-                <v-data-table
-                    v-model="selected"
-                    item-key="id"
-                    :search="search"
-                    id="gps-data-table"
-                    :class="{ 'gps-data-table-no-select-text': isCornerFocused }"
-                    :headers="headers"
-                    :items="orderGPSData"
-                    disable-initial-sort
-                    select-all
-                    hide-actions>
-                    <template slot="items" slot-scope="props">
-                        <td @mousedown="hideBordersAndCorner">
-                            <v-checkbox
-                                v-model="props.selected"
-                                primary
-                                hide-details>
-                            </v-checkbox>
-                        </td>
-                        <td @mousedown="hideBordersAndCorner" class="handle">
-                            ::
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${0}`"
-                            @click="selectCell($event, { index: props.index, column: 'image', columnIndex: 0, value: false })"
-                            @mouseenter="selectCellToCopyList($event, { index: props.index, column: 'image', columnIndex: 0, value: false })">
-                            <v-avatar
-                                @dblclick="onPickFile(`image-${props.index}`)"
-                                size="40"
-                                tile>
-                                <img :style="{cursor: 'pointer','object-fit': 'cover',width: '40px',height: '40px'}" :src="imagesPreviews[props.index] === '' ? uploadImage : imagesPreviews[props.index]" alt="image">
-                            </v-avatar>
-                            <input @change="onFilePicked($event, props.index)" style="display:none;" type="file" :ref="`image-${props.index}`">
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${1}`"
-                            @click="selectCell($event, { index: props.index, column: 'mark', columnIndex: 1, value: props.item.mark })"
-                            @dblclick="switchCellMode(props.index, 1, `mark-${props.index}-${1}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'mark', columnIndex: 1, value: props.item.mark })">
-                            <template v-if="!editModCells[props.index][1]">
-                                {{ props.item.mark }}
-                            </template>
-                            <template v-else>
-                                <v-combobox
-                                    :ref="`mark-${props.index}-${1}`"
-                                    :value="props.item.mark"
-                                    @change="setCellValue($event, props.index, 1, 'mark', `td-${props.index}-${1}`)"
-                                    :items="cachedDataTest"
-                                    hide-selected
-                                    label="Вибирете марку"
-                                    single-line>
-                                </v-combobox>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${2}`"
-                            @click="selectCell($event, { index: props.index, column: 'model', columnIndex: 2, value: props.item.model })"
-                            @dblclick="switchCellMode(props.index, 2, `model-${props.index}-${2}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'model', columnIndex: 2, value: props.item.model })">
-                            <template v-if="!editModCells[props.index][2]">
-                                {{ props.item.model }}
-                            </template>
-                            <template v-else>
-                                <v-combobox
-                                    :ref="`model-${props.index}-${2}`"
-                                    :value="props.item.model"
-                                    @change="setCellValue($event, props.index, 2, 'model', `td-${props.index}-${2}`)"
-                                    :items="cachedDataTest"
-                                    hide-selected
-                                    label="Вибирете модель"
-                                    single-line>
-                                </v-combobox>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${3}`"
-                            @click="selectCell($event, { index: props.index, column: 'year_of_issue', columnIndex: 3, value: props.item.year_of_issue })"
-                            @dblclick="switchCellMode(props.index, 3, `year_of_issue-${props.index}-${3}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'year_of_issue', columnIndex: 3, value: props.item.year_of_issue })">
-                            <template v-if="!editModCells[props.index][3]">
-                                {{ props.item.year_of_issue }}
-                            </template>
-                            <template v-else>
-                                <v-combobox
-                                    :ref="`year_of_issue-${props.index}-${3}`"
-                                    :value="props.item.year_of_issue"
-                                    @change="setCellValue($event, props.index, 3, 'year_of_issue', `td-${props.index}-${3}`)"
-                                    :items="Array.from({length: 150}, (_, i) => 1950 + i)"
-                                    hide-selected
-                                    label="Вибирете год выпуска"
-                                    single-line>
-                                </v-combobox>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${4}`"
-                            @click="selectCell($event, { index: props.index, column: 'fuel_type', columnIndex: 4, value: props.item.fuel_type })"
-                            @dblclick="switchCellMode(props.index, 4, `fuel_type-${props.index}-${4}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_type', columnIndex: 4, value: props.item.fuel_type })">
-                            <template v-if="!editModCells[props.index][4]">
-                                {{ props.item.fuel_type }}
-                            </template>
-                            <template v-else>
-                                <v-combobox
-                                    :ref="`fuel_type-${props.index}-${4}`"
-                                    :value="props.item.fuel_type"
-                                    @change="setCellValue($event, props.index, 4, 'fuel_type', `td-${props.index}-${4}`)"
-                                    :items="cachedDataTest"
-                                    hide-selected
-                                    label="Вибирете Тип топлива"
-                                    single-line>
-                                </v-combobox>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${5}`"
-                            @click="selectCell($event, { index: props.index, column: 'power', columnIndex: 5, value: props.item.power })"
-                            @dblclick="switchCellMode(props.index, 5, `power-${props.index}-${5}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'power', columnIndex: 5, value: props.item.power })">
-                            <template v-if="!editModCells[props.index][5]">
-                                {{ props.item.power }}
-                            </template>
-                            <template v-else>
-                                <v-combobox
-                                    :ref="`power-${props.index}-${5}`"
-                                    :value="props.item.power"
-                                    @change="setCellValue($event, props.index, 5, 'power', `td-${props.index}-${5}`)"
-                                    :items="cachedDataTest"
-                                    hide-selected
-                                    label="Вибирете мощность"
-                                    single-line>
-                                </v-combobox>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${6}`"
-                            @click="selectCell($event, { index: props.index, column: 'number', columnIndex: 6, value: props.item.number })"
-                            @dblclick="switchCellMode(props.index, 6, `number-${props.index}-${6}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'number', columnIndex: 6, value: props.item.number })">
-                            <template v-if="!editModCells[props.index][6]">
-                                {{ props.item.number }}
-                            </template>
-                            <template v-else>
-                                <v-combobox
-                                    :ref="`number-${props.index}-${6}`"
-                                    :value="props.item.number"
-                                    @change="setCellValue($event, props.index, 6, 'number', `td-${props.index}-${6}`)"
-                                    :items="cachedDataTest"
-                                    hide-selected
-                                    label="Вибирете гос. номер"
-                                    single-line>
-                                </v-combobox>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${7}`"
-                            @click="selectCell($event, { index: props.index, column: 'gps_tracker', columnIndex: 7, value: props.item.gps_tracker })"
-                            @dblclick="switchCellMode(props.index, 7, `gps_tracker-${props.index}-${7}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker', columnIndex: 7, value: props.item.gps_tracker })">
-                            <template v-if="!editModCells[props.index][7]">
-                                {{ props.item.gps_tracker.name }}
-                            </template>
-                            <template v-else>
-                                <v-autocomplete
-                                    :ref="`gps_tracker-${props.index}-${7}`"
-                                    :value="props.item.gps_tracker"
-                                    @change="setCellValue($event, props.index, 7, 'gps_tracker', `td-${props.index}-${7}`)"
-                                    :items="gpsTrackers"
-                                    item-text="name"
-                                    hide-selected
-                                    label="Вибирете GPS-трекер"
-                                    single-line
-                                    return-object>
-                                </v-autocomplete>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${8}`"
-                            @click="selectCell($event, { index: props.index, column: 'gps_tracker_price', columnIndex: 8, value: false })"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker_price', columnIndex: 8, value: false })">
-                            {{ props.item.gps_tracker.price || 0 }}$
-                        </td>
-                        <td
-                            :style="{ 'min-width': editModCells[props.index][9] ? '300px' : '10px' }"
-                            :ref="`td-${props.index}-${9}`"
-                            @click="selectCell($event, { index: props.index, column: 'fuel_gauge', columnIndex: 9, value: props.item.fuel_gauge })"
-                            @dblclick="switchCellMode(props.index, 9, `fuel_gauge-${props.index}-${9}`, $event, false)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_gauge', columnIndex: 9, value: props.item.fuel_gauge })">
-                            <template v-if="!editModCells[props.index][9]">
-                                <v-list v-if="props.item.fuel_gauge.some(el => typeof el !== 'undefined')">
-                                    <template v-for="(item, textIndex) in props.item.fuel_gauge">
-                                        <v-list-tile
-                                            v-if="typeof item !== 'undefined'"
-                                            :key="`fuel_gauge_text-${textIndex}`">
-                                            <v-list-tile-content>
-                                                <v-list-tile-title>
-                                                    {{ item.name }}
-                                                </v-list-tile-title>
-                                            </v-list-tile-content>
-                                        </v-list-tile>
-                                        <v-divider
-                                            v-if="isShowDivider(textIndex, props.item.fuel_gauge)"
-                                            :key="`fuel_gauge_divider-${textIndex}`"
-                                        ></v-divider>
-                                    </template>
-                                </v-list>
-                            </template>
-                            <template v-else>
-                                <v-layout wrap>
-                                    <template v-for="(_, inputIndex) in props.item.fuel_gauge.length">
-                                        <v-flex xs10 :key="`fuel_gauge_input-${inputIndex}`">
-                                            <v-autocomplete
-                                                :ref="`fuel_gauge-${props.index}-${9}`"
-                                                :value="props.item.fuel_gauge[inputIndex]"
-                                                @change="setCellValue($event, props.index, 9, 'fuel_gauge', `td-${props.index}-${9}`, inputIndex, false)"
-                                                :items="fuelLevelSensors"
-                                                item-text="name"
-                                                clearable
-                                                hide-selected
-                                                label="Вибирете ДУТ"
-                                                single-line
-                                                return-object>
-                                            </v-autocomplete>
-                                        </v-flex>
-                                        <v-flex xs2 class="layout align-center justify-center"  :key="`fuel_gauge_delete_btn-${inputIndex}`">
-                                            <v-btn
-                                                small
-                                                icon
-                                                @click="deleteOrderNestedData($event, props.index, 'fuel_gauge', inputIndex)">
-                                                <v-icon>delete</v-icon>
-                                            </v-btn>
-                                        </v-flex>
-                                    </template>
-                                    <v-flex xs12>
-                                        <v-btn color="success" small @click="addNestedData($event, props.index, 'fuel_gauge')">
-                                            Добавить
+        <v-card-text id="text-test" class="ma-0 pa-0">
+            <v-data-table
+                v-model="selected"
+                item-key="id"
+                id="gps-data-table"
+                :class="{ 'gps-data-table-no-select-text': isCornerFocused }"
+                :headers="headers"
+                :items="orderGPSData"
+                disable-initial-sort
+                select-all
+                hide-actions>
+                <template slot="items" slot-scope="props">
+                    <td @mousedown="hideBordersAndCorner">
+                        <v-checkbox
+                            v-model="props.selected"
+                            primary
+                            hide-details>
+                        </v-checkbox>
+                    </td>
+                    <td @mousedown="hideBordersAndCorner" class="handle">
+                        ::
+                    </td>
+                    <td
+                        :ref="`td-${props.index}-${0}`"
+                        @click="selectCell($event, { index: props.index, column: 'image', columnIndex: 0, value: false })"
+                        @mouseenter="selectCellToCopyList($event, { index: props.index, column: 'image', columnIndex: 0, value: false })">
+                        <v-avatar
+                            @dblclick="onPickFile(`image-${props.index}`)"
+                            size="40"
+                            tile>
+                            <img :style="{cursor: 'pointer','object-fit': 'cover',width: '40px',height: '40px'}" :src="imagesPreviews[props.index] === '' ? uploadImage : imagesPreviews[props.index]" alt="image">
+                        </v-avatar>
+                        <input @change="onFilePicked($event, props.index)" style="display:none;" type="file" :ref="`image-${props.index}`">
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${1}`"
+                        @click="selectCell($event, { index: props.index, column: 'mark', columnIndex: 1, value: props.item.mark })"
+                        @dblclick="switchCellMode(props.index, 1, true, `mark-${props.index}-${1}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'mark', columnIndex: 1, value: props.item.mark })">
+                        <template v-if="!editModCells[props.index][1]">
+                            {{ props.item.mark }}
+                        </template>
+                        <template v-else>
+                            <v-combobox
+                                :ref="`mark-${props.index}-${1}`"
+                                :value="props.item.mark"
+                                @change="setCellValue($event, props.index, 1, 'mark', `td-${props.index}-${1}`)"
+                                :items="cachedDataTest"
+                                label="Вибирете марку"
+                                single-line>
+                            </v-combobox>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 1, false, `mark-${props.index}-${1}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${2}`"
+                        @click="selectCell($event, { index: props.index, column: 'model', columnIndex: 2, value: props.item.model })"
+                        @dblclick="switchCellMode(props.index, 2, true, `model-${props.index}-${2}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'model', columnIndex: 2, value: props.item.model })">
+                        <template v-if="!editModCells[props.index][2]">
+                            {{ props.item.model }}
+                        </template>
+                        <template v-else>
+                            <v-combobox
+                                :ref="`model-${props.index}-${2}`"
+                                :value="props.item.model"
+                                @change="setCellValue($event, props.index, 2, 'model', `td-${props.index}-${2}`)"
+                                :items="cachedDataTest"
+                                hide-selected
+                                label="Вибирете модель"
+                                single-line>
+                            </v-combobox>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${3}`"
+                        @click="selectCell($event, { index: props.index, column: 'year_of_issue', columnIndex: 3, value: props.item.year_of_issue })"
+                        @dblclick="switchCellMode(props.index, 3, true, `year_of_issue-${props.index}-${3}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'year_of_issue', columnIndex: 3, value: props.item.year_of_issue })">
+                        <template v-if="!editModCells[props.index][3]">
+                            {{ props.item.year_of_issue }}
+                        </template>
+                        <template v-else>
+                            <v-combobox
+                                :ref="`year_of_issue-${props.index}-${3}`"
+                                :value="props.item.year_of_issue"
+                                @change="setCellValue($event, props.index, 3, 'year_of_issue', `td-${props.index}-${3}`)"
+                                :items="Array.apply(null, { length: 100 }).map((_, i) => 1950 + i)"
+                                hide-selected
+                                label="Вибирете год выпуска"
+                                single-line>
+                            </v-combobox>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${4}`"
+                        @click="selectCell($event, { index: props.index, column: 'fuel_type', columnIndex: 4, value: props.item.fuel_type })"
+                        @dblclick="switchCellMode(props.index, 4, true, `fuel_type-${props.index}-${4}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_type', columnIndex: 4, value: props.item.fuel_type })">
+                        <template v-if="!editModCells[props.index][4]">
+                            {{ props.item.fuel_type }}
+                        </template>
+                        <template v-else>
+                            <v-combobox
+                                :ref="`fuel_type-${props.index}-${4}`"
+                                :value="props.item.fuel_type"
+                                @change="setCellValue($event, props.index, 4, 'fuel_type', `td-${props.index}-${4}`)"
+                                :items="cachedDataTest"
+                                hide-selected
+                                label="Вибирете Тип топлива"
+                                single-line>
+                            </v-combobox>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${5}`"
+                        @click="selectCell($event, { index: props.index, column: 'power', columnIndex: 5, value: props.item.power })"
+                        @dblclick="switchCellMode(props.index, 5, true, `power-${props.index}-${5}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'power', columnIndex: 5, value: props.item.power })">
+                        <template v-if="!editModCells[props.index][5]">
+                            {{ props.item.power }}
+                        </template>
+                        <template v-else>
+                            <v-combobox
+                                :ref="`power-${props.index}-${5}`"
+                                :value="props.item.power"
+                                @change="setCellValue($event, props.index, 5, 'power', `td-${props.index}-${5}`)"
+                                :items="cachedDataTest"
+                                hide-selected
+                                label="Вибирете мощность"
+                                single-line>
+                            </v-combobox>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${6}`"
+                        @click="selectCell($event, { index: props.index, column: 'number', columnIndex: 6, value: props.item.number })"
+                        @dblclick="switchCellMode(props.index, 6, true, `number-${props.index}-${6}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'number', columnIndex: 6, value: props.item.number })">
+                        <template v-if="!editModCells[props.index][6]">
+                            {{ props.item.number }}
+                        </template>
+                        <template v-else>
+                            <v-combobox
+                                :ref="`number-${props.index}-${6}`"
+                                :value="props.item.number"
+                                @change="setCellValue($event, props.index, 6, 'number', `td-${props.index}-${6}`)"
+                                :items="cachedDataTest"
+                                hide-selected
+                                label="Вибирете гос. номер"
+                                single-line>
+                            </v-combobox>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${7}`"
+                        @click="selectCell($event, { index: props.index, column: 'gps_tracker', columnIndex: 7, value: props.item.gps_tracker })"
+                        @dblclick="switchCellMode(props.index, 7, true, `gps_tracker-${props.index}-${7}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker', columnIndex: 7, value: props.item.gps_tracker })">
+                        <template v-if="!editModCells[props.index][7]">
+                            {{ props.item.gps_tracker.name }}
+                        </template>
+                        <template v-else>
+                            <v-autocomplete
+                                :ref="`gps_tracker-${props.index}-${7}`"
+                                :value="props.item.gps_tracker"
+                                @change="setCellValue($event, props.index, 7, 'gps_tracker', `td-${props.index}-${7}`)"
+                                :items="gpsTrackers"
+                                item-text="name"
+                                hide-selected
+                                label="Вибирете GPS-трекер"
+                                single-line
+                                return-object>
+                            </v-autocomplete>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${8}`"
+                        @click="selectCell($event, { index: props.index, column: 'gps_tracker_price', columnIndex: 8, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker_price', columnIndex: 8, value: false })">
+                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['gps_tracker_price'] || 0 : 0 }}$
+                    </td>
+                    <td
+                        :class="{ 'text-xs-center': !editModCells[props.index][9] }"
+                        :ref="`td-${props.index}-${9}`"
+                        :style="{ 'min-width': editModCells[props.index][9] ? '300px' : '10px' }"
+                        @click="selectCell($event, { index: props.index, column: 'fuel_gauge', columnIndex: 9, value: props.item.fuel_gauge })"
+                        @dblclick="switchCellMode(props.index, 9, true, `fuel_gauge-${props.index}-${9}`, $event, false)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_gauge', columnIndex: 9, value: props.item.fuel_gauge })">
+                        <template v-if="!editModCells[props.index][9]">
+                            <v-list v-if="props.item.fuel_gauge.some(el => typeof el !== 'undefined')">
+                                <template v-for="(item, textIndex) in props.item.fuel_gauge">
+                                    <v-list-tile
+                                        v-if="typeof item !== 'undefined'"
+                                        :key="`fuel_gauge_text-${textIndex}`">
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                {{ item.name }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                    <v-divider
+                                        v-if="isShowDivider(textIndex, props.item.fuel_gauge)"
+                                        :key="`fuel_gauge_divider-${textIndex}`"
+                                    ></v-divider>
+                                </template>
+                            </v-list>
+                        </template>
+                        <template v-else>
+                            <v-layout wrap>
+                                <template v-for="(_, inputIndex) in props.item.fuel_gauge.length">
+                                    <v-flex xs10 :key="`fuel_gauge_input-${inputIndex}`">
+                                        <v-autocomplete
+                                            :ref="`fuel_gauge-${props.index}-${9}`"
+                                            :value="props.item.fuel_gauge[inputIndex]"
+                                            @change="setCellValue($event, props.index, 9, 'fuel_gauge', `td-${props.index}-${9}`, inputIndex, false)"
+                                            :items="fuelLevelSensors"
+                                            item-text="name"
+                                            clearable
+                                            hide-selected
+                                            label="Вибирете ДУТ"
+                                            single-line
+                                            return-object>
+                                        </v-autocomplete>
+                                    </v-flex>
+                                    <v-flex xs2 class="layout align-center justify-center"  :key="`fuel_gauge_delete_btn-${inputIndex}`">
+                                        <v-btn
+                                            small
+                                            icon
+                                            @click="deleteOrderNestedData($event, props.index, 'fuel_gauge', inputIndex)">
+                                            <v-icon>delete</v-icon>
                                         </v-btn>
                                     </v-flex>
-                                    <v-flex xs12>
-                                        <v-btn color="info" small @click="switchCellMode(props.index, 9, `fuel_gauge-${props.index}-${9}`, $event, false)">
-                                            Закрыть редактирование
+                                </template>
+                                <v-flex xs12>
+                                    <v-btn color="success" small @click="addNestedData($event, props.index, 'fuel_gauge')">
+                                        Добавить
+                                    </v-btn>
+                                </v-flex>
+                                <v-flex xs12>
+                                    <v-btn color="info" small @click="switchCellMode(props.index, 9, false, `fuel_gauge-${props.index}-${9}`, $event, false)">
+                                        Закрыть редактирование
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${10}`"
+                        @click="selectCell($event, { index: props.index, column: 'fuel_gauge_price', columnIndex: 10, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_gauge_price', columnIndex: 10, value: false })">
+                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['fuel_gauge_price'] || 0 : 0 }}$
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${11}`"
+                        @click="selectCell($event, { index: props.index, column: 'counter', columnIndex: 11, value: props.item.counter })"
+                        @dblclick="switchCellMode(props.index, 11, true, `counter-${props.index}-${11}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'counter', columnIndex: 11, value: props.item.counter })">
+                        <template v-if="!editModCells[props.index][11]">
+                            {{ props.item.counter.name }}
+                        </template>
+                        <template v-else>
+                            <v-autocomplete
+                                :ref="`counter-${props.index}-${11}`"
+                                :value="props.item.counter"
+                                @change="setCellValue($event, props.index, 11, 'counter', `td-${props.index}-${11}`)"
+                                :items="allEquipment"
+                                item-text="name"
+                                hide-selected
+                                label="Вибирете счетчик"
+                                single-line
+                                return-object>
+                            </v-autocomplete>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${12}`"
+                        @click="selectCell($event, { index: props.index, column: 'counter_price', columnIndex: 12, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'counter_price', columnIndex: 12, value: false })">
+                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['counter_price'] || 0 : 0 }}$
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${13}`"
+                        @click="selectCell($event, { index: props.index, column: 'rf_id', columnIndex: 13, value: props.item.rf_id })"
+                        @dblclick="switchCellMode(props.index, 13, true, `rf_id-${props.index}-${13}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rf_id', columnIndex: 13, value: props.item.rf_id })">
+                        <template v-if="!editModCells[props.index][13]">
+                            {{ props.item.rf_id.name }}
+                        </template>
+                        <template v-else>
+                            <v-autocomplete
+                                :ref="`rf_id-${props.index}-${13}`"
+                                :value="props.item.counter"
+                                @change="setCellValue($event, props.index, 13, 'rf_id', `td-${props.index}-${13}`)"
+                                :items="allEquipment"
+                                item-text="name"
+                                hide-selected
+                                label="Вибирете RFID"
+                                single-line
+                                return-object>
+                            </v-autocomplete>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${14}`"
+                        @click="selectCell($event, { index: props.index, column: 'rf_id_price', columnIndex: 14, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rf_id_price', columnIndex: 14, value: false })">
+                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['rf_id_price'] || 0 : 0 }}$
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${15}`"
+                        @click="selectCell($event, { index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 15, value: props.item.reader_of_trailed_equipment })"
+                        @dblclick="switchCellMode(props.index, 15, true, `reader_of_trailed_equipment-${props.index}-${15}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 15, value: props.item.reader_of_trailed_equipment })">
+                        <template v-if="!editModCells[props.index][15]">
+                            {{ props.item.reader_of_trailed_equipment.name }}
+                        </template>
+                        <template v-else>
+                            <v-autocomplete
+                                :ref="`reader_of_trailed_equipment-${props.index}-${15}`"
+                                :value="props.item.reader_of_trailed_equipment"
+                                @change="setCellValue($event, props.index, 15, 'reader_of_trailed_equipment', `td-${props.index}-${15}`)"
+                                :items="allEquipment"
+                                item-text="name"
+                                hide-selected
+                                label="Вибирете считыватель прицепного оборудования"
+                                single-line
+                                return-object>
+                            </v-autocomplete>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${16}`"
+                        @click="selectCell($event, { index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 16, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 16, value: false })">
+                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['reader_of_trailed_equipment_price'] || 0 : 0 }}$
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${17}`"
+                        @click="selectCell($event, { index: props.index, column: 'connect_module', columnIndex: 17, value: props.item.connect_module })"
+                        @dblclick="switchCellMode(props.index, 17, true, `connect_module-${props.index}-${17}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'connect_module', columnIndex: 17, value: props.item.connect_module })">
+                        <template v-if="!editModCells[props.index][17]">
+                            {{ props.item.connect_module.name }}
+                        </template>
+                        <template v-else>
+                            <v-autocomplete
+                                :ref="`connect_module-${props.index}-${17}`"
+                                :value="props.item.connect_module"
+                                @change="setCellValue($event, props.index, 17, 'connect_module', `td-${props.index}-${17}`)"
+                                :items="allEquipment"
+                                item-text="name"
+                                hide-selected
+                                label="Вибирете модуль конект"
+                                single-line
+                                return-object>
+                            </v-autocomplete>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${18}`"
+                        @click="selectCell($event, { index: props.index, column: 'connect_module_price', columnIndex: 18, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'connect_module_price', columnIndex: 18, value: false })">
+                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['connect_module_price'] || 0 : 0 }}$
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${19}`"
+                        @click="selectCell($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })"
+                        @dblclick="switchCellMode(props.index, 19, true, `can_reader-${props.index}-${19}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })">
+                        <template v-if="!editModCells[props.index][19]">
+                            {{ props.item.can_reader.name }}
+                        </template>
+                        <template v-else>
+                            <v-autocomplete
+                                :ref="`can_reader-${props.index}-${19}`"
+                                :value="props.item.can_reader"
+                                @change="setCellValue($event, props.index, 19, 'can_reader', `td-${props.index}-${19}`)"
+                                :items="allEquipment"
+                                item-text="name"
+                                hide-selected
+                                label="Вибирете CAN"
+                                single-line
+                                return-object>
+                            </v-autocomplete>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${20}`"
+                        @click="selectCell($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })">
+                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['can_reader_price'] || 0 : 0 }}$
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${21}`"
+                        @click="selectCell($event, { index: props.index, column: 'deaerator', columnIndex: 21, value: props.item.deaerator })"
+                        @dblclick="switchCellMode(props.index, 21, true, `deaerator-${props.index}-${21}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator', columnIndex: 21, value: props.item.deaerator })">
+                        <template v-if="!editModCells[props.index][21]">
+                            {{ props.item.deaerator.name }}
+                        </template>
+                        <template v-else>
+                            <v-autocomplete
+                                :ref="`deaerator-${props.index}-${21}`"
+                                :value="props.item.deaerator"
+                                @change="setCellValue($event, props.index, 21, 'deaerator', `td-${props.index}-${21}`)"
+                                :items="allEquipment"
+                                item-text="name"
+                                hide-selected
+                                label="Вибирете деаэратор"
+                                single-line
+                                return-object>
+                            </v-autocomplete>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${22}`"
+                        @click="selectCell($event, { index: props.index, column: 'deaerator_price', columnIndex: 22, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_price', columnIndex: 22, value: false })">
+                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['deaerator_price'] || 0 : 0 }}$
+                    </td>
+                    <td
+                        :class="{ 'text-xs-center': !editModCells[props.index][23] }"
+                        :ref="`td-${props.index}-${23}`"
+                        :style="{ 'min-width': editModCells[props.index][23] ? '300px' : '10px' }"
+                        @click="selectCell($event, { index: props.index, column: 'cn03', columnIndex: 23, value: props.item.cn03 })"
+                        @dblclick="switchCellMode(props.index, 23, true, `cn03-${props.index}-${23}`, $event, false)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03', columnIndex: 23, value: props.item.cn03 })">
+                        <template v-if="!editModCells[props.index][23]">
+                            <v-list v-if="props.item.cn03.some(el => typeof el !== 'undefined')">
+                                <template v-for="(item, textIndex) in props.item.cn03">
+                                    <v-list-tile
+                                        v-if="typeof item !== 'undefined'"
+                                        :key="`cn03_text-${textIndex}`">
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                {{ item.name }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                    <v-divider
+                                        v-if="isShowDivider(textIndex, props.item.cn03)"
+                                        :key="`cn03_divider-${textIndex}`"
+                                    ></v-divider>
+                                </template>
+                            </v-list>
+                        </template>
+                        <template v-else>
+                            <v-layout wrap>
+                                <template v-for="(_, inputIndex) in props.item.cn03.length">
+                                    <v-flex xs10 :key="`cn03_input-${inputIndex}`">
+                                        <v-autocomplete
+                                            :ref="`cn03-${props.index}-${23}`"
+                                            :value="props.item.cn03[inputIndex]"
+                                            @change="setCellValue($event, props.index, 23, 'cn03', `td-${props.index}-${23}`, inputIndex, false)"
+                                            :items="allEquipment"
+                                            item-text="name"
+                                            clearable
+                                            hide-selected
+                                            label="Вибирете CN03"
+                                            single-line
+                                            return-object>
+                                        </v-autocomplete>
+                                    </v-flex>
+                                    <v-flex xs2 class="layout align-center justify-center"  :key="`cn03_delete_btn-${inputIndex}`">
+                                        <v-btn
+                                            small
+                                            icon
+                                            @click="deleteOrderNestedData($event, props.index, 'cn03', inputIndex)">
+                                            <v-icon>delete</v-icon>
                                         </v-btn>
                                     </v-flex>
-                                </v-layout>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${10}`"
-                            @click="selectCell($event, { index: props.index, column: 'fuel_gauge_price', columnIndex: 10, value: false })"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_gauge_price', columnIndex: 10, value: false })">
-                            price
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${11}`"
-                            @click="selectCell($event, { index: props.index, column: 'counter', columnIndex: 11, value: props.item.counter })"
-                            @dblclick="switchCellMode(props.index, 11, `counter-${props.index}-${11}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'counter', columnIndex: 11, value: props.item.counter })">
-                            <template v-if="!editModCells[props.index][11]">
-                                {{ props.item.counter.name }}
-                            </template>
-                            <template v-else>
-                                <v-autocomplete
-                                    :ref="`counter-${props.index}-${11}`"
-                                    :value="props.item.counter"
-                                    @change="setCellValue($event, props.index, 11, 'counter', `td-${props.index}-${11}`)"
-                                    :items="allEquipment"
-                                    item-text="name"
-                                    hide-selected
-                                    label="Вибирете счетчик"
-                                    single-line
-                                    return-object>
-                                </v-autocomplete>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${12}`"
-                            @click="selectCell($event, { index: props.index, column: 'counter_price', columnIndex: 12, value: false })"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'counter_price', columnIndex: 12, value: false })">
-                            price
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${13}`"
-                            @click="selectCell($event, { index: props.index, column: 'rf_id', columnIndex: 13, value: props.item.rf_id })"
-                            @dblclick="switchCellMode(props.index, 13, `rf_id-${props.index}-${13}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rf_id', columnIndex: 13, value: props.item.rf_id })">
-                            <template v-if="!editModCells[props.index][13]">
-                                {{ props.item.rf_id.name }}
-                            </template>
-                            <template v-else>
-                                <v-autocomplete
-                                    :ref="`rf_id-${props.index}-${13}`"
-                                    :value="props.item.counter"
-                                    @change="setCellValue($event, props.index, 13, 'rf_id', `td-${props.index}-${13}`)"
-                                    :items="allEquipment"
-                                    item-text="name"
-                                    hide-selected
-                                    label="Вибирете RFID"
-                                    single-line
-                                    return-object>
-                                </v-autocomplete>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${14}`"
-                            @click="selectCell($event, { index: props.index, column: 'rf_id_price', columnIndex: 14, value: false })"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rf_id_price', columnIndex: 14, value: false })">
-                            price
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${15}`"
-                            @click="selectCell($event, { index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 15, value: props.item.reader_of_trailed_equipment })"
-                            @dblclick="switchCellMode(props.index, 15, `reader_of_trailed_equipment-${props.index}-${15}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 15, value: props.item.reader_of_trailed_equipment })">
-                            <template v-if="!editModCells[props.index][15]">
-                                {{ props.item.reader_of_trailed_equipment.name }}
-                            </template>
-                            <template v-else>
-                                <v-autocomplete
-                                    :ref="`reader_of_trailed_equipment-${props.index}-${15}`"
-                                    :value="props.item.reader_of_trailed_equipment"
-                                    @change="setCellValue($event, props.index, 15, 'reader_of_trailed_equipment', `td-${props.index}-${15}`)"
-                                    :items="allEquipment"
-                                    item-text="name"
-                                    hide-selected
-                                    label="Вибирете считыватель прицепного оборудования"
-                                    single-line
-                                    return-object>
-                                </v-autocomplete>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${16}`"
-                            @click="selectCell($event, { index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 16, value: false })"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 16, value: false })">
-                            price
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${17}`"
-                            @click="selectCell($event, { index: props.index, column: 'connect_module', columnIndex: 17, value: props.item.connect_module })"
-                            @dblclick="switchCellMode(props.index, 17, `connect_module-${props.index}-${17}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'connect_module', columnIndex: 17, value: props.item.connect_module })">
-                            <template v-if="!editModCells[props.index][17]">
-                                {{ props.item.connect_module.name }}
-                            </template>
-                            <template v-else>
-                                <v-autocomplete
-                                    :ref="`connect_module-${props.index}-${17}`"
-                                    :value="props.item.connect_module"
-                                    @change="setCellValue($event, props.index, 17, 'connect_module', `td-${props.index}-${17}`)"
-                                    :items="allEquipment"
-                                    item-text="name"
-                                    hide-selected
-                                    label="Вибирете модуль конект"
-                                    single-line
-                                    return-object>
-                                </v-autocomplete>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${18}`"
-                            @click="selectCell($event, { index: props.index, column: 'connect_module_price', columnIndex: 18, value: false })"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'connect_module_price', columnIndex: 18, value: false })">
-                            price
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${19}`"
-                            @click="selectCell($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })"
-                            @dblclick="switchCellMode(props.index, 19, `can_reader-${props.index}-${19}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })">
-                            <template v-if="!editModCells[props.index][19]">
-                                {{ props.item.can_reader.name }}
-                            </template>
-                            <template v-else>
-                                <v-autocomplete
-                                    :ref="`can_reader-${props.index}-${19}`"
-                                    :value="props.item.can_reader"
-                                    @change="setCellValue($event, props.index, 19, 'can_reader', `td-${props.index}-${19}`)"
-                                    :items="allEquipment"
-                                    item-text="name"
-                                    hide-selected
-                                    label="Вибирете CAN"
-                                    single-line
-                                    return-object>
-                                </v-autocomplete>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${20}`"
-                            @click="selectCell($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })">
-                            price
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${21}`"
-                            @click="selectCell($event, { index: props.index, column: 'deaerator', columnIndex: 21, value: props.item.deaerator })"
-                            @dblclick="switchCellMode(props.index, 21, `deaerator-${props.index}-${21}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator', columnIndex: 21, value: props.item.deaerator })">
-                            <template v-if="!editModCells[props.index][21]">
-                                {{ props.item.deaerator.name }}
-                            </template>
-                            <template v-else>
-                                <v-autocomplete
-                                    :ref="`deaerator-${props.index}-${21}`"
-                                    :value="props.item.deaerator"
-                                    @change="setCellValue($event, props.index, 21, 'deaerator', `td-${props.index}-${21}`)"
-                                    :items="allEquipment"
-                                    item-text="name"
-                                    hide-selected
-                                    label="Вибирете деаэратор"
-                                    single-line
-                                    return-object>
-                                </v-autocomplete>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${22}`"
-                            @click="selectCell($event, { index: props.index, column: 'deaerator_price', columnIndex: 22, value: false })"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_price', columnIndex: 22, value: false })">
-                            price
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${23}`"
-                            @click="selectCell($event, { index: props.index, column: 'cn03', columnIndex: 23, value: props.item.cn03 })"
-                            @dblclick="switchCellMode(props.index, 23, `cn03-${props.index}-${23}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03', columnIndex: 23, value: props.item.cn03 })">
-                            <template v-if="!editModCells[props.index][23]">
-                                {{ props.item.cn03.name }}
-                            </template>
-                            <template v-else>
-                                <v-autocomplete
-                                    :ref="`cn03-${props.index}-${23}`"
-                                    :value="props.item.cn03"
-                                    @change="setCellValue($event, props.index, 23, 'cn03', `td-${props.index}-${23}`)"
-                                    :items="allEquipment"
-                                    item-text="name"
-                                    hide-selected
-                                    label="Вибирете cn03"
-                                    single-line
-                                    return-object>
-                                </v-autocomplete>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${24}`"
-                            @click="selectCell($event, { index: props.index, column: 'cn03_price', columnIndex: 24, value: false })"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03_price', columnIndex: 24, value: false })">
-                            price
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${25}`"
-                            @click="selectCell($event, { index: props.index, column: 'rs01', columnIndex: 25, value: props.item.rs01 })"
-                            @dblclick="switchCellMode(props.index, 25, `rs01-${props.index}-${25}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01', columnIndex: 25, value: props.item.rs01 })">
-                            <template v-if="!editModCells[props.index][25]">
-                                {{ props.item.rs01.name }}
-                            </template>
-                            <template v-else>
-                                <v-autocomplete
-                                    :ref="`rs01-${props.index}-${25}`"
-                                    :value="props.item.rs01"
-                                    @change="setCellValue($event, props.index, 25, 'rs01', `td-${props.index}-${25}`)"
-                                    :items="allEquipment"
-                                    item-text="name"
-                                    hide-selected
-                                    label="Вибирете rs01"
-                                    single-line
-                                    return-object>
-                                </v-autocomplete>
-                            </template>
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${26}`"
-                            @click="selectCell($event, { index: props.index, column: 'cn03_price', columnIndex: 26, value: false })"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03_price', columnIndex: 26, value: false })">
-                            price
-                        </td>
-                        <td
-                            :ref="`td-${props.index}-${27}`"
-                            @click="selectCell($event, { index: props.index, column: 'additional_equipment', columnIndex: 27, value: props.item.additional_equipment })"
-                            @dblclick="switchCellMode(props.index, 27, `additional_equipment-${props.index}-${27}`)"
-                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment', columnIndex: 27, value: props.item.additional_equipment })">
-                            <template v-if="!editModCells[props.index][27]">
-                                {{ props.item.additional_equipment.name }}
-                            </template>
-                            <template v-else>
-                                <v-autocomplete
-                                    :ref="`additional_equipment-${props.index}-${27}`"
-                                    :value="props.item.additional_equipment"
-                                    @change="setCellValue($event, props.index, 27, 'additional_equipment', `td-${props.index}-${27}`)"
-                                    :items="optionalEquipment"
-                                    item-text="name"
-                                    hide-selected
-                                    label="Вибирете доп. оборудование"
-                                    single-line
-                                    return-object>
-                                </v-autocomplete>
-                            </template>
-                        </td>
-                        <td>
-                            price
-                        </td>
-                        <td>
-                            price
-                        </td>
-                        <!-- <td class="text-xs-right">{{ props.item.calories }}</td>
-                        <td class="text-xs-right">{{ props.item.fat }}</td>
-                        <td class="text-xs-right">{{ props.item.carbs }}</td>
-                        <td class="text-xs-right">{{ props.item.protein }}</td>
-                        <td class="text-xs-right"> -->
-                            <!-- <v-edit-dialog
-                                :return-value.sync="props.item.iron"
-                                large
-                                lazy
-                                @save="save"
-                                @cancel="cancel"
-                                >
-                                {{ props.item.iron }}
-                                <v-autocomplete
-                                    slot="input"
-                                    v-model="props.item.iron"
-                                    :items="itemsTest"
-                                    hide-selected
-                                    label="Вибирете клиента"
-                                    single-line
-                                    autofocus>
-                                </v-autocomplete>
-                            </v-edit-dialog> -->
-                        <!-- </td> -->
-                    </template>
-                </v-data-table>
-                <!-- <div class="borders">
-                    <div :style="{ position: 'absolute', top: 0, left: 0 }">
-                        <div ref="borderTop" class="border current" :style="bordersSelectData.topBorderStyles"></div>
-                        <div ref="borderleft" class="border current" :style="bordersSelectData.leftBorderStyles"></div>
-                        <div ref="borderBottom" class="border current" :style="bordersSelectData.bottomBorderStyles"></div>
-                        <div ref="borderRight" class="border current" :style="bordersSelectData.rightBorderStyles"></div>
-                        <div ref="borderCorner" @mousedown="cornerFocused" class="border current corner" :style="bordersSelectData.cornerStyles"></div>
-                    </div>
-                </div> -->
-            <!-- </div> -->
+                                </template>
+                                <v-flex xs12>
+                                    <v-btn color="success" small @click="addNestedData($event, props.index, 'cn03')">
+                                        Добавить
+                                    </v-btn>
+                                </v-flex>
+                                <v-flex xs12>
+                                    <v-btn color="info" small @click="switchCellMode(props.index, 23, false, `cn03-${props.index}-${23}`, $event, false)">
+                                        Закрыть редактирование
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${24}`"
+                        @click="selectCell($event, { index: props.index, column: 'cn03_price', columnIndex: 24, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03_price', columnIndex: 24, value: false })">
+                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['cn03_price'] || 0 : 0 }}$
+                    </td>
+                    <td
+                        :class="{ 'text-xs-center': !editModCells[props.index][25] }"
+                        :ref="`td-${props.index}-${25}`"
+                        :style="{ 'min-width': editModCells[props.index][25] ? '300px' : '10px' }"
+                        @click="selectCell($event, { index: props.index, column: 'rs01', columnIndex: 25, value: props.item.rs01 })"
+                        @dblclick="switchCellMode(props.index, 25, true, `rs01-${props.index}-${25}`, $event, false)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01', columnIndex: 25, value: props.item.rs01 })">
+                        <template v-if="!editModCells[props.index][25]">
+                            <v-list v-if="props.item.rs01.some(el => typeof el !== 'undefined')">
+                                <template v-for="(item, textIndex) in props.item.rs01">
+                                    <v-list-tile
+                                        v-if="typeof item !== 'undefined'"
+                                        :key="`rs01_text-${textIndex}`">
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                {{ item.name }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                    <v-divider
+                                        v-if="isShowDivider(textIndex, props.item.rs01)"
+                                        :key="`rs01_divider-${textIndex}`"
+                                    ></v-divider>
+                                </template>
+                            </v-list>
+                        </template>
+                        <template v-else>
+                            <v-layout wrap>
+                                <template v-for="(_, inputIndex) in props.item.rs01.length">
+                                    <v-flex xs10 :key="`rs01_input-${inputIndex}`">
+                                        <v-autocomplete
+                                            :ref="`rs01-${props.index}-${25}`"
+                                            :value="props.item.rs01[inputIndex]"
+                                            @change="setCellValue($event, props.index, 25, 'rs01', `td-${props.index}-${25}`, inputIndex, false)"
+                                            :items="allEquipment"
+                                            item-text="name"
+                                            clearable
+                                            hide-selected
+                                            label="Вибирете RS01"
+                                            single-line
+                                            return-object>
+                                        </v-autocomplete>
+                                    </v-flex>
+                                    <v-flex xs2 class="layout align-center justify-center"  :key="`rs01_delete_btn-${inputIndex}`">
+                                        <v-btn
+                                            small
+                                            icon
+                                            @click="deleteOrderNestedData($event, props.index, 'rs01', inputIndex)">
+                                            <v-icon>delete</v-icon>
+                                        </v-btn>
+                                    </v-flex>
+                                </template>
+                                <v-flex xs12>
+                                    <v-btn color="success" small @click="addNestedData($event, props.index, 'rs01')">
+                                        Добавить
+                                    </v-btn>
+                                </v-flex>
+                                <v-flex xs12>
+                                    <v-btn color="info" small @click="switchCellMode(props.index, 25, false, `rs01-${props.index}-${25}`, $event, false)">
+                                        Закрыть редактирование
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${26}`"
+                        @click="selectCell($event, { index: props.index, column: 'rs01_price', columnIndex: 26, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01_price', columnIndex: 26, value: false })">
+                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['rs01_price'] || 0 : 0 }}$
+                    </td>
+                    <td
+                        :class="{ 'text-xs-center': !editModCells[props.index][27] }"
+                        :ref="`td-${props.index}-${27}`"
+                        :style="{ 'min-width': editModCells[props.index][27] ? '300px' : '10px' }"
+                        @click="selectCell($event, { index: props.index, column: 'additional_equipment', columnIndex: 27, value: props.item.additional_equipment })"
+                        @dblclick="switchCellMode(props.index, 27, true, `additional_equipment-${props.index}-${27}`, $event, false)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment', columnIndex: 27, value: props.item.additional_equipment })">
+                        <template v-if="!editModCells[props.index][27]">
+                            <v-list v-if="props.item.additional_equipment.some(el => typeof el !== 'undefined')">
+                                <template v-for="(item, textIndex) in props.item.additional_equipment">
+                                    <v-list-tile
+                                        v-if="typeof item !== 'undefined'"
+                                        :key="`additional_equipment_text-${textIndex}`">
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                {{ item.name }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                    <v-divider
+                                        v-if="isShowDivider(textIndex, props.item.additional_equipment)"
+                                        :key="`additional_equipment_divider-${textIndex}`"
+                                    ></v-divider>
+                                </template>
+                            </v-list>
+                        </template>
+                        <template v-else>
+                            <v-layout wrap>
+                                <template v-for="(_, inputIndex) in props.item.additional_equipment.length">
+                                    <v-flex xs10 :key="`additional_equipment_input-${inputIndex}`">
+                                        <v-autocomplete
+                                            :ref="`additional_equipment-${props.index}-${27}`"
+                                            :value="props.item.additional_equipment[inputIndex]"
+                                            @change="setCellValue($event, props.index, 27, 'additional_equipment', `td-${props.index}-${27}`, inputIndex, false)"
+                                            :items="optionalEquipment"
+                                            item-text="name"
+                                            clearable
+                                            hide-selected
+                                            label="Вибирете доп. оборудование"
+                                            single-line
+                                            return-object>
+                                        </v-autocomplete>
+                                    </v-flex>
+                                    <v-flex xs2 class="layout align-center justify-center"  :key="`additional_equipment_delete_btn-${inputIndex}`">
+                                        <v-btn
+                                            small
+                                            icon
+                                            @click="deleteOrderNestedData($event, props.index, 'additional_equipment', inputIndex)">
+                                            <v-icon>delete</v-icon>
+                                        </v-btn>
+                                    </v-flex>
+                                </template>
+                                <v-flex xs12>
+                                    <v-btn color="success" small @click="addNestedData($event, props.index, 'additional_equipment')">
+                                        Добавить
+                                    </v-btn>
+                                </v-flex>
+                                <v-flex xs12>
+                                    <v-btn color="info" small @click="switchCellMode(props.index, 27, false, `additional_equipment-${props.index}-${27}`, $event, false)">
+                                        Закрыть редактирование
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </template>
+                    </td>
+                    <td
+                        class="text-xs-center">
+                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['additional_equipment_price'] || 0 : 0 }}$
+                    </td>
+                    <td
+                        class="text-xs-center">
+                        {{ pricesForEquipment.installationPrices[props.index] }}$
+                    </td>
+                </template>
+            </v-data-table>
         </v-card-text>
-        <!-- <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor">
-            {{ snackText }}
-        </v-snackbar> -->
     </v-card>
 </template>
 
@@ -591,6 +702,10 @@ export default {
         optionalEquipment: {
             type: Array,
             required: true
+        },
+        pricesForEquipment: {
+            type: Object,
+            required: true
         }
     },
     data() {
@@ -624,47 +739,42 @@ export default {
             copyList: [],
             selected: [],
             editModCells: [],
-            snackTimeout: 1500,
-            search: '',
             rowsPerPageItems: [10, 15, 20, 25, 30, 50],
             pagination: {
                 rowsPerPage: 20
             },
-            snack: false,
-            snackColor: '',
-            snackText: '',
             headers: [
                 { text: '#', align: 'left', sortable: false },
                 { text: 'Изображение', align: 'left', sortable: false, value: 'image' },
-                { text: 'Марка', value: 'mark' },
-                { text: 'Модель', value: 'model' },
-                { text: 'Год выпуска', value: 'year_of_issue' },
-                { text: 'Тип топлива', value: 'fuel_type' },
-                { text: 'Мощность', value: 'power' },
-                { text: 'Гос. номер', value: 'number' },
-                { text: 'GPS-трекер', value: 'gps_tracker' },
-                { text: 'Цена $ ', value: 'gps_tracker_price' },
-                { text: 'ДУТ', value: 'fuel_gauge' },
-                { text: 'Цена $  ', value: 'fuel_gauge_price' },
-                { text: 'Счетчик', value: 'counter' },
-                { text: 'Цена $   ', value: 'counter_price' },
-                { text: 'RFID', value: 'rf_id' },
-                { text: 'Цена $    ', value: 'rf_id_price' },
-                { text: 'Cчитыватель прицепного оборудования', value: 'reader_of_trailed_equipment' },
-                { text: 'Цена $     ', value: 'reader_of_trailed_equipment_price' },
-                { text: 'Модуль конект', value: 'connect_module' },
-                { text: 'Цена $      ', value: 'connect_module_price' },
-                { text: 'CAN', value: 'can_reader' },
-                { text: 'Цена $       ', value: 'can_reader_price' },
-                { text: 'Деаэратор', value: 'deaerator' },
-                { text: 'Цена $        ', value: 'deaerator_price' },
-                { text: 'CN03', value: 'cn03' },
-                { text: 'Цена $         ', value: 'cn03_price' },
-                { text: 'RS01', value: 'rs01' },
-                { text: 'Цена $          ', value: 'rs01_price' },
-                { text: 'Дополнительное оборудование', value: 'additional_equipment' },
-                { text: 'Цена $           ', value: 'additional_equipment_price' },
-                { text: 'Монтаж оборудования ₴', value: 'installation_of_equipment_price' },
+                { text: 'Марка', value: 'mark', sortable: false },
+                { text: 'Модель', value: 'model', sortable: false },
+                { text: 'Год выпуска', value: 'year_of_issue', sortable: false },
+                { text: 'Тип топлива', value: 'fuel_type', sortable: false },
+                { text: 'Мощность', value: 'power', sortable: false },
+                { text: 'Гос. номер', value: 'number', sortable: false },
+                { text: 'GPS-трекер', value: 'gps_tracker', sortable: false },
+                { text: 'Цена $ ', value: 'gps_tracker_price', sortable: false },
+                { text: 'ДУТ', value: 'fuel_gauge', sortable: false },
+                { text: 'Цена $  ', value: 'fuel_gauge_price', sortable: false },
+                { text: 'Счетчик', value: 'counter', sortable: false },
+                { text: 'Цена $   ', value: 'counter_price', sortable: false },
+                { text: 'RFID', value: 'rf_id', sortable: false },
+                { text: 'Цена $    ', value: 'rf_id_price', sortable: false },
+                { text: 'Cчитыватель прицепного оборудования', value: 'reader_of_trailed_equipment', sortable: false },
+                { text: 'Цена $     ', value: 'reader_of_trailed_equipment_price', sortable: false },
+                { text: 'Модуль конект', value: 'connect_module', sortable: false },
+                { text: 'Цена $      ', value: 'connect_module_price', sortable: false },
+                { text: 'CAN', value: 'can_reader', sortable: false },
+                { text: 'Цена $       ', value: 'can_reader_price', sortable: false },
+                { text: 'Деаэратор', value: 'deaerator', sortable: false },
+                { text: 'Цена $        ', value: 'deaerator_price', sortable: false },
+                { text: 'CN03', value: 'cn03', sortable: false },
+                { text: 'Цена $         ', value: 'cn03_price', sortable: false },
+                { text: 'RS01', value: 'rs01', sortable: false },
+                { text: 'Цена $          ', value: 'rs01_price', sortable: false },
+                { text: 'Дополнительное оборудование', value: 'additional_equipment', sortable: false },
+                { text: 'Цена $           ', value: 'additional_equipment_price', sortable: false },
+                { text: 'Монтаж оборудования ₴', value: 'installation_of_equipment_price', sortable: false },
             ],
             uploadImage: '/storage/upload-foto.png',
             imagesPreviews: [],
@@ -696,10 +806,12 @@ export default {
         }
     },
     methods: {
-        addRow() {
-            this.$emit('rowAdded');
-            this.imagesPreviews.push('');
-            this.editModCells.push(Array.apply(null, {length: this.headers.length-1}).map(() => false));
+        addRow(count = 1) {
+            this.$emit('rowAdded', count);
+            for (let i = 0; i < count; ++i) {
+                this.imagesPreviews.push('');
+                this.editModCells.push(Array.apply(null, {length: this.headers.length-1}).map(() => false));
+            }
         },
         onPickFile(ref) {
             this.$refs[ref].click();
@@ -710,18 +822,14 @@ export default {
             this.$refs[`td-${index}-0`].click();
         },
         setPreview(index) {
-            console.log('SET PREVIEW: ', this.orderGPSData[index].image);
-            setTimeout(() => {
-                this.$set(this.imagesPreviews, index, URL.createObjectURL(this.orderGPSData[index].image));
-            }, 1000);
-        },
-        cornerMoved(moveEvent) {
-            // moveEvent.preventDefault();
-            // console.log(moveEvent);
-            // console.log('Moved');
+            const reader = new FileReader();
+            const _self = this;
+            reader.onload = function (e) {
+                _self.$set(_self.imagesPreviews, index, e.target.result);
+            };
+            reader.readAsDataURL(this.orderGPSData[index].image);
         },
         cornerFocused(event) {
-            // this.tableBody.addEventListener('mousemove', this.cornerMoved, false);
             this.tableBody.addEventListener('mouseup', this.cornerBlurred, false);
             this.isCornerFocused = true;
             console.log('Focused');
@@ -731,11 +839,7 @@ export default {
             if (this.isReadyToCopy) {
                 this.$emit('copy-values:orderGPSData', this.copyList);
             }
-            this.clickOnTD(this.findTDEl(event));
             console.log('Blurred');
-        },
-        getInitialCellsPosition() {
-
         },
         hideBordersAndCorner() {
             if (this.bordersSelectData.top.el &&
@@ -981,8 +1085,8 @@ export default {
             this.normalizeStylesSelectBordersAndCorner();
             console.log('copyList: ', this.copyList);
         },
-        switchCellMode(row, cell, refName, event, autofocus = true) {
-            this.$set(this.editModCells[row], cell, !this.editModCells[row][cell]);
+        switchCellMode(row, cell, mode, refName, event, autofocus = true) {
+            this.$set(this.editModCells[row], cell, mode);
             if (autofocus && this.editModCells[row][cell]) {
                 this.$nextTick(() => {
                     this.$refs[refName].$el.querySelector('input').click();
@@ -991,10 +1095,10 @@ export default {
                 this.clickOnTD(this.findTDEl(event));
             }
         },
-        setCellValue(event, row, cell, name, td, nestedPath = false, forceSwitchMode = true) {
+        setCellValue(data, row, cell, name, td, nestedPath = false, forceSwitchMode = true) {
             console.log('setCellValue: ', arguments);
-            this.$emit('update:orderGPSData', event, row, name, nestedPath);
-            if (forceSwitchMode) this.switchCellMode(row, cell);
+            this.$emit('update:orderGPSData', data, row, name, nestedPath);
+            if (forceSwitchMode) this.switchCellMode(row, cell, false);
             if (td) {
                 this.clickOnTD(this.$refs[td]);
             }
@@ -1006,28 +1110,6 @@ export default {
         deleteOrderNestedData(event, row, column, index) {
             this.$emit('delete-nested-data:orderGPSData', row, column, index);
             this.clickOnTD(this.findTDEl(event));
-        },
-        open(name) {
-            // console.log('Before:', this.$refs[name]);
-            // this.$refs[name].$el.style.display = "none";
-            // this.$set(this.$refs[name]._data, 'isActive', false);
-            // console.log('After:', this.$refs[name]);
-            // this.$forceUpdate();
-            // .isActive = false
-            // console.log();
-        },
-        testTDClick(event) {
-
-        },
-        save() {
-            this.snackColor = "success";
-            this.snackText = "Данные сохранены";
-            this.snack = true;
-        },
-        cancel() {
-            this.snackColor = "error";
-            this.snackText = "Действие отменено";
-            this.snack = true;
         },
         close(ref) {
             this.$refs[ref].blur()
@@ -1041,7 +1123,7 @@ export default {
         }
     },
     created() {
-        this.addRow();
+        this.addRow(10);
     },
     mounted() {
         const tableBody = document.querySelector('#gps-data-table .v-datatable tbody');

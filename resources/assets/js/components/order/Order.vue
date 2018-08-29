@@ -4,6 +4,25 @@
             <v-card-text>
                 <v-form>
                     <v-container grid-list-md>
+                        <v-layout justify-center>
+                            <v-flex xs2 offset-xs2>
+                                <v-text-field
+                                    label="Курс Долара"
+                                    :readonly="!isDollarRateEditing"
+                                    v-model="orderData.dollar_rate">
+                                    <v-slide-x-reverse-transition
+                                        slot="append-outer"
+                                        mode="out-in">
+                                        <v-icon
+                                            :color="isDollarRateEditing ? 'success' : 'info'"
+                                            :key="`icon-${isDollarRateEditing}`"
+                                            @click="isDollarRateEditing = !isDollarRateEditing"
+                                            v-text="isDollarRateEditing ? 'mdi-check-outline' : 'mdi-circle-edit-outline'"
+                                        ></v-icon>
+                                    </v-slide-x-reverse-transition>
+                                </v-text-field>
+                            </v-flex>
+                        </v-layout>
                         <v-layout wrap justify-center>
                             <v-flex xs12 sm6>
                                 <v-autocomplete
@@ -49,9 +68,11 @@
             </v-card-text>
         </v-card>
 
-        <v-expansion-panel class="mt-3 mb-5" :value="0">
-            <v-expansion-panel-content>
-                <div slot="header" class="gps-tracking-header">GPS-трекинг</div>
+        <v-card class="mt-3 mb-5">
+            <v-card-title class="justify-center" primary-title>
+                <div class="headline gps-tracking-header">GPS-трекинг</div>
+            </v-card-title>
+            <v-card-text>
                 <appGPSData
                     ref="GPSData"
                     :orderGPSData="orderData.GPSData"
@@ -60,6 +81,9 @@
                     :fuelFlowmeters="fuelFlowmeters"
                     :identification="identification"
                     :optionalEquipment="optionalEquipment"
+                    :pricesForEquipment="pricesForEquipment"
+                    :allEquipmentPrice="allEquipmentPrice"
+                    :allInstallationPrice="allInstallationPrice"
                     @update:orderGPSData="updateOrderGPSData"
                     @add-nested-data:orderGPSData="addNestedDataInOrderGPSData"
                     @delete-nested-data:orderGPSData="deleteNestedDataInOrderGPSData"
@@ -67,8 +91,97 @@
                     @drag-n-drop-gps-data="dragNDropGPSData"
                     @rowAdded="addRowToOrderGPSData">
                 </appGPSData>
-            </v-expansion-panel-content>
-        </v-expansion-panel>
+            </v-card-text>
+            <v-card-text>
+                <v-layout wrap>
+                    <v-flex xs12 sm6>
+                        <v-container fluid grid-list-xs>
+                            <v-layout wrap>
+                                <v-flex xs4>
+                                    <v-text-field
+                                        label="Монтаж оборудования"
+                                        readonly
+                                        :value="allEquipmentPrice"
+                                        append-icon="₴">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs8></v-flex>
+                                <v-flex xs4>
+                                    <v-text-field
+                                        label="Оборудование"
+                                        readonly
+                                        :value="allInstallationPrice"
+                                        append-icon="₴">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs8></v-flex>
+                                <v-flex xs4>
+                                    <v-text-field
+                                        label="Дней командировки"
+                                        hint="Фиксированая цена 720 грн/день"
+                                        persistent-hint
+                                        v-model="orderData.days">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs8></v-flex>
+                                <v-flex xs4>
+                                    <v-text-field
+                                        label="Командировки / проживание"
+                                        readonly
+                                        :value="priceForDays"
+                                        append-icon="₴">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs8></v-flex>
+                                <v-flex xs4>
+                                    <v-text-field
+                                        label="Цена за 1км"
+                                        v-model="orderData.price_for_transportation_per_km"
+                                        append-icon="₴">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs8></v-flex>
+                                <v-flex xs4>
+                                    <v-text-field
+                                        label="Растояние км"
+                                        v-model="orderData.transportation_kms">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs8></v-flex>
+                                <v-flex xs4>
+                                    <v-text-field
+                                        label="Количество поездок"
+                                        v-model="orderData.number_of_trips">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs8></v-flex>
+                                <v-flex xs4>
+                                    <v-text-field
+                                        label="Маршрут"
+                                        v-model="orderData.route">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs8></v-flex>
+                                <v-flex xs4>
+                                    <v-text-field
+                                        label="Транспортные расходы"
+                                        readonly
+                                        :value="transportationPrice"
+                                        append-icon="₴">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs8></v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-flex>
+                    <v-flex xs12 sm6></v-flex>
+                </v-layout>
+            </v-card-text>
+        </v-card>
+
+        <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor">
+            {{ snackText }}
+        </v-snackbar>
     </v-card>
 </template>
 
@@ -77,8 +190,10 @@ import { mapGetters } from 'vuex';
 import CreateClient from './../CreateClient/CreateClient';
 import GPSData from './gpsData/GPSData';
 import dcopy from 'deep-copy';
+import utils from './../../mixins/utils.js';
 
 export default {
+    mixins: [utils],
     props: {
         isCreation: {
             type: Boolean,
@@ -88,6 +203,11 @@ export default {
     },
     data() {
         return {
+            isDollarRateEditing: false,
+            snack: false,
+            snackColor: '',
+            snackText: '',
+            snackTimeout: 1500,
             initialGPSRowData: {
                 id: 1,
                 image: '',
@@ -105,14 +225,21 @@ export default {
                 connect_module: '',
                 can_reader: '',
                 deaerator: '',
-                additional_equipment: '',
-                cn03: '',
-                rs01: ''
+                additional_equipment: [],
+                cn03: [],
+                rs01: []
             },
             orderData: {
                 name: '',
                 client: null,
                 area: '',
+                dollar_rate: 0.00,
+                days: '',
+                price_for_day: 720,
+                price_for_transportation_per_km: '',
+                number_of_trips: 2,
+                transportation_kms: '',
+                route: '',
                 services: [],
                 GPSData: []
             },
@@ -135,6 +262,62 @@ export default {
         priceForArea() {
             const area = (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);
             return this.orderData.services.reduce((price, service) => service.value ? price + (service.price * area) : price, 0);
+        },
+        priceForDays() {
+            return this.multiplyTwoFloats(this.orderData.days, this.orderData.price_for_day);
+        },
+        transportationPrice() {
+            return this.multiplyTwoFloats(this.multiplyTwoFloats(this.orderData.price_for_transportation_per_km, this.orderData.transportation_kms), this.orderData.number_of_trips);
+        },
+        pricesForEquipment() {
+            return this.orderData.GPSData.reduce((prices, row, index) => {
+                prices.equipmentPrices.push({});
+                prices.installationPrices[index] = 0.00;
+                Object.keys(row).forEach((key) => {
+                    const value = row[key];
+                    const priceKey = `${key}_price`;
+                    if (this.isObject(value) && !(value instanceof File)) {
+                        console.log('object: ', value);
+                        prices.equipmentPrices[index][priceKey] = row[key].price;
+                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], row[key].installation_price_for_one);
+                    } else if (Array.isArray(value)) {
+                        console.log('array: ', value);
+                        prices.equipmentPrices[index][priceKey] = 0.00;
+                        value
+                            .filter(el => !this.isUndefined(el))
+                            .forEach((el, _, arr) => {
+                                prices.equipmentPrices[index][priceKey] = this.addTwoFloats(prices.equipmentPrices[index][priceKey], el.price);
+                                const arrLen = arr.length;
+                                if (arrLen >= 3) {
+                                    if (el.installation_price_for_three) {
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index] + el.installation_price_for_three);
+                                    } else if (el.installation_price_for_two) {
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index] + el.installation_price_for_two);
+                                    } else {
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index] + el.installation_price_for_one);
+                                    }
+                                } else if (arrLen === 2) {
+                                    if (el.installation_price_for_two) {
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_two);
+                                    } else {
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
+                                    }
+                                } else if (arrLen === 1) {
+                                    prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
+                                }
+                            });
+                    }
+                });
+                return prices;
+            }, { equipmentPrices: [], installationPrices: [] });
+        },
+        allEquipmentPrice() {
+            return this.multiplyTwoFloats(this.pricesForEquipment.equipmentPrices.reduce((price, el) => {
+                return this.addTwoFloats(price, Object.keys(el).reduce((price, key) => this.addTwoFloats(price, el[key]), 0.00));
+            }, 0.00), this.orderData.dollar_rate);
+        },
+        allInstallationPrice() {
+            return this.pricesForEquipment.installationPrices.reduce((price, el) => this.addTwoFloats(price, el), 0.00);
         }
     },
     watch: {
@@ -150,6 +333,13 @@ export default {
                     this.clients = clients;
                 })
                 .catch(err => (console.log(err)));
+        },
+        getDollarRate() {
+            this.axios.get('/order/dollar-rate')
+            .then(({data}) => {
+                this.orderData.dollar_rate = data[0].rate;
+            })
+            .catch(err => console.log(err))
         },
         selectCreatedClient(client) {
             const updatedClient = this.getClientWithTextValue(client);
@@ -167,7 +357,9 @@ export default {
         updateOrderGPSData(val, index, path, nestedPath = false) {
             console.log('updateOrderGPSData: ', arguments);
             if (nestedPath !== false) {
-                this.orderData.GPSData[index][path][nestedPath] = val;
+                // const equipmentList = dcopy(this.orderData.GPSData[index][path]);
+                // equipmentList[nestedPath] = val;
+                this.$set(this.orderData.GPSData[index][path], nestedPath, val);
             } else {
                 this.orderData.GPSData[index][path] = val;
             }
@@ -200,9 +392,17 @@ export default {
                 }
             }
         },
-        addRowToOrderGPSData() {
-            this.orderData.GPSData.push({ ...this.initialGPSRowData, fuel_gauge: Array.apply(null, { length: 2 }) });
-            ++this.initialGPSRowData.id;
+        addRowToOrderGPSData(count) {
+            for (let i = 0; i < count; ++i) {
+                this.orderData.GPSData.push({
+                    ...this.initialGPSRowData,
+                    fuel_gauge: Array.apply(null, { length: 2 }),
+                    additional_equipment: Array.apply(null, { length: 2 }),
+                    cn03: Array.apply(null, { length: 2 }),
+                    rs01: Array.apply(null, { length: 2 })
+                });
+                ++this.initialGPSRowData.id;
+            }
         },
         dragNDropGPSData(newIndex, oldIndex) {
             const rowSelected = this.orderData.GPSData.splice(oldIndex, 1)[0];
@@ -210,6 +410,7 @@ export default {
         }
     },
     created() {
+        this.getDollarRate();
         this.getClients();
         this.$store.dispatch('getPriseList');
     },
@@ -225,7 +426,6 @@ export default {
         background-color: transparent;
     }
     .gps-tracking-header {
-        font-size: 28px;
-        text-align: center;
+        font-size: 28px !important;
     }
 </style>

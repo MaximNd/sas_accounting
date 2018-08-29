@@ -54,4 +54,7 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::put('/price-list/{id}', 'PriceListController@update');
 
     Route::delete('/price-list/{id}', 'PriceListController@delete');
+
+    // ORDERS
+    Route::get('/order/dollar-rate', 'OrderController@dollarRate');
 });

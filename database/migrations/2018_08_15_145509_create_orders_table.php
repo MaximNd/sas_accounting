@@ -19,6 +19,8 @@ class CreateOrdersTable extends Migration
             $table->integer('client_id')->unsigned();
             $table->foreign('client_id')->references('id')->on('clients');
 
+            $table->double('dollar_rate');
+
             $table->string('name');
             $table->double('area');
 
