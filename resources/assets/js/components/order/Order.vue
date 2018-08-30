@@ -5,7 +5,7 @@
                 <v-form>
                     <v-container grid-list-md>
                         <v-layout justify-center>
-                            <v-flex xs2 offset-xs2>
+                            <v-flex xs12 offset-xs0 md2 offset-md2>
                                 <v-text-field
                                     label="Курс Долара"
                                     :readonly="!isDollarRateEditing"
@@ -23,8 +23,8 @@
                                 </v-text-field>
                             </v-flex>
                         </v-layout>
-                        <v-layout wrap justify-center>
-                            <v-flex xs12 sm6>
+                        <v-layout wrap :justify-center="$vuetify.breakpoint.mdAndUp" :justify-start="$vuetify.breakpoint.smAndDown">
+                            <v-flex xs12 sm7 md6>
                                 <v-autocomplete
                                     v-if="!isClientCreation"
                                     v-model="orderData.client"
@@ -43,7 +43,7 @@
                                     @clientCreated="selectCreatedClient">
                                 </appCreateClient>
                             </v-flex>
-                            <v-flex xs12 sm2>
+                            <v-flex xs12 sm3 md2>
                                 <v-btn :block="$vuetify.breakpoint.xsOnly" color="primary" @click="isClientCreation = !isClientCreation">
                                     <v-icon small left>compare_arrows</v-icon>
                                     {{ switcherBtnText }}
@@ -51,15 +51,15 @@
                             </v-flex>
                         </v-layout>
                         <v-layout wrap>
-                            <v-flex xs12 offset-sm2 sm6>
+                            <v-flex xs12 offset-md2 md6>
                                 <v-text-field v-model="orderData.name" label="Название заказа"></v-text-field>
                             </v-flex>
-                            <v-flex xs12 offset-sm2 sm6>
+                            <v-flex xs12 offset-md2 md6>
                                 <v-text-field v-model="orderData.area" label="Площадь" :suffix="`${priceForArea}$`"></v-text-field>
                             </v-flex>
                         </v-layout>
                         <v-layout wrap>
-                            <v-flex xs12 offset-sm2 sm10 v-for="(service, index) in orderData.services" :key="`service-${index}`">
+                            <v-flex xs12 offset-md2 md10 v-for="(service, index) in orderData.services" :key="`service-${index}`">
                                 <v-checkbox :style="{ padding: 0, margin: index !== 0 ? 0 : false }" :label="service.name" v-model="orderData.services[index].value"></v-checkbox>
                             </v-flex>
                         </v-layout>
@@ -94,28 +94,28 @@
             </v-card-text>
             <v-card-text>
                 <v-layout wrap>
-                    <v-flex xs12 sm6>
+                    <v-flex order-xs2 order-sm1 xs12 sm6>
                         <v-container fluid grid-list-xs>
                             <v-layout wrap>
-                                <v-flex xs4>
+                                <v-flex xs12 md8 lg6 xl4>
                                     <v-text-field
                                         label="Монтаж оборудования"
-                                        readonly
-                                        :value="allEquipmentPrice"
-                                        append-icon="₴">
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex xs8></v-flex>
-                                <v-flex xs4>
-                                    <v-text-field
-                                        label="Оборудование"
                                         readonly
                                         :value="allInstallationPrice"
                                         append-icon="₴">
                                     </v-text-field>
                                 </v-flex>
                                 <v-flex xs8></v-flex>
-                                <v-flex xs4>
+                                <v-flex xs12 md8 lg6 xl4>
+                                    <v-text-field
+                                        label="Оборудование"
+                                        readonly
+                                        :value="allEquipmentPrice"
+                                        append-icon="₴">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs8></v-flex>
+                                <v-flex xs12 md8 lg6 xl4>
                                     <v-text-field
                                         label="Дней командировки"
                                         hint="Фиксированая цена 720 грн/день"
@@ -124,7 +124,7 @@
                                     </v-text-field>
                                 </v-flex>
                                 <v-flex xs8></v-flex>
-                                <v-flex xs4>
+                                <v-flex xs12 md8 lg6 xl4>
                                     <v-text-field
                                         label="Командировки / проживание"
                                         readonly
@@ -133,7 +133,7 @@
                                     </v-text-field>
                                 </v-flex>
                                 <v-flex xs8></v-flex>
-                                <v-flex xs4>
+                                <v-flex xs12 md8 lg6 xl4>
                                     <v-text-field
                                         label="Цена за 1км"
                                         v-model="orderData.price_for_transportation_per_km"
@@ -141,28 +141,28 @@
                                     </v-text-field>
                                 </v-flex>
                                 <v-flex xs8></v-flex>
-                                <v-flex xs4>
+                                <v-flex xs12 md8 lg6 xl4>
                                     <v-text-field
                                         label="Растояние км"
                                         v-model="orderData.transportation_kms">
                                     </v-text-field>
                                 </v-flex>
                                 <v-flex xs8></v-flex>
-                                <v-flex xs4>
+                                <v-flex xs12 md8 lg6 xl4>
                                     <v-text-field
                                         label="Количество поездок"
                                         v-model="orderData.number_of_trips">
                                     </v-text-field>
                                 </v-flex>
                                 <v-flex xs8></v-flex>
-                                <v-flex xs4>
+                                <v-flex xs12 md8 lg6 xl4>
                                     <v-text-field
                                         label="Маршрут"
                                         v-model="orderData.route">
                                     </v-text-field>
                                 </v-flex>
                                 <v-flex xs8></v-flex>
-                                <v-flex xs4>
+                                <v-flex xs12 md8 lg6 xl4>
                                     <v-text-field
                                         label="Транспортные расходы"
                                         readonly
@@ -171,12 +171,28 @@
                                     </v-text-field>
                                 </v-flex>
                                 <v-flex xs8></v-flex>
+                                <v-flex xs12 class="mt-4">
+                                    <div class="text-xs-left display-1 font-weight-bold">
+                                        СУММА ВСЕГО: {{ finalPrice }}₴
+                                    </div>
+                                </v-flex>
                             </v-layout>
                         </v-container>
                     </v-flex>
-                    <v-flex xs12 sm6></v-flex>
+                    <v-flex order-xs1 order-sm2 xs12 sm6>
+                        <appEquipmentData
+                            :orderGPSData="orderData.GPSData">
+                        </appEquipmentData>
+                    </v-flex>
                 </v-layout>
             </v-card-text>
+            <v-card-actions>
+                <v-layout justify-center class="mb-4">
+                    <v-flex xs12 sm11 md3>
+                        <v-btn block large color="primary">Создать заказ</v-btn>
+                    </v-flex>
+                </v-layout>
+            </v-card-actions>
         </v-card>
 
         <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor">
@@ -189,6 +205,7 @@
 import { mapGetters } from 'vuex';
 import CreateClient from './../CreateClient/CreateClient';
 import GPSData from './gpsData/GPSData';
+import EquipmentData from './EquipmentData/EquipmentData';
 import dcopy from 'deep-copy';
 import utils from './../../mixins/utils.js';
 
@@ -277,11 +294,9 @@ export default {
                     const value = row[key];
                     const priceKey = `${key}_price`;
                     if (this.isObject(value) && !(value instanceof File)) {
-                        console.log('object: ', value);
                         prices.equipmentPrices[index][priceKey] = row[key].price;
                         prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], row[key].installation_price_for_one);
                     } else if (Array.isArray(value)) {
-                        console.log('array: ', value);
                         prices.equipmentPrices[index][priceKey] = 0.00;
                         value
                             .filter(el => !this.isUndefined(el))
@@ -290,11 +305,11 @@ export default {
                                 const arrLen = arr.length;
                                 if (arrLen >= 3) {
                                     if (el.installation_price_for_three) {
-                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index] + el.installation_price_for_three);
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_three);
                                     } else if (el.installation_price_for_two) {
-                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index] + el.installation_price_for_two);
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_two);
                                     } else {
-                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index] + el.installation_price_for_one);
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
                                     }
                                 } else if (arrLen === 2) {
                                     if (el.installation_price_for_two) {
@@ -318,6 +333,19 @@ export default {
         },
         allInstallationPrice() {
             return this.pricesForEquipment.installationPrices.reduce((price, el) => this.addTwoFloats(price, el), 0.00);
+        },
+        finalPrice() {
+            return this.addTwoFloats(
+                this.multiplyTwoFloats(
+                    this.priceForArea, this.orderData.dollar_rate
+                ), this.addTwoFloats(
+                    this.priceForDays, this.addTwoFloats(
+                        this.transportationPrice, this.addTwoFloats(
+                            this.allEquipmentPrice, this.allInstallationPrice
+                        )
+                    )
+                )
+            );
         }
     },
     watch: {
@@ -341,6 +369,11 @@ export default {
             })
             .catch(err => console.log(err))
         },
+        showSnackbar(snackColor, snackText) {
+            this.snackColor = snackColor;
+            this.snackText = snackText;
+            this.snack = true;
+        },
         selectCreatedClient(client) {
             const updatedClient = this.getClientWithTextValue(client);
             this.clients.push(updatedClient);
@@ -363,12 +396,15 @@ export default {
             } else {
                 this.orderData.GPSData[index][path] = val;
             }
+            this.showSnackbar('success', 'Данные сохранены');
         },
         addNestedDataInOrderGPSData(row, column) {
             this.orderData.GPSData[row][column].push(undefined);
+            this.showSnackbar('success', 'Данные сохранены');
         },
         deleteNestedDataInOrderGPSData(row, column, index) {
             this.orderData.GPSData[row][column].splice(index, 1);
+            this.showSnackbar('success', 'Данные сохранены');
         },
         copySelectedInOrderGPSData(copyList) {
             for (let i = 0; i < copyList.length; ++i) {
@@ -391,8 +427,9 @@ export default {
                     }
                 }
             }
+            this.showSnackbar('success', 'Данные сохранены');
         },
-        addRowToOrderGPSData(count) {
+        addRowToOrderGPSData(count = 1) {
             for (let i = 0; i < count; ++i) {
                 this.orderData.GPSData.push({
                     ...this.initialGPSRowData,
@@ -403,6 +440,7 @@ export default {
                 });
                 ++this.initialGPSRowData.id;
             }
+            this.showSnackbar('info', `${this.declOfNum(count, ['Добавлен', 'Добавлено', 'Добавлено'])} ${count} ${this.declOfNum(count, ['ряд', 'ряда', 'рядов'])}`);
         },
         dragNDropGPSData(newIndex, oldIndex) {
             const rowSelected = this.orderData.GPSData.splice(oldIndex, 1)[0];
@@ -416,7 +454,8 @@ export default {
     },
     components: {
         appCreateClient: CreateClient,
-        appGPSData: GPSData
+        appGPSData: GPSData,
+        appEquipmentData: EquipmentData
     }
 }
 </script>

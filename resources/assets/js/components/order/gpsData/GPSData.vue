@@ -1,7 +1,7 @@
 <template>
     <v-card class="elevation-0">
          <v-card-title>
-            <v-btn @click="addRow" color="info">Добавить</v-btn>
+            <v-btn @click="addRow(1)" color="info">Добавить</v-btn>
             <v-spacer></v-spacer>
         </v-card-title>
         <v-card-text id="text-test" class="ma-0 pa-0">
