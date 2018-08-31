@@ -328,7 +328,7 @@ export default {
             return this.orderData.statuses.is_sent ? 'Отправленный' : 'Неотправленный';
         },
         isAgreedStatus() {
-            return this.orderData.statuses.is_agreed ? 'Соглашенный' : 'Несоглашенный';
+            return this.orderData.statuses.is_agreed ? 'Согласованный' : 'Несогласованный';
         },
         isPaidStatus() {
             return this.orderData.statuses.is_paid ? 'Оплаченный' : 'Неоплаченный';

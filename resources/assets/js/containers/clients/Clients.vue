@@ -18,7 +18,7 @@
                             :value="search"
                             @input="checkSearch"
                             append-icon="search"
-                            label="Search"
+                            label="Поиск"
                             single-line
                             hide-details>
                         </v-text-field>

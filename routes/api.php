@@ -58,9 +58,13 @@ Route::group(['middleware' => ['auth:api']], function() {
     // ORDERS
     Route::get('/order/dollar-rate', 'OrderController@dollarRate');
 
+    Route::get('/orders', 'OrderController@getOrders');
+
     Route::post('/orders/image', 'OrderController@uploadImage');
 
     Route::post('/orders', 'OrderController@createOrder');
+
+    Route::delete('/orders/{id}', 'OrderController@deleteOrder');
 
     // CACHED_DATA
     Route::get('/cache', 'CachedDataController@getCachedData');

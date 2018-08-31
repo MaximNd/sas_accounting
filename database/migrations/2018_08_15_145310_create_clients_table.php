@@ -20,6 +20,8 @@ class CreateClientsTable extends Migration
             $table->double('area');
             $table->string('telephone');
             $table->text('comment')->nullable();
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }
