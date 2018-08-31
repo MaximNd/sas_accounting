@@ -114,6 +114,7 @@
                     :pricesForEquipment="pricesForEquipment"
                     :allEquipmentPrice="allEquipmentPrice"
                     :allInstallationPrice="allInstallationPrice"
+                    :cachedData="allCacheData"
                     @update:orderGPSData="updateOrderGPSData"
                     @add-nested-data:orderGPSData="addNestedDataInOrderGPSData"
                     @delete-nested-data:orderGPSData="deleteNestedDataInOrderGPSData"
@@ -255,6 +256,10 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        order: {
+            type: Object,
+            required: false
         }
     },
     data() {
@@ -285,6 +290,8 @@ export default {
                 cn03: [],
                 rs01: []
             },
+            cachedData: [],
+            newCachedData: [],
             orderInCreation: false,
             orderData: {
                 name: '',
@@ -325,6 +332,17 @@ export default {
         },
         isPaidStatus() {
             return this.orderData.statuses.is_paid ? 'Оплаченный' : 'Неоплаченный';
+        },
+        allCacheData() {
+            const cache = {};
+            [...this.cachedData, ...this.newCachedData].forEach((cacheData) => {
+                if (cache[cacheData.column_name]) {
+                    cache[cacheData.column_name].push(cacheData.value);
+                } else {
+                    cache[cacheData.column_name] = [cacheData.value]
+                }
+            });
+            return cache;
         },
         priceForArea() {
             const area = (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);
@@ -415,6 +433,10 @@ export default {
         }
     },
     methods: {
+        addCache(column, value) {
+            this.newCachedData.push({ column_name: column, value });
+            localStorage.setItem('newCachedData', JSON.stringify(this.newCachedData));
+        },
         saveOrderDataToLocalStorage() {
             localStorage.setItem('orderData', JSON.stringify(this.orderData));
         },
@@ -423,6 +445,13 @@ export default {
                 .then(({data}) => {
                     const clients = data.map(client => this.getClientWithTextValue(client));
                     this.clients = clients;
+                })
+                .catch(err => (console.log(err)));
+        },
+        getCachedData() {
+            this.axios.get('/cache')
+                .then(({data}) => {
+                    this.cachedData = data;
                 })
                 .catch(err => (console.log(err)));
         },
@@ -453,11 +482,12 @@ export default {
         },
         updateOrderGPSData(val, index, path, nestedPath = false) {
             if (nestedPath !== false) {
-                // const equipmentList = dcopy(this.orderData.GPSData[index][path]);
-                // equipmentList[nestedPath] = val;
                 this.$set(this.orderData.GPSData[index][path], nestedPath, val);
             } else {
                 this.orderData.GPSData[index][path] = val;
+                if (typeof val === 'string' && path !== 'image' && path !== 'year_of_issue' && !this.cachedData.find(el => el.value === val)) {
+                    this.addCache(path, val);
+                }
             }
             this.saveOrderDataToLocalStorage();
             this.showSnackbar('success', 'Данные сохранены!');
@@ -479,14 +509,6 @@ export default {
                     let index = copyList[i][j].index;
                     let column = copyList[i][j].column;
 
-                    // if (column === 'image') {
-                    //     this.$set(this.orderData.GPSData[index], column, this.orderData.GPSData[copyList[i][0].index][column]);
-                    //     if (this.orderData.GPSData[copyList[i][0].index][column] !== '') {
-                    //         setTimeout(() => {
-                    //             this.$refs.GPSData.setPreview(index);
-                    //         }, 1000);
-                    //     }
-                    // } else
                     if (!column.endsWith('price')) {
                         this.$set(this.orderData.GPSData[index], column, dcopy(value));
                     }
@@ -565,13 +587,16 @@ export default {
                 .catch(err => (console.log(err)))
                 .finally(() => (this.orderInCreation = false));
 
-            // console.log('orderData: ', orderData);
+            if (this.newCachedData.length > 0)
+                this.axios.post('/cache', { cache: this.newCachedData });
         }
     },
     created() {
         this.getDollarRate();
         this.getClients();
+        this.getCachedData();
         this.$store.dispatch('getPriseList');
+        this.newCachedData = JSON.parse(localStorage.getItem('newCachedData')) || [];
         // this.orderData = JSON.parse(localStorage.getItem('orderData'));
     },
     components: {

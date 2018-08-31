@@ -61,4 +61,9 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::post('/orders/image', 'OrderController@uploadImage');
 
     Route::post('/orders', 'OrderController@createOrder');
+
+    // CACHED_DATA
+    Route::get('/cache', 'CachedDataController@getCachedData');
+
+    Route::post('/cache', 'CachedDataController@addCachedData');
 });

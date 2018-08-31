@@ -52,7 +52,7 @@
                                 :ref="`mark-${props.index}-${1}`"
                                 :value="props.item.mark"
                                 @change="setCellValue($event, props.index, 1, 'mark', `td-${props.index}-${1}`)"
-                                :items="cachedDataTest"
+                                :items="cachedData.mark"
                                 label="Вибирете марку"
                                 single-line>
                             </v-combobox>
@@ -75,11 +75,13 @@
                                 :ref="`model-${props.index}-${2}`"
                                 :value="props.item.model"
                                 @change="setCellValue($event, props.index, 2, 'model', `td-${props.index}-${2}`)"
-                                :items="cachedDataTest"
-                                hide-selected
+                                :items="cachedData.model"
                                 label="Вибирете модель"
                                 single-line>
                             </v-combobox>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 2, false, `model-${props.index}-${2}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
@@ -92,15 +94,18 @@
                             {{ props.item.year_of_issue }}
                         </template>
                         <template v-else>
-                            <v-combobox
+                            <v-autocomplete
                                 :ref="`year_of_issue-${props.index}-${3}`"
                                 :value="props.item.year_of_issue"
                                 @change="setCellValue($event, props.index, 3, 'year_of_issue', `td-${props.index}-${3}`)"
                                 :items="Array.apply(null, { length: 100 }).map((_, i) => 1950 + i)"
-                                hide-selected
                                 label="Вибирете год выпуска"
+                                auto
                                 single-line>
-                            </v-combobox>
+                            </v-autocomplete>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 3, false, `year_of_issue-${props.index}-${3}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
@@ -117,11 +122,13 @@
                                 :ref="`fuel_type-${props.index}-${4}`"
                                 :value="props.item.fuel_type"
                                 @change="setCellValue($event, props.index, 4, 'fuel_type', `td-${props.index}-${4}`)"
-                                :items="cachedDataTest"
-                                hide-selected
+                                :items="cachedData.fuel_type"
                                 label="Вибирете Тип топлива"
                                 single-line>
                             </v-combobox>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 4, false, `fuel_type-${props.index}-${4}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
@@ -138,11 +145,14 @@
                                 :ref="`power-${props.index}-${5}`"
                                 :value="props.item.power"
                                 @change="setCellValue($event, props.index, 5, 'power', `td-${props.index}-${5}`)"
-                                :items="cachedDataTest"
+                                :items="cachedData.power"
                                 hide-selected
                                 label="Вибирете мощность"
                                 single-line>
                             </v-combobox>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 5, false, `power-${props.index}-${5}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
@@ -159,11 +169,14 @@
                                 :ref="`number-${props.index}-${6}`"
                                 :value="props.item.number"
                                 @change="setCellValue($event, props.index, 6, 'number', `td-${props.index}-${6}`)"
-                                :items="cachedDataTest"
+                                :items="cachedData.number"
                                 hide-selected
                                 label="Вибирете гос. номер"
                                 single-line>
                             </v-combobox>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 6, false, `number-${props.index}-${6}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
@@ -684,6 +697,10 @@ export default {
             type: Array,
             required: true
         },
+        cachedData: {
+            type: Object,
+            required: true
+        },
         gpsTrackers: {
             type: Array,
             required: true
@@ -826,12 +843,6 @@ export default {
         },
         setPreview(index, imageName) {
             this.$emit('update:orderGPSData', imageName, index, 'image');
-            // const reader = new FileReader();
-            // const _self = this;
-            // reader.onload = function (e) {
-            //     _self.$set(_self.imagesPreviews, index, e.target.result);
-            // };
-            // reader.readAsDataURL(this.orderGPSData[index].image);
         },
         cornerFocused(event) {
             this.tableBody.addEventListener('mouseup', this.cornerBlurred, false);
