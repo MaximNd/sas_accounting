@@ -35,8 +35,7 @@ export default {
             const countEquipment = this.orderGPSData.reduce((grupped, row) => {
                 Object.keys(row).forEach((key) => {
                     const value = row[key];
-                    console.log(value);
-                    if (this.isObject(value) && !(value instanceof File)) {
+                    if (this.isObject(value)) {
                         if (!grupped[row[key].id]) {
                             grupped[row[key].id] = {
                                 type: row[key].name,
@@ -48,7 +47,7 @@ export default {
                     } else if (Array.isArray(value)) {
                         value
                             .forEach((el, index) => {
-                                if (this.isUndefined(el)) return;
+                                if (this.isUndefined(el) || this.isNull(el) ) return;
                                 if (!grupped[el.id]) {
                                     grupped[el.id] = {
                                         type: el.name,

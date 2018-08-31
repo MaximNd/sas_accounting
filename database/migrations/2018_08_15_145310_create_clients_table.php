@@ -19,7 +19,7 @@ class CreateClientsTable extends Migration
             $table->string('company_name');
             $table->double('area');
             $table->string('telephone');
-            $table->text('comment');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

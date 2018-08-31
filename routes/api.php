@@ -57,4 +57,8 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     // ORDERS
     Route::get('/order/dollar-rate', 'OrderController@dollarRate');
+
+    Route::post('/orders/image', 'OrderController@uploadImage');
+
+    Route::post('/orders', 'OrderController@createOrder');
 });

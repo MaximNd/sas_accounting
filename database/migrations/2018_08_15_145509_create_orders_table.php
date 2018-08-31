@@ -19,6 +19,10 @@ class CreateOrdersTable extends Migration
             $table->integer('client_id')->unsigned();
             $table->foreign('client_id')->references('id')->on('clients');
 
+            $table->boolean('is_sent');
+            $table->boolean('is_agreed');
+            $table->boolean('is_paid');
+
             $table->double('dollar_rate');
 
             $table->string('name');

@@ -28,13 +28,13 @@
                     </td>
                     <td
                         :ref="`td-${props.index}-${0}`"
-                        @click="selectCell($event, { index: props.index, column: 'image', columnIndex: 0, value: false })"
-                        @mouseenter="selectCellToCopyList($event, { index: props.index, column: 'image', columnIndex: 0, value: false })">
+                        @click="selectCell($event, { index: props.index, column: 'image', columnIndex: 0, value: props.item.image })"
+                        @mouseenter="selectCellToCopyList($event, { index: props.index, column: 'image', columnIndex: 0, value: props.item.image })">
                         <v-avatar
                             @dblclick="onPickFile(`image-${props.index}`)"
                             size="40"
                             tile>
-                            <img :style="{cursor: 'pointer','object-fit': 'cover',width: '40px',height: '40px'}" :src="imagesPreviews[props.index] === '' ? uploadImage : imagesPreviews[props.index]" alt="image">
+                            <img :style="{cursor: 'pointer','object-fit': 'cover',width: '40px',height: '40px'}" :src="props.item.image === '' ? uploadImage : props.item.image" alt="image">
                         </v-avatar>
                         <input @change="onFilePicked($event, props.index)" style="display:none;" type="file" :ref="`image-${props.index}`">
                     </td>
@@ -204,10 +204,10 @@
                         @dblclick="switchCellMode(props.index, 9, true, `fuel_gauge-${props.index}-${9}`, $event, false)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_gauge', columnIndex: 9, value: props.item.fuel_gauge })">
                         <template v-if="!editModCells[props.index][9]">
-                            <v-list v-if="props.item.fuel_gauge.some(el => typeof el !== 'undefined')">
+                            <v-list v-if="props.item.fuel_gauge.some(el => !isUndefined(el) && !isNull(el))">
                                 <template v-for="(item, textIndex) in props.item.fuel_gauge">
                                     <v-list-tile
-                                        v-if="typeof item !== 'undefined'"
+                                        v-if="!isUndefined(item) && !isNull(item)"
                                         :key="`fuel_gauge_text-${textIndex}`">
                                         <v-list-tile-content>
                                             <v-list-tile-title>
@@ -456,10 +456,10 @@
                         @dblclick="switchCellMode(props.index, 23, true, `cn03-${props.index}-${23}`, $event, false)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03', columnIndex: 23, value: props.item.cn03 })">
                         <template v-if="!editModCells[props.index][23]">
-                            <v-list v-if="props.item.cn03.some(el => typeof el !== 'undefined')">
+                            <v-list v-if="props.item.cn03.some(el => !isUndefined(el) && !isNull(el))">
                                 <template v-for="(item, textIndex) in props.item.cn03">
                                     <v-list-tile
-                                        v-if="typeof item !== 'undefined'"
+                                        v-if="!isUndefined(item) && !isNull(item)"
                                         :key="`cn03_text-${textIndex}`">
                                         <v-list-tile-content>
                                             <v-list-tile-title>
@@ -528,10 +528,10 @@
                         @dblclick="switchCellMode(props.index, 25, true, `rs01-${props.index}-${25}`, $event, false)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01', columnIndex: 25, value: props.item.rs01 })">
                         <template v-if="!editModCells[props.index][25]">
-                            <v-list v-if="props.item.rs01.some(el => typeof el !== 'undefined')">
+                            <v-list v-if="props.item.rs01.some(el => !isUndefined(el) && !isNull(el))">
                                 <template v-for="(item, textIndex) in props.item.rs01">
                                     <v-list-tile
-                                        v-if="typeof item !== 'undefined'"
+                                        v-if="!isUndefined(item) && !isNull(item)"
                                         :key="`rs01_text-${textIndex}`">
                                         <v-list-tile-content>
                                             <v-list-tile-title>
@@ -600,10 +600,10 @@
                         @dblclick="switchCellMode(props.index, 27, true, `additional_equipment-${props.index}-${27}`, $event, false)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment', columnIndex: 27, value: props.item.additional_equipment })">
                         <template v-if="!editModCells[props.index][27]">
-                            <v-list v-if="props.item.additional_equipment.some(el => typeof el !== 'undefined')">
+                            <v-list v-if="props.item.additional_equipment.some(el => !isUndefined(el) && !isNull(el))">
                                 <template v-for="(item, textIndex) in props.item.additional_equipment">
                                     <v-list-tile
-                                        v-if="typeof item !== 'undefined'"
+                                        v-if="!isUndefined(item) && !isNull(item)"
                                         :key="`additional_equipment_text-${textIndex}`">
                                         <v-list-tile-content>
                                             <v-list-tile-title>
@@ -663,7 +663,7 @@
                     </td>
                     <td
                         class="text-xs-center">
-                        {{ pricesForEquipment.installationPrices[props.index] }}$
+                        {{ pricesForEquipment.installationPrices[props.index] }}₴
                     </td>
                 </template>
             </v-data-table>
@@ -675,9 +675,10 @@
 import dcopy from 'deep-copy';
 import Sortable from 'sortablejs';
 import setStyles from './../../../mixins/stylesMixins.js';
+import utils from './../../../mixins/utils.js';
 
 export default {
-    mixins: [setStyles],
+    mixins: [setStyles, utils],
     props: {
         orderGPSData: {
             type: Array,
@@ -777,7 +778,6 @@ export default {
                 { text: 'Монтаж оборудования ₴', value: 'installation_of_equipment_price', sortable: false },
             ],
             uploadImage: '/storage/upload-foto.png',
-            imagesPreviews: [],
             cellsPosition: []
         };
     },
@@ -807,27 +807,31 @@ export default {
     },
     methods: {
         addRow(count = 1) {
-            this.$emit('rowAdded', count);
             for (let i = 0; i < count; ++i) {
-                this.imagesPreviews.push('');
                 this.editModCells.push(Array.apply(null, {length: this.headers.length-1}).map(() => false));
             }
+            this.$emit('rowAdded', count);
         },
         onPickFile(ref) {
             this.$refs[ref].click();
         },
         onFilePicked(event, index) {
-            this.$emit('update:orderGPSData', event.target.files[0], index, 'image');
-            this.setPreview(index);
+            const formData = new FormData();
+            formData.append('image', event.target.files[0]);
+            this.axios.post('/orders/image', formData)
+                .then(({ data }) => {
+                    this.setPreview(index, `/storage/${data}`);
+                });
             this.$refs[`td-${index}-0`].click();
         },
-        setPreview(index) {
-            const reader = new FileReader();
-            const _self = this;
-            reader.onload = function (e) {
-                _self.$set(_self.imagesPreviews, index, e.target.result);
-            };
-            reader.readAsDataURL(this.orderGPSData[index].image);
+        setPreview(index, imageName) {
+            this.$emit('update:orderGPSData', imageName, index, 'image');
+            // const reader = new FileReader();
+            // const _self = this;
+            // reader.onload = function (e) {
+            //     _self.$set(_self.imagesPreviews, index, e.target.result);
+            // };
+            // reader.readAsDataURL(this.orderGPSData[index].image);
         },
         cornerFocused(event) {
             this.tableBody.addEventListener('mouseup', this.cornerBlurred, false);
@@ -838,6 +842,7 @@ export default {
             this.isCornerFocused = false;
             if (this.isReadyToCopy) {
                 this.$emit('copy-values:orderGPSData', this.copyList);
+                this.clickOnTD(this.findTDEl(event));
             }
             console.log('Blurred');
         },
@@ -1083,7 +1088,6 @@ export default {
             }
             this.normalizeCorner(currentCellCoords, currentCell);
             this.normalizeStylesSelectBordersAndCorner();
-            console.log('copyList: ', this.copyList);
         },
         switchCellMode(row, cell, mode, refName, event, autofocus = true) {
             this.$set(this.editModCells[row], cell, mode);
@@ -1096,7 +1100,6 @@ export default {
             }
         },
         setCellValue(data, row, cell, name, td, nestedPath = false, forceSwitchMode = true) {
-            console.log('setCellValue: ', arguments);
             this.$emit('update:orderGPSData', data, row, name, nestedPath);
             if (forceSwitchMode) this.switchCellMode(row, cell, false);
             if (td) {
@@ -1115,25 +1118,33 @@ export default {
             this.$refs[ref].blur()
         },
         isShowDivider(index, arr) {
-            if (typeof arr[index] === 'undefined') return false;
+            if (this.isUndefined(arr[index]) || this.isNull(arr[index])) return false;
             const rest = arr.slice(index+1);
             if (rest.length === 0) return false;
-            if (rest.every(el => typeof el === 'undefined')) return false;
+            if (rest.every(el => this.isUndefined(el) || this.isNull(el))) return false;
             return true;
         }
     },
     created() {
-        this.addRow(10);
+        this.addRow(4);
     },
     mounted() {
         const tableBody = document.querySelector('#gps-data-table .v-datatable tbody');
         this.tableBody = tableBody;
         tableBody.classList.add('gps-data-tbody');
         const _self = this;
-        document.addEventListener('click', function(event) {
-            if (event.target.closest('.gps-data-tbody')) return;
-            _self.hideBordersAndCorner();
-        });
+        // document.addEventListener('click', function(event) {
+        //     let target = event.target;
+        //     while (target !== document) {
+        //         console.log('IN EVENT TAGNAME: ', target.tagName);
+        //         console.log('IN EVENT TARGET: ', target);
+        //         if (target.tagName === 'TBODY') return;
+        //         target = target.parentNode;
+        //     }
+        //     console.log('IN EVENT AND HIDE');
+        //     // if (event.target.closest('.gps-data-tbody')) return;
+        //     _self.hideBordersAndCorner();
+        // }, false);
 
         Sortable.create(tableBody, {
             handle: '.handle',

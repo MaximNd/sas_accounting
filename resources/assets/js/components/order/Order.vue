@@ -51,6 +51,36 @@
                             </v-flex>
                         </v-layout>
                         <v-layout wrap>
+                            <v-flex xs12 offset-md2 md9 lg8 xl6>
+                                <v-layout wrap>
+                                    <v-flex xs12 class="mt-3">
+                                        <div class="title font-weight-regular">
+                                            Статусы заказа:
+                                        </div>
+                                    </v-flex>
+                                    <v-flex xs12 sm4>
+                                         <v-switch
+                                            color="success"
+                                            :label="isSentStatus"
+                                            v-model="orderData.statuses.is_sent">
+                                        </v-switch>
+                                    </v-flex>
+                                    <v-flex xs12 sm4>
+                                        <v-switch
+                                            color="success"
+                                            :label="isAgreedStatus"
+                                            v-model="orderData.statuses.is_agreed">
+                                        </v-switch>
+                                    </v-flex>
+                                    <v-flex xs12 sm4>
+                                        <v-switch
+                                            color="success"
+                                            :label="isPaidStatus"
+                                            v-model="orderData.statuses.is_paid">
+                                        </v-switch>
+                                    </v-flex>
+                                </v-layout>
+                            </v-flex>
                             <v-flex xs12 offset-md2 md6>
                                 <v-text-field v-model="orderData.name" label="Название заказа"></v-text-field>
                             </v-flex>
@@ -151,7 +181,9 @@
                                 <v-flex xs12 md8 lg6 xl4>
                                     <v-text-field
                                         label="Количество поездок"
-                                        v-model="orderData.number_of_trips">
+                                        v-model="orderData.number_of_trips"
+                                        :type="'number'"
+                                        min="1">
                                     </v-text-field>
                                 </v-flex>
                                 <v-flex xs8></v-flex>
@@ -173,7 +205,7 @@
                                 <v-flex xs8></v-flex>
                                 <v-flex xs12 class="mt-4">
                                     <div class="text-xs-left display-1 font-weight-bold">
-                                        СУММА ВСЕГО: {{ finalPrice }}₴
+                                        СУММА ВСЕГО: {{ formattedFinalPrice }}
                                     </div>
                                 </v-flex>
                             </v-layout>
@@ -189,7 +221,13 @@
             <v-card-actions>
                 <v-layout justify-center class="mb-4">
                     <v-flex xs12 sm11 md3>
-                        <v-btn block large color="primary">Создать заказ</v-btn>
+                        <v-btn
+                            block large color="primary"
+                            :loading="orderInCreation"
+                            :disabled="orderInCreation"
+                            @click="createOrder">
+                            Создать заказ
+                        </v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-actions>
@@ -208,6 +246,7 @@ import GPSData from './gpsData/GPSData';
 import EquipmentData from './EquipmentData/EquipmentData';
 import dcopy from 'deep-copy';
 import utils from './../../mixins/utils.js';
+import formatter from 'accounting';
 
 export default {
     mixins: [utils],
@@ -246,9 +285,11 @@ export default {
                 cn03: [],
                 rs01: []
             },
+            orderInCreation: false,
             orderData: {
                 name: '',
                 client: null,
+                statuses: { is_sent: false, is_agreed: false, is_paid: false },
                 area: '',
                 dollar_rate: 0.00,
                 days: '',
@@ -276,9 +317,18 @@ export default {
         switcherBtnText() {
             return this.isClientCreation ? 'Выбрать клиента' : 'Создать клиента';
         },
+        isSentStatus() {
+            return this.orderData.statuses.is_sent ? 'Отправленный' : 'Неотправленный';
+        },
+        isAgreedStatus() {
+            return this.orderData.statuses.is_agreed ? 'Соглашенный' : 'Несоглашенный';
+        },
+        isPaidStatus() {
+            return this.orderData.statuses.is_paid ? 'Оплаченный' : 'Неоплаченный';
+        },
         priceForArea() {
             const area = (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);
-            return this.orderData.services.reduce((price, service) => service.value ? price + (service.price * area) : price, 0);
+            return this.orderData.services.reduce((price, service) => service.value ? this.addTwoFloats(price, this.multiplyTwoFloats(service.price, area)) : price, 0);
         },
         priceForDays() {
             return this.multiplyTwoFloats(this.orderData.days, this.orderData.price_for_day);
@@ -293,13 +343,13 @@ export default {
                 Object.keys(row).forEach((key) => {
                     const value = row[key];
                     const priceKey = `${key}_price`;
-                    if (this.isObject(value) && !(value instanceof File)) {
+                    if (this.isObject(value)) {
                         prices.equipmentPrices[index][priceKey] = row[key].price;
                         prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], row[key].installation_price_for_one);
                     } else if (Array.isArray(value)) {
                         prices.equipmentPrices[index][priceKey] = 0.00;
                         value
-                            .filter(el => !this.isUndefined(el))
+                            .filter(el => !this.isUndefined(el) && !this.isNull(el))
                             .forEach((el, _, arr) => {
                                 prices.equipmentPrices[index][priceKey] = this.addTwoFloats(prices.equipmentPrices[index][priceKey], el.price);
                                 const arrLen = arr.length;
@@ -346,6 +396,17 @@ export default {
                     )
                 )
             );
+        },
+        formattedFinalPrice() {
+            return formatter.formatMoney(this.finalPrice, {
+                symbol: "₴",
+                precision: 2,
+                thousand: " ",
+                format: {
+                    pos : "%v%s",
+                    zero: "%v%s"
+                }
+            });
         }
     },
     watch: {
@@ -354,6 +415,9 @@ export default {
         }
     },
     methods: {
+        saveOrderDataToLocalStorage() {
+            localStorage.setItem('orderData', JSON.stringify(this.orderData));
+        },
         getClients() {
             this.axios.get('/clients/all')
                 .then(({data}) => {
@@ -388,7 +452,6 @@ export default {
             return { ...client, text: `${client.person_full_name} (${client.company_name})` }
         },
         updateOrderGPSData(val, index, path, nestedPath = false) {
-            console.log('updateOrderGPSData: ', arguments);
             if (nestedPath !== false) {
                 // const equipmentList = dcopy(this.orderData.GPSData[index][path]);
                 // equipmentList[nestedPath] = val;
@@ -396,15 +459,18 @@ export default {
             } else {
                 this.orderData.GPSData[index][path] = val;
             }
-            this.showSnackbar('success', 'Данные сохранены');
+            this.saveOrderDataToLocalStorage();
+            this.showSnackbar('success', 'Данные сохранены!');
         },
         addNestedDataInOrderGPSData(row, column) {
             this.orderData.GPSData[row][column].push(undefined);
-            this.showSnackbar('success', 'Данные сохранены');
+            this.saveOrderDataToLocalStorage();
+            this.showSnackbar('success', 'Данные сохранены!');
         },
         deleteNestedDataInOrderGPSData(row, column, index) {
             this.orderData.GPSData[row][column].splice(index, 1);
-            this.showSnackbar('success', 'Данные сохранены');
+            this.saveOrderDataToLocalStorage();
+            this.showSnackbar('success', 'Данные сохранены!');
         },
         copySelectedInOrderGPSData(copyList) {
             for (let i = 0; i < copyList.length; ++i) {
@@ -412,22 +478,22 @@ export default {
                 for (let j = 1; j < copyList[i].length; ++j) {
                     let index = copyList[i][j].index;
                     let column = copyList[i][j].column;
-                    console.log('INDEX: ', index);
-                    console.log('COLUMN: ', column);
 
-                    if (column === 'image') {
-                        this.$set(this.orderData.GPSData[index], column, this.orderData.GPSData[copyList[i][0].index][column]);
-                        if (this.orderData.GPSData[copyList[i][0].index][column] !== '') {
-                            setTimeout(() => {
-                                this.$refs.GPSData.setPreview(index);
-                            }, 1000);
-                        }
-                    } else if (!column.endsWith('price')) {
+                    // if (column === 'image') {
+                    //     this.$set(this.orderData.GPSData[index], column, this.orderData.GPSData[copyList[i][0].index][column]);
+                    //     if (this.orderData.GPSData[copyList[i][0].index][column] !== '') {
+                    //         setTimeout(() => {
+                    //             this.$refs.GPSData.setPreview(index);
+                    //         }, 1000);
+                    //     }
+                    // } else
+                    if (!column.endsWith('price')) {
                         this.$set(this.orderData.GPSData[index], column, dcopy(value));
                     }
                 }
             }
-            this.showSnackbar('success', 'Данные сохранены');
+            this.saveOrderDataToLocalStorage();
+            this.showSnackbar('success', 'Данные сохранены!');
         },
         addRowToOrderGPSData(count = 1) {
             for (let i = 0; i < count; ++i) {
@@ -440,17 +506,73 @@ export default {
                 });
                 ++this.initialGPSRowData.id;
             }
+            this.saveOrderDataToLocalStorage();
             this.showSnackbar('info', `${this.declOfNum(count, ['Добавлен', 'Добавлено', 'Добавлено'])} ${count} ${this.declOfNum(count, ['ряд', 'ряда', 'рядов'])}`);
         },
         dragNDropGPSData(newIndex, oldIndex) {
             const rowSelected = this.orderData.GPSData.splice(oldIndex, 1)[0];
             this.orderData.GPSData.splice(newIndex, 0, rowSelected);
+            this.saveOrderDataToLocalStorage();
+            this.showSnackbar('info', `Ряд был перемещён`);
+        },
+        createOrder() {
+            this.orderInCreation = true;
+            const orderData = {
+                client_id: this.orderData.client,
+                dollar_rate: this.orderData.dollar_rate,
+                name: this.orderData.name,
+                is_sent: this.orderData.statuses.is_sent,
+                is_agreed: this.orderData.statuses.is_agreed,
+                is_paid: this.orderData.statuses.is_paid,
+                area: this.orderData.area,
+                days: this.orderData.days,
+                price_for_day: this.orderData.price_for_day,
+                price_for_transportation_per_km: this.orderData.price_for_transportation_per_km,
+                number_of_trips: this.orderData.number_of_trips,
+                transportation_kms: this.orderData.transportation_kms,
+                route: this.orderData.route,
+                services: JSON.stringify(this.orderData.services.reduce((services, service) => {
+                    if (service.value) {
+                        services.push(service.id)
+                    }
+                    return services;
+                }, [])),
+                GPSData: this.orderData.GPSData.map(row => {
+                    const newRow = {};
+                    Object.keys(row).forEach((key) => {
+                        const value = row[key];
+                        if (this.isObject(value)) {
+                            newRow[key] = value.id;
+                        } else if (Array.isArray(value)) {
+                            let ids = [];
+                            value.forEach(el => {
+                                if (this.isUndefined(el) || this.isNull(el) ) return;
+                                ids.push(el.id);
+                            });
+                            newRow[key] = JSON.stringify(ids);
+                        } else if (key !== 'id') {
+                            newRow[key] = value;
+                        }
+                    });
+                    return newRow;
+                })
+            };
+
+            this.axios.post('/orders', orderData)
+                .then(({data}) => {
+                    console.log(data);
+                })
+                .catch(err => (console.log(err)))
+                .finally(() => (this.orderInCreation = false));
+
+            // console.log('orderData: ', orderData);
         }
     },
     created() {
         this.getDollarRate();
         this.getClients();
         this.$store.dispatch('getPriseList');
+        // this.orderData = JSON.parse(localStorage.getItem('orderData'));
     },
     components: {
         appCreateClient: CreateClient,
