@@ -38,6 +38,7 @@ class CreateOrdersTable extends Migration
 
             $table->json('services');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

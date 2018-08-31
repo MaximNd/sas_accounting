@@ -14855,7 +14855,7 @@ module.exports = castPath;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(61);
-module.exports = __webpack_require__(290);
+module.exports = __webpack_require__(297);
 
 
 /***/ }),
@@ -14915,8 +14915,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2__web
             return res.data.access_token;
         }
     },
-    http: __webpack_require__(278),
-    router: __webpack_require__(279),
+    http: __webpack_require__(285),
+    router: __webpack_require__(286),
     loginData: { url: "http://127.0.0.1:8000/" + 'oauth/token', method: 'POST', redirect: '/', fetchUser: true },
     // registerData: { url: `${Vue.http.options.root}/user/signup`, method: 'POST', redirect: '/login', fetchUser: false },
     refreshData: { url: 'auth/refresh', method: 'GET', enabled: false, interval: 0 },
@@ -14929,7 +14929,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2__web
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('app', __webpack_require__(280));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('app', __webpack_require__(287));
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     el: '#app',
@@ -37899,6 +37899,9 @@ module.exports = function (css) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__containers_priceList_PriceList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__containers_priceList_PriceList_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue__ = __webpack_require__(260);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue__ = __webpack_require__(279);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue__);
+
 
 
 
@@ -37946,6 +37949,10 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
         path: '/create-order',
         name: 'create-order',
         component: __WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue___default.a
+    }, {
+        path: '/orders',
+        name: 'orders',
+        component: __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue___default.a
     }, {
         path: '',
         name: 'home',
@@ -40776,7 +40783,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.pending = true;
             var data = {
                 client_id: 2,
-                client_secret: "Hp9jn6GADFRVsQTaSJ8ZehcvEm2KCHb8wtmTMD91",
+                client_secret: "H7chmwyJTkUpmVJMjvPqwXIgSe84XN31TCfuSpo2",
                 grant_type: 'password',
                 username: this.loginData.email,
                 password: this.loginData.password
@@ -47624,7 +47631,7 @@ var render = function() {
                           clearable: "",
                           value: _vm.search,
                           "append-icon": "search",
-                          label: "Search",
+                          label: "Поиск",
                           "single-line": "",
                           "hide-details": ""
                         },
@@ -50417,7 +50424,7 @@ var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(261)
 /* template */
-var __vue_template__ = __webpack_require__(277)
+var __vue_template__ = __webpack_require__(278)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -50495,7 +50502,7 @@ var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(265)
 /* template */
-var __vue_template__ = __webpack_require__(276)
+var __vue_template__ = __webpack_require__(277)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -50589,10 +50596,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_deep_copy__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_deep_copy___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_deep_copy__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__mixins_utils_js__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_accounting__ = __webpack_require__(292);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_accounting__ = __webpack_require__(276);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_accounting___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_accounting__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+//
 //
 //
 //
@@ -50850,6 +50860,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             type: Boolean,
             required: false,
             default: false
+        },
+        order: {
+            type: Object,
+            required: false
         }
     },
     data: function data() {
@@ -50880,6 +50894,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 cn03: [],
                 rs01: []
             },
+            cachedData: [],
+            newCachedData: [],
             orderInCreation: false,
             orderData: {
                 name: '',
@@ -50909,10 +50925,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return this.orderData.statuses.is_sent ? 'Отправленный' : 'Неотправленный';
         },
         isAgreedStatus: function isAgreedStatus() {
-            return this.orderData.statuses.is_agreed ? 'Соглашенный' : 'Несоглашенный';
+            return this.orderData.statuses.is_agreed ? 'Согласованный' : 'Несогласованный';
         },
         isPaidStatus: function isPaidStatus() {
             return this.orderData.statuses.is_paid ? 'Оплаченный' : 'Неоплаченный';
+        },
+        allCacheData: function allCacheData() {
+            var cache = {};
+            [].concat(_toConsumableArray(this.cachedData), _toConsumableArray(this.newCachedData)).forEach(function (cacheData) {
+                if (cache[cacheData.column_name]) {
+                    cache[cacheData.column_name].push(cacheData.value);
+                } else {
+                    cache[cacheData.column_name] = [cacheData.value];
+                }
+            });
+            return cache;
         },
         priceForArea: function priceForArea() {
             var _this = this;
@@ -51009,6 +51036,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     },
     methods: {
+        addCache: function addCache(column, value) {
+            this.newCachedData.push({ column_name: column, value: value });
+            localStorage.setItem('newCachedData', JSON.stringify(this.newCachedData));
+        },
         saveOrderDataToLocalStorage: function saveOrderDataToLocalStorage() {
             localStorage.setItem('orderData', JSON.stringify(this.orderData));
         },
@@ -51026,13 +51057,24 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 return console.log(err);
             });
         },
-        getDollarRate: function getDollarRate() {
+        getCachedData: function getCachedData() {
             var _this6 = this;
 
-            this.axios.get('/order/dollar-rate').then(function (_ref2) {
+            this.axios.get('/cache').then(function (_ref2) {
                 var data = _ref2.data;
 
-                _this6.orderData.dollar_rate = data[0].rate;
+                _this6.cachedData = data;
+            }).catch(function (err) {
+                return console.log(err);
+            });
+        },
+        getDollarRate: function getDollarRate() {
+            var _this7 = this;
+
+            this.axios.get('/order/dollar-rate').then(function (_ref3) {
+                var data = _ref3.data;
+
+                _this7.orderData.dollar_rate = data[0].rate;
             }).catch(function (err) {
                 return console.log(err);
             });
@@ -51059,11 +51101,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             var nestedPath = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
             if (nestedPath !== false) {
-                // const equipmentList = dcopy(this.orderData.GPSData[index][path]);
-                // equipmentList[nestedPath] = val;
                 this.$set(this.orderData.GPSData[index][path], nestedPath, val);
             } else {
                 this.orderData.GPSData[index][path] = val;
+                if (typeof val === 'string' && path !== 'image' && path !== 'year_of_issue' && !this.cachedData.find(function (el) {
+                    return el.value === val;
+                })) {
+                    this.addCache(path, val);
+                }
             }
             this.saveOrderDataToLocalStorage();
             this.showSnackbar('success', 'Данные сохранены!');
@@ -51085,14 +51130,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     var index = copyList[i][j].index;
                     var column = copyList[i][j].column;
 
-                    // if (column === 'image') {
-                    //     this.$set(this.orderData.GPSData[index], column, this.orderData.GPSData[copyList[i][0].index][column]);
-                    //     if (this.orderData.GPSData[copyList[i][0].index][column] !== '') {
-                    //         setTimeout(() => {
-                    //             this.$refs.GPSData.setPreview(index);
-                    //         }, 1000);
-                    //     }
-                    // } else
                     if (!column.endsWith('price')) {
                         this.$set(this.orderData.GPSData[index], column, __WEBPACK_IMPORTED_MODULE_4_deep_copy___default()(value));
                     }
@@ -51123,7 +51160,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.showSnackbar('info', '\u0420\u044F\u0434 \u0431\u044B\u043B \u043F\u0435\u0440\u0435\u043C\u0435\u0449\u0451\u043D');
         },
         createOrder: function createOrder() {
-            var _this7 = this;
+            var _this8 = this;
 
             this.orderInCreation = true;
             var orderData = {
@@ -51150,12 +51187,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     var newRow = {};
                     Object.keys(row).forEach(function (key) {
                         var value = row[key];
-                        if (_this7.isObject(value)) {
+                        if (_this8.isObject(value)) {
                             newRow[key] = value.id;
                         } else if (Array.isArray(value)) {
                             var ids = [];
                             value.forEach(function (el) {
-                                if (_this7.isUndefined(el) || _this7.isNull(el)) return;
+                                if (_this8.isUndefined(el) || _this8.isNull(el)) return;
                                 ids.push(el.id);
                             });
                             newRow[key] = JSON.stringify(ids);
@@ -51167,23 +51204,25 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 })
             };
 
-            this.axios.post('/orders', orderData).then(function (_ref3) {
-                var data = _ref3.data;
+            this.axios.post('/orders', orderData).then(function (_ref4) {
+                var data = _ref4.data;
 
                 console.log(data);
             }).catch(function (err) {
                 return console.log(err);
             }).finally(function () {
-                return _this7.orderInCreation = false;
+                return _this8.orderInCreation = false;
             });
 
-            // console.log('orderData: ', orderData);
+            if (this.newCachedData.length > 0) this.axios.post('/cache', { cache: this.newCachedData });
         }
     },
     created: function created() {
         this.getDollarRate();
         this.getClients();
+        this.getCachedData();
         this.$store.dispatch('getPriseList');
+        this.newCachedData = JSON.parse(localStorage.getItem('newCachedData')) || [];
         // this.orderData = JSON.parse(localStorage.getItem('orderData'));
     },
 
@@ -51972,6 +52011,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -51983,6 +52035,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     props: {
         orderGPSData: {
             type: Array,
+            required: true
+        },
+        cachedData: {
+            type: Object,
             required: true
         },
         gpsTrackers: {
@@ -52090,12 +52146,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         },
         setPreview: function setPreview(index, imageName) {
             this.$emit('update:orderGPSData', imageName, index, 'image');
-            // const reader = new FileReader();
-            // const _self = this;
-            // reader.onload = function (e) {
-            //     _self.$set(_self.imagesPreviews, index, e.target.result);
-            // };
-            // reader.readAsDataURL(this.orderGPSData[index].image);
         },
         cornerFocused: function cornerFocused(event) {
             this.tableBody.addEventListener('mouseup', this.cornerBlurred, false);
@@ -54197,7 +54247,7 @@ var render = function() {
                                 ref: "mark-" + props.index + "-" + 1,
                                 attrs: {
                                   value: props.item.mark,
-                                  items: _vm.cachedDataTest,
+                                  items: _vm.cachedData.mark,
                                   label: "Вибирете марку",
                                   "single-line": ""
                                 },
@@ -54288,8 +54338,7 @@ var render = function() {
                                 ref: "model-" + props.index + "-" + 2,
                                 attrs: {
                                   value: props.item.model,
-                                  items: _vm.cachedDataTest,
-                                  "hide-selected": "",
+                                  items: _vm.cachedData.model,
                                   label: "Вибирете модель",
                                   "single-line": ""
                                 },
@@ -54304,7 +54353,31 @@ var render = function() {
                                     )
                                   }
                                 }
-                              })
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "info", small: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.switchCellMode(
+                                        props.index,
+                                        2,
+                                        false,
+                                        "model-" + props.index + "-" + 2,
+                                        $event,
+                                        false
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Закрыть редактирование\n                        "
+                                  )
+                                ]
+                              )
                             ]
                       ],
                       2
@@ -54352,7 +54425,7 @@ var render = function() {
                               )
                             ]
                           : [
-                              _c("v-combobox", {
+                              _c("v-autocomplete", {
                                 ref: "year_of_issue-" + props.index + "-" + 3,
                                 attrs: {
                                   value: props.item.year_of_issue,
@@ -54361,8 +54434,8 @@ var render = function() {
                                       return 1950 + i
                                     }
                                   ),
-                                  "hide-selected": "",
                                   label: "Вибирете год выпуска",
+                                  auto: "",
                                   "single-line": ""
                                 },
                                 on: {
@@ -54376,7 +54449,34 @@ var render = function() {
                                     )
                                   }
                                 }
-                              })
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "info", small: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.switchCellMode(
+                                        props.index,
+                                        3,
+                                        false,
+                                        "year_of_issue-" +
+                                          props.index +
+                                          "-" +
+                                          3,
+                                        $event,
+                                        false
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Закрыть редактирование\n                        "
+                                  )
+                                ]
+                              )
                             ]
                       ],
                       2
@@ -54428,8 +54528,7 @@ var render = function() {
                                 ref: "fuel_type-" + props.index + "-" + 4,
                                 attrs: {
                                   value: props.item.fuel_type,
-                                  items: _vm.cachedDataTest,
-                                  "hide-selected": "",
+                                  items: _vm.cachedData.fuel_type,
                                   label: "Вибирете Тип топлива",
                                   "single-line": ""
                                 },
@@ -54444,7 +54543,31 @@ var render = function() {
                                     )
                                   }
                                 }
-                              })
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "info", small: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.switchCellMode(
+                                        props.index,
+                                        4,
+                                        false,
+                                        "fuel_type-" + props.index + "-" + 4,
+                                        $event,
+                                        false
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Закрыть редактирование\n                        "
+                                  )
+                                ]
+                              )
                             ]
                       ],
                       2
@@ -54496,7 +54619,7 @@ var render = function() {
                                 ref: "power-" + props.index + "-" + 5,
                                 attrs: {
                                   value: props.item.power,
-                                  items: _vm.cachedDataTest,
+                                  items: _vm.cachedData.power,
                                   "hide-selected": "",
                                   label: "Вибирете мощность",
                                   "single-line": ""
@@ -54512,7 +54635,31 @@ var render = function() {
                                     )
                                   }
                                 }
-                              })
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "info", small: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.switchCellMode(
+                                        props.index,
+                                        5,
+                                        false,
+                                        "power-" + props.index + "-" + 5,
+                                        $event,
+                                        false
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Закрыть редактирование\n                        "
+                                  )
+                                ]
+                              )
                             ]
                       ],
                       2
@@ -54564,7 +54711,7 @@ var render = function() {
                                 ref: "number-" + props.index + "-" + 6,
                                 attrs: {
                                   value: props.item.number,
-                                  items: _vm.cachedDataTest,
+                                  items: _vm.cachedData.number,
                                   "hide-selected": "",
                                   label: "Вибирете гос. номер",
                                   "single-line": ""
@@ -54580,7 +54727,31 @@ var render = function() {
                                     )
                                   }
                                 }
-                              })
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "info", small: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.switchCellMode(
+                                        props.index,
+                                        6,
+                                        false,
+                                        "number-" + props.index + "-" + 6,
+                                        $event,
+                                        false
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Закрыть редактирование\n                        "
+                                  )
+                                ]
+                              )
                             ]
                       ],
                       2
@@ -56767,6 +56938,425 @@ if (false) {
 /* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/*!
+ * accounting.js v0.4.1
+ * Copyright 2014 Open Exchange Rates
+ *
+ * Freely distributable under the MIT license.
+ * Portions of accounting.js are inspired or borrowed from underscore.js
+ *
+ * Full details and documentation:
+ * http://openexchangerates.github.io/accounting.js/
+ */
+
+(function(root, undefined) {
+
+	/* --- Setup --- */
+
+	// Create the local library object, to be exported or referenced globally later
+	var lib = {};
+
+	// Current version
+	lib.version = '0.4.1';
+
+
+	/* --- Exposed settings --- */
+
+	// The library's settings configuration object. Contains default parameters for
+	// currency and number formatting
+	lib.settings = {
+		currency: {
+			symbol : "$",		// default currency symbol is '$'
+			format : "%s%v",	// controls output: %s = symbol, %v = value (can be object, see docs)
+			decimal : ".",		// decimal point separator
+			thousand : ",",		// thousands separator
+			precision : 2,		// decimal places
+			grouping : 3		// digit grouping (not implemented yet)
+		},
+		number: {
+			precision : 0,		// default precision on numbers is 0
+			grouping : 3,		// digit grouping (not implemented yet)
+			thousand : ",",
+			decimal : "."
+		}
+	};
+
+
+	/* --- Internal Helper Methods --- */
+
+	// Store reference to possibly-available ECMAScript 5 methods for later
+	var nativeMap = Array.prototype.map,
+		nativeIsArray = Array.isArray,
+		toString = Object.prototype.toString;
+
+	/**
+	 * Tests whether supplied parameter is a string
+	 * from underscore.js
+	 */
+	function isString(obj) {
+		return !!(obj === '' || (obj && obj.charCodeAt && obj.substr));
+	}
+
+	/**
+	 * Tests whether supplied parameter is a string
+	 * from underscore.js, delegates to ECMA5's native Array.isArray
+	 */
+	function isArray(obj) {
+		return nativeIsArray ? nativeIsArray(obj) : toString.call(obj) === '[object Array]';
+	}
+
+	/**
+	 * Tests whether supplied parameter is a true object
+	 */
+	function isObject(obj) {
+		return obj && toString.call(obj) === '[object Object]';
+	}
+
+	/**
+	 * Extends an object with a defaults object, similar to underscore's _.defaults
+	 *
+	 * Used for abstracting parameter handling from API methods
+	 */
+	function defaults(object, defs) {
+		var key;
+		object = object || {};
+		defs = defs || {};
+		// Iterate over object non-prototype properties:
+		for (key in defs) {
+			if (defs.hasOwnProperty(key)) {
+				// Replace values with defaults only if undefined (allow empty/zero values):
+				if (object[key] == null) object[key] = defs[key];
+			}
+		}
+		return object;
+	}
+
+	/**
+	 * Implementation of `Array.map()` for iteration loops
+	 *
+	 * Returns a new Array as a result of calling `iterator` on each array value.
+	 * Defers to native Array.map if available
+	 */
+	function map(obj, iterator, context) {
+		var results = [], i, j;
+
+		if (!obj) return results;
+
+		// Use native .map method if it exists:
+		if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
+
+		// Fallback for native .map:
+		for (i = 0, j = obj.length; i < j; i++ ) {
+			results[i] = iterator.call(context, obj[i], i, obj);
+		}
+		return results;
+	}
+
+	/**
+	 * Check and normalise the value of precision (must be positive integer)
+	 */
+	function checkPrecision(val, base) {
+		val = Math.round(Math.abs(val));
+		return isNaN(val)? base : val;
+	}
+
+
+	/**
+	 * Parses a format string or object and returns format obj for use in rendering
+	 *
+	 * `format` is either a string with the default (positive) format, or object
+	 * containing `pos` (required), `neg` and `zero` values (or a function returning
+	 * either a string or object)
+	 *
+	 * Either string or format.pos must contain "%v" (value) to be valid
+	 */
+	function checkCurrencyFormat(format) {
+		var defaults = lib.settings.currency.format;
+
+		// Allow function as format parameter (should return string or object):
+		if ( typeof format === "function" ) format = format();
+
+		// Format can be a string, in which case `value` ("%v") must be present:
+		if ( isString( format ) && format.match("%v") ) {
+
+			// Create and return positive, negative and zero formats:
+			return {
+				pos : format,
+				neg : format.replace("-", "").replace("%v", "-%v"),
+				zero : format
+			};
+
+		// If no format, or object is missing valid positive value, use defaults:
+		} else if ( !format || !format.pos || !format.pos.match("%v") ) {
+
+			// If defaults is a string, casts it to an object for faster checking next time:
+			return ( !isString( defaults ) ) ? defaults : lib.settings.currency.format = {
+				pos : defaults,
+				neg : defaults.replace("%v", "-%v"),
+				zero : defaults
+			};
+
+		}
+		// Otherwise, assume format was fine:
+		return format;
+	}
+
+
+	/* --- API Methods --- */
+
+	/**
+	 * Takes a string/array of strings, removes all formatting/cruft and returns the raw float value
+	 * Alias: `accounting.parse(string)`
+	 *
+	 * Decimal must be included in the regular expression to match floats (defaults to
+	 * accounting.settings.number.decimal), so if the number uses a non-standard decimal 
+	 * separator, provide it as the second argument.
+	 *
+	 * Also matches bracketed negatives (eg. "$ (1.99)" => -1.99)
+	 *
+	 * Doesn't throw any errors (`NaN`s become 0) but this may change in future
+	 */
+	var unformat = lib.unformat = lib.parse = function(value, decimal) {
+		// Recursively unformat arrays:
+		if (isArray(value)) {
+			return map(value, function(val) {
+				return unformat(val, decimal);
+			});
+		}
+
+		// Fails silently (need decent errors):
+		value = value || 0;
+
+		// Return the value as-is if it's already a number:
+		if (typeof value === "number") return value;
+
+		// Default decimal point comes from settings, but could be set to eg. "," in opts:
+		decimal = decimal || lib.settings.number.decimal;
+
+		 // Build regex to strip out everything except digits, decimal point and minus sign:
+		var regex = new RegExp("[^0-9-" + decimal + "]", ["g"]),
+			unformatted = parseFloat(
+				("" + value)
+				.replace(/\((.*)\)/, "-$1") // replace bracketed values with negatives
+				.replace(regex, '')         // strip out any cruft
+				.replace(decimal, '.')      // make sure decimal point is standard
+			);
+
+		// This will fail silently which may cause trouble, let's wait and see:
+		return !isNaN(unformatted) ? unformatted : 0;
+	};
+
+
+	/**
+	 * Implementation of toFixed() that treats floats more like decimals
+	 *
+	 * Fixes binary rounding issues (eg. (0.615).toFixed(2) === "0.61") that present
+	 * problems for accounting- and finance-related software.
+	 */
+	var toFixed = lib.toFixed = function(value, precision) {
+		precision = checkPrecision(precision, lib.settings.number.precision);
+		var power = Math.pow(10, precision);
+
+		// Multiply up by precision, round accurately, then divide and use native toFixed():
+		return (Math.round(lib.unformat(value) * power) / power).toFixed(precision);
+	};
+
+
+	/**
+	 * Format a number, with comma-separated thousands and custom precision/decimal places
+	 * Alias: `accounting.format()`
+	 *
+	 * Localise by overriding the precision and thousand / decimal separators
+	 * 2nd parameter `precision` can be an object matching `settings.number`
+	 */
+	var formatNumber = lib.formatNumber = lib.format = function(number, precision, thousand, decimal) {
+		// Resursively format arrays:
+		if (isArray(number)) {
+			return map(number, function(val) {
+				return formatNumber(val, precision, thousand, decimal);
+			});
+		}
+
+		// Clean up number:
+		number = unformat(number);
+
+		// Build options object from second param (if object) or all params, extending defaults:
+		var opts = defaults(
+				(isObject(precision) ? precision : {
+					precision : precision,
+					thousand : thousand,
+					decimal : decimal
+				}),
+				lib.settings.number
+			),
+
+			// Clean up precision
+			usePrecision = checkPrecision(opts.precision),
+
+			// Do some calc:
+			negative = number < 0 ? "-" : "",
+			base = parseInt(toFixed(Math.abs(number || 0), usePrecision), 10) + "",
+			mod = base.length > 3 ? base.length % 3 : 0;
+
+		// Format the number:
+		return negative + (mod ? base.substr(0, mod) + opts.thousand : "") + base.substr(mod).replace(/(\d{3})(?=\d)/g, "$1" + opts.thousand) + (usePrecision ? opts.decimal + toFixed(Math.abs(number), usePrecision).split('.')[1] : "");
+	};
+
+
+	/**
+	 * Format a number into currency
+	 *
+	 * Usage: accounting.formatMoney(number, symbol, precision, thousandsSep, decimalSep, format)
+	 * defaults: (0, "$", 2, ",", ".", "%s%v")
+	 *
+	 * Localise by overriding the symbol, precision, thousand / decimal separators and format
+	 * Second param can be an object matching `settings.currency` which is the easiest way.
+	 *
+	 * To do: tidy up the parameters
+	 */
+	var formatMoney = lib.formatMoney = function(number, symbol, precision, thousand, decimal, format) {
+		// Resursively format arrays:
+		if (isArray(number)) {
+			return map(number, function(val){
+				return formatMoney(val, symbol, precision, thousand, decimal, format);
+			});
+		}
+
+		// Clean up number:
+		number = unformat(number);
+
+		// Build options object from second param (if object) or all params, extending defaults:
+		var opts = defaults(
+				(isObject(symbol) ? symbol : {
+					symbol : symbol,
+					precision : precision,
+					thousand : thousand,
+					decimal : decimal,
+					format : format
+				}),
+				lib.settings.currency
+			),
+
+			// Check format (returns object with pos, neg and zero):
+			formats = checkCurrencyFormat(opts.format),
+
+			// Choose which format to use for this value:
+			useFormat = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero;
+
+		// Return with currency symbol added:
+		return useFormat.replace('%s', opts.symbol).replace('%v', formatNumber(Math.abs(number), checkPrecision(opts.precision), opts.thousand, opts.decimal));
+	};
+
+
+	/**
+	 * Format a list of numbers into an accounting column, padding with whitespace
+	 * to line up currency symbols, thousand separators and decimals places
+	 *
+	 * List should be an array of numbers
+	 * Second parameter can be an object containing keys that match the params
+	 *
+	 * Returns array of accouting-formatted number strings of same length
+	 *
+	 * NB: `white-space:pre` CSS rule is required on the list container to prevent
+	 * browsers from collapsing the whitespace in the output strings.
+	 */
+	lib.formatColumn = function(list, symbol, precision, thousand, decimal, format) {
+		if (!list) return [];
+
+		// Build options object from second param (if object) or all params, extending defaults:
+		var opts = defaults(
+				(isObject(symbol) ? symbol : {
+					symbol : symbol,
+					precision : precision,
+					thousand : thousand,
+					decimal : decimal,
+					format : format
+				}),
+				lib.settings.currency
+			),
+
+			// Check format (returns object with pos, neg and zero), only need pos for now:
+			formats = checkCurrencyFormat(opts.format),
+
+			// Whether to pad at start of string or after currency symbol:
+			padAfterSymbol = formats.pos.indexOf("%s") < formats.pos.indexOf("%v") ? true : false,
+
+			// Store value for the length of the longest string in the column:
+			maxLength = 0,
+
+			// Format the list according to options, store the length of the longest string:
+			formatted = map(list, function(val, i) {
+				if (isArray(val)) {
+					// Recursively format columns if list is a multi-dimensional array:
+					return lib.formatColumn(val, opts);
+				} else {
+					// Clean up the value
+					val = unformat(val);
+
+					// Choose which format to use for this value (pos, neg or zero):
+					var useFormat = val > 0 ? formats.pos : val < 0 ? formats.neg : formats.zero,
+
+						// Format this value, push into formatted list and save the length:
+						fVal = useFormat.replace('%s', opts.symbol).replace('%v', formatNumber(Math.abs(val), checkPrecision(opts.precision), opts.thousand, opts.decimal));
+
+					if (fVal.length > maxLength) maxLength = fVal.length;
+					return fVal;
+				}
+			});
+
+		// Pad each number in the list and send back the column of numbers:
+		return map(formatted, function(val, i) {
+			// Only if this is a string (not a nested array, which would have already been padded):
+			if (isString(val) && val.length < maxLength) {
+				// Depending on symbol position, pad after symbol or at index 0:
+				return padAfterSymbol ? val.replace(opts.symbol, opts.symbol+(new Array(maxLength - val.length + 1).join(" "))) : (new Array(maxLength - val.length + 1).join(" ")) + val;
+			}
+			return val;
+		});
+	};
+
+
+	/* --- Module Definition --- */
+
+	// Export accounting for CommonJS. If being loaded as an AMD module, define it as such.
+	// Otherwise, just add `accounting` to the global object
+	if (true) {
+		if (typeof module !== 'undefined' && module.exports) {
+			exports = module.exports = lib;
+		}
+		exports.accounting = lib;
+	} else if (typeof define === 'function' && define.amd) {
+		// Return the library as an AMD module:
+		define([], function() {
+			return lib;
+		});
+	} else {
+		// Use accounting.noConflict to restore `accounting` back to its original value.
+		// Returns a reference to the library's `accounting` object;
+		// e.g. `var numbers = accounting.noConflict();`
+		lib.noConflict = (function(oldAccounting) {
+			return function() {
+				// Reset the value of the root's `accounting` variable:
+				root.accounting = oldAccounting;
+				// Delete the noConflict method:
+				lib.noConflict = undefined;
+				// Return reference to the library to re-assign it:
+				return lib;
+			};
+		})(root.accounting);
+
+		// Declare `fx` on the root (global/window) object:
+		root['accounting'] = lib;
+	}
+
+	// Root will be `window` in browser or `global` on the server:
+}(this));
+
+
+/***/ }),
+/* 277 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -57201,7 +57791,8 @@ var render = function() {
                   optionalEquipment: _vm.optionalEquipment,
                   pricesForEquipment: _vm.pricesForEquipment,
                   allEquipmentPrice: _vm.allEquipmentPrice,
-                  allInstallationPrice: _vm.allInstallationPrice
+                  allInstallationPrice: _vm.allInstallationPrice,
+                  cachedData: _vm.allCacheData
                 },
                 on: {
                   "update:orderGPSData": _vm.updateOrderGPSData,
@@ -57585,7 +58176,7 @@ if (false) {
 }
 
 /***/ }),
-/* 277 */
+/* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -57624,7 +58215,423 @@ if (false) {
 }
 
 /***/ }),
-/* 278 */
+/* 279 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(299)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(280)
+/* template */
+var __vue_template__ = __webpack_require__(301)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-a6bd4bde"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\containers\\orders\\Orders.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-a6bd4bde", Component.options)
+  } else {
+    hotAPI.reload("data-v-a6bd4bde", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 280 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_order_deleteOrder_DeleteOrder__ = __webpack_require__(281);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_order_deleteOrder_DeleteOrder___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_order_deleteOrder_DeleteOrder__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            deleteDialog: false,
+            search: '',
+            totalOrders: 0,
+            orders: [],
+            loading: true,
+            pagination: {
+                rowsPerPage: 10
+            },
+            headers: [{
+                text: 'Название',
+                align: 'left',
+                value: 'name'
+            }, { text: 'Клиент', value: 'client.person_full_name' }, { text: 'Компания', value: 'client.company_name' }, { text: 'Площадь', value: 'area', width: '15px' }, { text: 'Статус отправки', value: 'is_sent' }, { text: 'Статус согласования', value: 'is_agreed' }, { text: 'Статус оплаты', value: 'is_paid' }, { text: 'Дата создания', value: 'created_at' }, { text: 'Удаление', value: '', align: 'right', sortable: false }],
+            deletingOrder: {}
+        };
+    },
+
+    watch: {
+        pagination: {
+            handler: 'getOrders',
+            deep: true
+        }
+    },
+    methods: {
+        getOrders: function getOrders() {
+            var _this = this;
+
+            this.loading = true;
+            var _pagination = this.pagination,
+                sortBy = _pagination.sortBy,
+                descending = _pagination.descending,
+                page = _pagination.page,
+                rowsPerPage = _pagination.rowsPerPage;
+
+            var params = {};
+            params.page = page;
+            params.per_page = rowsPerPage;
+            if (this.search !== '') {
+                params.query = this.search;
+            }
+            if (sortBy) {
+                var direction = descending ? 'desc' : 'asc';
+                params.direction = direction;
+                params.sortBy = sortBy;
+            }
+
+            this.axios.get('/orders', { params: params }).then(function (_ref) {
+                var data = _ref.data;
+
+                _this.totalOrders = data.total;
+                _this.orders = data.data;
+            }).catch(function (err) {
+                console.log(err);
+            }).finally(function () {
+                _this.loading = false;
+            });
+        },
+        checkSearch: function checkSearch(value) {
+            var _this2 = this;
+
+            this.search = value;
+            setTimeout(function () {
+                if (_this2.search === value) {
+                    _this2.getOrders();
+                }
+            }, 1500);
+        },
+        setDeleteOrder: function setDeleteOrder(order) {
+            this.deletingOrder = order;
+            this.openDilaog();
+        },
+        deleteOrder: function deleteOrder(id) {
+            this.orders = this.orders.filter(function (order) {
+                return order.id !== id;
+            });
+        },
+        openDilaog: function openDilaog() {
+            this.deleteDialog = true;
+        },
+        closeDialog: function closeDialog() {
+            this.deleteDialog = false;
+        }
+    },
+    components: {
+        appDeleteOrder: __WEBPACK_IMPORTED_MODULE_0__components_order_deleteOrder_DeleteOrder___default.a
+    }
+});
+
+/***/ }),
+/* 281 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(282)
+/* template */
+var __vue_template__ = __webpack_require__(283)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\order\\deleteOrder\\DeleteOrder.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7e50ac16", Component.options)
+  } else {
+    hotAPI.reload("data-v-7e50ac16", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 282 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        dialog: {
+            type: Boolean,
+            required: true
+        },
+        deletingOrder: {
+            type: Object,
+            required: true
+        }
+    },
+    data: function data() {
+        return {
+            pending: false
+        };
+    },
+
+    methods: {
+        deleteOrder: function deleteOrder() {
+            var _this = this;
+
+            this.pending = true;
+            this.axios.delete('/orders/' + this.deletingOrder.id).then(function (data) {
+                _this.$emit('delete:order', _this.deletingOrder.id);
+                _this.$emit('deleteDialogClosed');
+            }).catch(function (err) {
+                console.log(err);
+            }).finally(function () {
+                _this.pending = false;
+            });
+        },
+        closeDialog: function closeDialog() {
+            this.$emit('deleteDialogClosed');
+        }
+    }
+});
+
+/***/ }),
+/* 283 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: { persistent: "", "max-width": "300px" },
+      model: {
+        value: _vm.dialog,
+        callback: function($$v) {
+          _vm.dialog = $$v
+        },
+        expression: "dialog"
+      }
+    },
+    [
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-card-title",
+            {
+              staticClass: "headline error white--text",
+              attrs: { "primary-title": "" }
+            },
+            [
+              _vm._v(
+                "\n            Удалить заказ: " +
+                  _vm._s(_vm.deletingOrder.name) +
+                  "?\n        "
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c(
+                "v-btn",
+                {
+                  attrs: {
+                    loading: _vm.pending,
+                    disabled: _vm.pending,
+                    color: "error",
+                    flat: "",
+                    block: ""
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      return _vm.closeDialog($event)
+                    }
+                  }
+                },
+                [_vm._v("Нет")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: {
+                    loading: _vm.pending,
+                    disabled: _vm.pending,
+                    color: "success",
+                    flat: "",
+                    block: ""
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      return _vm.deleteOrder($event)
+                    }
+                  }
+                },
+                [_vm._v("Да")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7e50ac16", module.exports)
+  }
+}
+
+/***/ }),
+/* 284 */,
+/* 285 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -57690,7 +58697,7 @@ module.exports = {
 
 
 /***/ }),
-/* 279 */
+/* 286 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -57758,19 +58765,19 @@ module.exports = {
 };
 
 /***/ }),
-/* 280 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(281)
+  __webpack_require__(288)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(283)
+var __vue_script__ = __webpack_require__(290)
 /* template */
-var __vue_template__ = __webpack_require__(289)
+var __vue_template__ = __webpack_require__(296)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -57809,13 +58816,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 281 */
+/* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(282);
+var content = __webpack_require__(289);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -57835,7 +58842,7 @@ if(false) {
 }
 
 /***/ }),
-/* 282 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(3)(false);
@@ -57843,19 +58850,27 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.bg-primary {\n    width: 100%;\n    height: 100vh;\n    background: rgb(8,54,94);\n    background: linear-gradient(40deg, rgba(8,54,94,1) 0%, rgba(32,100,151,1) 100%);\n    background-size: cover;\n}\n\n", ""]);
+exports.push([module.i, "\n.bg-primary {\n    width: 100%;\n    height: 100vh;\n    background: rgb(8,54,94);\n    background: linear-gradient(40deg, rgba(8,54,94,1) 0%, rgba(32,100,151,1) 100%);\n    background-size: cover;\n}\n.animated {\n    -webkit-animation-duration: 0.3s;\n            animation-duration: 0.3s;\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both;\n}\n@-webkit-keyframes fadeInDown {\nfrom {\n        opacity: 0;\n        -webkit-transform: translate3d(0, -10%, 0);\n                transform: translate3d(0, -10%, 0);\n}\nto {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\n}\n@keyframes fadeInDown {\nfrom {\n        opacity: 0;\n        -webkit-transform: translate3d(0, -10%, 0);\n                transform: translate3d(0, -10%, 0);\n}\nto {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\n}\n.fadeInDown {\n    -webkit-animation-name: fadeInDown;\n            animation-name: fadeInDown;\n}\n@-webkit-keyframes fadeOutDown {\nfrom {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\nto {\n        opacity: 0;\n        -webkit-transform: translate3d(0, 10%, 0);\n                transform: translate3d(0, 10%, 0);\n}\n}\n@keyframes fadeOutDown {\nfrom {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\nto {\n        opacity: 0;\n        -webkit-transform: translate3d(0, 10%, 0);\n                transform: translate3d(0, 10%, 0);\n}\n}\n.fadeOutDown {\n    -webkit-animation-name: fadeOutDown;\n            animation-name: fadeOutDown;\n}\n@media (prefers-reduced-motion) {\n.animated {\n        -webkit-animation: unset !important;\n                animation: unset !important;\n        -webkit-transition: none !important;\n        transition: none !important;\n}\n}\n\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 283 */
+/* 290 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation__ = __webpack_require__(284);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation__ = __webpack_require__(291);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -57900,19 +58915,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 284 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(285)
+  __webpack_require__(292)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(287)
+var __vue_script__ = __webpack_require__(294)
 /* template */
-var __vue_template__ = __webpack_require__(288)
+var __vue_template__ = __webpack_require__(295)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -57951,13 +58966,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 285 */
+/* 292 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(286);
+var content = __webpack_require__(293);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -57977,7 +58992,7 @@ if(false) {
 }
 
 /***/ }),
-/* 286 */
+/* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(3)(false);
@@ -57991,7 +59006,7 @@ exports.push([module.i, "\n.menu-active {\n    color: #000 !important;\n    back
 
 
 /***/ }),
-/* 287 */
+/* 294 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58065,7 +59080,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         initMenuItems: function initMenuItems() {
-            this.menuItems = [{ title: 'Профиль', icon: 'mdi-account-box-outline', link: '/profile' }, { title: 'Заказы', icon: 'event', link: '/test' }, { title: 'Зоздать заказ', icon: 'border_color', link: '/create-order' }, { title: 'Сотрудники', icon: 'account_circle', link: '/users' }, { title: 'Клиенты', icon: 'work', link: '/clients' }, { title: 'Прайслист', icon: 'assignment', link: '/price-list' }];
+            this.menuItems = [{ title: 'Профиль', icon: 'mdi-account-box-outline', link: '/profile' }, { title: 'Заказы', icon: 'event', link: '/orders' }, { title: 'Зоздать заказ', icon: 'border_color', link: '/create-order' }, { title: 'Сотрудники', icon: 'account_circle', link: '/users' }, { title: 'Клиенты', icon: 'work', link: '/clients' }, { title: 'Прайслист', icon: 'assignment', link: '/price-list' }];
         },
         logOut: function logOut() {
             this.$auth.logout();
@@ -58077,7 +59092,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 288 */
+/* 295 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -58285,7 +59300,7 @@ if (false) {
 }
 
 /***/ }),
-/* 289 */
+/* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -58300,7 +59315,23 @@ var render = function() {
             ? [
                 _c(
                   "appNavigation",
-                  [_c("router-view", { key: _vm.$route.fullPath })],
+                  [
+                    _c(
+                      "transition",
+                      {
+                        attrs: {
+                          appear: "",
+                          "enter-class": "",
+                          "enter-active-class": "animated fadeInDown",
+                          "leave-class": "",
+                          "leave-active-class": "animated fadeOutDown",
+                          mode: "out-in"
+                        }
+                      },
+                      [_c("router-view", { key: _vm.$route.fullPath })],
+                      1
+                    )
+                  ],
                   1
                 )
               ]
@@ -58321,430 +59352,268 @@ if (false) {
 }
 
 /***/ }),
-/* 290 */
+/* 297 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 291 */,
-/* 292 */
+/* 298 */,
+/* 299 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/*!
- * accounting.js v0.4.1
- * Copyright 2014 Open Exchange Rates
- *
- * Freely distributable under the MIT license.
- * Portions of accounting.js are inspired or borrowed from underscore.js
- *
- * Full details and documentation:
- * http://openexchangerates.github.io/accounting.js/
- */
-
-(function(root, undefined) {
-
-	/* --- Setup --- */
-
-	// Create the local library object, to be exported or referenced globally later
-	var lib = {};
-
-	// Current version
-	lib.version = '0.4.1';
-
-
-	/* --- Exposed settings --- */
-
-	// The library's settings configuration object. Contains default parameters for
-	// currency and number formatting
-	lib.settings = {
-		currency: {
-			symbol : "$",		// default currency symbol is '$'
-			format : "%s%v",	// controls output: %s = symbol, %v = value (can be object, see docs)
-			decimal : ".",		// decimal point separator
-			thousand : ",",		// thousands separator
-			precision : 2,		// decimal places
-			grouping : 3		// digit grouping (not implemented yet)
-		},
-		number: {
-			precision : 0,		// default precision on numbers is 0
-			grouping : 3,		// digit grouping (not implemented yet)
-			thousand : ",",
-			decimal : "."
-		}
-	};
-
-
-	/* --- Internal Helper Methods --- */
-
-	// Store reference to possibly-available ECMAScript 5 methods for later
-	var nativeMap = Array.prototype.map,
-		nativeIsArray = Array.isArray,
-		toString = Object.prototype.toString;
-
-	/**
-	 * Tests whether supplied parameter is a string
-	 * from underscore.js
-	 */
-	function isString(obj) {
-		return !!(obj === '' || (obj && obj.charCodeAt && obj.substr));
-	}
-
-	/**
-	 * Tests whether supplied parameter is a string
-	 * from underscore.js, delegates to ECMA5's native Array.isArray
-	 */
-	function isArray(obj) {
-		return nativeIsArray ? nativeIsArray(obj) : toString.call(obj) === '[object Array]';
-	}
-
-	/**
-	 * Tests whether supplied parameter is a true object
-	 */
-	function isObject(obj) {
-		return obj && toString.call(obj) === '[object Object]';
-	}
-
-	/**
-	 * Extends an object with a defaults object, similar to underscore's _.defaults
-	 *
-	 * Used for abstracting parameter handling from API methods
-	 */
-	function defaults(object, defs) {
-		var key;
-		object = object || {};
-		defs = defs || {};
-		// Iterate over object non-prototype properties:
-		for (key in defs) {
-			if (defs.hasOwnProperty(key)) {
-				// Replace values with defaults only if undefined (allow empty/zero values):
-				if (object[key] == null) object[key] = defs[key];
-			}
-		}
-		return object;
-	}
-
-	/**
-	 * Implementation of `Array.map()` for iteration loops
-	 *
-	 * Returns a new Array as a result of calling `iterator` on each array value.
-	 * Defers to native Array.map if available
-	 */
-	function map(obj, iterator, context) {
-		var results = [], i, j;
-
-		if (!obj) return results;
-
-		// Use native .map method if it exists:
-		if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
-
-		// Fallback for native .map:
-		for (i = 0, j = obj.length; i < j; i++ ) {
-			results[i] = iterator.call(context, obj[i], i, obj);
-		}
-		return results;
-	}
-
-	/**
-	 * Check and normalise the value of precision (must be positive integer)
-	 */
-	function checkPrecision(val, base) {
-		val = Math.round(Math.abs(val));
-		return isNaN(val)? base : val;
-	}
-
-
-	/**
-	 * Parses a format string or object and returns format obj for use in rendering
-	 *
-	 * `format` is either a string with the default (positive) format, or object
-	 * containing `pos` (required), `neg` and `zero` values (or a function returning
-	 * either a string or object)
-	 *
-	 * Either string or format.pos must contain "%v" (value) to be valid
-	 */
-	function checkCurrencyFormat(format) {
-		var defaults = lib.settings.currency.format;
-
-		// Allow function as format parameter (should return string or object):
-		if ( typeof format === "function" ) format = format();
-
-		// Format can be a string, in which case `value` ("%v") must be present:
-		if ( isString( format ) && format.match("%v") ) {
-
-			// Create and return positive, negative and zero formats:
-			return {
-				pos : format,
-				neg : format.replace("-", "").replace("%v", "-%v"),
-				zero : format
-			};
-
-		// If no format, or object is missing valid positive value, use defaults:
-		} else if ( !format || !format.pos || !format.pos.match("%v") ) {
-
-			// If defaults is a string, casts it to an object for faster checking next time:
-			return ( !isString( defaults ) ) ? defaults : lib.settings.currency.format = {
-				pos : defaults,
-				neg : defaults.replace("%v", "-%v"),
-				zero : defaults
-			};
-
-		}
-		// Otherwise, assume format was fine:
-		return format;
-	}
-
-
-	/* --- API Methods --- */
-
-	/**
-	 * Takes a string/array of strings, removes all formatting/cruft and returns the raw float value
-	 * Alias: `accounting.parse(string)`
-	 *
-	 * Decimal must be included in the regular expression to match floats (defaults to
-	 * accounting.settings.number.decimal), so if the number uses a non-standard decimal 
-	 * separator, provide it as the second argument.
-	 *
-	 * Also matches bracketed negatives (eg. "$ (1.99)" => -1.99)
-	 *
-	 * Doesn't throw any errors (`NaN`s become 0) but this may change in future
-	 */
-	var unformat = lib.unformat = lib.parse = function(value, decimal) {
-		// Recursively unformat arrays:
-		if (isArray(value)) {
-			return map(value, function(val) {
-				return unformat(val, decimal);
-			});
-		}
-
-		// Fails silently (need decent errors):
-		value = value || 0;
-
-		// Return the value as-is if it's already a number:
-		if (typeof value === "number") return value;
-
-		// Default decimal point comes from settings, but could be set to eg. "," in opts:
-		decimal = decimal || lib.settings.number.decimal;
-
-		 // Build regex to strip out everything except digits, decimal point and minus sign:
-		var regex = new RegExp("[^0-9-" + decimal + "]", ["g"]),
-			unformatted = parseFloat(
-				("" + value)
-				.replace(/\((.*)\)/, "-$1") // replace bracketed values with negatives
-				.replace(regex, '')         // strip out any cruft
-				.replace(decimal, '.')      // make sure decimal point is standard
-			);
-
-		// This will fail silently which may cause trouble, let's wait and see:
-		return !isNaN(unformatted) ? unformatted : 0;
-	};
-
-
-	/**
-	 * Implementation of toFixed() that treats floats more like decimals
-	 *
-	 * Fixes binary rounding issues (eg. (0.615).toFixed(2) === "0.61") that present
-	 * problems for accounting- and finance-related software.
-	 */
-	var toFixed = lib.toFixed = function(value, precision) {
-		precision = checkPrecision(precision, lib.settings.number.precision);
-		var power = Math.pow(10, precision);
-
-		// Multiply up by precision, round accurately, then divide and use native toFixed():
-		return (Math.round(lib.unformat(value) * power) / power).toFixed(precision);
-	};
-
-
-	/**
-	 * Format a number, with comma-separated thousands and custom precision/decimal places
-	 * Alias: `accounting.format()`
-	 *
-	 * Localise by overriding the precision and thousand / decimal separators
-	 * 2nd parameter `precision` can be an object matching `settings.number`
-	 */
-	var formatNumber = lib.formatNumber = lib.format = function(number, precision, thousand, decimal) {
-		// Resursively format arrays:
-		if (isArray(number)) {
-			return map(number, function(val) {
-				return formatNumber(val, precision, thousand, decimal);
-			});
-		}
-
-		// Clean up number:
-		number = unformat(number);
-
-		// Build options object from second param (if object) or all params, extending defaults:
-		var opts = defaults(
-				(isObject(precision) ? precision : {
-					precision : precision,
-					thousand : thousand,
-					decimal : decimal
-				}),
-				lib.settings.number
-			),
-
-			// Clean up precision
-			usePrecision = checkPrecision(opts.precision),
-
-			// Do some calc:
-			negative = number < 0 ? "-" : "",
-			base = parseInt(toFixed(Math.abs(number || 0), usePrecision), 10) + "",
-			mod = base.length > 3 ? base.length % 3 : 0;
-
-		// Format the number:
-		return negative + (mod ? base.substr(0, mod) + opts.thousand : "") + base.substr(mod).replace(/(\d{3})(?=\d)/g, "$1" + opts.thousand) + (usePrecision ? opts.decimal + toFixed(Math.abs(number), usePrecision).split('.')[1] : "");
-	};
-
-
-	/**
-	 * Format a number into currency
-	 *
-	 * Usage: accounting.formatMoney(number, symbol, precision, thousandsSep, decimalSep, format)
-	 * defaults: (0, "$", 2, ",", ".", "%s%v")
-	 *
-	 * Localise by overriding the symbol, precision, thousand / decimal separators and format
-	 * Second param can be an object matching `settings.currency` which is the easiest way.
-	 *
-	 * To do: tidy up the parameters
-	 */
-	var formatMoney = lib.formatMoney = function(number, symbol, precision, thousand, decimal, format) {
-		// Resursively format arrays:
-		if (isArray(number)) {
-			return map(number, function(val){
-				return formatMoney(val, symbol, precision, thousand, decimal, format);
-			});
-		}
-
-		// Clean up number:
-		number = unformat(number);
-
-		// Build options object from second param (if object) or all params, extending defaults:
-		var opts = defaults(
-				(isObject(symbol) ? symbol : {
-					symbol : symbol,
-					precision : precision,
-					thousand : thousand,
-					decimal : decimal,
-					format : format
-				}),
-				lib.settings.currency
-			),
-
-			// Check format (returns object with pos, neg and zero):
-			formats = checkCurrencyFormat(opts.format),
-
-			// Choose which format to use for this value:
-			useFormat = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero;
-
-		// Return with currency symbol added:
-		return useFormat.replace('%s', opts.symbol).replace('%v', formatNumber(Math.abs(number), checkPrecision(opts.precision), opts.thousand, opts.decimal));
-	};
-
-
-	/**
-	 * Format a list of numbers into an accounting column, padding with whitespace
-	 * to line up currency symbols, thousand separators and decimals places
-	 *
-	 * List should be an array of numbers
-	 * Second parameter can be an object containing keys that match the params
-	 *
-	 * Returns array of accouting-formatted number strings of same length
-	 *
-	 * NB: `white-space:pre` CSS rule is required on the list container to prevent
-	 * browsers from collapsing the whitespace in the output strings.
-	 */
-	lib.formatColumn = function(list, symbol, precision, thousand, decimal, format) {
-		if (!list) return [];
-
-		// Build options object from second param (if object) or all params, extending defaults:
-		var opts = defaults(
-				(isObject(symbol) ? symbol : {
-					symbol : symbol,
-					precision : precision,
-					thousand : thousand,
-					decimal : decimal,
-					format : format
-				}),
-				lib.settings.currency
-			),
-
-			// Check format (returns object with pos, neg and zero), only need pos for now:
-			formats = checkCurrencyFormat(opts.format),
-
-			// Whether to pad at start of string or after currency symbol:
-			padAfterSymbol = formats.pos.indexOf("%s") < formats.pos.indexOf("%v") ? true : false,
-
-			// Store value for the length of the longest string in the column:
-			maxLength = 0,
-
-			// Format the list according to options, store the length of the longest string:
-			formatted = map(list, function(val, i) {
-				if (isArray(val)) {
-					// Recursively format columns if list is a multi-dimensional array:
-					return lib.formatColumn(val, opts);
-				} else {
-					// Clean up the value
-					val = unformat(val);
-
-					// Choose which format to use for this value (pos, neg or zero):
-					var useFormat = val > 0 ? formats.pos : val < 0 ? formats.neg : formats.zero,
-
-						// Format this value, push into formatted list and save the length:
-						fVal = useFormat.replace('%s', opts.symbol).replace('%v', formatNumber(Math.abs(val), checkPrecision(opts.precision), opts.thousand, opts.decimal));
-
-					if (fVal.length > maxLength) maxLength = fVal.length;
-					return fVal;
-				}
-			});
-
-		// Pad each number in the list and send back the column of numbers:
-		return map(formatted, function(val, i) {
-			// Only if this is a string (not a nested array, which would have already been padded):
-			if (isString(val) && val.length < maxLength) {
-				// Depending on symbol position, pad after symbol or at index 0:
-				return padAfterSymbol ? val.replace(opts.symbol, opts.symbol+(new Array(maxLength - val.length + 1).join(" "))) : (new Array(maxLength - val.length + 1).join(" ")) + val;
-			}
-			return val;
-		});
-	};
-
-
-	/* --- Module Definition --- */
-
-	// Export accounting for CommonJS. If being loaded as an AMD module, define it as such.
-	// Otherwise, just add `accounting` to the global object
-	if (true) {
-		if (typeof module !== 'undefined' && module.exports) {
-			exports = module.exports = lib;
-		}
-		exports.accounting = lib;
-	} else if (typeof define === 'function' && define.amd) {
-		// Return the library as an AMD module:
-		define([], function() {
-			return lib;
-		});
-	} else {
-		// Use accounting.noConflict to restore `accounting` back to its original value.
-		// Returns a reference to the library's `accounting` object;
-		// e.g. `var numbers = accounting.noConflict();`
-		lib.noConflict = (function(oldAccounting) {
-			return function() {
-				// Reset the value of the root's `accounting` variable:
-				root.accounting = oldAccounting;
-				// Delete the noConflict method:
-				lib.noConflict = undefined;
-				// Return reference to the library to re-assign it:
-				return lib;
-			};
-		})(root.accounting);
-
-		// Declare `fx` on the root (global/window) object:
-		root['accounting'] = lib;
-	}
-
-	// Root will be `window` in browser or `global` on the server:
-}(this));
-
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(300);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("f21ef994", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a6bd4bde\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Orders.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a6bd4bde\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Orders.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 300 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\na[data-v-a6bd4bde] {\n    text-decoration: none;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 301 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-container",
+    { attrs: { fluid: "" } },
+    [
+      _c("appDeleteOrder", {
+        attrs: { dialog: _vm.deleteDialog, deletingOrder: _vm.deletingOrder },
+        on: {
+          "delete:order": _vm.deleteOrder,
+          deleteDialogClosed: _vm.closeDialog
+        }
+      }),
+      _vm._v(" "),
+      _c(
+        "v-layout",
+        [
+          _c(
+            "v-flex",
+            { attrs: { xs12: "" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-card-title",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: {
+                          clearable: "",
+                          value: _vm.search,
+                          "append-icon": "search",
+                          label: "Поиск",
+                          "single-line": "",
+                          "hide-details": ""
+                        },
+                        on: { input: _vm.checkSearch, change: _vm.getOrders }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-data-table", {
+                    staticClass: "elevation-1",
+                    attrs: {
+                      "disable-initial-sort": "",
+                      headers: _vm.headers,
+                      items: _vm.orders,
+                      pagination: _vm.pagination,
+                      "total-items": _vm.totalOrders,
+                      loading: _vm.loading
+                    },
+                    on: {
+                      "update:pagination": function($event) {
+                        _vm.pagination = $event
+                      }
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "items",
+                        fn: function(props) {
+                          return [
+                            _c(
+                              "td",
+                              [
+                                _c(
+                                  "router-link",
+                                  { attrs: { to: "/orders/" + props.item.id } },
+                                  [_vm._v(_vm._s(props.item.name))]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    attrs: {
+                                      to: "/clients/" + props.item.client.id
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(props.item.client.person_full_name)
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(_vm._s(props.item.client.company_name))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(props.item.area))]),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              {
+                                class: {
+                                  "error--text": !props.item.is_sent,
+                                  "success--text": props.item.is_sent
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  _vm._s(
+                                    props.item.is_sent
+                                      ? "Отправленный"
+                                      : "Неотправленный"
+                                  )
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              {
+                                class: {
+                                  "error--text": !props.item.is_agreed,
+                                  "success--text": props.item.is_agreed
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  _vm._s(
+                                    props.item.is_agreed
+                                      ? "Согласованный"
+                                      : "Несогласованный"
+                                  )
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              {
+                                class: {
+                                  "error--text": !props.item.is_paid,
+                                  "success--text": props.item.is_paid
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  _vm._s(
+                                    props.item.is_paid
+                                      ? "Оплаченный"
+                                      : "Неоплаченный"
+                                  )
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(props.item.created_at))]),
+                            _vm._v(" "),
+                            _vm.$auth.check("admin")
+                              ? _c(
+                                  "td",
+                                  { staticClass: "justify-center layout px-0" },
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { icon: "" },
+                                        on: {
+                                          click: function($event) {
+                                            _vm.setDeleteOrder(props.item)
+                                          }
+                                        }
+                                      },
+                                      [_c("v-icon", [_vm._v("delete")])],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _vm._e()
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-a6bd4bde", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

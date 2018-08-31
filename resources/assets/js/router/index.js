@@ -9,6 +9,7 @@ import Users from './../containers/users/Users.vue';
 import Clients from './../containers/clients/Clients.vue';
 import PriceList from './../containers/priceList/PriceList.vue';
 import CreateOrder from './../containers/createOrder/CreateOrder.vue';
+import Orders from './../containers/orders/Orders.vue';
 
 Vue.use(Router);
 
@@ -53,6 +54,11 @@ export default new Router({
         path: '/create-order',
         name: 'create-order',
         component: CreateOrder
+    },
+    {
+        path: '/orders',
+        name: 'orders',
+        component: Orders
     },
     {
         path: '',

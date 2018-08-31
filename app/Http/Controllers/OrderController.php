@@ -67,4 +67,53 @@ class OrderController extends Controller
 
         return $result;
     }
+
+    public function getOrders(Request $request) {
+        $params = $request->query();
+        $query = Order::query();
+
+        if (isset($params['per_page']) && $params['per_page'] == -1) {
+            $params['per_page'] = $query->count();
+        }
+
+        if (isset($params['query'])) {
+            $value = '%'.$params['query'].'%';
+            $query
+                ->where('name', 'like', $value)
+                ->orWhere('area', 'like', $value)
+                ->orWhereHas('client', function ($q) use ($value) {
+                    $q
+                        ->where('person_full_name', 'like', $value)
+                        ->orWhere('company_name', 'like', $value);
+                });
+        }
+
+        if (isset($params['sortBy']) && isset($params['direction'])) {
+            $query->orderBy($params['sortBy'], $params['direction']);
+        }
+        return $query->with('client')->paginate($params['per_page']);
+    }
+
+    public function updateOrder(Request $request, $id) {
+
+    }
+
+    public function deleteOrder(Request $request, $id) {
+        if ($request->user()->role !== 'admin') {
+            return response()->json([
+                'message' => 'You are not allowed to register new user'
+            ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
+        }
+        DB::transaction(function () use ($request, $id) {
+            Order::destroy($id);
+            $orderLog = new OrderLog([
+                'order_id' => $id,
+                'user_id' => $request->user()->id,
+                'type' => 'Удаление',
+                'before' => "{}",
+                'after' => "{}"
+            ]);
+            $orderLog->save();
+        });
+    }
 }

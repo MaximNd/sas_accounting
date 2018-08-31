@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'client_id',
         'is_sent',
@@ -22,6 +25,12 @@ class Order extends Model
         'route',
         'services'
     ];
+
+    protected $dates = ['deleted_at'];
+
+    public function client() {
+        return $this->belongsTo('App\Client', 'client_id');
+    }
 
     public function gpsData() {
         return $this->hasMany('App\GPSData', 'order_id');
