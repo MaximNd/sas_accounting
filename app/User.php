@@ -39,5 +39,10 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $appends = ['full_name'];
+
+    public function getFullNameAttribute() {
+        return $this->last_name . ' ' . $this->first_name . ' ' . $this->mid_name;
+    }
 
 }

@@ -73,7 +73,8 @@ export default {
                 { title: 'Сотрудники', icon: 'account_circle', link: '/users' },
                 { title: 'Клиенты', icon: 'work', link: '/clients' },
                 { title: 'Прайслист', icon: 'assignment', link: '/price-list' },
-
+                { title: 'История заказов', icon: 'restore', link: '/orders-history' },
+                { title: 'История прайслиста', icon: 'restore', link: '/price-list-history' }
             ];
         },
         logOut() {

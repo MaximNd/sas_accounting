@@ -15,8 +15,10 @@ class PriceListLog extends Model
     ];
 
     public function equipment() {
-        return $this->belongsTo('App\PriseList', 'price_list_id');
+        return $this->belongsTo('App\PriceList', 'price_list_id');
     }
 
-
+    public function user() {
+        return $this->belongsTo('App\User', 'user_id');
+    }
 }

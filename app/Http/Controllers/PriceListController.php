@@ -69,10 +69,9 @@ class PriceListController extends Controller
             'isService' => 'required|boolean',
             'equipment.incoming_price' => 'numeric',
             'equipment.price' => 'numeric',
-            'equipment.installation_price_for_one' => 'numeric',
-            'equipment.installation_price_for_two' => 'numeric',
-            'equipment.installation_price_for_three' => 'numeric',
-            'equipment.description' => 'string',
+            'equipment.installation_price_for_one' => 'nullable|numeric',
+            'equipment.installation_price_for_two' => 'nullable|numeric',
+            'equipment.installation_price_for_three' => 'nullable|numeric',
             'equipment.type' => Rule::in(['GPS-трекеры', 'Датчики уровня топлива', 'Расходомеры топлива', 'Идентификация', 'Дополнительное оборудование']),
             'service.price' => 'numeric',
             'service.type' => Rule::in(['Услуга']),
@@ -108,6 +107,27 @@ class PriceListController extends Controller
                 'price_list_id' => $id,
                 'user_id' => $request->user()->id,
                 'type' => 'Удаление',
+                'before' => "{}",
+                'after' => "{}"
+            ]);
+            $priceListLog->save();
+        });
+    }
+
+    public function restore(Request $request, $id) {
+        if ($request->user()->role !== 'admin') {
+            return response()->json([
+                'message' => 'You are not allowed to register new user'
+            ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
+        }
+        DB::transaction(function () use ($request, $id) {
+            PriceList::withTrashed()
+                ->where('id', '=', $id)
+                ->restore();
+            $priceListLog = new PriceListLog([
+                'price_list_id' => $id,
+                'user_id' => $request->user()->id,
+                'type' => 'Восстановление',
                 'before' => "{}",
                 'after' => "{}"
             ]);

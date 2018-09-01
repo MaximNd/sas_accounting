@@ -53,7 +53,12 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::put('/price-list/{id}', 'PriceListController@update');
 
+    Route::put('/price-list/{id}/restore', 'PriceListController@restore');
+
     Route::delete('/price-list/{id}', 'PriceListController@delete');
+
+    // PRISE_LIST_LOGS
+    Route::get('/price-list/logs', 'PriceListLogController@getLogs');
 
     // ORDERS
     Route::get('/order/dollar-rate', 'OrderController@dollarRate');

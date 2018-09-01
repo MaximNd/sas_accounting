@@ -600,21 +600,6 @@ function toComment(sourceMap) {
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(43);
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
-
-module.exports = root;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
 /*
   MIT License http://www.opensource.org/licenses/mit-license.php
   Author Tobias Koppers @sokra
@@ -837,6 +822,21 @@ function applyToTag (styleElement, obj) {
     styleElement.appendChild(document.createTextNode(css))
   }
 }
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var freeGlobal = __webpack_require__(43);
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
 
 
 /***/ }),
@@ -11866,7 +11866,7 @@ module.exports = baseGetTag;
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(4);
+var root = __webpack_require__(5);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -13486,7 +13486,7 @@ module.exports = eq;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(6),
-    root = __webpack_require__(4);
+    root = __webpack_require__(5);
 
 /* Built-in method references that are verified to be native. */
 var Map = getNative(root, 'Map');
@@ -14248,7 +14248,7 @@ module.exports = freeGlobal;
 /* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(4),
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(5),
     stubFalse = __webpack_require__(146);
 
 /** Detect free variable `exports`. */
@@ -14855,7 +14855,7 @@ module.exports = castPath;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(61);
-module.exports = __webpack_require__(297);
+module.exports = __webpack_require__(304);
 
 
 /***/ }),
@@ -14915,8 +14915,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2__web
             return res.data.access_token;
         }
     },
-    http: __webpack_require__(285),
-    router: __webpack_require__(286),
+    http: __webpack_require__(292),
+    router: __webpack_require__(293),
     loginData: { url: "http://127.0.0.1:8000/" + 'oauth/token', method: 'POST', redirect: '/', fetchUser: true },
     // registerData: { url: `${Vue.http.options.root}/user/signup`, method: 'POST', redirect: '/login', fetchUser: false },
     refreshData: { url: 'auth/refresh', method: 'GET', enabled: false, interval: 0 },
@@ -14929,7 +14929,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2__web
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('app', __webpack_require__(287));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('app', __webpack_require__(294));
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     el: '#app',
@@ -37901,6 +37901,9 @@ module.exports = function (css) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue__ = __webpack_require__(279);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__containers_priceListHistory_PriceListHistory_vue__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__containers_priceListHistory_PriceListHistory_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__containers_priceListHistory_PriceListHistory_vue__);
+
 
 
 
@@ -37953,6 +37956,10 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
         path: '/orders',
         name: 'orders',
         component: __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue___default.a
+    }, {
+        path: '/price-list-history',
+        name: 'price-list-history',
+        component: __WEBPACK_IMPORTED_MODULE_11__containers_priceListHistory_PriceListHistory_vue___default.a
     }, {
         path: '',
         name: 'home',
@@ -40660,7 +40667,7 @@ var content = __webpack_require__(99);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("7dd31229", content, false, {});
+var update = __webpack_require__(4)("7dd31229", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -41668,7 +41675,7 @@ var content = __webpack_require__(112);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("83f2e448", content, false, {});
+var update = __webpack_require__(4)("83f2e448", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -41863,7 +41870,7 @@ var content = __webpack_require__(116);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("6c19f069", content, false, {});
+var update = __webpack_require__(4)("6c19f069", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -43130,7 +43137,7 @@ var content = __webpack_require__(128);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("3a0310b8", content, false, {});
+var update = __webpack_require__(4)("3a0310b8", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -45275,7 +45282,7 @@ module.exports = isMasked;
 /* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(4);
+var root = __webpack_require__(5);
 
 /** Used to detect overreaching core-js shims. */
 var coreJsData = root['__core-js_shared__'];
@@ -45959,7 +45966,7 @@ module.exports = equalByTag;
 /* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(4);
+var root = __webpack_require__(5);
 
 /** Built-in value references. */
 var Uint8Array = root.Uint8Array;
@@ -46323,7 +46330,7 @@ module.exports = getTag;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(6),
-    root = __webpack_require__(4);
+    root = __webpack_require__(5);
 
 /* Built-in method references that are verified to be native. */
 var DataView = getNative(root, 'DataView');
@@ -46336,7 +46343,7 @@ module.exports = DataView;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(6),
-    root = __webpack_require__(4);
+    root = __webpack_require__(5);
 
 /* Built-in method references that are verified to be native. */
 var Promise = getNative(root, 'Promise');
@@ -46349,7 +46356,7 @@ module.exports = Promise;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(6),
-    root = __webpack_require__(4);
+    root = __webpack_require__(5);
 
 /* Built-in method references that are verified to be native. */
 var Set = getNative(root, 'Set');
@@ -46362,7 +46369,7 @@ module.exports = Set;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(6),
-    root = __webpack_require__(4);
+    root = __webpack_require__(5);
 
 /* Built-in method references that are verified to be native. */
 var WeakMap = getNative(root, 'WeakMap');
@@ -50551,7 +50558,7 @@ var content = __webpack_require__(264);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("6234b7e0", content, false, {});
+var update = __webpack_require__(4)("6234b7e0", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -51295,7 +51302,7 @@ var content = __webpack_require__(268);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("080f62b4", content, false, {});
+var update = __webpack_require__(4)("080f62b4", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -58221,13 +58228,13 @@ if (false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(299)
+  __webpack_require__(280)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(280)
+var __vue_script__ = __webpack_require__(282)
 /* template */
-var __vue_template__ = __webpack_require__(301)
+var __vue_template__ = __webpack_require__(286)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -58267,11 +58274,51 @@ module.exports = Component.exports
 
 /***/ }),
 /* 280 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(281);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("f21ef994", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a6bd4bde\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Orders.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a6bd4bde\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Orders.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 281 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\na[data-v-a6bd4bde] {\n    text-decoration: none;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 282 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_order_deleteOrder_DeleteOrder__ = __webpack_require__(281);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_order_deleteOrder_DeleteOrder__ = __webpack_require__(283);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_order_deleteOrder_DeleteOrder___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_order_deleteOrder_DeleteOrder__);
 //
 //
@@ -58424,15 +58471,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 281 */
+/* 283 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(282)
+var __vue_script__ = __webpack_require__(284)
 /* template */
-var __vue_template__ = __webpack_require__(283)
+var __vue_template__ = __webpack_require__(285)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -58471,7 +58518,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 282 */
+/* 284 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58531,7 +58578,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 283 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -58630,776 +58677,7 @@ if (false) {
 }
 
 /***/ }),
-/* 284 */,
-/* 285 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  _init: function () {
-      if ( ! this.options.Vue.axios) {
-          return 'axios.js : Vue.axios must be set.'
-      }
-  },
-
-  _interceptor: function (req, res) {
-    var _this = this;
-
-    if (req) {
-      this.options.Vue.axios.interceptors.request.use(function (request) {
-        req.call(_this, request);
-        return request;
-      }, function (error) {
-        req.call(_this, error.request);
-        return Promise.reject(error);
-      })
-    }
-
-    if (res) {
-      this.options.Vue.axios.interceptors.response.use(function (response) {
-        res.call(_this, response);
-        return response;
-      }, function (error) {
-        if (error && error.response) {
-          res.call(_this, error.response);
-        }
-        
-        return Promise.reject(error);
-      })
-    }
-  },
-
-  _invalidToken: function (res) {
-    if (res.status === 401) {
-      return true;
-    }
-  },
-
-  _httpData: function (res) {
-    return res.data || {};
-  },
-
-  _http: function (data) {
-    var http = this.options.Vue.axios(data);
-
-    http.then(data.success, data.error);
-
-    return http;
-  },
-
-  _getHeaders: function (res) {
-    return res.headers;
-  },
-
-  _setHeaders: function (req, headers) {
-    req.headers.common = Object.assign({}, req.headers.common, headers);
-  }
-}
-
-
-/***/ }),
 /* 286 */
-/***/ (function(module, exports) {
-
-module.exports = {
-
-    _init: function () {
-        if ( ! this.options.Vue.router) {
-            return 'vue-router.2.x.js : Vue.router must be set.';
-        }
-    },
-
-    _bindData: function (data, ctx) {
-        var error, success;
-
-        data = data || {};
-
-        error = data.error;
-        success = data.success;
-
-        data.query = ctx.$route.query || {};
-
-        if (data.success) { data.success = function (res) { success.call(ctx, res); } }
-        if (data.error) { data.error = function (res) { error.call(ctx, res); } }
-
-        return data;
-    },
-
-    _beforeEach: function (routerBeforeEach, transitionEach) {
-        var _this = this;
-
-        this.options.Vue.router.beforeEach(function (transition, location, next) {
-            _this.options.setTransitions.call(this, transition);
-            
-            routerBeforeEach.call(_this, function () {
-                var auth = _this.options.getAuthMeta(transition);
-
-                transitionEach.call(_this, transition, auth, function (redirect) {
-                    if (!redirect) {
-                        (next || transition.next)();
-                        return;
-                    }
-
-                    // router v2.x
-                    if (next) {
-                        next(redirect);
-                    } else {
-                        this.options.router._routerReplace.call(this, redirect);
-                    }
-                });
-            });
-        })
-    },
-
-    _routerReplace: function (data) {
-        var router = this.options.Vue.router;
-
-        router.replace.call(router, data);
-    },
-
-    _routerGo: function (data) {
-        var router = this.options.Vue.router;
-
-        (router.push || router.go).call(router, data);
-    }
-
-};
-
-/***/ }),
-/* 287 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(288)
-}
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(290)
-/* template */
-var __vue_template__ = __webpack_require__(296)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\App.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6dd1125c", Component.options)
-  } else {
-    hotAPI.reload("data-v-6dd1125c", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 288 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(289);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(5)("7352d4e6", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dd1125c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./App.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dd1125c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./App.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 289 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.bg-primary {\n    width: 100%;\n    height: 100vh;\n    background: rgb(8,54,94);\n    background: linear-gradient(40deg, rgba(8,54,94,1) 0%, rgba(32,100,151,1) 100%);\n    background-size: cover;\n}\n.animated {\n    -webkit-animation-duration: 0.3s;\n            animation-duration: 0.3s;\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both;\n}\n@-webkit-keyframes fadeInDown {\nfrom {\n        opacity: 0;\n        -webkit-transform: translate3d(0, -10%, 0);\n                transform: translate3d(0, -10%, 0);\n}\nto {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\n}\n@keyframes fadeInDown {\nfrom {\n        opacity: 0;\n        -webkit-transform: translate3d(0, -10%, 0);\n                transform: translate3d(0, -10%, 0);\n}\nto {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\n}\n.fadeInDown {\n    -webkit-animation-name: fadeInDown;\n            animation-name: fadeInDown;\n}\n@-webkit-keyframes fadeOutDown {\nfrom {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\nto {\n        opacity: 0;\n        -webkit-transform: translate3d(0, 10%, 0);\n                transform: translate3d(0, 10%, 0);\n}\n}\n@keyframes fadeOutDown {\nfrom {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\nto {\n        opacity: 0;\n        -webkit-transform: translate3d(0, 10%, 0);\n                transform: translate3d(0, 10%, 0);\n}\n}\n.fadeOutDown {\n    -webkit-animation-name: fadeOutDown;\n            animation-name: fadeOutDown;\n}\n@media (prefers-reduced-motion) {\n.animated {\n        -webkit-animation: unset !important;\n                animation: unset !important;\n        -webkit-transition: none !important;\n        transition: none !important;\n}\n}\n\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 290 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation__ = __webpack_require__(291);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            loaded: false
-        };
-    },
-    created: function created() {
-        var _this = this;
-
-        this.$auth.ready(function () {
-            _this.loaded = true;
-            //   this.$store.dispatch('fetchUser')
-            //     .then(() => {
-            //       this.loaded = true;
-            //     })
-            //     .catch(() => {
-            //       this.$router.push({ name: 'login' })
-            //       this.loaded = true;
-            //     });
-        });
-    },
-
-    components: {
-        appNavigation: __WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation___default.a
-    }
-});
-
-/***/ }),
-/* 291 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(292)
-}
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(294)
-/* template */
-var __vue_template__ = __webpack_require__(295)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\components\\Navigation\\Navigation.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1d8eafd6", Component.options)
-  } else {
-    hotAPI.reload("data-v-1d8eafd6", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 292 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(293);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(5)("ad3a01ee", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d8eafd6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Navigation.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d8eafd6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Navigation.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 293 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.menu-active {\n    color: #000 !important;\n    background-color: #fff !important;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 294 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            drawer: true,
-            clipped: true,
-            menuItems: []
-        };
-    },
-
-    computed: {
-        xsOnly: function xsOnly() {
-            return this.$vuetify.breakpoint.xsOnly;
-        },
-        smAndDown: function smAndDown() {
-            return this.$vuetify.breakpoint.smAndDown;
-        }
-    },
-    methods: {
-        initMenuItems: function initMenuItems() {
-            this.menuItems = [{ title: 'Профиль', icon: 'mdi-account-box-outline', link: '/profile' }, { title: 'Заказы', icon: 'event', link: '/orders' }, { title: 'Зоздать заказ', icon: 'border_color', link: '/create-order' }, { title: 'Сотрудники', icon: 'account_circle', link: '/users' }, { title: 'Клиенты', icon: 'work', link: '/clients' }, { title: 'Прайслист', icon: 'assignment', link: '/price-list' }];
-        },
-        logOut: function logOut() {
-            this.$auth.logout();
-        }
-    },
-    created: function created() {
-        this.initMenuItems();
-    }
-});
-
-/***/ }),
-/* 295 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm.$auth.ready()
-    ? _c(
-        "v-container",
-        { attrs: { fluid: "" } },
-        [
-          _c(
-            "v-navigation-drawer",
-            {
-              attrs: { clipped: !_vm.smAndDown, app: "", dark: "" },
-              model: {
-                value: _vm.drawer,
-                callback: function($$v) {
-                  _vm.drawer = $$v
-                },
-                expression: "drawer"
-              }
-            },
-            [
-              _vm.xsOnly
-                ? _c(
-                    "v-list",
-                    [
-                      _c(
-                        "v-list-tile",
-                        { attrs: { avatar: "" } },
-                        [
-                          _c("v-list-tile-avatar", [
-                            _c("img", {
-                              staticStyle: {
-                                "object-fit": "cover",
-                                width: "40px",
-                                height: "40px"
-                              },
-                              attrs: {
-                                src: "/storage/" + _vm.$auth.user().image,
-                                alt: "avatar"
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-tile-content",
-                            [
-                              _c("v-list-tile-title", [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.$auth.user().last_name +
-                                      " " +
-                                      _vm.$auth.user().first_name +
-                                      " " +
-                                      _vm.$auth.user().mid_name
-                                  )
-                                )
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("v-divider"),
-              _vm._v(" "),
-              _c(
-                "v-list",
-                { attrs: { "two-line": "" } },
-                _vm._l(_vm.menuItems, function(item, index) {
-                  return _c(
-                    "v-list-tile",
-                    {
-                      key: index,
-                      staticClass: "white--text",
-                      attrs: { "active-class": "menu-active", to: item.link }
-                    },
-                    [
-                      _c(
-                        "v-list-tile-action",
-                        [
-                          _c("v-icon", { attrs: { large: "" } }, [
-                            _vm._v(_vm._s(item.icon))
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-tile-content",
-                        [_c("v-list-tile-title", [_vm._v(_vm._s(item.title))])],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                })
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-toolbar",
-            {
-              attrs: {
-                dark: "",
-                fixed: "",
-                app: "",
-                "clipped-left": !_vm.smAndDown
-              }
-            },
-            [
-              _c("v-toolbar-side-icon", {
-                on: {
-                  click: function($event) {
-                    $event.stopPropagation()
-                    _vm.drawer = !_vm.drawer
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              !_vm.xsOnly
-                ? _c(
-                    "v-toolbar-items",
-                    [
-                      _c(
-                        "v-btn",
-                        { attrs: { flat: "" } },
-                        [
-                          _c("span", { staticClass: "mr-3" }, [
-                            _vm._v(
-                              _vm._s(
-                                _vm.$auth.user().last_name +
-                                  " " +
-                                  _vm.$auth.user().first_name +
-                                  " " +
-                                  _vm.$auth.user().mid_name
-                              )
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-avatar",
-                            { attrs: { size: 40, color: "grey lighten-4" } },
-                            [
-                              _c("img", {
-                                staticStyle: {
-                                  "object-fit": "cover",
-                                  width: "40px",
-                                  height: "40px"
-                                },
-                                attrs: {
-                                  src: "/storage/" + _vm.$auth.user().image,
-                                  alt: "avatar"
-                                }
-                              })
-                            ]
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  staticClass: "ml-2",
-                  attrs: { icon: "" },
-                  on: { click: _vm.logOut }
-                },
-                [_c("v-icon", [_vm._v("exit_to_app")])],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("v-content", [_vm._t("default")], 2)
-        ],
-        1
-      )
-    : _vm._e()
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-1d8eafd6", module.exports)
-  }
-}
-
-/***/ }),
-/* 296 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm.$auth.ready() && _vm.loaded
-    ? _c(
-        "v-app",
-        [
-          _vm.$auth.check()
-            ? [
-                _c(
-                  "appNavigation",
-                  [
-                    _c(
-                      "transition",
-                      {
-                        attrs: {
-                          appear: "",
-                          "enter-class": "",
-                          "enter-active-class": "animated fadeInDown",
-                          "leave-class": "",
-                          "leave-active-class": "animated fadeOutDown",
-                          mode: "out-in"
-                        }
-                      },
-                      [_c("router-view", { key: _vm.$route.fullPath })],
-                      1
-                    )
-                  ],
-                  1
-                )
-              ]
-            : [_c("router-view", { key: _vm.$route.fullPath })]
-        ],
-        2
-      )
-    : _vm._e()
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-6dd1125c", module.exports)
-  }
-}
-
-/***/ }),
-/* 297 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 298 */,
-/* 299 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(300);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(5)("f21ef994", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a6bd4bde\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Orders.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a6bd4bde\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Orders.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 300 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\na[data-v-a6bd4bde] {\n    text-decoration: none;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 301 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -59614,6 +58892,1852 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-a6bd4bde", module.exports)
   }
 }
+
+/***/ }),
+/* 287 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(288)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(290)
+/* template */
+var __vue_template__ = __webpack_require__(291)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-65be55d1"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\containers\\priceListHistory\\PriceListHistory.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-65be55d1", Component.options)
+  } else {
+    hotAPI.reload("data-v-65be55d1", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 288 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(289);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("3e996ea5", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-65be55d1\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PriceListHistory.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-65be55d1\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PriceListHistory.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 289 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\na[data-v-65be55d1] {\n    text-decoration: none;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 290 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            createdDataHeaders: {
+                equipment: [{ text: 'Модель', align: 'left', value: 'name', sortable: false }, { text: 'Категория', align: 'right', value: 'type', sortable: false }, { text: 'Входящая цена $', align: 'right', value: 'incoming_price', sortable: false }, { text: 'Цена $', align: 'right', value: 'price', sortable: false }, { text: 'Монтаж 1шт. ₴', align: 'right', value: 'installation_price_for_one', sortable: false }, { text: 'Монтаж 2шт. ₴', align: 'right', value: 'installation_price_for_two', sortable: false }, { text: 'Монтаж 3шт. ₴', align: 'right', value: 'installation_price_for_three', sortable: false }, { text: 'Описание', align: 'right', value: 'description', sortable: false }],
+                service: [{ text: 'Название', align: 'left', value: 'name', sortable: false }, { text: 'Цена $', align: 'right', value: 'price', sortable: false }, { text: 'Дата создания', align: 'right', value: 'created_at', sortable: false }]
+            },
+            permissibleKeysMap: {
+                equipment: {
+                    name: 'Модель',
+                    incoming_price: 'Входящая Цена',
+                    price: 'Цена',
+                    installation_price_for_one: 'Монтаж 1шт.',
+                    installation_price_for_two: 'Монтаж 2шт.',
+                    installation_price_for_three: 'Монтаж 3шт.',
+                    type: 'Категория',
+                    description: 'Описание'
+                },
+                service: {
+                    name: 'Назване',
+                    price: 'Цена'
+                }
+            },
+            search: '',
+            totalPriceListHistoryItems: 0,
+            priceListHistory: [],
+            rowsPerPageItems: [10, 15, 20, 25, 30, 50],
+            loading: true,
+            restoring: false,
+            pagination: {
+                rowsPerPage: 10,
+                sortBy: 'created_at',
+                descending: true
+            },
+            headers: [{
+                text: 'Дата',
+                align: 'left',
+                value: 'created_at'
+            }, { text: 'Оборудование/Услуга', value: 'equipment.name' }, { text: 'Сотрудник', value: 'user.full_name' }, { text: 'Действие', value: 'type' }, { text: 'Подробно', value: '', align: 'right', sortable: false }]
+        };
+    },
+
+    computed: {
+        createdData: function createdData() {
+            var _this = this;
+
+            return this.priceListHistory.reduce(function (createdData, priceListHistoryData, index) {
+                if (priceListHistoryData.type === 'Создание') {
+                    var isService = priceListHistoryData.equipment.type === 'Услуга';
+                    var key = isService ? 'service' : 'equipment';
+                    createdData[index] = {
+                        headers: _this.createdDataHeaders[key],
+                        items: [JSON.parse(priceListHistoryData.after)]
+                    };
+                }
+                return createdData;
+            }, {});
+        },
+        updatedData: function updatedData() {
+            var _this2 = this;
+
+            return this.priceListHistory.reduce(function (updatedData, priceListHistoryData, index) {
+                if (priceListHistoryData.type === 'Обновление') {
+                    var isService = priceListHistoryData.equipment.type === 'Услуга';
+                    var keyForPermissibleKeys = isService ? 'service' : 'equipment';
+                    var permissibleKeys = Object.keys(_this2.permissibleKeysMap[keyForPermissibleKeys]);
+                    updatedData[index] = { before: [], after: [] };
+                    var before = JSON.parse(priceListHistoryData.before);
+                    var after = JSON.parse(priceListHistoryData.after);
+                    updatedData[index].before = Object.keys(before).reduce(function (beforeData, key) {
+                        if (permissibleKeys.includes(key)) {
+                            beforeData.push({ text: _this2.permissibleKeysMap[keyForPermissibleKeys][key], value: before[key], isChanged: before[key] !== after[key] });
+                        }
+                        return beforeData;
+                    }, []);
+                    updatedData[index].after = Object.keys(after).reduce(function (afterData, key) {
+                        if (permissibleKeys.includes(key)) {
+                            afterData.push({ text: _this2.permissibleKeysMap[keyForPermissibleKeys][key], value: after[key], isChanged: before[key] !== after[key] });
+                        }
+                        return afterData;
+                    }, []);
+                }
+                return updatedData;
+            }, {});
+        }
+    },
+    watch: {
+        pagination: {
+            handler: 'getPriceListHistory',
+            deep: true
+        }
+    },
+    methods: {
+        getPriceListHistory: function getPriceListHistory() {
+            var _this3 = this;
+
+            this.loading = true;
+            var _pagination = this.pagination,
+                sortBy = _pagination.sortBy,
+                descending = _pagination.descending,
+                page = _pagination.page,
+                rowsPerPage = _pagination.rowsPerPage;
+
+            var params = {};
+            params.page = page;
+            params.per_page = rowsPerPage;
+            if (this.search !== '') {
+                params.query = this.search;
+            }
+            if (sortBy) {
+                var direction = descending ? 'desc' : 'asc';
+                params.direction = direction;
+                params.sortBy = sortBy;
+            }
+
+            this.axios.get('/price-list/logs', { params: params }).then(function (_ref) {
+                var data = _ref.data;
+
+                _this3.totalPriceListHistoryItems = data.total;
+                _this3.priceListHistory = data.data; //.map(data => ({ ...data, before: JSON.parse(data.before), after: JSON.parse(data.after) }));
+            }).catch(function (err) {
+                console.log(err);
+            }).finally(function () {
+                _this3.loading = false;
+                _this3.restoring = false;
+            });
+        },
+        checkSearch: function checkSearch(value) {
+            var _this4 = this;
+
+            this.search = value;
+            setTimeout(function () {
+                if (_this4.search === value) {
+                    _this4.getPriceListHistory();
+                }
+            }, 1500);
+        },
+        expand: function expand(item, props) {
+            if (item.type !== 'Восстановление') {
+                props.expanded = !props.expanded;
+            }
+        },
+        restore: function restore(id) {
+            var _this5 = this;
+
+            this.restoring = true;
+            this.axios.put('/price-list/' + id + '/restore').then(function () {
+                return _this5.getPriceListHistory();
+            }).catch(function (err) {
+                return console.log(err);
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 291 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-container",
+    { attrs: { fluid: "" } },
+    [
+      _c(
+        "v-layout",
+        [
+          _c(
+            "v-flex",
+            { attrs: { xs12: "" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-card-title",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: {
+                          clearable: "",
+                          value: _vm.search,
+                          "append-icon": "search",
+                          label: "Поиск",
+                          "single-line": "",
+                          "hide-details": ""
+                        },
+                        on: {
+                          input: _vm.checkSearch,
+                          change: _vm.getPriceListHistory
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-data-table", {
+                    staticClass: "elevation-1",
+                    attrs: {
+                      headers: _vm.headers,
+                      items: _vm.priceListHistory,
+                      "rows-per-page-items": _vm.rowsPerPageItems,
+                      pagination: _vm.pagination,
+                      "total-items": _vm.totalPriceListHistoryItems,
+                      loading: _vm.loading,
+                      expand: ""
+                    },
+                    on: {
+                      "update:pagination": function($event) {
+                        _vm.pagination = $event
+                      }
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "items",
+                        fn: function(props) {
+                          return [
+                            _c(
+                              "tr",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    _vm.expand(props.item, props)
+                                  }
+                                }
+                              },
+                              [
+                                _c("td", [
+                                  _vm._v(_vm._s(props.item.created_at))
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(_vm._s(props.item.equipment.name))
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(_vm._s(props.item.user.full_name))
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    class: {
+                                      "success--text":
+                                        props.item.type === "Создание",
+                                      "info--text":
+                                        props.item.type === "Обновление",
+                                      "purple--text":
+                                        props.item.type === "Восстановление",
+                                      "error--text":
+                                        props.item.type === "Удаление"
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(props.item.type) +
+                                        "\n                            "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "text-xs-right" },
+                                  [
+                                    props.expanded
+                                      ? _c(
+                                          "v-btn",
+                                          { attrs: { icon: "" } },
+                                          [
+                                            _c("v-icon", [
+                                              _vm._v("expand_less")
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                      : _c(
+                                          "v-btn",
+                                          { attrs: { icon: "" } },
+                                          [
+                                            _c("v-icon", [
+                                              _vm._v("expand_more")
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                  ],
+                                  1
+                                )
+                              ]
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "expand",
+                        fn: function(props) {
+                          return [
+                            _c(
+                              "v-card",
+                              { attrs: { flat: "" } },
+                              [
+                                _c(
+                                  "v-card-text",
+                                  [
+                                    props.item.type === "Обновление"
+                                      ? _c(
+                                          "v-container",
+                                          {
+                                            attrs: {
+                                              fluid: "",
+                                              "grid-list-xs": ""
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "v-layout",
+                                              { attrs: { wrap: "" } },
+                                              [
+                                                _c(
+                                                  "v-flex",
+                                                  {
+                                                    attrs: { xs12: "", sm6: "" }
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "v-card",
+                                                      [
+                                                        _c("v-card-title", [
+                                                          _c("h4", [
+                                                            _vm._v("До:")
+                                                          ])
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("v-divider"),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-list",
+                                                          {
+                                                            attrs: { dense: "" }
+                                                          },
+                                                          _vm._l(
+                                                            _vm.updatedData[
+                                                              props.index
+                                                            ].before,
+                                                            function(
+                                                              beforeData,
+                                                              index
+                                                            ) {
+                                                              return _c(
+                                                                "v-list-tile",
+                                                                {
+                                                                  key:
+                                                                    "key-" +
+                                                                    index
+                                                                },
+                                                                [
+                                                                  _c(
+                                                                    "v-list-tile-content",
+                                                                    {
+                                                                      class: {
+                                                                        "red--text darken-4--text":
+                                                                          beforeData.isChanged
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          beforeData.text
+                                                                        ) + ":"
+                                                                      )
+                                                                    ]
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "v-list-tile-content",
+                                                                    {
+                                                                      class: {
+                                                                        "align-end": true,
+                                                                        "red--text darken-4--text":
+                                                                          beforeData.isChanged
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          beforeData.value
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ],
+                                                                1
+                                                              )
+                                                            }
+                                                          )
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-flex",
+                                                  {
+                                                    attrs: { xs12: "", sm6: "" }
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "v-card",
+                                                      [
+                                                        _c("v-card-title", [
+                                                          _c("h4", [
+                                                            _vm._v("После:")
+                                                          ])
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("v-divider"),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-list",
+                                                          {
+                                                            attrs: { dense: "" }
+                                                          },
+                                                          _vm._l(
+                                                            _vm.updatedData[
+                                                              props.index
+                                                            ].after,
+                                                            function(
+                                                              afterData,
+                                                              index
+                                                            ) {
+                                                              return _c(
+                                                                "v-list-tile",
+                                                                {
+                                                                  key:
+                                                                    "key-" +
+                                                                    index
+                                                                },
+                                                                [
+                                                                  _c(
+                                                                    "v-list-tile-content",
+                                                                    {
+                                                                      class: {
+                                                                        "success--text":
+                                                                          afterData.isChanged
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          afterData.text
+                                                                        ) + ":"
+                                                                      )
+                                                                    ]
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "v-list-tile-content",
+                                                                    {
+                                                                      class: {
+                                                                        "align-end": true,
+                                                                        "success--text":
+                                                                          afterData.isChanged
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          afterData.value
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ],
+                                                                1
+                                                              )
+                                                            }
+                                                          )
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    props.item.type === "Создание"
+                                      ? _c(
+                                          "v-container",
+                                          { attrs: { fluid: "" } },
+                                          [
+                                            _c(
+                                              "v-layout",
+                                              { attrs: { wrap: "" } },
+                                              [
+                                                _c(
+                                                  "v-flex",
+                                                  { attrs: { xs12: "" } },
+                                                  [
+                                                    _c("v-data-table", {
+                                                      staticClass:
+                                                        "elevation-1",
+                                                      attrs: {
+                                                        headers:
+                                                          _vm.createdData[
+                                                            props.index
+                                                          ].headers,
+                                                        items:
+                                                          _vm.createdData[
+                                                            props.index
+                                                          ].items,
+                                                        "hide-actions": ""
+                                                      },
+                                                      scopedSlots: _vm._u([
+                                                        {
+                                                          key: "items",
+                                                          fn: function(
+                                                            nestedProps
+                                                          ) {
+                                                            return [
+                                                              _c("td", [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    nestedProps
+                                                                      .item.name
+                                                                  )
+                                                                )
+                                                              ]),
+                                                              _vm._v(" "),
+                                                              _vm.createdData[
+                                                                props.index
+                                                              ].items[0]
+                                                                .type !==
+                                                              "Услуга"
+                                                                ? _c(
+                                                                    "td",
+                                                                    {
+                                                                      staticClass:
+                                                                        "text-xs-right"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          nestedProps
+                                                                            .item
+                                                                            .type
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : _vm._e(),
+                                                              _vm._v(" "),
+                                                              _vm.createdData[
+                                                                props.index
+                                                              ].items[0]
+                                                                .type !==
+                                                              "Услуга"
+                                                                ? _c(
+                                                                    "td",
+                                                                    {
+                                                                      staticClass:
+                                                                        "text-xs-right"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          nestedProps
+                                                                            .item
+                                                                            .incoming_price
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : _vm._e(),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "td",
+                                                                {
+                                                                  staticClass:
+                                                                    "text-xs-right"
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    _vm._s(
+                                                                      nestedProps
+                                                                        .item
+                                                                        .price
+                                                                    )
+                                                                  )
+                                                                ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _vm.createdData[
+                                                                props.index
+                                                              ].items[0]
+                                                                .type !==
+                                                              "Услуга"
+                                                                ? _c(
+                                                                    "td",
+                                                                    {
+                                                                      staticClass:
+                                                                        "text-xs-right"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          nestedProps
+                                                                            .item
+                                                                            .installation_price_for_one
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : _vm._e(),
+                                                              _vm._v(" "),
+                                                              _vm.createdData[
+                                                                props.index
+                                                              ].items[0]
+                                                                .type !==
+                                                              "Услуга"
+                                                                ? _c(
+                                                                    "td",
+                                                                    {
+                                                                      staticClass:
+                                                                        "text-xs-right"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          nestedProps
+                                                                            .item
+                                                                            .installation_price_for_two
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : _vm._e(),
+                                                              _vm._v(" "),
+                                                              _vm.createdData[
+                                                                props.index
+                                                              ].items[0]
+                                                                .type !==
+                                                              "Услуга"
+                                                                ? _c(
+                                                                    "td",
+                                                                    {
+                                                                      staticClass:
+                                                                        "text-xs-right"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          nestedProps
+                                                                            .item
+                                                                            .installation_price_for_three
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : _vm._e(),
+                                                              _vm._v(" "),
+                                                              _vm.createdData[
+                                                                props.index
+                                                              ].items[0]
+                                                                .type !==
+                                                              "Услуга"
+                                                                ? _c(
+                                                                    "td",
+                                                                    {
+                                                                      staticClass:
+                                                                        "text-xs-right"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          nestedProps
+                                                                            .item
+                                                                            .description
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : _vm._e(),
+                                                              _vm._v(" "),
+                                                              _vm.createdData[
+                                                                props.index
+                                                              ].items[0]
+                                                                .type ===
+                                                              "Услуга"
+                                                                ? _c(
+                                                                    "td",
+                                                                    {
+                                                                      staticClass:
+                                                                        "text-xs-right"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          nestedProps
+                                                                            .item
+                                                                            .created_at
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : _vm._e()
+                                                            ]
+                                                          }
+                                                        }
+                                                      ])
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _vm.$auth.check("admin") &&
+                                    props.item.type === "Удаление"
+                                      ? _c(
+                                          "v-container",
+                                          { attrs: { fluid: "" } },
+                                          [
+                                            props.item.equipment.deleted_at
+                                              ? _c(
+                                                  "v-layout",
+                                                  { attrs: { wrap: "" } },
+                                                  [
+                                                    _c(
+                                                      "v-flex",
+                                                      {
+                                                        attrs: {
+                                                          xs12: "",
+                                                          sm6: "",
+                                                          md4: "",
+                                                          lg3: ""
+                                                        }
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "p",
+                                                          {
+                                                            staticClass:
+                                                              "title",
+                                                            staticStyle: {
+                                                              margin: "0",
+                                                              "line-height":
+                                                                "2.2!important"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "\n                                                Нажмите чтобы восстановить:\n                                            "
+                                                            )
+                                                          ]
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "v-flex",
+                                                      {
+                                                        attrs: {
+                                                          xs12: "",
+                                                          sm3: ""
+                                                        }
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "v-btn",
+                                                          {
+                                                            staticClass:
+                                                              "white--text",
+                                                            attrs: {
+                                                              loading:
+                                                                _vm.restoring,
+                                                              disabled:
+                                                                _vm.restoring,
+                                                              color: "purple"
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                _vm.restore(
+                                                                  props.item
+                                                                    .equipment
+                                                                    .id
+                                                                )
+                                                              }
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "Восстановить"
+                                                            )
+                                                          ]
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              : _c(
+                                                  "v-layout",
+                                                  [
+                                                    _c(
+                                                      "v-flex",
+                                                      { attrs: { xs12: "" } },
+                                                      [
+                                                        _c(
+                                                          "p",
+                                                          {
+                                                            staticClass:
+                                                              "red--text text--darken-4 title",
+                                                            staticStyle: {
+                                                              margin: "0",
+                                                              "line-height":
+                                                                "2.2!important"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "\n                                                На данный момент восстановление невозможно, так как оборудование/услуга восстановлена!\n                                            "
+                                                            )
+                                                          ]
+                                                        )
+                                                      ]
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                          ],
+                                          1
+                                        )
+                                      : _vm._e()
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-65be55d1", module.exports)
+  }
+}
+
+/***/ }),
+/* 292 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  _init: function () {
+      if ( ! this.options.Vue.axios) {
+          return 'axios.js : Vue.axios must be set.'
+      }
+  },
+
+  _interceptor: function (req, res) {
+    var _this = this;
+
+    if (req) {
+      this.options.Vue.axios.interceptors.request.use(function (request) {
+        req.call(_this, request);
+        return request;
+      }, function (error) {
+        req.call(_this, error.request);
+        return Promise.reject(error);
+      })
+    }
+
+    if (res) {
+      this.options.Vue.axios.interceptors.response.use(function (response) {
+        res.call(_this, response);
+        return response;
+      }, function (error) {
+        if (error && error.response) {
+          res.call(_this, error.response);
+        }
+        
+        return Promise.reject(error);
+      })
+    }
+  },
+
+  _invalidToken: function (res) {
+    if (res.status === 401) {
+      return true;
+    }
+  },
+
+  _httpData: function (res) {
+    return res.data || {};
+  },
+
+  _http: function (data) {
+    var http = this.options.Vue.axios(data);
+
+    http.then(data.success, data.error);
+
+    return http;
+  },
+
+  _getHeaders: function (res) {
+    return res.headers;
+  },
+
+  _setHeaders: function (req, headers) {
+    req.headers.common = Object.assign({}, req.headers.common, headers);
+  }
+}
+
+
+/***/ }),
+/* 293 */
+/***/ (function(module, exports) {
+
+module.exports = {
+
+    _init: function () {
+        if ( ! this.options.Vue.router) {
+            return 'vue-router.2.x.js : Vue.router must be set.';
+        }
+    },
+
+    _bindData: function (data, ctx) {
+        var error, success;
+
+        data = data || {};
+
+        error = data.error;
+        success = data.success;
+
+        data.query = ctx.$route.query || {};
+
+        if (data.success) { data.success = function (res) { success.call(ctx, res); } }
+        if (data.error) { data.error = function (res) { error.call(ctx, res); } }
+
+        return data;
+    },
+
+    _beforeEach: function (routerBeforeEach, transitionEach) {
+        var _this = this;
+
+        this.options.Vue.router.beforeEach(function (transition, location, next) {
+            _this.options.setTransitions.call(this, transition);
+            
+            routerBeforeEach.call(_this, function () {
+                var auth = _this.options.getAuthMeta(transition);
+
+                transitionEach.call(_this, transition, auth, function (redirect) {
+                    if (!redirect) {
+                        (next || transition.next)();
+                        return;
+                    }
+
+                    // router v2.x
+                    if (next) {
+                        next(redirect);
+                    } else {
+                        this.options.router._routerReplace.call(this, redirect);
+                    }
+                });
+            });
+        })
+    },
+
+    _routerReplace: function (data) {
+        var router = this.options.Vue.router;
+
+        router.replace.call(router, data);
+    },
+
+    _routerGo: function (data) {
+        var router = this.options.Vue.router;
+
+        (router.push || router.go).call(router, data);
+    }
+
+};
+
+/***/ }),
+/* 294 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(295)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(297)
+/* template */
+var __vue_template__ = __webpack_require__(303)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\App.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6dd1125c", Component.options)
+  } else {
+    hotAPI.reload("data-v-6dd1125c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 295 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(296);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("7352d4e6", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dd1125c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./App.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dd1125c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./App.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 296 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.bg-primary {\n    width: 100%;\n    height: 100vh;\n    background: rgb(8,54,94);\n    background: linear-gradient(40deg, rgba(8,54,94,1) 0%, rgba(32,100,151,1) 100%);\n    background-size: cover;\n}\n.animated {\n    -webkit-animation-duration: 0.3s;\n            animation-duration: 0.3s;\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both;\n}\n@-webkit-keyframes fadeInDown {\nfrom {\n        opacity: 0;\n        -webkit-transform: translate3d(0, -10%, 0);\n                transform: translate3d(0, -10%, 0);\n}\nto {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\n}\n@keyframes fadeInDown {\nfrom {\n        opacity: 0;\n        -webkit-transform: translate3d(0, -10%, 0);\n                transform: translate3d(0, -10%, 0);\n}\nto {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\n}\n.fadeInDown {\n    -webkit-animation-name: fadeInDown;\n            animation-name: fadeInDown;\n}\n@-webkit-keyframes fadeOutDown {\nfrom {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\nto {\n        opacity: 0;\n        -webkit-transform: translate3d(0, 10%, 0);\n                transform: translate3d(0, 10%, 0);\n}\n}\n@keyframes fadeOutDown {\nfrom {\n        opacity: 1;\n        -webkit-transform: translate3d(0, 0%, 0);\n                transform: translate3d(0, 0%, 0);\n}\nto {\n        opacity: 0;\n        -webkit-transform: translate3d(0, 10%, 0);\n                transform: translate3d(0, 10%, 0);\n}\n}\n.fadeOutDown {\n    -webkit-animation-name: fadeOutDown;\n            animation-name: fadeOutDown;\n}\n@media (prefers-reduced-motion) {\n.animated {\n        -webkit-animation: unset !important;\n                animation: unset !important;\n        -webkit-transition: none !important;\n        transition: none !important;\n}\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 297 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation__ = __webpack_require__(298);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            loaded: false
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        this.$auth.ready(function () {
+            _this.loaded = true;
+            //   this.$store.dispatch('fetchUser')
+            //     .then(() => {
+            //       this.loaded = true;
+            //     })
+            //     .catch(() => {
+            //       this.$router.push({ name: 'login' })
+            //       this.loaded = true;
+            //     });
+        });
+    },
+
+    components: {
+        appNavigation: __WEBPACK_IMPORTED_MODULE_0__components_Navigation_Navigation___default.a
+    }
+});
+
+/***/ }),
+/* 298 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(299)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(301)
+/* template */
+var __vue_template__ = __webpack_require__(302)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Navigation\\Navigation.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1d8eafd6", Component.options)
+  } else {
+    hotAPI.reload("data-v-1d8eafd6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 299 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(300);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("ad3a01ee", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d8eafd6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Navigation.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d8eafd6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Navigation.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 300 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.menu-active {\n    color: #000 !important;\n    background-color: #fff !important;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 301 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            drawer: true,
+            clipped: true,
+            menuItems: []
+        };
+    },
+
+    computed: {
+        xsOnly: function xsOnly() {
+            return this.$vuetify.breakpoint.xsOnly;
+        },
+        smAndDown: function smAndDown() {
+            return this.$vuetify.breakpoint.smAndDown;
+        }
+    },
+    methods: {
+        initMenuItems: function initMenuItems() {
+            this.menuItems = [{ title: 'Профиль', icon: 'mdi-account-box-outline', link: '/profile' }, { title: 'Заказы', icon: 'event', link: '/orders' }, { title: 'Зоздать заказ', icon: 'border_color', link: '/create-order' }, { title: 'Сотрудники', icon: 'account_circle', link: '/users' }, { title: 'Клиенты', icon: 'work', link: '/clients' }, { title: 'Прайслист', icon: 'assignment', link: '/price-list' }, { title: 'История заказов', icon: 'restore', link: '/orders-history' }, { title: 'История прайслиста', icon: 'restore', link: '/price-list-history' }];
+        },
+        logOut: function logOut() {
+            this.$auth.logout();
+        }
+    },
+    created: function created() {
+        this.initMenuItems();
+    }
+});
+
+/***/ }),
+/* 302 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.$auth.ready()
+    ? _c(
+        "v-container",
+        { attrs: { fluid: "" } },
+        [
+          _c(
+            "v-navigation-drawer",
+            {
+              attrs: { clipped: !_vm.smAndDown, app: "", dark: "" },
+              model: {
+                value: _vm.drawer,
+                callback: function($$v) {
+                  _vm.drawer = $$v
+                },
+                expression: "drawer"
+              }
+            },
+            [
+              _vm.xsOnly
+                ? _c(
+                    "v-list",
+                    [
+                      _c(
+                        "v-list-tile",
+                        { attrs: { avatar: "" } },
+                        [
+                          _c("v-list-tile-avatar", [
+                            _c("img", {
+                              staticStyle: {
+                                "object-fit": "cover",
+                                width: "40px",
+                                height: "40px"
+                              },
+                              attrs: {
+                                src: "/storage/" + _vm.$auth.user().image,
+                                alt: "avatar"
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.$auth.user().last_name +
+                                      " " +
+                                      _vm.$auth.user().first_name +
+                                      " " +
+                                      _vm.$auth.user().mid_name
+                                  )
+                                )
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-list",
+                { attrs: { "two-line": "" } },
+                _vm._l(_vm.menuItems, function(item, index) {
+                  return _c(
+                    "v-list-tile",
+                    {
+                      key: index,
+                      staticClass: "white--text",
+                      attrs: { "active-class": "menu-active", to: item.link }
+                    },
+                    [
+                      _c(
+                        "v-list-tile-action",
+                        [
+                          _c("v-icon", { attrs: { large: "" } }, [
+                            _vm._v(_vm._s(item.icon))
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile-content",
+                        [_c("v-list-tile-title", [_vm._v(_vm._s(item.title))])],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                })
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-toolbar",
+            {
+              attrs: {
+                dark: "",
+                fixed: "",
+                app: "",
+                "clipped-left": !_vm.smAndDown
+              }
+            },
+            [
+              _c("v-toolbar-side-icon", {
+                on: {
+                  click: function($event) {
+                    $event.stopPropagation()
+                    _vm.drawer = !_vm.drawer
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              !_vm.xsOnly
+                ? _c(
+                    "v-toolbar-items",
+                    [
+                      _c(
+                        "v-btn",
+                        { attrs: { flat: "" } },
+                        [
+                          _c("span", { staticClass: "mr-3" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.$auth.user().last_name +
+                                  " " +
+                                  _vm.$auth.user().first_name +
+                                  " " +
+                                  _vm.$auth.user().mid_name
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-avatar",
+                            { attrs: { size: 40, color: "grey lighten-4" } },
+                            [
+                              _c("img", {
+                                staticStyle: {
+                                  "object-fit": "cover",
+                                  width: "40px",
+                                  height: "40px"
+                                },
+                                attrs: {
+                                  src: "/storage/" + _vm.$auth.user().image,
+                                  alt: "avatar"
+                                }
+                              })
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  staticClass: "ml-2",
+                  attrs: { icon: "" },
+                  on: { click: _vm.logOut }
+                },
+                [_c("v-icon", [_vm._v("exit_to_app")])],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-content", [_vm._t("default")], 2)
+        ],
+        1
+      )
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1d8eafd6", module.exports)
+  }
+}
+
+/***/ }),
+/* 303 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.$auth.ready() && _vm.loaded
+    ? _c(
+        "v-app",
+        [
+          _vm.$auth.check()
+            ? [
+                _c(
+                  "appNavigation",
+                  [
+                    _c(
+                      "transition",
+                      {
+                        attrs: {
+                          appear: "",
+                          "enter-class": "",
+                          "enter-active-class": "animated fadeInDown",
+                          "leave-class": "",
+                          "leave-active-class": "animated fadeOutDown",
+                          mode: "out-in"
+                        }
+                      },
+                      [_c("router-view", { key: _vm.$route.fullPath })],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ]
+            : [_c("router-view", { key: _vm.$route.fullPath })]
+        ],
+        2
+      )
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6dd1125c", module.exports)
+  }
+}
+
+/***/ }),
+/* 304 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
