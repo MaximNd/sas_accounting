@@ -23,7 +23,6 @@
                         </v-text-field>
                     </v-card-title>
                     <v-data-table
-                        disable-initial-sort
                         :headers="headers"
                         :items="orders"
                         :pagination.sync="pagination"
@@ -66,7 +65,9 @@ export default {
             orders: [],
             loading: true,
             pagination: {
-                rowsPerPage: 10
+                rowsPerPage: 10,
+                sortBy: 'created_at',
+                descending: true
             },
             headers: [
                 {
@@ -80,8 +81,7 @@ export default {
                 { text: 'Статус отправки', value: 'is_sent' },
                 { text: 'Статус согласования', value: 'is_agreed' },
                 { text: 'Статус оплаты', value: 'is_paid' },
-                { text: 'Дата создания', value: 'created_at' },
-                { text: 'Удаление', value: '', align: 'right', sortable: false }
+                { text: 'Дата создания', value: 'created_at' }
             ],
             deletingOrder: {}
         };
@@ -140,6 +140,11 @@ export default {
         },
         closeDialog() {
             this.deleteDialog = false;
+        }
+    },
+    created() {
+        if (this.$auth.check('admin')) {
+            this.headers.push({ text: 'Удаление', value: '', align: 'right', sortable: false });
         }
     },
     components: {
