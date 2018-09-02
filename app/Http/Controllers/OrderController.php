@@ -68,6 +68,10 @@ class OrderController extends Controller
         return $result;
     }
 
+    public function getOrder($id) {
+        return Order::with('client')->with('gpsData')->find($id);
+    }
+
     public function getOrders(Request $request) {
         $params = $request->query();
         $query = Order::query();
@@ -78,6 +82,7 @@ class OrderController extends Controller
 
         if (isset($params['query'])) {
             $value = '%'.$params['query'].'%';
+
             $query
                 ->where('name', 'like', $value)
                 ->orWhere('area', 'like', $value)
@@ -89,8 +94,19 @@ class OrderController extends Controller
         }
 
         if (isset($params['sortBy']) && isset($params['direction'])) {
-            $query->orderBy($params['sortBy'], $params['direction']);
+            $sortColumns = explode('.', $params['sortBy']);
+            if (count($sortColumns) === 1) {
+                $query->orderBy($params['sortBy'], $params['direction']);
+            } else {
+                $query
+                    ->join('clients', 'orders.client_id', '=', 'clients.id')
+                    ->orderBy($sortColumns[1], $params['direction'])
+                    ->select('orders.*');
+            }
         }
+//        \DB::listen(function($sql) {
+//            dd($sql);
+//        });
         return $query->with('client')->paginate($params['per_page']);
     }
 

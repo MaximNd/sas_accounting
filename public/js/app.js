@@ -16266,12 +16266,17 @@ var mutations = {
 };
 
 var actions = {
-    createEquipment: function createEquipment(_ref, payload) {
+    reset: function reset(_ref) {
         var commit = _ref.commit;
 
+        commit('SET_EQUIPMENT_LIST', []);
+    },
+    createEquipment: function createEquipment(_ref2, payload) {
+        var commit = _ref2.commit;
+
         return new Promise(function (resolve, reject) {
-            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.post('/price-list', payload).then(function (_ref2) {
-                var data = _ref2.data;
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.post('/price-list', payload).then(function (_ref3) {
+                var data = _ref3.data;
 
                 commit('ADD_EQUIPMENT', data);
                 resolve(data);
@@ -16280,15 +16285,15 @@ var actions = {
             });
         });
     },
-    editEquipment: function editEquipment(_ref3, payload) {
-        var commit = _ref3.commit;
+    editEquipment: function editEquipment(_ref4, payload) {
+        var commit = _ref4.commit;
 
         var id = payload.id,
             editedData = _objectWithoutProperties(payload, ['id']);
 
         return new Promise(function (resolve, reject) {
-            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.put('/price-list/' + id, editedData).then(function (_ref4) {
-                var data = _ref4.data;
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.put('/price-list/' + id, editedData).then(function (_ref5) {
+                var data = _ref5.data;
 
                 commit('EDIT_EQUIPMENT', payload);
                 resolve(data);
@@ -16297,23 +16302,27 @@ var actions = {
             });
         });
     },
-    getPriseList: function getPriseList(_ref5) {
-        var commit = _ref5.commit;
-
-        __WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.get('/price-list').then(function (_ref6) {
-            var data = _ref6.data;
-
-            commit('SET_EQUIPMENT_LIST', data);
-        }).catch(function (err) {
-            return console.log(err);
-        });
-    },
-    deleteEquipment: function deleteEquipment(_ref7, payload) {
-        var commit = _ref7.commit;
+    getPriseList: function getPriseList(_ref6) {
+        var commit = _ref6.commit;
 
         return new Promise(function (resolve, reject) {
-            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.delete('/price-list/' + payload).then(function (_ref8) {
-                var data = _ref8.data;
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.get('/price-list').then(function (_ref7) {
+                var data = _ref7.data;
+
+                commit('SET_EQUIPMENT_LIST', data);
+                resolve(data);
+            }).catch(function (err) {
+                console.log(err);
+                reject(err);
+            });
+        });
+    },
+    deleteEquipment: function deleteEquipment(_ref8, payload) {
+        var commit = _ref8.commit;
+
+        return new Promise(function (resolve, reject) {
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.axios.delete('/price-list/' + payload).then(function (_ref9) {
+                var data = _ref9.data;
 
                 commit('DELETE_EQUIPMENT', payload);
                 resolve(data);
@@ -37901,8 +37910,11 @@ module.exports = function (css) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue__ = __webpack_require__(279);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__containers_priceListHistory_PriceListHistory_vue__ = __webpack_require__(287);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__containers_priceListHistory_PriceListHistory_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__containers_priceListHistory_PriceListHistory_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__containers_order_Order_vue__ = __webpack_require__(306);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__containers_order_Order_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__containers_order_Order_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__containers_priceListHistory_PriceListHistory_vue__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__containers_priceListHistory_PriceListHistory_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__containers_priceListHistory_PriceListHistory_vue__);
+
 
 
 
@@ -37957,9 +37969,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
         name: 'orders',
         component: __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue___default.a
     }, {
+        path: '/orders/:id',
+        name: 'order',
+        component: __WEBPACK_IMPORTED_MODULE_11__containers_order_Order_vue___default.a
+    }, {
         path: '/price-list-history',
         name: 'price-list-history',
-        component: __WEBPACK_IMPORTED_MODULE_11__containers_priceListHistory_PriceListHistory_vue___default.a
+        component: __WEBPACK_IMPORTED_MODULE_12__containers_priceListHistory_PriceListHistory_vue___default.a
     }, {
         path: '',
         name: 'home',
@@ -50851,6 +50867,37 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -50880,6 +50927,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             snackColor: '',
             snackText: '',
             snackTimeout: 1500,
+            defaultRowCount: 0,
             initialGPSRowData: {
                 id: 1,
                 image: '',
@@ -50904,6 +50952,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             cachedData: [],
             newCachedData: [],
             orderInCreation: false,
+            oldOrder: {},
             orderData: {
                 name: '',
                 client: null,
@@ -50917,7 +50966,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 transportation_kms: '',
                 route: '',
                 services: [],
-                GPSData: []
+                GPSData: null
             },
             clients: [],
             isClientCreation: false
@@ -50953,7 +51002,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
             var area = this.orderData.area === '' || this.orderData.area === null ? 0 : parseFloat(this.orderData.area);
             return this.orderData.services.reduce(function (price, service) {
-                return service.value ? _this.addTwoFloats(price, _this.multiplyTwoFloats(service.price, area)) : price;
+                return _this.addTwoFloats(price, _this.multiplyTwoFloats(service.price, area));
             }, 0);
         },
         priceForDays: function priceForDays() {
@@ -50965,6 +51014,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         pricesForEquipment: function pricesForEquipment() {
             var _this2 = this;
 
+            var defaultPrices = { equipmentPrices: [], installationPrices: [] };
+            if (!this.orderData.GPSData) return defaultPrices;
             return this.orderData.GPSData.reduce(function (prices, row, index) {
                 prices.equipmentPrices.push({});
                 prices.installationPrices[index] = 0.00;
@@ -51002,7 +51053,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                     }
                 });
                 return prices;
-            }, { equipmentPrices: [], installationPrices: [] });
+            }, defaultPrices);
         },
         allEquipmentPrice: function allEquipmentPrice() {
             var _this3 = this;
@@ -51036,13 +51087,61 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
     }),
     watch: {
-        services: function services(newValue) {
-            this.orderData.services = this.services.map(function (service) {
-                return { id: service.id, name: service.name, price: service.price, value: false };
-            });
-        }
+        // services(newValue) {
+        //     this.orderData.services = this.services.map(service => ({ id: service.id, name: service.name, price: service.price, value: false }));
+        // }
     },
     methods: {
+        initOrder: function initOrder(priceList) {
+            var _this5 = this;
+
+            var copyOrder = __WEBPACK_IMPORTED_MODULE_4_deep_copy___default()(this.order);
+            copyOrder.services = copyOrder.services.map(function (serviceID) {
+                return _this5.services.find(function (service) {
+                    return service.id === serviceID;
+                });
+            });
+            var id = 0;
+            copyOrder.gps_data = copyOrder.gps_data.map(function (gpsDataRow) {
+                ++id;
+                return Object.keys(gpsDataRow).reduce(function (newRow, key) {
+                    if (key !== 'id' && typeof gpsDataRow[key] === 'number') {
+                        newRow[key] = priceList.find(function (data) {
+                            return data.id === gpsDataRow[key];
+                        });
+                    } else if (Array.isArray(gpsDataRow[key])) {
+                        newRow[key] = gpsDataRow[key].map(function (id) {
+                            return priceList.find(function (data) {
+                                return data.id === id;
+                            });
+                        });
+                    } else if (key !== 'id' && typeof gpsDataRow[key] === 'string') {
+                        newRow[key] = gpsDataRow[key];
+                    } else if (key !== 'id' && (_this5.isNull(gpsDataRow[key]) || _this5.isUndefined(gpsDataRow[key]))) {
+                        newRow[key] = '';
+                    }
+                    return newRow;
+                }, { id: id });
+            });
+            this.initialGPSRowData.id = ++id;
+            this.oldOrder = copyOrder;
+            var newOrderData = __WEBPACK_IMPORTED_MODULE_4_deep_copy___default()(copyOrder);
+            this.orderData.name = newOrderData.name;
+            this.orderData.client = newOrderData.client;
+            this.orderData.statuses = {
+                is_sent: newOrderData.is_sent, is_agreed: newOrderData.is_agreed, is_paid: newOrderData.is_paid
+            };
+            this.orderData.area = newOrderData.area;
+            this.orderData.dollar_rate = newOrderData.dollar_rate;
+            this.orderData.days = newOrderData.days;
+            this.orderData.price_for_day = newOrderData.price_for_day;
+            this.orderData.price_for_transportation_per_km = newOrderData.price_for_transportation_per_km;
+            this.orderData.number_of_trips = newOrderData.number_of_trips;
+            this.orderData.transportation_kms = newOrderData.transportation_kms;
+            this.orderData.route = newOrderData.route;
+            this.orderData.services = newOrderData.services;
+            this.orderData.GPSData = newOrderData.gps_data;
+        },
         addCache: function addCache(column, value) {
             this.newCachedData.push({ column_name: column, value: value });
             localStorage.setItem('newCachedData', JSON.stringify(this.newCachedData));
@@ -51051,37 +51150,37 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             localStorage.setItem('orderData', JSON.stringify(this.orderData));
         },
         getClients: function getClients() {
-            var _this5 = this;
+            var _this6 = this;
 
             this.axios.get('/clients/all').then(function (_ref) {
                 var data = _ref.data;
 
                 var clients = data.map(function (client) {
-                    return _this5.getClientWithTextValue(client);
+                    return _this6.getClientWithTextValue(client);
                 });
-                _this5.clients = clients;
+                _this6.clients = clients;
             }).catch(function (err) {
                 return console.log(err);
             });
         },
         getCachedData: function getCachedData() {
-            var _this6 = this;
+            var _this7 = this;
 
             this.axios.get('/cache').then(function (_ref2) {
                 var data = _ref2.data;
 
-                _this6.cachedData = data;
+                _this7.cachedData = data;
             }).catch(function (err) {
                 return console.log(err);
             });
         },
         getDollarRate: function getDollarRate() {
-            var _this7 = this;
+            var _this8 = this;
 
             this.axios.get('/order/dollar-rate').then(function (_ref3) {
                 var data = _ref3.data;
 
-                _this7.orderData.dollar_rate = data[0].rate;
+                _this8.orderData.dollar_rate = data[0].rate;
             }).catch(function (err) {
                 return console.log(err);
             });
@@ -51157,8 +51256,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 }));
                 ++this.initialGPSRowData.id;
             }
-            this.saveOrderDataToLocalStorage();
-            this.showSnackbar('info', this.declOfNum(count, ['Добавлен', 'Добавлено', 'Добавлено']) + ' ' + count + ' ' + this.declOfNum(count, ['ряд', 'ряда', 'рядов']));
+            if (count > 0) {
+                this.saveOrderDataToLocalStorage();
+                this.showSnackbar('info', this.declOfNum(count, ['Добавлен', 'Добавлено', 'Добавлено']) + ' ' + count + ' ' + this.declOfNum(count, ['ряд', 'ряда', 'рядов']));
+            }
         },
         dragNDropGPSData: function dragNDropGPSData(newIndex, oldIndex) {
             var rowSelected = this.orderData.GPSData.splice(oldIndex, 1)[0];
@@ -51167,7 +51268,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             this.showSnackbar('info', '\u0420\u044F\u0434 \u0431\u044B\u043B \u043F\u0435\u0440\u0435\u043C\u0435\u0449\u0451\u043D');
         },
         createOrder: function createOrder() {
-            var _this8 = this;
+            var _this9 = this;
 
             this.orderInCreation = true;
             var orderData = {
@@ -51185,21 +51286,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 transportation_kms: this.orderData.transportation_kms,
                 route: this.orderData.route,
                 services: JSON.stringify(this.orderData.services.reduce(function (services, service) {
-                    if (service.value) {
-                        services.push(service.id);
-                    }
+                    services.push(service.id);
                     return services;
                 }, [])),
                 GPSData: this.orderData.GPSData.map(function (row) {
                     var newRow = {};
                     Object.keys(row).forEach(function (key) {
                         var value = row[key];
-                        if (_this8.isObject(value)) {
+                        if (_this9.isObject(value)) {
                             newRow[key] = value.id;
                         } else if (Array.isArray(value)) {
                             var ids = [];
                             value.forEach(function (el) {
-                                if (_this8.isUndefined(el) || _this8.isNull(el)) return;
+                                if (_this9.isUndefined(el) || _this9.isNull(el)) return;
                                 ids.push(el.id);
                             });
                             newRow[key] = JSON.stringify(ids);
@@ -51218,17 +51317,27 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             }).catch(function (err) {
                 return console.log(err);
             }).finally(function () {
-                return _this8.orderInCreation = false;
+                return _this9.orderInCreation = false;
             });
 
             if (this.newCachedData.length > 0) this.axios.post('/cache', { cache: this.newCachedData });
         }
     },
     created: function created() {
-        this.getDollarRate();
-        this.getClients();
+        var _this10 = this;
+
+        if (this.isCreation) {
+            this.getDollarRate();
+            this.getClients();
+            this.$store.dispatch('getPriseList');
+            this.orderData.GPSData = [];
+            this.defaultRowCount = 4;
+        } else {
+            this.$store.dispatch('getPriseList').then(function (data) {
+                _this10.initOrder(data);
+            });
+        }
         this.getCachedData();
-        this.$store.dispatch('getPriseList');
         this.newCachedData = JSON.parse(localStorage.getItem('newCachedData')) || [];
         // this.orderData = JSON.parse(localStorage.getItem('orderData'));
     },
@@ -52040,6 +52149,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins_stylesMixins_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__mixins_utils_js__["a" /* default */]],
     props: {
+        defaultRowCount: {
+            type: Number,
+            required: true
+        },
         orderGPSData: {
             type: Array,
             required: true
@@ -52129,12 +52242,22 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         addRow: function addRow() {
             var count = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
 
+            this.addEditModCells(count);
+            this.$emit('rowAdded', count);
+        },
+        addEditModCells: function addEditModCells(count) {
+            var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+            if (!index) index = this.editModCells.length - 1;
             for (var i = 0; i < count; ++i) {
-                this.editModCells.push(Array.apply(null, { length: this.headers.length - 1 }).map(function () {
+                this.editModCells.splice(index + i, 0, Array.apply(null, { length: this.headers.length - 1 }).map(function () {
                     return false;
                 }));
             }
-            this.$emit('rowAdded', count);
+        },
+        swapEditModCells: function swapEditModCells(newIndex, oldIndex) {
+            var rowSelected = this.editModCells.splice(oldIndex, 1)[0];
+            this.editModCells.splice(newIndex, 0, rowSelected);
         },
         onPickFile: function onPickFile(ref) {
             this.$refs[ref].click();
@@ -52453,7 +52576,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
     },
     created: function created() {
-        this.addRow(4);
+        this.addEditModCells(this.orderGPSData.length);
+        this.addRow(this.defaultRowCount);
     },
     mounted: function mounted() {
         var tableBody = document.querySelector('#gps-data-table .v-datatable tbody');
@@ -52480,6 +52604,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                     oldIndex = _ref2.oldIndex;
 
                 _self.$emit('drag-n-drop-gps-data', newIndex, oldIndex);
+                _self.swapEditModCells(newIndex, oldIndex);
             }
         });
         var tableOverflow = document.querySelector('#gps-data-table .v-table__overflow');
@@ -57463,83 +57588,93 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c(
-                        "v-layout",
-                        {
-                          attrs: {
-                            wrap: "",
-                            "justify-center": _vm.$vuetify.breakpoint.mdAndUp,
-                            "justify-start": _vm.$vuetify.breakpoint.smAndDown
-                          }
-                        },
-                        [
-                          _c(
-                            "v-flex",
-                            { attrs: { xs12: "", sm7: "", md6: "" } },
-                            [
-                              !_vm.isClientCreation
-                                ? _c("v-autocomplete", {
-                                    attrs: {
-                                      items: _vm.clients,
-                                      "hide-selected": "",
-                                      "item-text": "text",
-                                      "item-value": "id",
-                                      label: "Вибирете клиента",
-                                      hint:
-                                        "Если в списке нету нужного клиента, то вы можете его создать",
-                                      "persistent-hint": ""
-                                    },
-                                    model: {
-                                      value: _vm.orderData.client,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.orderData, "client", $$v)
-                                      },
-                                      expression: "orderData.client"
-                                    }
-                                  })
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.isClientCreation
-                                ? _c("appCreateClient", {
-                                    attrs: { clients: _vm.clients },
-                                    on: {
-                                      existingClientSelected:
-                                        _vm.selectExistingClient,
-                                      clientCreated: _vm.selectCreatedClient
-                                    }
-                                  })
-                                : _vm._e()
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-flex",
-                            { attrs: { xs12: "", sm3: "", md2: "" } },
+                      _vm.isCreation
+                        ? _c(
+                            "v-layout",
+                            {
+                              attrs: {
+                                wrap: "",
+                                "justify-center":
+                                  _vm.$vuetify.breakpoint.mdAndUp,
+                                "justify-start":
+                                  _vm.$vuetify.breakpoint.smAndDown
+                              }
+                            },
                             [
                               _c(
-                                "v-btn",
-                                {
-                                  attrs: {
-                                    block: _vm.$vuetify.breakpoint.xsOnly,
-                                    color: "primary"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      _vm.isClientCreation = !_vm.isClientCreation
-                                    }
-                                  }
-                                },
+                                "v-flex",
+                                { attrs: { xs12: "", sm7: "", md6: "" } },
+                                [
+                                  !_vm.isClientCreation
+                                    ? _c("v-autocomplete", {
+                                        attrs: {
+                                          items: _vm.clients,
+                                          "hide-selected": "",
+                                          "item-text": "text",
+                                          "item-value": "id",
+                                          label: "Вибирете клиента",
+                                          hint:
+                                            "Если в списке нету нужного клиента, то вы можете его создать",
+                                          "persistent-hint": ""
+                                        },
+                                        model: {
+                                          value: _vm.orderData.client,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.orderData,
+                                              "client",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "orderData.client"
+                                        }
+                                      })
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.isClientCreation
+                                    ? _c("appCreateClient", {
+                                        attrs: { clients: _vm.clients },
+                                        on: {
+                                          existingClientSelected:
+                                            _vm.selectExistingClient,
+                                          clientCreated: _vm.selectCreatedClient
+                                        }
+                                      })
+                                    : _vm._e()
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs12: "", sm3: "", md2: "" } },
                                 [
                                   _c(
-                                    "v-icon",
-                                    { attrs: { small: "", left: "" } },
-                                    [_vm._v("compare_arrows")]
-                                  ),
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(_vm.switcherBtnText) +
-                                      "\n                            "
+                                    "v-btn",
+                                    {
+                                      attrs: {
+                                        block: _vm.$vuetify.breakpoint.xsOnly,
+                                        color: "primary"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.isClientCreation = !_vm.isClientCreation
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "v-icon",
+                                        { attrs: { small: "", left: "" } },
+                                        [_vm._v("compare_arrows")]
+                                      ),
+                                      _vm._v(
+                                        "\n                                " +
+                                          _vm._s(_vm.switcherBtnText) +
+                                          "\n                            "
+                                      )
+                                    ],
+                                    1
                                   )
                                 ],
                                 1
@@ -57547,9 +57682,29 @@ var render = function() {
                             ],
                             1
                           )
-                        ],
-                        1
-                      ),
+                        : _c(
+                            "v-layout",
+                            { attrs: { wrap: "", "justify-start": "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                {
+                                  attrs: { xs12: "", "offset-md2": "", md6: "" }
+                                },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Клиент",
+                                      readonly: "",
+                                      value: "Клиент (Компания)"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
                       _vm._v(" "),
                       _c(
                         "v-layout",
@@ -57720,43 +57875,45 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c(
-                        "v-layout",
-                        { attrs: { wrap: "" } },
-                        _vm._l(_vm.orderData.services, function(
-                          service,
-                          index
-                        ) {
-                          return _c(
-                            "v-flex",
-                            {
-                              key: "service-" + index,
-                              attrs: { xs12: "", "offset-md2": "", md10: "" }
-                            },
-                            [
-                              _c("v-checkbox", {
-                                style: {
-                                  padding: 0,
-                                  margin: index !== 0 ? 0 : false
+                      _vm.services.length > 0
+                        ? _c(
+                            "v-layout",
+                            { attrs: { wrap: "" } },
+                            _vm._l(_vm.services, function(service, index) {
+                              return _c(
+                                "v-flex",
+                                {
+                                  key: "service-" + index,
+                                  attrs: {
+                                    xs12: "",
+                                    "offset-md2": "",
+                                    md10: ""
+                                  }
                                 },
-                                attrs: { label: service.name },
-                                model: {
-                                  value: _vm.orderData.services[index].value,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.orderData.services[index],
-                                      "value",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "orderData.services[index].value"
-                                }
-                              })
-                            ],
-                            1
+                                [
+                                  _c("v-checkbox", {
+                                    style: {
+                                      padding: 0,
+                                      margin: index !== 0 ? 0 : false
+                                    },
+                                    attrs: {
+                                      label: service.name,
+                                      value: service
+                                    },
+                                    model: {
+                                      value: _vm.orderData.services,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.orderData, "services", $$v)
+                                      },
+                                      expression: "orderData.services"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            })
                           )
-                        })
-                      )
+                        : _vm._e()
                     ],
                     1
                   )
@@ -57787,31 +57944,42 @@ var render = function() {
           _c(
             "v-card-text",
             [
-              _c("appGPSData", {
-                ref: "GPSData",
-                attrs: {
-                  orderGPSData: _vm.orderData.GPSData,
-                  gpsTrackers: _vm.gpsTrackers,
-                  fuelLevelSensors: _vm.fuelLevelSensors,
-                  fuelFlowmeters: _vm.fuelFlowmeters,
-                  identification: _vm.identification,
-                  optionalEquipment: _vm.optionalEquipment,
-                  pricesForEquipment: _vm.pricesForEquipment,
-                  allEquipmentPrice: _vm.allEquipmentPrice,
-                  allInstallationPrice: _vm.allInstallationPrice,
-                  cachedData: _vm.allCacheData
-                },
-                on: {
-                  "update:orderGPSData": _vm.updateOrderGPSData,
-                  "add-nested-data:orderGPSData":
-                    _vm.addNestedDataInOrderGPSData,
-                  "delete-nested-data:orderGPSData":
-                    _vm.deleteNestedDataInOrderGPSData,
-                  "copy-values:orderGPSData": _vm.copySelectedInOrderGPSData,
-                  "drag-n-drop-gps-data": _vm.dragNDropGPSData,
-                  rowAdded: _vm.addRowToOrderGPSData
-                }
-              })
+              _vm.orderData.GPSData
+                ? _c("appGPSData", {
+                    ref: "GPSData",
+                    attrs: {
+                      orderGPSData: _vm.orderData.GPSData,
+                      gpsTrackers: _vm.gpsTrackers,
+                      fuelLevelSensors: _vm.fuelLevelSensors,
+                      fuelFlowmeters: _vm.fuelFlowmeters,
+                      identification: _vm.identification,
+                      optionalEquipment: _vm.optionalEquipment,
+                      pricesForEquipment: _vm.pricesForEquipment,
+                      allEquipmentPrice: _vm.allEquipmentPrice,
+                      allInstallationPrice: _vm.allInstallationPrice,
+                      cachedData: _vm.allCacheData,
+                      defaultRowCount: _vm.defaultRowCount
+                    },
+                    on: {
+                      "update:orderGPSData": _vm.updateOrderGPSData,
+                      "add-nested-data:orderGPSData":
+                        _vm.addNestedDataInOrderGPSData,
+                      "delete-nested-data:orderGPSData":
+                        _vm.deleteNestedDataInOrderGPSData,
+                      "copy-values:orderGPSData":
+                        _vm.copySelectedInOrderGPSData,
+                      "drag-n-drop-gps-data": _vm.dragNDropGPSData,
+                      rowAdded: _vm.addRowToOrderGPSData
+                    }
+                  })
+                : _c("v-progress-linear", {
+                    attrs: {
+                      width: 10,
+                      size: 100,
+                      color: "primary",
+                      indeterminate: ""
+                    }
+                  })
             ],
             1
           ),
@@ -58099,9 +58267,11 @@ var render = function() {
                       }
                     },
                     [
-                      _c("appEquipmentData", {
-                        attrs: { orderGPSData: _vm.orderData.GPSData }
-                      })
+                      _vm.orderData.GPSData
+                        ? _c("appEquipmentData", {
+                            attrs: { orderGPSData: _vm.orderData.GPSData }
+                          })
+                        : _vm._e()
                     ],
                     1
                   )
@@ -58119,31 +58289,106 @@ var render = function() {
                 "v-layout",
                 { staticClass: "mb-4", attrs: { "justify-center": "" } },
                 [
-                  _c(
-                    "v-flex",
-                    { attrs: { xs12: "", sm11: "", md3: "" } },
-                    [
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: {
-                            block: "",
-                            large: "",
-                            color: "primary",
-                            loading: _vm.orderInCreation,
-                            disabled: _vm.orderInCreation
-                          },
-                          on: { click: _vm.createOrder }
-                        },
+                  _vm.isCreation
+                    ? _c(
+                        "v-flex",
+                        { attrs: { xs12: "", sm11: "", md3: "" } },
                         [
-                          _vm._v(
-                            "\n                        Создать заказ\n                    "
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                block: "",
+                                large: "",
+                                color: "primary",
+                                loading: _vm.orderInCreation,
+                                disabled: _vm.orderInCreation
+                              },
+                              on: { click: _vm.createOrder }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Создать заказ\n                    "
+                              )
+                            ]
                           )
-                        ]
+                        ],
+                        1
                       )
-                    ],
-                    1
-                  )
+                    : _c(
+                        "v-flex",
+                        { attrs: { xs12: "", md8: "" } },
+                        [
+                          _c(
+                            "v-container",
+                            { attrs: { fluid: "", "grid-list-md": "" } },
+                            [
+                              _c(
+                                "v-layout",
+                                { attrs: { wrap: "", "justify-center": "" } },
+                                [
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { xs12: "", sm6: "" } },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            large: "",
+                                            block: "",
+                                            color: "info"
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "v-icon",
+                                            { attrs: { left: "" } },
+                                            [_vm._v("backup")]
+                                          ),
+                                          _vm._v("Сохранить")
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { xs12: "", sm6: "" } },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            large: "",
+                                            block: "",
+                                            color: "primary"
+                                          }
+                                        },
+                                        [
+                                          _vm._v("Скачать PDF "),
+                                          _c(
+                                            "v-icon",
+                                            { attrs: { right: "" } },
+                                            [_vm._v("get_app")]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
                 ],
                 1
               )
@@ -58375,7 +58620,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -58388,13 +58632,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             orders: [],
             loading: true,
             pagination: {
-                rowsPerPage: 10
+                rowsPerPage: 10,
+                sortBy: 'created_at',
+                descending: true
             },
             headers: [{
                 text: 'Название',
                 align: 'left',
                 value: 'name'
-            }, { text: 'Клиент', value: 'client.person_full_name' }, { text: 'Компания', value: 'client.company_name' }, { text: 'Площадь', value: 'area', width: '15px' }, { text: 'Статус отправки', value: 'is_sent' }, { text: 'Статус согласования', value: 'is_agreed' }, { text: 'Статус оплаты', value: 'is_paid' }, { text: 'Дата создания', value: 'created_at' }, { text: 'Удаление', value: '', align: 'right', sortable: false }],
+            }, { text: 'Клиент', value: 'client.person_full_name' }, { text: 'Компания', value: 'client.company_name' }, { text: 'Площадь', value: 'area', width: '15px' }, { text: 'Статус отправки', value: 'is_sent' }, { text: 'Статус согласования', value: 'is_agreed' }, { text: 'Статус оплаты', value: 'is_paid' }, { text: 'Дата создания', value: 'created_at' }],
             deletingOrder: {}
         };
     },
@@ -58465,6 +58711,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.deleteDialog = false;
         }
     },
+    created: function created() {
+        if (this.$auth.check('admin')) {
+            this.headers.push({ text: 'Удаление', value: '', align: 'right', sortable: false });
+        }
+    },
+
     components: {
         appDeleteOrder: __WEBPACK_IMPORTED_MODULE_0__components_order_deleteOrder_DeleteOrder___default.a
     }
@@ -58729,7 +58981,6 @@ var render = function() {
                   _c("v-data-table", {
                     staticClass: "elevation-1",
                     attrs: {
-                      "disable-initial-sort": "",
                       headers: _vm.headers,
                       items: _vm.orders,
                       pagination: _vm.pagination,
@@ -60462,7 +60713,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         initMenuItems: function initMenuItems() {
-            this.menuItems = [{ title: 'Профиль', icon: 'mdi-account-box-outline', link: '/profile' }, { title: 'Заказы', icon: 'event', link: '/orders' }, { title: 'Зоздать заказ', icon: 'border_color', link: '/create-order' }, { title: 'Сотрудники', icon: 'account_circle', link: '/users' }, { title: 'Клиенты', icon: 'work', link: '/clients' }, { title: 'Прайслист', icon: 'assignment', link: '/price-list' }, { title: 'История заказов', icon: 'restore', link: '/orders-history' }, { title: 'История прайслиста', icon: 'restore', link: '/price-list-history' }];
+            this.menuItems = [{ title: 'Профиль', icon: 'portrait', link: '/profile' }, { title: 'Заказы', icon: 'event', link: '/orders' }, { title: 'Зоздать заказ', icon: 'border_color', link: '/create-order' }, { title: 'Сотрудники', icon: 'account_circle', link: '/users' }, { title: 'Клиенты', icon: 'work', link: '/clients' }, { title: 'Прайслист', icon: 'assignment', link: '/price-list' }, { title: 'История заказов', icon: 'restore', link: '/orders-history' }, { title: 'История прайслиста', icon: 'restore', link: '/price-list-history' }];
         },
         logOut: function logOut() {
             this.$auth.logout();
@@ -60738,6 +60989,161 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 305 */,
+/* 306 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(307)
+/* template */
+var __vue_template__ = __webpack_require__(308)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\containers\\order\\Order.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-373c8495", Component.options)
+  } else {
+    hotAPI.reload("data-v-373c8495", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 307 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_order_Order__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_order_Order___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_order_Order__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            order: null
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        this.axios.get('/order/' + this.$route.params.id).then(function (_ref) {
+            var data = _ref.data;
+
+            _this.order = data;
+        }).catch(function (err) {
+            return console.log(err);
+        });
+    },
+    beforeRouteLeave: function beforeRouteLeave(to, from, next) {
+        this.$store.dispatch('reset');
+        next();
+    },
+
+    components: {
+        appOrder: __WEBPACK_IMPORTED_MODULE_0__components_order_Order___default.a
+    }
+});
+
+/***/ }),
+/* 308 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-container",
+    { attrs: { fluid: "" } },
+    [
+      _c(
+        "v-layout",
+        { attrs: { wrap: "" } },
+        [
+          _c(
+            "v-flex",
+            { attrs: { xs12: "", "d-flex": "", "justify-center": "" } },
+            [
+              _vm.order
+                ? _c("appOrder", {
+                    attrs: { order: _vm.order, isCreation: false }
+                  })
+                : _c("v-progress-circular", {
+                    attrs: {
+                      width: 10,
+                      size: 100,
+                      color: "primary",
+                      indeterminate: ""
+                    }
+                  })
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-373c8495", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

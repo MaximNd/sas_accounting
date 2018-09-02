@@ -63,6 +63,8 @@ Route::group(['middleware' => ['auth:api']], function() {
     // ORDERS
     Route::get('/order/dollar-rate', 'OrderController@dollarRate');
 
+    Route::get('/order/{id}', 'OrderController@getOrder');
+
     Route::get('/orders', 'OrderController@getOrders');
 
     Route::post('/orders/image', 'OrderController@uploadImage');

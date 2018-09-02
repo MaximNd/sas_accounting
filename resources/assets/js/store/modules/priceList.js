@@ -50,6 +50,9 @@ const mutations = {
 };
 
 const actions = {
+    reset({ commit }) {
+        commit('SET_EQUIPMENT_LIST', []);
+    },
     createEquipment({ commit }, payload) {
         return new Promise((resolve, reject) => {
             Vue.axios.post('/price-list', payload)
@@ -72,11 +75,17 @@ const actions = {
         });
     },
     getPriseList({ commit }) {
-        Vue.axios.get('/price-list')
-            .then(({data}) => {
-                commit('SET_EQUIPMENT_LIST', data);
-            })
-            .catch(err => console.log(err));
+        return new Promise((resolve, reject) => {
+            Vue.axios.get('/price-list')
+                .then(({data}) => {
+                    commit('SET_EQUIPMENT_LIST', data);
+                    resolve(data);
+                })
+                .catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
+        });
     },
     deleteEquipment({ commit }, payload) {
         return new Promise((resolve, reject) => {

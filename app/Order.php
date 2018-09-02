@@ -28,6 +28,13 @@ class Order extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected $casts = [
+        'services' => 'array',
+        'is_sent' => 'boolean',
+        'is_agreed' => 'boolean',
+        'is_paid' => 'boolean'
+    ];
+
     public function client() {
         return $this->belongsTo('App\Client', 'client_id');
     }

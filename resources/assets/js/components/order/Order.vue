@@ -23,7 +23,7 @@
                                 </v-text-field>
                             </v-flex>
                         </v-layout>
-                        <v-layout wrap :justify-center="$vuetify.breakpoint.mdAndUp" :justify-start="$vuetify.breakpoint.smAndDown">
+                        <v-layout v-if="isCreation" wrap :justify-center="$vuetify.breakpoint.mdAndUp" :justify-start="$vuetify.breakpoint.smAndDown">
                             <v-flex xs12 sm7 md6>
                                 <v-autocomplete
                                     v-if="!isClientCreation"
@@ -48,6 +48,15 @@
                                     <v-icon small left>compare_arrows</v-icon>
                                     {{ switcherBtnText }}
                                 </v-btn>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout v-else wrap justify-start>
+                            <v-flex xs12 offset-md2 md6>
+                                <v-text-field
+                                    label="Клиент"
+                                    readonly
+                                    :value="'Клиент (Компания)'">
+                                </v-text-field>
                             </v-flex>
                         </v-layout>
                         <v-layout wrap>
@@ -88,9 +97,9 @@
                                 <v-text-field v-model="orderData.area" label="Площадь" :suffix="`${priceForArea}$`"></v-text-field>
                             </v-flex>
                         </v-layout>
-                        <v-layout wrap>
-                            <v-flex xs12 offset-md2 md10 v-for="(service, index) in orderData.services" :key="`service-${index}`">
-                                <v-checkbox :style="{ padding: 0, margin: index !== 0 ? 0 : false }" :label="service.name" v-model="orderData.services[index].value"></v-checkbox>
+                        <v-layout wrap v-if="services.length > 0">
+                            <v-flex xs12 offset-md2 md10 v-for="(service, index) in services" :key="`service-${index}`">
+                                <v-checkbox :style="{ padding: 0, margin: index !== 0 ? 0 : false }" :label="service.name" v-model="orderData.services" :value="service"></v-checkbox>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -104,6 +113,7 @@
             </v-card-title>
             <v-card-text>
                 <appGPSData
+                    v-if="orderData.GPSData"
                     ref="GPSData"
                     :orderGPSData="orderData.GPSData"
                     :gpsTrackers="gpsTrackers"
@@ -115,6 +125,7 @@
                     :allEquipmentPrice="allEquipmentPrice"
                     :allInstallationPrice="allInstallationPrice"
                     :cachedData="allCacheData"
+                    :defaultRowCount="defaultRowCount"
                     @update:orderGPSData="updateOrderGPSData"
                     @add-nested-data:orderGPSData="addNestedDataInOrderGPSData"
                     @delete-nested-data:orderGPSData="deleteNestedDataInOrderGPSData"
@@ -122,6 +133,13 @@
                     @drag-n-drop-gps-data="dragNDropGPSData"
                     @rowAdded="addRowToOrderGPSData">
                 </appGPSData>
+                <v-progress-linear
+                    v-else
+                    :width="10"
+                    :size="100"
+                    color="primary"
+                    indeterminate>
+                </v-progress-linear>
             </v-card-text>
             <v-card-text>
                 <v-layout wrap>
@@ -214,6 +232,7 @@
                     </v-flex>
                     <v-flex order-xs1 order-sm2 xs12 sm6>
                         <appEquipmentData
+                            v-if="orderData.GPSData"
                             :orderGPSData="orderData.GPSData">
                         </appEquipmentData>
                     </v-flex>
@@ -221,7 +240,7 @@
             </v-card-text>
             <v-card-actions>
                 <v-layout justify-center class="mb-4">
-                    <v-flex xs12 sm11 md3>
+                    <v-flex v-if="isCreation" xs12 sm11 md3>
                         <v-btn
                             block large color="primary"
                             :loading="orderInCreation"
@@ -229,6 +248,18 @@
                             @click="createOrder">
                             Создать заказ
                         </v-btn>
+                    </v-flex>
+                    <v-flex v-else xs12 md8>
+                        <v-container fluid grid-list-md>
+                            <v-layout wrap justify-center>
+                                <v-flex xs12 sm6>
+                                    <v-btn large block color="info"><v-icon left>backup</v-icon>Сохранить</v-btn>
+                                </v-flex>
+                                <v-flex xs12 sm6>
+                                    <v-btn large block color="primary">Скачать PDF <v-icon right>get_app</v-icon></v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
                     </v-flex>
                 </v-layout>
             </v-card-actions>
@@ -269,6 +300,7 @@ export default {
             snackColor: '',
             snackText: '',
             snackTimeout: 1500,
+            defaultRowCount: 0,
             initialGPSRowData: {
                 id: 1,
                 image: '',
@@ -293,6 +325,7 @@ export default {
             cachedData: [],
             newCachedData: [],
             orderInCreation: false,
+            oldOrder: {},
             orderData: {
                 name: '',
                 client: null,
@@ -306,7 +339,7 @@ export default {
                 transportation_kms: '',
                 route: '',
                 services: [],
-                GPSData: []
+                GPSData: null
             },
             clients: [],
             isClientCreation: false
@@ -346,7 +379,7 @@ export default {
         },
         priceForArea() {
             const area = (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);
-            return this.orderData.services.reduce((price, service) => service.value ? this.addTwoFloats(price, this.multiplyTwoFloats(service.price, area)) : price, 0);
+            return this.orderData.services.reduce((price, service) => this.addTwoFloats(price, this.multiplyTwoFloats(service.price, area)), 0);
         },
         priceForDays() {
             return this.multiplyTwoFloats(this.orderData.days, this.orderData.price_for_day);
@@ -355,6 +388,8 @@ export default {
             return this.multiplyTwoFloats(this.multiplyTwoFloats(this.orderData.price_for_transportation_per_km, this.orderData.transportation_kms), this.orderData.number_of_trips);
         },
         pricesForEquipment() {
+            const defaultPrices = { equipmentPrices: [], installationPrices: [] };
+            if (!this.orderData.GPSData) return defaultPrices;
             return this.orderData.GPSData.reduce((prices, row, index) => {
                 prices.equipmentPrices.push({});
                 prices.installationPrices[index] = 0.00;
@@ -392,7 +427,7 @@ export default {
                     }
                 });
                 return prices;
-            }, { equipmentPrices: [], installationPrices: [] });
+            }, defaultPrices);
         },
         allEquipmentPrice() {
             return this.multiplyTwoFloats(this.pricesForEquipment.equipmentPrices.reduce((price, el) => {
@@ -428,11 +463,50 @@ export default {
         }
     },
     watch: {
-        services(newValue) {
-            this.orderData.services = this.services.map(service => ({ id: service.id, name: service.name, price: service.price, value: false }));
-        }
+        // services(newValue) {
+        //     this.orderData.services = this.services.map(service => ({ id: service.id, name: service.name, price: service.price, value: false }));
+        // }
     },
     methods: {
+        initOrder(priceList) {
+            let copyOrder = dcopy(this.order);
+            copyOrder.services = copyOrder.services.map(serviceID => this.services.find(service => service.id === serviceID));
+            let id = 0;
+            copyOrder.gps_data = copyOrder.gps_data.map(gpsDataRow => {
+                ++id;
+                return Object.keys(gpsDataRow).reduce((newRow, key) => {
+                    if (key !== 'id' && typeof gpsDataRow[key] === 'number') {
+                        newRow[key] = priceList.find(data => data.id === gpsDataRow[key]);
+                    } else if (Array.isArray(gpsDataRow[key])) {
+                        newRow[key] = gpsDataRow[key].map(id => priceList.find(data => data.id === id));
+                    } else if (key !== 'id' && typeof gpsDataRow[key] === 'string') {
+                        newRow[key] = gpsDataRow[key];
+                    } else if (key !== 'id' && (this.isNull(gpsDataRow[key]) || this.isUndefined(gpsDataRow[key]))) {
+                        newRow[key] = '';
+                    }
+                    return newRow;
+                }, { id });
+            });
+            this.initialGPSRowData.id = ++id;
+            this.oldOrder = copyOrder;
+            const newOrderData = dcopy(copyOrder);
+            this.orderData.name = newOrderData.name;
+            this.orderData.client = newOrderData.client;
+            this.orderData.statuses = {
+                is_sent: newOrderData.is_sent, is_agreed: newOrderData.is_agreed, is_paid: newOrderData.is_paid
+            };
+            this.orderData.area = newOrderData.area;
+            this.orderData.dollar_rate = newOrderData.dollar_rate;
+            this.orderData.days = newOrderData.days;
+            this.orderData.price_for_day = newOrderData.price_for_day;
+            this.orderData.price_for_transportation_per_km = newOrderData.price_for_transportation_per_km;
+            this.orderData.number_of_trips = newOrderData.number_of_trips;
+            this.orderData.transportation_kms = newOrderData.transportation_kms;
+            this.orderData.route = newOrderData.route;
+            this.orderData.services = newOrderData.services;
+            this.orderData.GPSData = newOrderData.gps_data;
+
+        },
         addCache(column, value) {
             this.newCachedData.push({ column_name: column, value });
             localStorage.setItem('newCachedData', JSON.stringify(this.newCachedData));
@@ -528,8 +602,10 @@ export default {
                 });
                 ++this.initialGPSRowData.id;
             }
-            this.saveOrderDataToLocalStorage();
-            this.showSnackbar('info', `${this.declOfNum(count, ['Добавлен', 'Добавлено', 'Добавлено'])} ${count} ${this.declOfNum(count, ['ряд', 'ряда', 'рядов'])}`);
+            if (count > 0) {
+                this.saveOrderDataToLocalStorage();
+                this.showSnackbar('info', `${this.declOfNum(count, ['Добавлен', 'Добавлено', 'Добавлено'])} ${count} ${this.declOfNum(count, ['ряд', 'ряда', 'рядов'])}`);
+            }
         },
         dragNDropGPSData(newIndex, oldIndex) {
             const rowSelected = this.orderData.GPSData.splice(oldIndex, 1)[0];
@@ -554,9 +630,7 @@ export default {
                 transportation_kms: this.orderData.transportation_kms,
                 route: this.orderData.route,
                 services: JSON.stringify(this.orderData.services.reduce((services, service) => {
-                    if (service.value) {
-                        services.push(service.id)
-                    }
+                    services.push(service.id);
                     return services;
                 }, [])),
                 GPSData: this.orderData.GPSData.map(row => {
@@ -592,10 +666,19 @@ export default {
         }
     },
     created() {
-        this.getDollarRate();
-        this.getClients();
+        if (this.isCreation) {
+            this.getDollarRate();
+            this.getClients();
+            this.$store.dispatch('getPriseList');
+            this.orderData.GPSData = [];
+            this.defaultRowCount = 4;
+        } else {
+            this.$store.dispatch('getPriseList')
+                .then(data => {
+                    this.initOrder(data);
+                });
+        }
         this.getCachedData();
-        this.$store.dispatch('getPriseList');
         this.newCachedData = JSON.parse(localStorage.getItem('newCachedData')) || [];
         // this.orderData = JSON.parse(localStorage.getItem('orderData'));
     },

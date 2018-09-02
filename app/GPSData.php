@@ -28,6 +28,13 @@ class GPSData extends Model
         'rs01'
     ];
 
+    protected $casts = [
+        'fuel_gauge' => 'array',
+        'additional_equipment' => 'array',
+        'cn03' => 'array',
+        'rs01' => 'array'
+    ];
+
     public function order() {
         return $this->belongsTo('App\Order', 'order_id');
     }

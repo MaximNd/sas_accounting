@@ -693,6 +693,10 @@ import utils from './../../../mixins/utils.js';
 export default {
     mixins: [setStyles, utils],
     props: {
+        defaultRowCount: {
+            type: Number,
+            required: true
+        },
         orderGPSData: {
             type: Array,
             required: true
@@ -824,10 +828,18 @@ export default {
     },
     methods: {
         addRow(count = 1) {
-            for (let i = 0; i < count; ++i) {
-                this.editModCells.push(Array.apply(null, {length: this.headers.length-1}).map(() => false));
-            }
+            this.addEditModCells(count);
             this.$emit('rowAdded', count);
+        },
+        addEditModCells(count, index = false) {
+            if (!index) index = this.editModCells.length-1;
+            for (let i = 0; i < count; ++i) {
+                this.editModCells.splice(index + i, 0, Array.apply(null, {length: this.headers.length-1}).map(() => false));
+            }
+        },
+        swapEditModCells(newIndex, oldIndex) {
+            const rowSelected = this.editModCells.splice(oldIndex, 1)[0];
+            this.editModCells.splice(newIndex, 0, rowSelected);
         },
         onPickFile(ref) {
             this.$refs[ref].click();
@@ -1137,7 +1149,8 @@ export default {
         }
     },
     created() {
-        this.addRow(4);
+        this.addEditModCells(this.orderGPSData.length);
+        this.addRow(this.defaultRowCount);
     },
     mounted() {
         const tableBody = document.querySelector('#gps-data-table .v-datatable tbody');
@@ -1161,6 +1174,7 @@ export default {
             handle: '.handle',
             onEnd({ newIndex, oldIndex }) {
                 _self.$emit('drag-n-drop-gps-data', newIndex, oldIndex);
+                _self.swapEditModCells(newIndex, oldIndex);
             }
         });
         const tableOverflow = document.querySelector('#gps-data-table .v-table__overflow');
