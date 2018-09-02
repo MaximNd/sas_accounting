@@ -28,6 +28,6 @@ $factory->define(App\Order::class, function (Faker $faker) {
         'number_of_trips' => 2,
         'transportation_kms' => $faker->randomFloat(2, 100, 500),
         'route' => $faker->word.'-'.$faker->word,
-        'services' => '[]'
+        'services' => []
     ];
 });

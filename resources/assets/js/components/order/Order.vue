@@ -629,10 +629,10 @@ export default {
                 number_of_trips: this.orderData.number_of_trips,
                 transportation_kms: this.orderData.transportation_kms,
                 route: this.orderData.route,
-                services: JSON.stringify(this.orderData.services.reduce((services, service) => {
+                services: this.orderData.services.reduce((services, service) => {
                     services.push(service.id);
                     return services;
-                }, [])),
+                }, []),
                 GPSData: this.orderData.GPSData.map(row => {
                     const newRow = {};
                     Object.keys(row).forEach((key) => {
@@ -645,7 +645,7 @@ export default {
                                 if (this.isUndefined(el) || this.isNull(el) ) return;
                                 ids.push(el.id);
                             });
-                            newRow[key] = JSON.stringify(ids);
+                            newRow[key] = ids;
                         } else if (key !== 'id') {
                             newRow[key] = value;
                         }
@@ -657,6 +657,7 @@ export default {
             this.axios.post('/orders', orderData)
                 .then(({data}) => {
                     console.log(data);
+
                 })
                 .catch(err => (console.log(err)))
                 .finally(() => (this.orderInCreation = false));
