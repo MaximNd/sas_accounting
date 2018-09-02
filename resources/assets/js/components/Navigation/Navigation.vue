@@ -67,7 +67,7 @@ export default {
     methods: {
         initMenuItems() {
             this.menuItems = [
-                { title: 'Профиль', icon: 'mdi-account-box-outline', link: `/profile` },
+                { title: 'Профиль', icon: 'portrait', link: `/profile` },
                 { title: 'Заказы', icon: 'event', link: `/orders` },
                 { title: 'Зоздать заказ', icon: 'border_color', link: '/create-order' },
                 { title: 'Сотрудники', icon: 'account_circle', link: '/users' },
