@@ -657,7 +657,7 @@ export default {
             this.axios.post('/orders', orderData)
                 .then(({data}) => {
                     console.log(data);
-
+                    this.$router.push(`/orders/${data.id}`);
                 })
                 .catch(err => (console.log(err)))
                 .finally(() => (this.orderInCreation = false));
