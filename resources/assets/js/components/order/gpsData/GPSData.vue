@@ -2,6 +2,7 @@
     <v-card class="elevation-0">
          <v-card-title>
             <v-btn @click="addRow(1)" color="info">Добавить</v-btn>
+            <v-btn @click="deleteSelected" color="error">Удалить выбранные</v-btn>
             <v-spacer></v-spacer>
         </v-card-title>
         <v-card-text id="text-test" class="ma-0 pa-0">
@@ -831,6 +832,12 @@ export default {
             this.addEditModCells(count);
             this.$emit('rowAdded', count);
         },
+        deleteSelected() {
+            const indices = this.selected.map(selectedRow => this.orderGPSData.findIndex(row => row.id === selectedRow.id));
+            this.$emit('delete:rows', indices);
+            this.deleteEditModCells(indices);
+            this.selected = [];
+        },
         addEditModCells(count, index = false) {
             if (!index) index = this.editModCells.length-1;
             for (let i = 0; i < count; ++i) {
@@ -840,6 +847,9 @@ export default {
         swapEditModCells(newIndex, oldIndex) {
             const rowSelected = this.editModCells.splice(oldIndex, 1)[0];
             this.editModCells.splice(newIndex, 0, rowSelected);
+        },
+        deleteEditModCells(indices) {
+            this.editModCells = this.editModCells.filter((_, index) => !indices.includes(index));
         },
         onPickFile(ref) {
             this.$refs[ref].click();

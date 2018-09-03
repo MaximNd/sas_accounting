@@ -111,6 +111,55 @@ class OrderController extends Controller
     }
 
     public function updateOrder(Request $request, $id) {
+        $this->validate($request, [
+            'dollar_rate' => 'numeric',
+            'area' => 'numeric',
+            'days' => 'numeric',
+            'price_for_day' => 'numeric',
+            'price_for_transportation_per_km' => 'numeric',
+            'number_of_trips' => 'numeric',
+            'transportation_kms' => 'numeric',
+            'GPSData.toDelete' => 'array',
+            'GPSData.toAdd' => 'array',
+            'GPSData.toUpdate' => 'array',
+            'log.before' => 'required|string',
+            'log.after' => 'required|string'
+        ]);
+
+        DB::transaction(function () use ($request, $id) {
+            $orderDataToUpdate = $request->except(['GPSData', 'log']);
+//            dd($orderDataToUpdate);
+            if (count($orderDataToUpdate) > 0) {
+                $orderDataToUpdate['services'] = json_encode($orderDataToUpdate['services']);
+                Order::where('id', '=', $id)->update($orderDataToUpdate);
+            }
+            $GPSDataToDelete = $request->input('GPSData.toDelete');
+            $GPSDataToAdd = $request->input('GPSData.toAdd');
+            $GPSDataToUpdate = $request->input('GPSData.toUpdate');
+            if (count($GPSDataToDelete) > 0) {
+                GPSData::destroy($GPSDataToDelete);
+            }
+            if (count($GPSDataToAdd) > 0) {
+                for ($i = 0; $i < count($GPSDataToAdd); ++$i) {
+                    $GPSDataToAdd[$i]['order_id'] = $id;
+                }
+                GPSData::insert($GPSDataToAdd);
+            }
+            if (count($GPSDataToUpdate) > 0) {
+                for ($i = 0; $i < count($GPSDataToUpdate); ++$i) {
+                    GPSData::where('id', '=', $GPSDataToUpdate[$i]['id'])->update($GPSDataToUpdate[$i]);
+                }
+            }
+
+            $orderLog = new OrderLog([
+                'order_id' => $id,
+                'user_id' => $request->user()->id,
+                'type' => 'Обновление',
+                'before' => $request->input('log.before'),
+                'after' => $request->input('log.after')
+            ]);
+            $orderLog->save();
+        });
 
     }
 

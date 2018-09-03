@@ -71,6 +71,8 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::post('/orders', 'OrderController@createOrder');
 
+    Route::put('/orders/{id}', 'OrderController@updateOrder');
+
     Route::delete('/orders/{id}', 'OrderController@deleteOrder');
 
     // CACHED_DATA

@@ -17,7 +17,7 @@
                                             :color="isDollarRateEditing ? 'success' : 'info'"
                                             :key="`icon-${isDollarRateEditing}`"
                                             @click="isDollarRateEditing = !isDollarRateEditing"
-                                            v-text="isDollarRateEditing ? 'mdi-check-outline' : 'mdi-circle-edit-outline'"
+                                            v-text="isDollarRateEditing ? 'done_all' : 'edit'"
                                         ></v-icon>
                                     </v-slide-x-reverse-transition>
                                 </v-text-field>
@@ -55,7 +55,7 @@
                                 <v-text-field
                                     label="Клиент"
                                     readonly
-                                    :value="'Клиент (Компания)'">
+                                    :value="orderData.client && `${orderData.client.person_full_name} (${orderData.client.company_name})`">
                                 </v-text-field>
                             </v-flex>
                         </v-layout>
@@ -131,7 +131,8 @@
                     @delete-nested-data:orderGPSData="deleteNestedDataInOrderGPSData"
                     @copy-values:orderGPSData="copySelectedInOrderGPSData"
                     @drag-n-drop-gps-data="dragNDropGPSData"
-                    @rowAdded="addRowToOrderGPSData">
+                    @rowAdded="addRowToOrderGPSData"
+                    @delete:rows="deleteRowsFromOrderGPSData">
                 </appGPSData>
                 <v-progress-linear
                     v-else
@@ -253,7 +254,7 @@
                         <v-container fluid grid-list-md>
                             <v-layout wrap justify-center>
                                 <v-flex xs12 sm6>
-                                    <v-btn large block color="info"><v-icon left>backup</v-icon>Сохранить</v-btn>
+                                    <v-btn @click="updateOrder" large block color="info"><v-icon left>backup</v-icon>Сохранить</v-btn>
                                 </v-flex>
                                 <v-flex xs12 sm6>
                                     <v-btn large block color="primary">Скачать PDF <v-icon right>get_app</v-icon></v-btn>
@@ -279,6 +280,7 @@ import EquipmentData from './EquipmentData/EquipmentData';
 import dcopy from 'deep-copy';
 import utils from './../../mixins/utils.js';
 import formatter from 'accounting';
+import diff from 'deep-diff';
 
 export default {
     mixins: [utils],
@@ -473,19 +475,23 @@ export default {
             copyOrder.services = copyOrder.services.map(serviceID => this.services.find(service => service.id === serviceID));
             let id = 0;
             copyOrder.gps_data = copyOrder.gps_data.map(gpsDataRow => {
-                ++id;
+                if (gpsDataRow.id > id) {
+                    id = gpsDataRow.id;
+                }
                 return Object.keys(gpsDataRow).reduce((newRow, key) => {
                     if (key !== 'id' && typeof gpsDataRow[key] === 'number') {
                         newRow[key] = priceList.find(data => data.id === gpsDataRow[key]);
                     } else if (Array.isArray(gpsDataRow[key])) {
                         newRow[key] = gpsDataRow[key].map(id => priceList.find(data => data.id === id));
-                    } else if (key !== 'id' && typeof gpsDataRow[key] === 'string') {
+                    } else if (typeof gpsDataRow[key] === 'string') {
                         newRow[key] = gpsDataRow[key];
-                    } else if (key !== 'id' && (this.isNull(gpsDataRow[key]) || this.isUndefined(gpsDataRow[key]))) {
+                    } else if (this.isNull(gpsDataRow[key]) || this.isUndefined(gpsDataRow[key])) {
                         newRow[key] = '';
+                    } else if (key === 'id') {
+                        newRow[key] = gpsDataRow[key];
                     }
                     return newRow;
-                }, { id });
+                }, {});
             });
             this.initialGPSRowData.id = ++id;
             this.oldOrder = copyOrder;
@@ -604,7 +610,14 @@ export default {
             }
             if (count > 0) {
                 this.saveOrderDataToLocalStorage();
-                this.showSnackbar('info', `${this.declOfNum(count, ['Добавлен', 'Добавлено', 'Добавлено'])} ${count} ${this.declOfNum(count, ['ряд', 'ряда', 'рядов'])}`);
+                this.showSnackbar('info', `${this.declOfNum(count, ['Добавлен', 'Добавлено', 'Добавлены'])} ${count} ${this.declOfNum(count, ['ряд', 'ряда', 'рядов'])}`);
+            }
+        },
+        deleteRowsFromOrderGPSData(indices) {
+            this.orderData.GPSData = this.orderData.GPSData.filter((_, index) => !indices.includes(index));
+            if (indices.length > 0) {
+                this.saveOrderDataToLocalStorage();
+                this.showSnackbar('info', `${this.declOfNum(indices.length, ['Удален', 'Удалено', 'Удалены'])} ${indices.length} ${this.declOfNum(indices.length, ['ряд', 'ряда', 'рядов'])}`);
             }
         },
         dragNDropGPSData(newIndex, oldIndex) {
@@ -612,6 +625,33 @@ export default {
             this.orderData.GPSData.splice(newIndex, 0, rowSelected);
             this.saveOrderDataToLocalStorage();
             this.showSnackbar('info', `Ряд был перемещён`);
+        },
+        getServicesIDs() {
+            return this.orderData.services.reduce((services, service) => {
+                services.push(service.id);
+                return services;
+            }, []);
+        },
+        getGPSDataIDs() {
+            return this.orderData.GPSData.map(row => {
+                const newRow = {};
+                Object.keys(row).forEach((key) => {
+                    const value = row[key];
+                    if (this.isObject(value)) {
+                        newRow[key] = value.id;
+                    } else if (Array.isArray(value)) {
+                        let ids = [];
+                        value.forEach(el => {
+                            if (this.isUndefined(el) || this.isNull(el) ) return;
+                            ids.push(el.id);
+                        });
+                        newRow[key] = ids;
+                    } else if (key !== 'id') {
+                        newRow[key] = value;
+                    }
+                });
+                return newRow;
+            });
         },
         createOrder() {
             this.orderInCreation = true;
@@ -629,29 +669,8 @@ export default {
                 number_of_trips: this.orderData.number_of_trips,
                 transportation_kms: this.orderData.transportation_kms,
                 route: this.orderData.route,
-                services: this.orderData.services.reduce((services, service) => {
-                    services.push(service.id);
-                    return services;
-                }, []),
-                GPSData: this.orderData.GPSData.map(row => {
-                    const newRow = {};
-                    Object.keys(row).forEach((key) => {
-                        const value = row[key];
-                        if (this.isObject(value)) {
-                            newRow[key] = value.id;
-                        } else if (Array.isArray(value)) {
-                            let ids = [];
-                            value.forEach(el => {
-                                if (this.isUndefined(el) || this.isNull(el) ) return;
-                                ids.push(el.id);
-                            });
-                            newRow[key] = ids;
-                        } else if (key !== 'id') {
-                            newRow[key] = value;
-                        }
-                    });
-                    return newRow;
-                })
+                services: this.getServicesIDs(),
+                GPSData: this.getGPSDataIDs()
             };
 
             this.axios.post('/orders', orderData)
@@ -664,6 +683,152 @@ export default {
 
             if (this.newCachedData.length > 0)
                 this.axios.post('/cache', { cache: this.newCachedData });
+        },
+        updateOrder() {
+            const oldOrderData = {
+                name: this.oldOrder.name,
+                client: this.oldOrder.client,
+                is_sent: this.oldOrder.is_sent,
+                is_agreed: this.oldOrder.is_agreed,
+                is_paid: this.oldOrder.is_paid,
+                area: this.oldOrder.area,
+                dollar_rate: this.oldOrder.dollar_rate,
+                days: this.oldOrder.days,
+                price_for_day: this.oldOrder.price_for_day,
+                price_for_transportation_per_km: this.oldOrder.price_for_transportation_per_km,
+                number_of_trips: this.oldOrder.number_of_trips,
+                transportation_kms: this.oldOrder.transportation_kms,
+                route: this.oldOrder.route
+            };
+            const updatedOrderData = {
+                name: this.orderData.name,
+                client: this.oldOrder.client,
+                is_sent: this.orderData.statuses.is_sent,
+                is_agreed: this.orderData.statuses.is_agreed,
+                is_paid: this.orderData.statuses.is_paid,
+                area: this.orderData.area,
+                dollar_rate: this.orderData.dollar_rate,
+                days: this.orderData.days,
+                price_for_day: this.orderData.price_for_day,
+                price_for_transportation_per_km: this.orderData.price_for_transportation_per_km,
+                number_of_trips: this.orderData.number_of_trips,
+                transportation_kms: this.orderData.transportation_kms,
+                route: this.orderData.route
+            };
+            // SERVICES
+            const oldOrderServicesData = this.oldOrder.services;
+            const updatedOrderServicesData = this.orderData.services;
+
+            // GPS_DATA
+            const oldOrderGPSData = this.oldOrder.gps_data;
+            const updatedOrderGPSData = this.orderData.GPSData;
+
+            const deletedGPSData = oldOrderGPSData.filter(oldGPSDataRow => !updatedOrderGPSData.find(updatedGPSDataRow => updatedGPSDataRow.id === oldGPSDataRow.id));
+
+            const addedGPSData = updatedOrderGPSData.filter(updatedGPSDataRow => !oldOrderGPSData.find(oldGPSDataRow => oldGPSDataRow.id === updatedGPSDataRow.id));
+
+            const restOldOrderGPSData = oldOrderGPSData.filter(oldGPSDataRow => !deletedGPSData.find(deletedGPSDataRow => deletedGPSDataRow.id === oldGPSDataRow.id)).sort((row1, row2) => row1.id - row2.id);
+            const restUpdatedOrderGPSData = updatedOrderGPSData.filter(updatedGPSDataRow => !addedGPSData.find(addedGPSDataRow => addedGPSDataRow.id === updatedGPSDataRow.id)).sort((row1, row2) => row1.id - row2.id);
+
+            const editedGPSDataIndices = this.getEditedGPSDataIndices(restOldOrderGPSData, restUpdatedOrderGPSData);
+
+            const restOldChangedOrderGPSData = restOldOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
+            const restUpdatedChangedOrderGPSData = restUpdatedOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
+
+            const orderDataLog = this.parseOrderDiffData(diff(oldOrderData, updatedOrderData));
+
+            const log = {
+                before: JSON.stringify({
+                    orderData: orderDataLog.before,
+                    services: oldOrderServicesData,
+                    gpsData: {
+                        changed: restOldChangedOrderGPSData
+                    }
+                }),
+                after: JSON.stringify({
+                    orderData: orderDataLog.after,
+                    services: updatedOrderServicesData,
+                    gpsData: {
+                        deleted: deletedGPSData,
+                        added: addedGPSData,
+                        changed: restUpdatedChangedOrderGPSData
+                    }
+                })
+            };
+
+            const newOrderData = {
+                ...orderDataLog.after,
+                services: updatedOrderServicesData.map(service => service.id),
+                GPSData: {
+                    toDelete: deletedGPSData.map(row => row.id),
+                    toAdd: addedGPSData.map(row => {
+                        const newRow = {};
+                        Object.keys(row).forEach((key) => {
+                            const value = row[key];
+                            if (this.isObject(value)) {
+                                newRow[key] = value.id;
+                            } else if (Array.isArray(value)) {
+                                let ids = [];
+                                value.forEach(el => {
+                                    if (this.isUndefined(el) || this.isNull(el) ) return;
+                                    ids.push(el.id);
+                                });
+                                newRow[key] = JSON.stringify(ids);
+                            } else if (key !== 'order_id' && key !== 'id') {
+                                newRow[key] = value;
+                            }
+                        });
+                        return newRow;
+                    }),
+                    toUpdate: restUpdatedChangedOrderGPSData.map(row => {
+                        const newRow = {};
+                        Object.keys(row).forEach((key) => {
+                            const value = row[key];
+                            if (this.isObject(value)) {
+                                newRow[key] = value.id;
+                            } else if (Array.isArray(value)) {
+                                let ids = [];
+                                value.forEach(el => {
+                                    if (this.isUndefined(el) || this.isNull(el) ) return;
+                                    ids.push(el.id);
+                                });
+                                newRow[key] = JSON.stringify(ids);
+                            } else if (key !== 'order_id') {
+                                newRow[key] = value;
+                            }
+                        });
+                        return newRow;
+                    })
+                },
+                log
+            };
+
+            this.axios.put(`/orders/${this.$route.params.id}`, newOrderData)
+                .then(({data}) => {
+                    console.log(data);
+                });
+            console.log('NEW DATA:', newOrderData);
+        },
+        parseOrderDiffData(differences) {
+            const log = { before: {}, after: {} };
+            if (this.isNull(differences) || this.isUndefined(differences)) return log;
+            return differences.reduce((log, difference) => {
+                const key = difference.path[0];
+                log.before[key] = difference.lhs;
+                log.after[key] = difference.rhs;
+                return log;
+            }, log);
+        },
+        getEditedGPSDataIndices(restOldOrderGPSData, restUpdatedOrderGPSData) {
+            const differences = diff(restOldOrderGPSData, restUpdatedOrderGPSData);
+            if (this.isNull(differences) || this.isUndefined(differences)) return [];
+            return differences.reduce((indices, difference) => {
+                const index = difference.path[0];
+                if (!indices.includes(index)) {
+                    indices.push(index);
+                }
+                return indices;
+            }, []);
         }
     },
     created() {
