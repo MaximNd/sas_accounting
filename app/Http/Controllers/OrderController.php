@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\OptionalService;
 use App\GPSData;
 use App\OrderLog;
 use Illuminate\Http\Request;
@@ -33,6 +34,11 @@ class OrderController extends Controller
         $this->validate($request, [
             'client_id' => 'required|numeric',
             'dollar_rate' => 'required|numeric',
+            'dollar_date' => 'required',
+            'is_sent' => 'required|boolean',
+            'is_agreed' => 'required|boolean',
+            'is_paid' => 'required|boolean',
+            'is_installation_finished' => 'required|boolean',
             'name' => 'required',
             'area' => 'required|numeric',
             'days' => 'required|numeric',
@@ -42,11 +48,12 @@ class OrderController extends Controller
             'transportation_kms' => 'required|numeric',
             'route' => 'required',
             'services' => 'required',
+            'optional_services' => 'array|nullable',
             'GPSData' => 'required|array'
         ]);
 
         $result = DB::transaction(function() use ($request) {
-            $order = new Order($request->except('GPSData'));
+            $order = new Order($request->except(['GPSData', 'optional_services']));
             $order->save();
             $gpsData = $request->input('GPSData');
             $gpsDataLength = count($gpsData);
@@ -55,6 +62,15 @@ class OrderController extends Controller
                 $orderGPSData[] = new GPSData($gpsData[$i]);
             }
             $order->gpsData()->saveMany($orderGPSData);
+
+            $optionalServices = $request->input('optional_services');
+            $optionalServicesLength = count($optionalServices);
+            $orderOptionalServices = [];
+            for ($i = 0; $i < $optionalServicesLength; ++$i) {
+                $orderOptionalServices[] = new OptionalService($optionalServices[$i]);
+            }
+            $order->optionalServices()->saveMany($orderOptionalServices);
+
             $log = new OrderLog([
                 'type' => 'Создание',
                 'user_id' => $request->user()->id,
@@ -69,7 +85,7 @@ class OrderController extends Controller
     }
 
     public function getOrder($id) {
-        return Order::with('client')->with('gpsData')->find($id);
+        return Order::with('client')->with('gpsData')->with('optionalServices')->find($id);
     }
 
     public function getOrders(Request $request) {

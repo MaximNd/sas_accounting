@@ -37,6 +37,7 @@
                             <td :class="{ 'error--text': !props.item.is_sent, 'success--text': props.item.is_sent }">{{ props.item.is_sent ? 'Отправленный' : 'Неотправленный' }}</td>
                             <td :class="{ 'error--text': !props.item.is_agreed, 'success--text': props.item.is_agreed }">{{ props.item.is_agreed ? 'Согласованный' : 'Несогласованный' }}</td>
                             <td :class="{ 'error--text': !props.item.is_paid, 'success--text': props.item.is_paid }">{{ props.item.is_paid ? 'Оплаченный' : 'Неоплаченный' }}</td>
+                            <td :class="{ 'error--text': !props.item.is_installation_finished, 'success--text': props.item.is_installation_finished }">{{ props.item.is_paid ? 'Закончен' : 'Не закончен' }}</td>
                             <td>{{ props.item.created_at }}</td>
                             <td v-if="$auth.check('admin')" class="justify-center layout px-0">
                                 <v-btn
@@ -81,6 +82,7 @@ export default {
                 { text: 'Статус отправки', value: 'is_sent' },
                 { text: 'Статус согласования', value: 'is_agreed' },
                 { text: 'Статус оплаты', value: 'is_paid' },
+                { text: 'Статус монтажа', value: 'is_installation_finished' },
                 { text: 'Дата создания', value: 'created_at' }
             ],
             deletingOrder: {}

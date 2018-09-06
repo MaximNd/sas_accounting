@@ -4,10 +4,17 @@
             <v-card-text>
                 <v-form>
                     <v-container grid-list-md>
-                        <v-layout justify-center>
-                            <v-flex xs12 offset-xs0 md2 offset-md2>
+                        <v-layout justify-start wrap>
+                            <v-flex xs12 md3 offset-md2>
                                 <v-text-field
-                                    label="Курс Долара"
+                                    label="Дата курса доллара"
+                                    :readonly="true"
+                                    v-model="orderData.dollar_date">
+                                </v-text-field>
+                            </v-flex>
+                            <v-flex xs12 md3>
+                                <v-text-field
+                                    label="Курс Доллара"
                                     :readonly="!isDollarRateEditing"
                                     v-model="orderData.dollar_rate">
                                     <v-slide-x-reverse-transition
@@ -67,25 +74,32 @@
                                             Статусы заказа:
                                         </div>
                                     </v-flex>
-                                    <v-flex xs12 sm4>
+                                    <v-flex xs12 sm6 md4>
                                          <v-switch
                                             color="success"
                                             :label="isSentStatus"
                                             v-model="orderData.statuses.is_sent">
                                         </v-switch>
                                     </v-flex>
-                                    <v-flex xs12 sm4>
+                                    <v-flex xs12 sm6 md4>
                                         <v-switch
                                             color="success"
                                             :label="isAgreedStatus"
                                             v-model="orderData.statuses.is_agreed">
                                         </v-switch>
                                     </v-flex>
-                                    <v-flex xs12 sm4>
+                                    <v-flex xs12 sm6 md4>
                                         <v-switch
                                             color="success"
                                             :label="isPaidStatus"
                                             v-model="orderData.statuses.is_paid">
+                                        </v-switch>
+                                    </v-flex>
+                                    <v-flex xs12 sm6 md4>
+                                        <v-switch
+                                            color="success"
+                                            :label="isInstallationFinishedStatus"
+                                            v-model="orderData.statuses.is_installation_finished">
                                         </v-switch>
                                     </v-flex>
                                 </v-layout>
@@ -98,8 +112,42 @@
                             </v-flex>
                         </v-layout>
                         <v-layout wrap v-if="services.length > 0">
+                            <v-flex xs12 offset-md2 class="mt-2">
+                                <div class="title font-weight-regular">
+                                    Услуги:
+                                </div>
+                            </v-flex>
                             <v-flex xs12 offset-md2 md10 v-for="(service, index) in services" :key="`service-${index}`">
                                 <v-checkbox :style="{ padding: 0, margin: index !== 0 ? 0 : false }" :label="service.name" v-model="orderData.services" :value="service"></v-checkbox>
+                            </v-flex>
+                            <v-flex xs12 offset-md2 class="mt-2">
+                                <div class="title font-weight-regular">
+                                    Дополнительные услуги:
+                                </div>
+                                <div class="mt-2">
+                                    <v-btn @click="addOptionalService" style="margin-left: 0;" color="success">Добавить</v-btn>
+                                </div>
+                            </v-flex>
+                            <v-flex xs12 offset-md2 md6 v-for="(optionalService, index) in orderData.optional_services" :key="`optional-service-${index}`">
+                                <v-card>
+                                    <v-card-text>
+                                        <v-text-field
+                                            label="Название"
+                                            v-model="orderData.optional_services[index].name">
+                                        </v-text-field>
+                                        <v-text-field
+                                            label="Цена"
+                                            v-model="orderData.optional_services[index].price">
+                                        </v-text-field>
+                                        <v-textarea
+                                            label="Комментарий"
+                                            v-model="orderData.optional_services[index].comment">
+                                        </v-textarea>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-btn @click="deleteOptionalService(index)" color="error">Удалить</v-btn>
+                                    </v-card-actions>
+                                </v-card>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -331,9 +379,10 @@ export default {
             orderData: {
                 name: '',
                 client: null,
-                statuses: { is_sent: false, is_agreed: false, is_paid: false },
+                statuses: { is_sent: false, is_agreed: false, is_paid: false, is_installation_finished: false },
                 area: '',
                 dollar_rate: 0.00,
+                dollar_date: '',
                 days: '',
                 price_for_day: 720,
                 price_for_transportation_per_km: '',
@@ -341,6 +390,7 @@ export default {
                 transportation_kms: '',
                 route: '',
                 services: [],
+                optional_services: [],
                 GPSData: null
             },
             clients: [],
@@ -368,6 +418,9 @@ export default {
         isPaidStatus() {
             return this.orderData.statuses.is_paid ? 'Оплаченный' : 'Неоплаченный';
         },
+        isInstallationFinishedStatus() {
+            return this.orderData.statuses.is_installation_finished ? 'Монтаж закончен' : 'Монтаж не закончен';
+        },
         allCacheData() {
             const cache = {};
             [...this.cachedData, ...this.newCachedData].forEach((cacheData) => {
@@ -381,7 +434,9 @@ export default {
         },
         priceForArea() {
             const area = (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);
-            return this.orderData.services.reduce((price, service) => this.addTwoFloats(price, this.multiplyTwoFloats(service.price, area)), 0);
+            const priceForServices = this.orderData.services.reduce((price, service) => this.addTwoFloats(price, this.multiplyTwoFloats(service.price, area)), 0);
+            const finalPriceForArea = this.orderData.optional_services ? this.orderData.optional_services.reduce((price, service) => this.addTwoFloats(price, this.multiplyTwoFloats(service.price, area)), priceForServices) : priceForServices;
+            return finalPriceForArea;
         },
         priceForDays() {
             return this.multiplyTwoFloats(this.orderData.days, this.orderData.price_for_day);
@@ -499,10 +554,11 @@ export default {
             this.orderData.name = newOrderData.name;
             this.orderData.client = newOrderData.client;
             this.orderData.statuses = {
-                is_sent: newOrderData.is_sent, is_agreed: newOrderData.is_agreed, is_paid: newOrderData.is_paid
+                is_sent: newOrderData.is_sent, is_agreed: newOrderData.is_agreed, is_paid: newOrderData.is_paid, is_installation_finished: newOrderData.is_installation_finished
             };
             this.orderData.area = newOrderData.area;
             this.orderData.dollar_rate = newOrderData.dollar_rate;
+            this.orderData.dollar_date = newOrderData.dollar_date;
             this.orderData.days = newOrderData.days;
             this.orderData.price_for_day = newOrderData.price_for_day;
             this.orderData.price_for_transportation_per_km = newOrderData.price_for_transportation_per_km;
@@ -510,12 +566,18 @@ export default {
             this.orderData.transportation_kms = newOrderData.transportation_kms;
             this.orderData.route = newOrderData.route;
             this.orderData.services = newOrderData.services;
+            this.orderData.optional_services = newOrderData.optional_services;
             this.orderData.GPSData = newOrderData.gps_data;
-
         },
         addCache(column, value) {
             this.newCachedData.push({ column_name: column, value });
             localStorage.setItem('newCachedData', JSON.stringify(this.newCachedData));
+        },
+        addOptionalService() {
+            this.orderData.optional_services.push({ name: '', price: '', comment: '' });
+        },
+        deleteOptionalService(index) {
+            this.orderData.optional_services.splice(index, 1);
         },
         saveOrderDataToLocalStorage() {
             localStorage.setItem('orderData', JSON.stringify(this.orderData));
@@ -539,6 +601,7 @@ export default {
             this.axios.get('/order/dollar-rate')
             .then(({data}) => {
                 this.orderData.dollar_rate = data[0].rate;
+                this.orderData.dollar_date = data[0].exchangedate;
             })
             .catch(err => console.log(err))
         },
@@ -658,10 +721,12 @@ export default {
             const orderData = {
                 client_id: this.orderData.client,
                 dollar_rate: this.orderData.dollar_rate,
+                dollar_date: this.orderData.dollar_date,
                 name: this.orderData.name,
                 is_sent: this.orderData.statuses.is_sent,
                 is_agreed: this.orderData.statuses.is_agreed,
                 is_paid: this.orderData.statuses.is_paid,
+                is_installation_finished: this.orderData.statuses.is_installation_finished,
                 area: this.orderData.area,
                 days: this.orderData.days,
                 price_for_day: this.orderData.price_for_day,
@@ -670,6 +735,7 @@ export default {
                 transportation_kms: this.orderData.transportation_kms,
                 route: this.orderData.route,
                 services: this.getServicesIDs(),
+                optional_services: this.orderData.optional_services,
                 GPSData: this.getGPSDataIDs()
             };
 
@@ -691,8 +757,10 @@ export default {
                 is_sent: this.oldOrder.is_sent,
                 is_agreed: this.oldOrder.is_agreed,
                 is_paid: this.oldOrder.is_paid,
+                is_installation_finished: this.oldOrder.is_installation_finished,
                 area: this.oldOrder.area,
                 dollar_rate: this.oldOrder.dollar_rate,
+                dollar_date: this.oldOrder.dollar_date,
                 days: this.oldOrder.days,
                 price_for_day: this.oldOrder.price_for_day,
                 price_for_transportation_per_km: this.oldOrder.price_for_transportation_per_km,
@@ -706,8 +774,10 @@ export default {
                 is_sent: this.orderData.statuses.is_sent,
                 is_agreed: this.orderData.statuses.is_agreed,
                 is_paid: this.orderData.statuses.is_paid,
+                is_installation_finished: this.orderData.statuses.is_installation_finished,
                 area: this.orderData.area,
                 dollar_rate: this.orderData.dollar_rate,
+                dollar_date: this.orderData.dollar_date,
                 days: this.orderData.days,
                 price_for_day: this.orderData.price_for_day,
                 price_for_transportation_per_km: this.orderData.price_for_transportation_per_km,

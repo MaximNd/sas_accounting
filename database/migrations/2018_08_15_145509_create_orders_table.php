@@ -22,8 +22,10 @@ class CreateOrdersTable extends Migration
             $table->boolean('is_sent');
             $table->boolean('is_agreed');
             $table->boolean('is_paid');
+            $table->boolean('is_installation_finished');
 
             $table->double('dollar_rate');
+            $table->date('dollar_date');
 
             $table->string('name');
             $table->double('area');
@@ -37,6 +39,7 @@ class CreateOrdersTable extends Migration
             $table->string('route');
 
             $table->json('services');
+
 
             $table->softDeletes();
             $table->timestamps();

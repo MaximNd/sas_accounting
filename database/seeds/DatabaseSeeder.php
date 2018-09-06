@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
             factory(\App\PriceListLog::class, 1)->create(['price_list_id' => $equipment->id]);
         });
 
-        factory(\App\Order::class, 50)->create()->each(function ($order) {
-            factory(\App\OrderLog::class, 1)->create(['order_id' => $order->id]);
-        });
+//        factory(\App\Order::class, 50)->create()->each(function ($order) {
+//            factory(\App\OrderLog::class, 1)->create(['order_id' => $order->id]);
+//        });
     }
 }

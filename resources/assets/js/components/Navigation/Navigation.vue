@@ -69,7 +69,7 @@ export default {
             this.menuItems = [
                 { title: 'Профиль', icon: 'portrait', link: `/profile` },
                 { title: 'Заказы', icon: 'event', link: `/orders` },
-                { title: 'Зоздать заказ', icon: 'border_color', link: '/create-order' },
+                { title: 'Создать заказ', icon: 'border_color', link: '/create-order' },
                 { title: 'Сотрудники', icon: 'account_circle', link: '/users' },
                 { title: 'Клиенты', icon: 'work', link: '/clients' },
                 { title: 'Прайслист', icon: 'assignment', link: '/price-list' },

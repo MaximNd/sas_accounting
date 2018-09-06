@@ -14,7 +14,9 @@ class Order extends Model
         'is_sent',
         'is_agreed',
         'is_paid',
+        'is_installation_finished',
         'dollar_rate',
+        'dollar_date',
         'name',
         'area',
         'days',
@@ -32,7 +34,8 @@ class Order extends Model
         'services' => 'array',
         'is_sent' => 'boolean',
         'is_agreed' => 'boolean',
-        'is_paid' => 'boolean'
+        'is_paid' => 'boolean',
+        'is_installation_finished' => 'boolean'
     ];
 
     public function client() {
@@ -41,6 +44,10 @@ class Order extends Model
 
     public function gpsData() {
         return $this->hasMany('App\GPSData', 'order_id');
+    }
+
+    public function optionalServices() {
+        return $this->hasMany('App\OptionalService', 'order_id');
     }
 
     public function logs() {
