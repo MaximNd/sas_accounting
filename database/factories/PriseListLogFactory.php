@@ -13,9 +13,6 @@ use Faker\Generator as Faker;
 |
 */
 $factory->define(App\PriceListLog::class, function (Faker $faker){
-    $types = ['Создание', 'Обновление'];
-    $type_key = array_rand($types);
-    $type = $types[$type_key];
     $user_ids = [1,2,3,4];
     $user_id = $user_ids[array_rand($user_ids)];
     return [
@@ -25,6 +22,6 @@ $factory->define(App\PriceListLog::class, function (Faker $faker){
         'user_id' => $user_id,
         'before' => '{}',
         'after' => '{}',
-        'type' => $type
+        'type' => 'Создание'
     ];
 });

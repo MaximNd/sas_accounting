@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::post('/price-list', 'PriceListController@create');
 
+    Route::post('/price-list/image', 'PriceListController@storeEquipmentImage');
+
     Route::put('/price-list/{id}', 'PriceListController@update');
 
     Route::put('/price-list/{id}/restore', 'PriceListController@restore');

@@ -7,6 +7,14 @@
             <v-card-text>
                 <v-container grid-list-md>
                     <v-layout wrap>
+                        <v-flex xs12 d-flex>
+                            <v-avatar
+                                @click="onPickFile"
+                                size="200">
+                                <img :src="imgPreview === '' ? uploadImage : imgPreview" alt="imgPreview">
+                            </v-avatar>
+                            <input @change="onFilePicked($event)" style="display:none;" type="file" ref="imgPreview">
+                        </v-flex>
                         <v-flex xs12>
                             <v-text-field v-model="newEquipment.name" label="Модель"></v-text-field>
                         </v-flex>
@@ -55,7 +63,10 @@ export default {
     data() {
         return {
             pending: false,
+            uploadImage: '/storage/upload-foto.png',
+            imgPreview: '',
             newEquipment: {
+                image: '',
                 name: '',
                 incoming_price: '',
                 price: '',
@@ -71,7 +82,18 @@ export default {
         createEquipment() {
             this.pending = true;
             this.newEquipment.type = this.type;
-            this.$store.dispatch('createEquipment', this.newEquipment)
+            const formData = new FormData();
+            formData.append('image', this.newEquipment.image);
+            formData.append('name', this.newEquipment.name);
+            formData.append('incoming_price', this.newEquipment.incoming_price);
+            formData.append('price', this.newEquipment.price);
+            formData.append('installation_price_for_one', this.newEquipment.installation_price_for_one);
+            formData.append('installation_price_for_two', this.newEquipment.installation_price_for_two);
+            formData.append('installation_price_for_three', this.newEquipment.installation_price_for_three);
+            formData.append('description', this.newEquipment.description);
+            formData.append('type', this.newEquipment.type);
+
+            this.$store.dispatch('createEquipment', formData)
                 .then((data) => {
                     this.$emit('createDialogClosed', 'createDialog');
                 })
@@ -82,9 +104,30 @@ export default {
                     this.pending = false;
                 });
         },
+        onPickFile() {
+            this.$refs.imgPreview.click();
+        },
+        onFilePicked(event) {
+            this.newEquipment.image = event.target.files[0];
+            this.imgPreview = URL.createObjectURL(this.newEquipment.image);
+        },
         closeDialog() {
             this.$emit('createDialogClosed', 'createDialog');
         }
     }
 }
 </script>
+
+<style scoped>
+    img {
+        cursor: pointer;
+        object-fit: cover;
+        width: 200px;
+        height: 200px;
+        transition: transform 1s;
+    }
+
+    img:hover {
+        transform: scale(1.03);
+    }
+</style>

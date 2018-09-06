@@ -46,6 +46,10 @@ export default {
     created() {
         this.$store.dispatch('getPriseList');
     },
+    beforeRouteLeave(to, from, next) {
+        this.$store.dispatch('reset');
+        next();
+    },
     components: {
         appEquipment: Equipment,
         appServices: Services

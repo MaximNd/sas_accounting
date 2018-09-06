@@ -7,6 +7,15 @@
             <v-card-text>
                 <v-container grid-list-md>
                     <v-layout wrap>
+                        <v-flex xs12 d-flex>
+                            <v-avatar
+                                @click="onPickFile"
+                                tile
+                                size="200">
+                                <img :src="imgPreview === '' ? uploadImage : imgPreview" alt="imgPreview">
+                            </v-avatar>
+                            <input @change="onFilePicked($event)" style="display:none;" type="file" ref="imgPreview">
+                        </v-flex>
                         <v-flex xs12>
                             <v-text-field v-model="editedEquipment.name" label="Модель"></v-text-field>
                         </v-flex>
@@ -54,6 +63,8 @@ export default {
     },
     data() {
         return {
+            uploadImage: '/storage/upload-foto.png',
+            imgPreview: '',
             pending: false,
             editedEquipment: {}
         };
@@ -70,6 +81,7 @@ export default {
                 id: this.equipment.id,
                 isService: false,
                 equipment: {
+                    image: this.editedEquipment.image,
                     name: this.editedEquipment.name,
                     incoming_price: this.editedEquipment.incoming_price,
                     price: this.editedEquipment.price,
@@ -86,18 +98,45 @@ export default {
             };
             this.$store.dispatch('editEquipment', payload)
                 .then((data) => {
+                    this.imgPreview = '';
                     this.$emit('editDialogClosed', 'editDialog');
+                    this.pending = false;
                 })
                 .catch(err => {
                     console.log(err);
-                })
-                .finally(() => {
                     this.pending = false;
                 });
         },
+        onPickFile() {
+            this.$refs.imgPreview.click();
+        },
+        onFilePicked(event) {
+            const formData = new FormData();
+            formData.append('image', event.target.files[0]);
+            this.$store.dispatch('uploadImage', { id: this.editedEquipment.id, image: formData })
+                .then(imgName => {
+                    this.editedEquipment.image = imgName;
+                    this.imgPreview = URL.createObjectURL(event.target.files[0]);
+                });
+        },
         closeDialog() {
+            this.imgPreview = '';
             this.$emit('editDialogClosed', 'editDialog');
         }
     }
 }
 </script>
+
+<style scoped>
+    img {
+        cursor: pointer;
+        /* object-fit: cover; */
+        width: 200px;
+        height: 200px;
+        transition: transform 1s;
+    }
+
+    img:hover {
+        transform: scale(1.03);
+    }
+</style>

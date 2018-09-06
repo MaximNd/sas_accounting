@@ -57,7 +57,10 @@
                                                     <v-list dense>
                                                         <v-list-tile v-for="(beforeData, index) in updatedData[props.index].before" :key="`key-${index}`">
                                                             <v-list-tile-content :class="{ 'red--text darken-4--text': beforeData.isChanged }" >{{ beforeData.text }}:</v-list-tile-content>
-                                                            <v-list-tile-content :class="{ 'align-end': true, 'red--text darken-4--text': beforeData.isChanged }">{{ beforeData.value }}</v-list-tile-content>
+                                                            <v-list-tile-content v-if="beforeData.text === 'Изображение'" :class="{ 'align-end': true, 'red--text darken-4--text': beforeData.isChanged }">
+                                                                <img :style="{width: '60px'}" :src="`/storage/${beforeData.value}`" alt="image">
+                                                            </v-list-tile-content>
+                                                            <v-list-tile-content v-else :class="{ 'align-end': true, 'red--text darken-4--text': beforeData.isChanged }">{{ beforeData.value }}</v-list-tile-content>
                                                         </v-list-tile>
                                                     </v-list>
                                                 </v-card>
@@ -69,7 +72,10 @@
                                                     <v-list dense>
                                                         <v-list-tile v-for="(afterData, index) in updatedData[props.index].after" :key="`key-${index}`">
                                                             <v-list-tile-content :class="{ 'success--text': afterData.isChanged }" >{{ afterData.text }}:</v-list-tile-content>
-                                                            <v-list-tile-content :class="{ 'align-end': true, 'success--text': afterData.isChanged }">{{ afterData.value }}</v-list-tile-content>
+                                                            <v-list-tile-content v-if="afterData.text === 'Изображение'" :class="{ 'align-end': true, 'success--text': afterData.isChanged }">
+                                                                <img :style="{width: '60px'}" :src="`/storage/${afterData.value}`" alt="image">
+                                                            </v-list-tile-content>
+                                                            <v-list-tile-content v-else :class="{ 'align-end': true, 'success--text': afterData.isChanged }">{{ afterData.value }}</v-list-tile-content>
                                                         </v-list-tile>
                                                     </v-list>
                                                 </v-card>
@@ -85,6 +91,9 @@
                                                     hide-actions
                                                     class="elevation-1">
                                                     <template slot="items" slot-scope="nestedProps">
+                                                        <td v-if="createdData[props.index].items[0].type !== 'Услуга'">
+                                                            <img :style="{width: '60px'}" :src="`/storage/${nestedProps.item.image}`" alt="image">
+                                                        </td>
                                                         <td>{{ nestedProps.item.name }}</td>
                                                         <td v-if="createdData[props.index].items[0].type !== 'Услуга'" class="text-xs-right">{{ nestedProps.item.type }}</td>
                                                         <td v-if="createdData[props.index].items[0].type !== 'Услуга'" class="text-xs-right">{{ nestedProps.item.incoming_price }}</td>
@@ -134,6 +143,7 @@ export default {
         return {
             createdDataHeaders: {
                 equipment: [
+                    { text: 'Изображение', align: 'left', value: 'image', sortable: false },
                     { text: 'Модель', align: 'left', value: 'name', sortable: false },
                     { text: 'Категория', align: 'right', value: 'type', sortable: false },
                     { text: 'Входящая цена $', align: 'right', value: 'incoming_price', sortable: false },
@@ -151,6 +161,7 @@ export default {
             },
             permissibleKeysMap: {
                 equipment: {
+                    image: 'Изображение',
                     name: 'Модель',
                     incoming_price: 'Входящая Цена',
                     price: 'Цена',

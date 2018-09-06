@@ -63,6 +63,15 @@ const actions = {
                 .catch(err => reject(err));
         });
     },
+    uploadImage(_, payload) {
+        return new Promise((resolve, reject) => {
+            Vue.axios.post('/price-list/image', payload.image)
+                .then(({ data }) => {
+                    resolve(data);
+                })
+                .catch(err => reject(err));
+        });
+    },
     editEquipment({ commit }, payload) {
         const { id, ...editedData } = payload;
         return new Promise((resolve, reject) => {

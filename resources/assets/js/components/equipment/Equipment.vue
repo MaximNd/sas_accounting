@@ -35,6 +35,9 @@
             :items="equipment"
             :search="search">
             <template slot="items" slot-scope="props">
+                <td>
+                    <img :style="{width: '60px'}" :src="`/storage/${props.item.image}`" alt="image">
+                </td>
                 <td>{{ props.item.name }}</td>
                 <td class="text-xs-right">{{ props.item.incoming_price }}</td>
                 <td class="text-xs-right">{{ props.item.price }}</td>
@@ -85,6 +88,7 @@ export default {
                 deleteDialog: false
             },
             editedEquipment: {
+                image: '',
                 name: '',
                 incoming_price: '',
                 price: '',
@@ -111,6 +115,7 @@ export default {
         },
         headers() {
             let headers = [
+                { text: 'Изображение', align: 'left', value: 'image', sortable: false },
                 { text: 'Модель', align: 'left', value: 'name' },
                 { text: 'Входящая цена $', align: 'right', value: 'incoming_price' },
                 { text: 'Цена $', align: 'right', value: 'price' }

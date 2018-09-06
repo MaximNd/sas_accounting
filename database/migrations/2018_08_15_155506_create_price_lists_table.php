@@ -16,6 +16,7 @@ class CreatePriceListsTable extends Migration
         Schema::create('price_lists', function (Blueprint $table) {
             $table->increments('id');
 
+            $table->string('image')->nullable();
             $table->string('name');
             $table->double('incoming_price')->nullable();
             $table->double('price');

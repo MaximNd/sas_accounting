@@ -7,6 +7,7 @@ use App\PriceListLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class PriceListController extends Controller
 {
@@ -31,6 +32,7 @@ class PriceListController extends Controller
             ]);
         } else {
             $this->validate($request, [
+                'image' => 'image',
                 'name' => 'required',
                 'incoming_price' => 'required|numeric',
                 'price' => 'required|numeric',
@@ -42,7 +44,13 @@ class PriceListController extends Controller
 
 
         $result = DB::transaction(function() use ($request) {
-            $equipment = new PriceList($request->all());
+            $data = $request->all();
+
+            if ($data['type'] != 'Услуга') {
+                $data['image'] = $this->storeEquipmentImage($request);
+            }
+
+            $equipment = new PriceList($data);
             $equipment->save();
 
             $log = new PriceListLog([
@@ -133,5 +141,12 @@ class PriceListController extends Controller
             ]);
             $priceListLog->save();
         });
+    }
+
+    public function storeEquipmentImage(Request $request) {
+        $image = $request->file('image');
+        $imageName = uniqid('equipment_') . $image->getClientOriginalName();
+        Storage::disk('public')->putFileAs('/', $image, $imageName);
+        return $imageName;
     }
 }
