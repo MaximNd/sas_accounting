@@ -1,5 +1,8 @@
 <template>
     <v-card class="elevation-0 bg-card">
+
+        <appPDF></appPDF>
+
         <v-card>
             <v-card-text>
                 <v-form>
@@ -305,7 +308,7 @@
                                     <v-btn @click="updateOrder" large block color="info"><v-icon left>backup</v-icon>Сохранить</v-btn>
                                 </v-flex>
                                 <v-flex xs12 sm6>
-                                    <v-btn large block color="primary">Скачать PDF <v-icon right>get_app</v-icon></v-btn>
+                                    <v-btn @click="createPDF" large block color="primary">Скачать PDF <v-icon right>get_app</v-icon></v-btn>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -325,10 +328,12 @@ import { mapGetters } from 'vuex';
 import CreateClient from './../CreateClient/CreateClient';
 import GPSData from './gpsData/GPSData';
 import EquipmentData from './EquipmentData/EquipmentData';
+import PDF from './PDF/PDF';
 import dcopy from 'deep-copy';
 import utils from './../../mixins/utils.js';
 import formatter from 'accounting';
 import diff from 'deep-diff';
+import html2pdf from 'html2pdf.js';
 
 export default {
     mixins: [utils],
@@ -899,6 +904,18 @@ export default {
                 }
                 return indices;
             }, []);
+        },
+        createPDF() {
+            var element = document.getElementById('pdf');
+            var opt = {
+                margin:       0,
+                filename:     'myfile.pdf',
+                image:        { type: 'jpeg', quality: 1.0 },
+                html2canvas:  { scale: 1 },
+                jsPDF:        { unit: 'mm', format: 'letter', orientation: 'l' }
+            };
+
+            html2pdf().from(element).set(opt).save();
         }
     },
     created() {
@@ -921,7 +938,8 @@ export default {
     components: {
         appCreateClient: CreateClient,
         appGPSData: GPSData,
-        appEquipmentData: EquipmentData
+        appEquipmentData: EquipmentData,
+        appPDF: PDF
     }
 }
 </script>

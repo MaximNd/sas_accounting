@@ -12,6 +12,10 @@
 import Order from './../../components/order/Order';
 
 export default {
+    beforeRouteLeave(to, from, next) {
+        this.$store.dispatch('reset');
+        next();
+    },
     components: {
         appOrder: Order
     }
