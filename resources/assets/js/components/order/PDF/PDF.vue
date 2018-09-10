@@ -35,6 +35,14 @@
             </div>
         </v-layout>
         <div class="html2pdf__page-break"></div>
+        <appConnectionToPlatformTitle />
+        <div class="html2pdf__page-break"></div>
+        <appConnectionToPlatformProgramPart />
+        <div class="html2pdf__page-break"></div>
+        <appConnectionToPlatformFieldsMapping byDrones />
+        <div class="html2pdf__page-break"></div>
+        <appConnectionToPlatformFieldsMapping :byDrones="false" />
+        <div class="html2pdf__page-break"></div>
         <v-layout>
             END
         </v-layout>
@@ -42,19 +50,33 @@
 </template>
 
 <script>
-export default {
+import ConnectionToPlatformTitle from './connectionToPlatform/ConnectionToPlatformTitle';
+import ConnectionToPlatformProgramPart from './connectionToPlatform/ConnectionToPlatformProgramPart';
+import ConnectionToPlatformFieldsMapping from './connectionToPlatform/ConnectionToPlatformFeildsMapping';
 
+export default {
+    components: {
+        appConnectionToPlatformTitle: ConnectionToPlatformTitle,
+        appConnectionToPlatformProgramPart: ConnectionToPlatformProgramPart,
+        appConnectionToPlatformFieldsMapping: ConnectionToPlatformFieldsMapping
+    }
 }
 </script>
 
 <style>
     #pdf {
         padding: 0;
+        width: 1137.5px;
+        height: 100%;
     }
 
     .page {
-        height: 815.9px;
+        position: relative;
+        width: 1137.5px;
+        height: 807.9px;
     }
+
+    /* ---------------------------------------------------------------- */
 
     #page-2 {
         background-image: url('/storage/image11.png');

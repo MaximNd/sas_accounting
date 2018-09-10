@@ -305,10 +305,26 @@
                         <v-container fluid grid-list-md>
                             <v-layout wrap justify-center>
                                 <v-flex xs12 sm6>
-                                    <v-btn @click="updateOrder" large block color="info"><v-icon left>backup</v-icon>Сохранить</v-btn>
+                                    <v-btn
+                                        @click="updateOrder"
+                                        large
+                                        block
+                                        color="info"
+                                        :disabled="loading"
+                                        :loading="loading">
+                                            <v-icon left>backup</v-icon>Сохранить
+                                    </v-btn>
                                 </v-flex>
                                 <v-flex xs12 sm6>
-                                    <v-btn @click="createPDF" large block color="primary">Скачать PDF <v-icon right>get_app</v-icon></v-btn>
+                                    <v-btn
+                                        @click="createPDF"
+                                        large
+                                        block
+                                        color="primary"
+                                        :disabled="loading"
+                                        :loading="loading">
+                                            Скачать PDF <v-icon right>get_app</v-icon>
+                                    </v-btn>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -350,6 +366,7 @@ export default {
     },
     data() {
         return {
+            loading: false,
             isDollarRateEditing: false,
             snack: false,
             snackColor: '',
@@ -906,16 +923,17 @@ export default {
             }, []);
         },
         createPDF() {
-            var element = document.getElementById('pdf');
-            var opt = {
+            this.loading = true;
+            const element = document.getElementById('pdf');
+            const opt = {
                 margin:       0,
                 filename:     'myfile.pdf',
-                image:        { type: 'jpeg', quality: 1.0 },
+                image:        { type: 'jpeg', quality: 0.95 },
                 html2canvas:  { scale: 1 },
-                jsPDF:        { unit: 'mm', format: 'letter', orientation: 'l' }
+                jsPDF:        { unit: 'pt', format: [852.5, 606.5], orientation: 'l' }
             };
 
-            html2pdf().from(element).set(opt).save();
+            html2pdf().from(element).set(opt).save().then(() => { this.loading = false; });
         }
     },
     created() {
