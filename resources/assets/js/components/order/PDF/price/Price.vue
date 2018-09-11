@@ -47,15 +47,19 @@ export default {
         color: white;
         font-family: Roboto;
         text-align: center;
+        display: flex;
+        justify-content: center;
     }
 
     .price-wrapper .price-text,
     .price-wrapper .price {
-        display: inline-block;
+        /* display: inline-block; */
         font-family: Roboto;
     }
 
     .price-wrapper .price-currency {
-        position: absolute;
+        /* display: inline-block; */
+
+        /* position: absolute; */
     }
 </style>

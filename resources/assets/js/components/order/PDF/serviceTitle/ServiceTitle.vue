@@ -2,7 +2,7 @@
     <div class="service-title-wrapper">
         <div class="service-title-content">
             <div class="service-title">
-                <p class="service-text">
+                <p :class="{'service-text': true, 'font-weight-bold': bold }">
                     {{ title }}
                 </p>
             </div>
@@ -19,6 +19,11 @@ export default {
         title: {
             type: String,
             required: true
+        },
+        bold: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     }
 }
@@ -31,7 +36,8 @@ export default {
     }
 
     .service-title-wrapper .service-title-content {
-        width: 57%;
+        width: 648.38px;
+        height: 368px;
         display: flex;
         font-family: Roboto;
         font-size: 64px;

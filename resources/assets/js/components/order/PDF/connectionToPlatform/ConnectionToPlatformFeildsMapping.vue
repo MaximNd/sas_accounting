@@ -19,7 +19,8 @@ export default {
     data() {
         return {
             drones: {
-                title: 'Дронами',
+                title: 'Картування полів',
+                subtitle: 'Дронами',
                 data: [
                     { icon: '/storage/image23.png', text: 'Обліт' },
                     { icon: '/storage/image24.png', text: 'Зшиття' },
@@ -33,10 +34,11 @@ export default {
                 price: 1,
                 coordinates: { left: '378px', top: '670px' },
                 wrapperStyles: { fontSize: '20px', width: '200px', height: '70px', backgroundColor: '#009769' },
-                priceStyles: { text: { 'font-size': '24px', 'margin-top': '20px' }, currency: { top: '14px', left: '137px', 'font-size': '22px' } }
+                priceStyles: { text: { 'font-size': '31px', 'margin-top': '20px' }, currency: { 'margin-left': '2px', 'margin-top': '12px', 'font-size': '26px' } }
             },
             physicalMeasure: {
-                title: 'Фізичний обмір',
+                title: 'Картування полів',
+                subtitle: 'Фізичний обмір',
                 data: [
                     { icon: '/storage/image23.png', text: 'Об\'їзд' },
                     { icon: '/storage/image25.png', text: 'Точкування' },
@@ -49,7 +51,7 @@ export default {
                 price: 0.7,
                 coordinates: { left: '378px', top: '670px' },
                 wrapperStyles: { fontSize: '20px', width: '200px', height: '70px', backgroundColor: '#009769' },
-                priceStyles: { text: { 'font-size': '24px', 'margin-top': '20px' }, currency: { top: '14px', left: '151px', 'font-size': '22px' } }
+                priceStyles: { text: { 'font-size': '31px', 'margin-top': '20px' }, currency: { 'margin-left': '2px', 'margin-top': '12px', 'font-size': '26px' } }
             }
         };
     },

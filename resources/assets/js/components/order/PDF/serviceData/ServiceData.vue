@@ -3,17 +3,17 @@
         <appPrice
         :price="data.price"
         :coordinates="data.coordinates"
-        :wrapperStyles="data.wrapperStyles" 
+        :wrapperStyles="data.wrapperStyles"
         :priceStyles="data.priceStyles" />
         <v-layout column style="height: 100%;">
-            <div class="right-data-title font-weight-bold">
-                Картування полів
+            <div class="right-data-title font-weight-bold" :style="{ 'margin-bottom': data.titleOffset || '0px' }">
+                {{ data.title }}
             </div>
             <div class="data">
-                <div class="data-title">{{ data.title }}</div>
+                <div v-if="data.subtitle" class="data-title">{{ data.subtitle }}</div>
                 <ul class="data-list">
-                    <li v-for="(item, index) in data.data" :key="`data-${index}`">
-                        <div class="icon"><img :src="item.icon" alt="icon"></div>
+                    <li v-for="(item, index) in data.data" :key="`data-${index}`" :style="{ 'margin-bottom': data.listOffset || '26px' }">
+                        <div class="icon" :style="{ width: data.iconWidth || '7%' }"><img :src="item.icon" alt="icon"></div>
                         <div class="text">
                             <p>{{ item.text }}</p>
                         </div>
@@ -74,13 +74,12 @@ export default {
 
     .data .data-list li {
         display: flex;
-        margin-bottom: 26px;
+        /* margin-bottom: 26px; */
     }
 
     .data .data-list .icon {
         display: flex;
         align-items: center;
-        width: 7%;
         padding-left: 5px;
         padding-right: 5px;
     }
@@ -90,7 +89,6 @@ export default {
     }
 
     .data .data-list .text {
-        width: 93%;
         padding-left: 30px;
         padding-right: 5px;
         font-family: Roboto;
