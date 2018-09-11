@@ -43,6 +43,10 @@
         <div class="html2pdf__page-break"></div>
         <appConnectionToPlatformFieldsMapping :byDrones="false" />
         <div class="html2pdf__page-break"></div>
+        <appLandBankRegistrationTitle />
+        <div class="html2pdf__page-break"></div>
+        <appLandBankRegistrationList />
+        <div class="html2pdf__page-break"></div>
         <v-layout>
             END
         </v-layout>
@@ -54,11 +58,16 @@ import ConnectionToPlatformTitle from './connectionToPlatform/ConnectionToPlatfo
 import ConnectionToPlatformProgramPart from './connectionToPlatform/ConnectionToPlatformProgramPart';
 import ConnectionToPlatformFieldsMapping from './connectionToPlatform/ConnectionToPlatformFeildsMapping';
 
+import LandBankRegistrationTitle from './landBankRegistration/LandBankRegistrationTitle';
+import LandBankRegistrationList from './landBankRegistration/LandBankRegistrationList';
+
 export default {
     components: {
         appConnectionToPlatformTitle: ConnectionToPlatformTitle,
         appConnectionToPlatformProgramPart: ConnectionToPlatformProgramPart,
-        appConnectionToPlatformFieldsMapping: ConnectionToPlatformFieldsMapping
+        appConnectionToPlatformFieldsMapping: ConnectionToPlatformFieldsMapping,
+        appLandBankRegistrationTitle: LandBankRegistrationTitle,
+        appLandBankRegistrationList: LandBankRegistrationList
     }
 }
 </script>
