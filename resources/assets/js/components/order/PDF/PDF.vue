@@ -56,6 +56,18 @@
             :transportImage="gpsData.transportImage" />
             <div class="html2pdf__page-break" :key="`gps-data-page-break-${index}`"></div>
         </template>
+        <appPatrol />
+        <div class="html2pdf__page-break"></div>
+        <appNDVI />
+        <div class="html2pdf__page-break"></div>
+        <appCountingSeedlings />
+        <div class="html2pdf__page-break"></div>
+        <appAeroVisualReviewTitle />
+        <div class="html2pdf__page-break"></div>
+        <appAeroVisualReviewData page="first" />
+        <div class="html2pdf__page-break"></div>
+        <appAeroVisualReviewData page="second" />
+        <div class="html2pdf__page-break"></div>
         <v-layout>
             END
         </v-layout>
@@ -73,6 +85,15 @@ import LandBankRegistrationList from './landBankRegistration/LandBankRegistratio
 
 import GPSTrackingTitle from './GPSTracking/GPSTrackingTitle';
 import GPSTrackingData from './GPSTracking/GPSTrackingData';
+
+import Patrol from './patrol/Patrol';
+
+import NDVI from './NDVI/NDVI';
+
+import CountingSeedlings from './countingSeedlings/CountingSeedlings';
+
+import AeroVisualReviewTitle from './aeroVisualReview/AeroVisualReviewTitle';
+import AeroVisualReviewData from './aeroVisualReview/AeroVisualReviewData';
 
 export default {
     data() {
@@ -116,7 +137,12 @@ export default {
         appLandBankRegistrationTitle: LandBankRegistrationTitle,
         appLandBankRegistrationList: LandBankRegistrationList,
         appGPSTrackingTitle: GPSTrackingTitle,
-        appGPSTrackingData: GPSTrackingData
+        appGPSTrackingData: GPSTrackingData,
+        appPatrol: Patrol,
+        appNDVI: NDVI,
+        appCountingSeedlings: CountingSeedlings,
+        appAeroVisualReviewTitle: AeroVisualReviewTitle,
+        appAeroVisualReviewData: AeroVisualReviewData
     }
 }
 </script>

@@ -61223,6 +61223,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__GPSTracking_GPSTrackingTitle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__GPSTracking_GPSTrackingTitle__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__GPSTracking_GPSTrackingData__ = __webpack_require__(359);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__GPSTracking_GPSTrackingData___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__GPSTracking_GPSTrackingData__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__patrol_Patrol__ = __webpack_require__(440);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__patrol_Patrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__patrol_Patrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__NDVI_NDVI__ = __webpack_require__(445);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__NDVI_NDVI___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__NDVI_NDVI__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__countingSeedlings_CountingSeedlings__ = __webpack_require__(450);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__countingSeedlings_CountingSeedlings___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__countingSeedlings_CountingSeedlings__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__aeroVisualReview_AeroVisualReviewTitle__ = __webpack_require__(460);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__aeroVisualReview_AeroVisualReviewTitle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__aeroVisualReview_AeroVisualReviewTitle__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__aeroVisualReview_AeroVisualReviewData__ = __webpack_require__(465);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__aeroVisualReview_AeroVisualReviewData___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__aeroVisualReview_AeroVisualReviewData__);
 //
 //
 //
@@ -61287,6 +61297,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+
 
 
 
@@ -61319,7 +61350,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         appLandBankRegistrationTitle: __WEBPACK_IMPORTED_MODULE_3__landBankRegistration_LandBankRegistrationTitle___default.a,
         appLandBankRegistrationList: __WEBPACK_IMPORTED_MODULE_4__landBankRegistration_LandBankRegistrationList___default.a,
         appGPSTrackingTitle: __WEBPACK_IMPORTED_MODULE_5__GPSTracking_GPSTrackingTitle___default.a,
-        appGPSTrackingData: __WEBPACK_IMPORTED_MODULE_6__GPSTracking_GPSTrackingData___default.a
+        appGPSTrackingData: __WEBPACK_IMPORTED_MODULE_6__GPSTracking_GPSTrackingData___default.a,
+        appPatrol: __WEBPACK_IMPORTED_MODULE_7__patrol_Patrol___default.a,
+        appNDVI: __WEBPACK_IMPORTED_MODULE_8__NDVI_NDVI___default.a,
+        appCountingSeedlings: __WEBPACK_IMPORTED_MODULE_9__countingSeedlings_CountingSeedlings___default.a,
+        appAeroVisualReviewTitle: __WEBPACK_IMPORTED_MODULE_10__aeroVisualReview_AeroVisualReviewTitle___default.a,
+        appAeroVisualReviewData: __WEBPACK_IMPORTED_MODULE_11__aeroVisualReview_AeroVisualReviewData___default.a
     }
 });
 
@@ -61974,6 +62010,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             type: String,
             required: false,
             default: '95%'
+        },
+        positionY: {
+            type: String,
+            required: false,
+            default: 'auto'
         }
     },
     data: function data() {
@@ -61981,7 +62022,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             styles: {
                 'background-image': 'url(' + this.image + ')',
                 'background-size': this.size,
-                'background-position-x': this.positionX
+                'background-position-x': this.positionX,
+                'background-position-y': this.positionY
+
             }
         };
     }
@@ -62444,9 +62487,18 @@ var render = function() {
                       [_c("img", { attrs: { src: item.icon, alt: "icon" } })]
                     ),
                     _vm._v(" "),
-                    _c("div", { staticClass: "text" }, [
-                      _c("p", [_vm._v(_vm._s(item.text))])
-                    ])
+                    _c(
+                      "div",
+                      {
+                        staticClass: "text",
+                        style: {
+                          width: _vm.data.iconWidth
+                            ? 100 - parseFloat(_vm.data.iconWidth) + "%"
+                            : "auto"
+                        }
+                      },
+                      [_c("p", [_vm._v(_vm._s(item.text))])]
+                    )
                   ]
                 )
               })
@@ -63438,6 +63490,30 @@ var render = function() {
           })
         ]
       }),
+      _vm._v(" "),
+      _c("appPatrol"),
+      _vm._v(" "),
+      _c("div", { staticClass: "html2pdf__page-break" }),
+      _vm._v(" "),
+      _c("appNDVI"),
+      _vm._v(" "),
+      _c("div", { staticClass: "html2pdf__page-break" }),
+      _vm._v(" "),
+      _c("appCountingSeedlings"),
+      _vm._v(" "),
+      _c("div", { staticClass: "html2pdf__page-break" }),
+      _vm._v(" "),
+      _c("appAeroVisualReviewTitle"),
+      _vm._v(" "),
+      _c("div", { staticClass: "html2pdf__page-break" }),
+      _vm._v(" "),
+      _c("appAeroVisualReviewData", { attrs: { page: "first" } }),
+      _vm._v(" "),
+      _c("div", { staticClass: "html2pdf__page-break" }),
+      _vm._v(" "),
+      _c("appAeroVisualReviewData", { attrs: { page: "second" } }),
+      _vm._v(" "),
+      _c("div", { staticClass: "html2pdf__page-break" }),
       _vm._v(" "),
       _c("v-layout", [_vm._v("\n        END\n    ")])
     ],
@@ -74877,6 +74953,1195 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-35cefc7c", module.exports)
+  }
+}
+
+/***/ }),
+/* 440 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(441)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(443)
+/* template */
+var __vue_template__ = __webpack_require__(444)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-aa0a4b46"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\order\\PDF\\patrol\\Patrol.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-aa0a4b46", Component.options)
+  } else {
+    hotAPI.reload("data-v-aa0a4b46", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 441 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(442);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("05eb5f40", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-aa0a4b46\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Patrol.vue", function() {
+     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-aa0a4b46\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Patrol.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 442 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 443 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData__);
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            data: {
+                title: 'Патрулювання',
+                data: [{ icon: '/storage/image47.png', text: 'Узгодження потенційно небезпечних територій' }, { icon: '/storage/image48.png', text: 'Здійснення патрулювання посівів' }, { icon: '/storage/image49.png', text: 'У разі виявлення порушників інформування служби безпеки господарства' }, { icon: '/storage/image50.png', text: 'Звіт про виконану роботу' }],
+                price: 0.45,
+                listOffset: '65px',
+                titleOffset: '70px',
+                iconWidth: '9%',
+                coordinates: { left: '378px', top: '670px' },
+                wrapperStyles: { fontSize: '20px', width: '200px', height: '70px', backgroundColor: '#009769' },
+                priceStyles: { text: { 'font-size': '31px', 'margin-top': '20px' }, currency: { 'margin-left': '2px', 'margin-top': '12px', 'font-size': '26px' } }
+            }
+        };
+    },
+
+    components: {
+        appLeftImage: __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage___default.a,
+        appServiceData: __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData___default.a
+    }
+});
+
+/***/ }),
+/* 444 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-layout",
+    { staticClass: "page", attrs: { id: "page-11" } },
+    [
+      _c("appLeftImage", {
+        attrs: {
+          image: "/storage/image46.jpg",
+          size: "350% 101%",
+          positionX: "55%"
+        }
+      }),
+      _vm._v(" "),
+      _c("appServiceData", { attrs: { data: _vm.data } })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-aa0a4b46", module.exports)
+  }
+}
+
+/***/ }),
+/* 445 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(446)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(448)
+/* template */
+var __vue_template__ = __webpack_require__(449)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-467838dd"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\order\\PDF\\NDVI\\NDVI.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-467838dd", Component.options)
+  } else {
+    hotAPI.reload("data-v-467838dd", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 446 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(447);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("5f5f87c8", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-467838dd\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NDVI.vue", function() {
+     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-467838dd\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NDVI.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 447 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 448 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData__);
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            data: {
+                title: 'NDVI',
+                data: [{ icon: '/storage/image52.png', text: 'Cканування полів' }, { icon: '/storage/image54.png', text: 'Обробка знімків та сворення ортофотопланів  полів' }, { icon: '/storage/image55.png', text: 'Розрахунок індексів вегетайції' }, { icon: '/storage/image53.png', text: 'Завантаження готового матеріалу в систему Cropio' }],
+                price: 2,
+                listOffset: '45px',
+                titleOffset: '80px',
+                iconWidth: '10%',
+                coordinates: { left: '378px', top: '670px' },
+                wrapperStyles: { fontSize: '20px', width: '200px', height: '70px', backgroundColor: '#009769' },
+                priceStyles: { text: { 'font-size': '31px', 'margin-top': '20px' }, currency: { 'margin-left': '2px', 'margin-top': '12px', 'font-size': '26px' } }
+            }
+        };
+    },
+
+    components: {
+        appLeftImage: __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage___default.a,
+        appServiceData: __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData___default.a
+    }
+});
+
+/***/ }),
+/* 449 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-layout",
+    { staticClass: "page", attrs: { id: "page-12" } },
+    [
+      _c("appLeftImage", {
+        attrs: {
+          image: "/storage/image51.jpg",
+          size: "101%",
+          positionX: "60%",
+          positionY: "61%"
+        }
+      }),
+      _vm._v(" "),
+      _c("appServiceData", { attrs: { data: _vm.data } })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-467838dd", module.exports)
+  }
+}
+
+/***/ }),
+/* 450 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(451)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(453)
+/* template */
+var __vue_template__ = __webpack_require__(454)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-22752452"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\order\\PDF\\countingSeedlings\\CountingSeedlings.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-22752452", Component.options)
+  } else {
+    hotAPI.reload("data-v-22752452", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 451 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(452);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("f776bf1a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-22752452\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CountingSeedlings.vue", function() {
+     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-22752452\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CountingSeedlings.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 452 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 453 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData__);
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            data: {
+                title: 'Підрахунок всходів',
+                data: [{ icon: '/storage/image52.png', text: 'Сканування частин полів (3-5га) на малих висотах - 20-30м' }, { icon: '/storage/image59.png', text: 'Створення ортофотоплану надвисокої роздільної здатності (0,5 см/пкс)' }, { icon: '/storage/image58.png', text: 'Аналіз та підрахунок кількості рослин' }],
+                price: 3,
+                listOffset: '40px',
+                titleOffset: '80px',
+                iconWidth: '10%',
+                coordinates: { left: '378px', top: '670px' },
+                wrapperStyles: { fontSize: '20px', width: '200px', height: '70px', backgroundColor: '#009769' },
+                priceStyles: { text: { 'font-size': '31px', 'margin-top': '20px' }, currency: { 'margin-left': '2px', 'margin-top': '12px', 'font-size': '26px' } }
+            }
+        };
+    },
+
+    components: {
+        appLeftImage: __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage___default.a,
+        appServiceData: __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData___default.a
+    }
+});
+
+/***/ }),
+/* 454 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-layout",
+    { staticClass: "page", attrs: { id: "page-13" } },
+    [
+      _c("appLeftImage", {
+        attrs: { image: "/storage/image57.jpg", size: "213%", positionX: "40%" }
+      }),
+      _vm._v(" "),
+      _c("appServiceData", { attrs: { data: _vm.data } })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-22752452", module.exports)
+  }
+}
+
+/***/ }),
+/* 455 */,
+/* 456 */,
+/* 457 */,
+/* 458 */,
+/* 459 */,
+/* 460 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(461)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(463)
+/* template */
+var __vue_template__ = __webpack_require__(464)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-77f469ea"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\order\\PDF\\aeroVisualReview\\AeroVisualReviewTitle.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-77f469ea", Component.options)
+  } else {
+    hotAPI.reload("data-v-77f469ea", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 461 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(462);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("70f0fe76", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-77f469ea\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AeroVisualReviewTitle.vue", function() {
+     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-77f469ea\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AeroVisualReviewTitle.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 462 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n#page-14[data-v-77f469ea] {\n    background-image: url('/storage/image60.png');\n    background-size: 141% 101%;\n    background-position-x: 60%;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 463 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__serviceTitle_ServiceTitle__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__serviceTitle_ServiceTitle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__serviceTitle_ServiceTitle__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__price_Price__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__price_Price___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__price_Price__);
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    components: {
+        appServiceTitle: __WEBPACK_IMPORTED_MODULE_0__serviceTitle_ServiceTitle___default.a,
+        appPrice: __WEBPACK_IMPORTED_MODULE_1__price_Price___default.a
+    }
+});
+
+/***/ }),
+/* 464 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-layout",
+    { staticClass: "page", attrs: { id: "page-14", wrap: "" } },
+    [
+      _c("appServiceTitle", {
+        attrs: { title: "Аеровізуальний огляд", bold: "" }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-77f469ea", module.exports)
+  }
+}
+
+/***/ }),
+/* 465 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(466)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(468)
+/* template */
+var __vue_template__ = __webpack_require__(469)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-226babc7"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\order\\PDF\\aeroVisualReview\\AeroVisualReviewData.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-226babc7", Component.options)
+  } else {
+    hotAPI.reload("data-v-226babc7", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 466 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(467);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("439e06b3", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-226babc7\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AeroVisualReviewData.vue", function() {
+     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-226babc7\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AeroVisualReviewData.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 467 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.aero-data-title[data-v-226babc7] {\n    font-family: Roboto;\n    font-size: 40px;\n    text-align: center;\n}\n.aero-data-img img[data-v-226babc7] {\n    max-width: 91%;\n}\n.seasons[data-v-226babc7] {\n    font-family: Roboto;\n    font-size: 18px;\n}\n.durability-data .drone-durability[data-v-226babc7] {\n    height: 30px;\n    border-left: 1.8px solid #000;\n    border-bottom: 1.8px solid #000;\n    border-right: 1.8px solid #000;\n}\n.durability-data .drones[data-v-226babc7] {\n    margin-top: 10px;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.durability-data .drones img[data-v-226babc7] {\n    max-width: 100%;\n}\n.aero-bottom-logo[data-v-226babc7] {\n    position: absolute;\n    right: 0;\n    bottom: 0;\n}\n.aero-bottom-logo img[data-v-226babc7] {\n    margin-right: 10px;\n    margin-bottom: 10px;\n    width: 200px;\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 468 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        page: {
+            type: String,
+            required: true
+        }
+    },
+    data: function data() {
+        return {
+            data: {
+                first: {
+                    image: '/storage/image65.jpg',
+                    imageSize: '185% 101%',
+                    imageX: '29%',
+                    imageY: '75%',
+                    titleOffset: '25px',
+                    data: [{
+                        title: 'Озима пшениця',
+                        image: '/storage/image61.png',
+                        seasons: [{ offset: '56px', data: ['Жовт.', 'Листоп.'] }, { offset: '116px', data: ['Берез.', 'Квіт.', 'Трав.'] }],
+                        durability: [{ offset: '65px', width: '100px', drones: 1 }, { offset: '142px', width: '145px', drones: 1 }]
+                    }, {
+                        title: 'Ріпак',
+                        image: '/storage/image63.png',
+                        seasons: [{ offset: '40px', data: ['Жовт.', 'Листоп.'] }, { offset: '226px', data: ['Берез.', 'Квіт.', 'Трав.'] }],
+                        durability: [{ offset: '48px', width: '100px', drones: 1 }, { offset: '254px', width: '145px', drones: 1 }]
+                    }]
+                },
+                second: {
+                    image: '/storage/image71.jpg',
+                    imageSize: '320% 101%',
+                    imageX: '66%',
+                    imageY: '75%',
+                    titleOffset: '10px',
+                    data: [{
+                        title: 'Кукурудза',
+                        image: '/storage/image67_.png',
+                        seasons: [{ offset: '135px', data: ['Квіт.', 'Трав.', 'Черв.', 'Лип.'] }],
+                        durability: [{ dronesOffset: '130px', offset: '130px', width: '232px', drones: 2 }]
+                    }, {
+                        title: 'Соняшник',
+                        image: '/storage/image66_.png',
+                        seasons: [{ offset: '129px', data: ['Трав.', 'Черв.', 'Лип.'] }],
+                        durability: [{ dronesOffset: '118px', offset: '128px', width: '169px', drones: 2 }]
+                    }]
+                }
+            }
+        };
+    },
+
+    computed: {
+        spacesTimes: function spacesTimes() {
+            return this.page === 'first' ? 1 : 3;
+        }
+    },
+    components: {
+        appLeftImage: __WEBPACK_IMPORTED_MODULE_0__leftImage_LeftImage___default.a,
+        appServiceData: __WEBPACK_IMPORTED_MODULE_1__serviceData_ServiceData___default.a
+    }
+});
+
+/***/ }),
+/* 469 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-layout",
+    { staticClass: "page", staticStyle: { "background-color": "#fff" } },
+    [
+      _c("appLeftImage", {
+        attrs: {
+          image: _vm.data[_vm.page].image,
+          size: _vm.data[_vm.page].imageSize,
+          positionX: _vm.data[_vm.page].imageX,
+          positionY: _vm.data[_vm.page].imageY
+        }
+      }),
+      _vm._v(" "),
+      _c(
+        "v-flex",
+        { attrs: { xs8: "" } },
+        [
+          _c(
+            "v-layout",
+            { attrs: { column: "" } },
+            [
+              _c(
+                "v-flex",
+                [
+                  _c(
+                    "v-layout",
+                    { attrs: { column: "" } },
+                    [
+                      _c("v-flex", [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "aero-data-title font-weight-medium",
+                            style: {
+                              "margin-top": _vm.data[_vm.page].titleOffset
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.data[_vm.page].data[0].title))]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("v-flex", [
+                        _c("div", { staticClass: "aero-data-img" }, [
+                          _c("img", {
+                            attrs: {
+                              src: _vm.data[_vm.page].data[0].image,
+                              alt: "img"
+                            }
+                          })
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("v-flex", [
+                        _c(
+                          "div",
+                          _vm._l(_vm.data[_vm.page].data[0].seasons, function(
+                            seasonsData,
+                            index1
+                          ) {
+                            return _c(
+                              "span",
+                              {
+                                key: "seasons-0-" + _vm.page + "-" + index1,
+                                staticClass: "seasons",
+                                style: { "margin-left": seasonsData.offset }
+                              },
+                              [
+                                _vm._l(seasonsData.data, function(season) {
+                                  return [
+                                    _vm._v(
+                                      "\n                                    " +
+                                        _vm._s(season)
+                                    ),
+                                    _vm._l(_vm.spacesTimes, function(_) {
+                                      return [_vm._v(" ")]
+                                    })
+                                  ]
+                                })
+                              ],
+                              2
+                            )
+                          })
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticStyle: { display: "flex" } },
+                          _vm._l(
+                            _vm.data[_vm.page].data[0].durability,
+                            function(durabilityData, index) {
+                              return _c(
+                                "div",
+                                {
+                                  key: "durability-0-" + _vm.page + "-" + index,
+                                  staticClass: "durability-data"
+                                },
+                                [
+                                  _c("div", {
+                                    staticClass: "drone-durability",
+                                    style: {
+                                      "margin-left": durabilityData.offset,
+                                      width: durabilityData.width
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "drones" }, [
+                                    _c("img", {
+                                      style: {
+                                        "margin-left":
+                                          durabilityData.dronesOffset ||
+                                          durabilityData.offset
+                                      },
+                                      attrs: {
+                                        src:
+                                          durabilityData.drones === 1
+                                            ? "/storage/image-drone.png"
+                                            : "/storage/image-drones.png",
+                                        alt: "drone"
+                                      }
+                                    })
+                                  ])
+                                ]
+                              )
+                            }
+                          )
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-flex",
+                [
+                  _c(
+                    "v-layout",
+                    { attrs: { column: "" } },
+                    [
+                      _c("v-flex", [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "aero-data-title font-weight-medium",
+                            style: {
+                              "margin-top": _vm.data[_vm.page].titleOffset
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.data[_vm.page].data[1].title))]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("v-flex", [
+                        _c("div", { staticClass: "aero-data-img" }, [
+                          _c("img", {
+                            attrs: {
+                              src: _vm.data[_vm.page].data[1].image,
+                              alt: "img"
+                            }
+                          })
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("v-flex", [
+                        _c(
+                          "div",
+                          _vm._l(_vm.data[_vm.page].data[1].seasons, function(
+                            seasonsData,
+                            index1
+                          ) {
+                            return _c(
+                              "span",
+                              {
+                                key: "seasons-1-" + _vm.page + "-" + index1,
+                                staticClass: "seasons",
+                                style: { "margin-left": seasonsData.offset }
+                              },
+                              [
+                                _vm._l(seasonsData.data, function(season) {
+                                  return [
+                                    _vm._v(
+                                      "\n                                    " +
+                                        _vm._s(season)
+                                    ),
+                                    _vm._l(_vm.spacesTimes, function(_) {
+                                      return [_vm._v(" ")]
+                                    })
+                                  ]
+                                })
+                              ],
+                              2
+                            )
+                          })
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticStyle: { display: "flex" } },
+                          _vm._l(
+                            _vm.data[_vm.page].data[1].durability,
+                            function(durabilityData, index) {
+                              return _c(
+                                "div",
+                                {
+                                  key: "durability-1-" + _vm.page + "-" + index,
+                                  staticClass: "durability-data"
+                                },
+                                [
+                                  _c("div", {
+                                    staticClass: "drone-durability",
+                                    style: {
+                                      "margin-left": durabilityData.offset,
+                                      width: durabilityData.width
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "drones" }, [
+                                    _c("img", {
+                                      style: {
+                                        "margin-left":
+                                          durabilityData.dronesOffset ||
+                                          durabilityData.offset
+                                      },
+                                      attrs: {
+                                        src:
+                                          durabilityData.drones === 1
+                                            ? "/storage/image-drone.png"
+                                            : "/storage/image-drones.png",
+                                        alt: "drone"
+                                      }
+                                    })
+                                  ])
+                                ]
+                              )
+                            }
+                          )
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "aero-bottom-logo" }, [
+            _c("img", { attrs: { src: "/storage/image4.png", alt: "logo" } })
+          ])
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-226babc7", module.exports)
   }
 }
 

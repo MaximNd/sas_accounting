@@ -14,7 +14,7 @@
                 <ul class="data-list">
                     <li v-for="(item, index) in data.data" :key="`data-${index}`" :style="{ 'margin-bottom': data.listOffset || '26px' }">
                         <div class="icon" :style="{ width: data.iconWidth || '7%' }"><img :src="item.icon" alt="icon"></div>
-                        <div class="text">
+                        <div class="text" :style="{ width: data.iconWidth ? `${100 - parseFloat(data.iconWidth)}%` : 'auto' }">
                             <p>{{ item.text }}</p>
                         </div>
                     </li>

@@ -18,6 +18,11 @@ export default {
             type: String,
             required: false,
             default: '95%'
+        },
+        positionY: {
+            type: String,
+            required: false,
+            default: 'auto'
         }
     },
     data() {
@@ -25,7 +30,9 @@ export default {
             styles: {
                 'background-image': `url(${this.image})`,
                 'background-size': this.size,
-                'background-position-x': this.positionX
+                'background-position-x': this.positionX,
+                'background-position-y': this.positionY
+
             }
         };
     }
