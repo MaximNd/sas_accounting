@@ -1,5 +1,5 @@
 <template>
-    <v-layout class="page" id="page-5">
+    <v-layout class="page">
         <appLeftImage image="/storage/image22.jpeg" size="cover" positionX="75%" />
         <appServiceData :data="byDrones ? drones : physicalMeasure" />
     </v-layout>
@@ -61,7 +61,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-</style>

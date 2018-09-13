@@ -1,6 +1,6 @@
 <template>
     <div class="price-wrapper" :style="priceWrapperStyle">
-        <span :style="priceStyles.text" class="price-text">Ціна&nbsp;</span>
+        <span :style="priceStyles.text" class="price-text">{{ text }}&nbsp;</span>
         <span :style="priceStyles.text" class="price font-weight-bold">{{ price }}</span>
         <span :style="priceStyles.currency" class="price-currency font-weight-bold">$</span>
     </div>
@@ -12,6 +12,11 @@ export default {
         price: {
             type: Number,
             required: true
+        },
+        text: {
+            type: String,
+            required: false,
+            default: 'Ціна'
         },
         coordinates: {
             type: Object,
@@ -34,7 +39,8 @@ export default {
                 'font-size': this.wrapperStyles.fontSize,
                 width: this.wrapperStyles.width,
                 height: this.wrapperStyles.height,
-                'background-color': this.wrapperStyles.backgroundColor
+                'background-color': this.wrapperStyles.backgroundColor,
+                'justify-content': this.wrapperStyles.justifyContent || 'center'
             }
         };
     }
@@ -48,7 +54,6 @@ export default {
         font-family: Roboto;
         text-align: center;
         display: flex;
-        justify-content: center;
     }
 
     .price-wrapper .price-text,

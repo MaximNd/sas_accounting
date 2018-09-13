@@ -39,14 +39,23 @@
         <div class="html2pdf__page-break"></div>
         <appConnectionToPlatformProgramPart />
         <div class="html2pdf__page-break"></div>
-        <appConnectionToPlatformFieldsMapping byDrones />
+        <appFieldsMapping byDrones />
         <div class="html2pdf__page-break"></div>
-        <appConnectionToPlatformFieldsMapping :byDrones="false" />
+        <appFieldsMapping :byDrones="false" />
         <div class="html2pdf__page-break"></div>
         <appLandBankRegistrationTitle />
         <div class="html2pdf__page-break"></div>
         <appLandBankRegistrationList />
         <div class="html2pdf__page-break"></div>
+        <appGPSTrackingTitle />
+        <div class="html2pdf__page-break"></div>
+        <template v-for="(gpsData, index) in gpsTrackingData">
+            <appGPSTrackingData
+            :key="`gps-data-${index}`"
+            :equipment="gpsData.equipment"
+            :transportImage="gpsData.transportImage" />
+            <div class="html2pdf__page-break" :key="`gps-data-page-break-${index}`"></div>
+        </template>
         <v-layout>
             END
         </v-layout>
@@ -56,18 +65,58 @@
 <script>
 import ConnectionToPlatformTitle from './connectionToPlatform/ConnectionToPlatformTitle';
 import ConnectionToPlatformProgramPart from './connectionToPlatform/ConnectionToPlatformProgramPart';
-import ConnectionToPlatformFieldsMapping from './connectionToPlatform/ConnectionToPlatformFeildsMapping';
+
+import FieldsMapping from './fieldsMapping/FeildsMapping';
 
 import LandBankRegistrationTitle from './landBankRegistration/LandBankRegistrationTitle';
 import LandBankRegistrationList from './landBankRegistration/LandBankRegistrationList';
 
+import GPSTrackingTitle from './GPSTracking/GPSTrackingTitle';
+import GPSTrackingData from './GPSTracking/GPSTrackingData';
+
 export default {
+    data() {
+        return {
+            gpsTrackingData: [
+                {
+                    equipment: [
+                        { image: '/storage/image37.png', name: 'GPS трекер Connect', price: 103 },
+                        { image: '/storage/image38.jpg', name: 'RFID водія', price: 53 },
+                        { image: '/storage/image39.jpg', name: 'Зчитувач причіпного BL01', price: 56 },
+                        { image: '/storage/image40.png', name: 'ДУТ 2шт BI FL Sensor 100', price: 218 },
+                        { image: '/storage/image42.jpg', name: 'ДРТ DFM 250D CAN', price: 453 },
+                        { image: '/storage/image36.jpg', name: 'CAN reader', price: 36 },
+                        { image: '/storage/image43.jpg', name: 'Модуль CN03', price: 56 },
+                        { image: '/storage/image44.jpg', name: 'Високоточна антена', price: 750 },
+                        { image: '/storage/image44.jpg', name: 'Високоточна антена', price: 750 }
+                    ],
+                    transportImage: '/storage/image41.png'
+                },
+                {
+                    equipment: [
+                        { image: '/storage/image37.png', name: 'GPS трекер Connect', price: 103 },
+                        { image: '/storage/image38.jpg', name: 'RFID водія', price: 53 },
+                        { image: '/storage/image39.jpg', name: 'Зчитувач причіпного BL01', price: 56 },
+                        { image: '/storage/image40.png', name: 'ДУТ 2шт BI FL Sensor 100', price: 218 },
+                        { image: '/storage/image42.jpg', name: 'ДРТ DFM 250D CAN', price: 453 },
+                        { image: '/storage/image36.jpg', name: 'CAN reader', price: 36 },
+                        { image: '/storage/image43.jpg', name: 'Модуль CN03', price: 56 },
+                        { image: '/storage/image44.jpg', name: 'Високоточна антена', price: 750 },
+                        { image: '/storage/image44.jpg', name: 'Високоточна антена', price: 750 }
+                    ],
+                    transportImage: '/storage/image41.png'
+                }
+            ]
+        };
+    },
     components: {
         appConnectionToPlatformTitle: ConnectionToPlatformTitle,
         appConnectionToPlatformProgramPart: ConnectionToPlatformProgramPart,
-        appConnectionToPlatformFieldsMapping: ConnectionToPlatformFieldsMapping,
+        appFieldsMapping: FieldsMapping,
         appLandBankRegistrationTitle: LandBankRegistrationTitle,
-        appLandBankRegistrationList: LandBankRegistrationList
+        appLandBankRegistrationList: LandBankRegistrationList,
+        appGPSTrackingTitle: GPSTrackingTitle,
+        appGPSTrackingData: GPSTrackingData
     }
 }
 </script>

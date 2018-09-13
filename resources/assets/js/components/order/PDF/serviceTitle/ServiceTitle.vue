@@ -2,8 +2,7 @@
     <div class="service-title-wrapper">
         <div class="service-title-content">
             <div class="service-title">
-                <p :class="{'service-text': true, 'font-weight-bold': bold }">
-                    {{ title }}
+                <p :class="{'service-text': true, 'font-weight-bold': bold }" v-html="title">
                 </p>
             </div>
             <div class="service-aside"></div>
@@ -48,12 +47,13 @@ export default {
     .service-title-wrapper .service-title-content .service-title {
         width: 88%;
         background-color: rgba(13, 58, 97, 0.6);
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
     }
 
     .service-title-wrapper .service-title-content .service-text {
         padding-left: 35px;
-        padding-top: 70px;
-        padding-bottom: 70px;
         color: #fff;
         line-height: 1.2;
         margin: 0;
