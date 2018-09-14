@@ -117,6 +117,7 @@ export default {
                 .then(imgName => {
                     this.editedEquipment.image = imgName;
                     this.imgPreview = URL.createObjectURL(event.target.files[0]);
+                    this.$refs.imgPreview.value = null;
                 });
         },
         closeDialog() {
