@@ -7,8 +7,8 @@
             <div class="name">{{ name }}</div>
             <div class="price">
                 <span>Ціна:&nbsp;</span>
-                <span class="font-weight-medium">{{ price }}</span>
-                <span>$</span>
+                <span class="price-price">{{ price }}</span>
+                <span class="currency">$</span>
             </div>
         </div>
     </li>
@@ -56,8 +56,12 @@ export default {
         display: flex;
         flex-flow: column;
         justify-content: center;
-        font-family: Roboto;
+        font-family: ProximaNova;
         font-size: 20px;
+    }
+
+    .list-item .list-item-data .name {
+        font-family: ProximaNovaBlack;
     }
 
     .list-item .list-item-data .icon {
@@ -65,10 +69,15 @@ export default {
     }
 
     .list-item .list-item-data .price {
-        font-family: Roboto;
+        font-family: ProximaNova;
         display: flex;
         justify-content: flex-start;
         align-items: center;
+    }
+
+    .list-item .list-item-data .price-price,
+    .list-item .list-item-data .currency {
+        font-family: ProximaNovaBold;
     }
 
     .list-item .list-item-data .price span:nth-child(2) {

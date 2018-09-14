@@ -76,7 +76,7 @@ export default {
     }
 
     #page-4 .main-list .main-list-title {
-        font-family: Roboto;
+        font-family: ProximaNovaBlack;
         font-size: 40px;
         color: #fff;
         text-align: center;
@@ -112,7 +112,7 @@ export default {
         width: 91%;
         padding-left: 5px;
         padding-right: 5px;
-        font-family: Roboto;
+        font-family: ProximaNova;
         font-size: 22px;
         color: #fff;
         display: flex;

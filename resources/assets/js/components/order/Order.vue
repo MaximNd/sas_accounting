@@ -1,7 +1,7 @@
 <template>
     <v-card class="elevation-0 bg-card">
 
-        <appPDF></appPDF>
+        <appPDF :gpsData="orderData.GPSData"></appPDF>
 
         <v-card>
             <v-card-text>
@@ -350,6 +350,7 @@ import utils from './../../mixins/utils.js';
 import formatter from 'accounting';
 import diff from 'deep-diff';
 import html2pdf from 'html2pdf.js';
+import jsPDF from 'jspdf';
 
 export default {
     mixins: [utils],
@@ -924,16 +925,71 @@ export default {
         },
         createPDF() {
             this.loading = true;
+
             const element = document.getElementById('pdf');
             const opt = {
                 margin:       0,
                 filename:     'myfile.pdf',
-                image:        { type: 'jpeg', quality: 0.95 },
+                image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 1 },
                 jsPDF:        { unit: 'pt', format: [852.5, 606.5], orientation: 'l' }
             };
 
             html2pdf().from(element).set(opt).save().then(() => { this.loading = false; });
+            // this.loading = true;
+
+            // const element = document.getElementById('pdf');
+            // const opt = {
+            //     margin:       0,
+            //     filename:     'myfile.pdf',
+            //     image:        { type: 'jpeg', quality: 0.95 },
+            //     html2canvas:  { scale: 1 },
+            //     jsPDF:        { unit: 'pt', format: [852.5, 606.5], orientation: 'l' }
+            // };
+
+            // // const childrenPages = Array.prototype.slice.call(document.getElementById('pdf').children);
+            // const pages = [
+            //     document.getElementById('first-pdf-part'),
+            //     document.getElementById('second-pdf-part')
+            // ];
+            // // childrenPages.reduce((pages, childPage, index) => {
+
+            // // }, []);
+            // // for (let i = 0; i < 25; ++i) {
+
+            // // }
+
+            // // html2pdf().from(element).set(opt).save().then(() => { this.loading = false; });
+            // const exportHTMLToPDF = async (pages, outputType='blob') => {
+            //     const opt = {
+            //         margin:       0,
+            //         filename:     'myfile.pdf',
+            //         image:        { type: 'jpeg', quality: 0.98 },
+            //         html2canvas:  { dpi: 192, letterRendering: true, scale: 1 },
+            //         jsPDF:        { unit: 'pt', format: [852.5, 606.5], orientation: 'l' }
+            //     };
+            //     const doc = new jsPDF(opt.jsPDF);
+            //     const pageSize = jsPDF.getPageSize(opt.jsPDF);
+            //     for(let i = 0; i < pages.length; i++){
+            //         const page = pages[i];
+            //         console.log(page);
+            //         const pageImage = await html2pdf().from(page).set(opt).outputImg();
+            //         if(i != 0) {
+            //             doc.addPage();
+            //         }
+            //         doc.addImage(pageImage.src, 'jpeg', opt.margin, opt.margin, pageSize.width, pageSize.height);
+            //     }
+            //     // This can be whatever output you want. I prefer blob.
+            //     const pdf = doc.output('blob');
+            //     // console.log(pdf);
+            //     var link = document.createElement('a');
+            //     link.href = window.URL.createObjectURL(pdf);
+            //     link.download = "Report_" + new Date() + ".pdf";
+            //     link.click();
+            //     // return pdf;
+            // };
+
+            // exportHTMLToPDF(pages);
         }
     },
     created() {

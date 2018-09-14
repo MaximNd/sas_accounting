@@ -38,7 +38,7 @@ export default {
         width: 648.38px;
         height: 368px;
         display: flex;
-        font-family: Roboto;
+        font-family: ProximaNovaBlack;
         font-size: 64px;
         margin-top: 260px;
         margin-left: 60px;

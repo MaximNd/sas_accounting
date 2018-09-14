@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid id="pdf">
+    <v-container v-if="gpsData" fluid id="pdf">
         <v-layout class="page" id="page-1" wrap>
             <v-flex xs12 class="main-logo-container">
                 <img class="main-logo-img" src="/storage/image0.png" alt="">
@@ -68,6 +68,18 @@
         <div class="html2pdf__page-break"></div>
         <appAeroVisualReviewData page="second" />
         <div class="html2pdf__page-break"></div>
+        <appSASMapper />
+        <div class="html2pdf__page-break"></div>
+        <appChemicalAnalisisOfSoils />
+        <div class="html2pdf__page-break"></div>
+        <!-- <appSoilHardnessMeasuring />
+        <div class="html2pdf__page-break"></div>
+        <appIntegration1C />
+        <div class="html2pdf__page-break"></div> -->
+        <!-- <appPrices1C />
+        <div class="html2pdf__page-break"></div> -->
+        <appOptionalServices />
+        <div class="html2pdf__page-break"></div>
         <v-layout>
             END
         </v-layout>
@@ -75,6 +87,7 @@
 </template>
 
 <script>
+import utils from './../../../mixins/utils.js';
 import ConnectionToPlatformTitle from './connectionToPlatform/ConnectionToPlatformTitle';
 import ConnectionToPlatformProgramPart from './connectionToPlatform/ConnectionToPlatformProgramPart';
 
@@ -95,24 +108,41 @@ import CountingSeedlings from './countingSeedlings/CountingSeedlings';
 import AeroVisualReviewTitle from './aeroVisualReview/AeroVisualReviewTitle';
 import AeroVisualReviewData from './aeroVisualReview/AeroVisualReviewData';
 
+import SASMapper from './SASMapper/SASMapper';
+
+import ChemicalAnalisisOfSoils from './chemicalAnalysisOfSoils/ChemicalAnalysisOfSoils';
+
+import SoilHardnessMeasuring from './soilHardnessMeasuring/SoilHardnessMeasuring';
+
+import Integration1C from './1CIntegration/1CIntegration';
+import Prices1C from './1CIntegration/1CPrices';
+
+import OptionalServices from './optionalServices/OptionalServices';
+
 export default {
+    mixins: [utils],
+    props: {
+        gpsData: {
+            type: Array,
+            required: false,
+            default: []
+        }
+    },
     data() {
         return {
-            gpsTrackingData: [
-                {
-                    equipment: [
-                        { image: '/storage/image37.png', name: 'GPS трекер Connect', price: 103 },
-                        { image: '/storage/image38.jpg', name: 'RFID водія', price: 53 },
-                        { image: '/storage/image39.jpg', name: 'Зчитувач причіпного BL01', price: 56 },
-                        { image: '/storage/image40.png', name: 'ДУТ 2шт BI FL Sensor 100', price: 218 },
-                        { image: '/storage/image42.jpg', name: 'ДРТ DFM 250D CAN', price: 453 },
-                        { image: '/storage/image36.jpg', name: 'CAN reader', price: 36 },
-                        { image: '/storage/image43.jpg', name: 'Модуль CN03', price: 56 },
-                        { image: '/storage/image44.jpg', name: 'Високоточна антена', price: 750 },
-                        { image: '/storage/image44.jpg', name: 'Високоточна антена', price: 750 }
-                    ],
-                    transportImage: '/storage/image41.png'
-                },
+            mappedColumnNames: {
+                gps_tracker: 'GPS трекер',
+                fuel_gauge: 'ДУТ',
+                counter: 'Лічильник',
+                rf_id: 'RFID водія',
+                reader_of_trailed_equipment: 'Зчитувач причіпного',
+                can_reader: 'CAN reader',
+                deaerator: 'ДРТ',
+                cn03: 'Модуль CN03',
+                rs01: 'Модуль RS01',
+                additional_equipment: ''
+            },
+            gd: [
                 {
                     equipment: [
                         { image: '/storage/image37.png', name: 'GPS трекер Connect', price: 103 },
@@ -130,6 +160,49 @@ export default {
             ]
         };
     },
+    computed: {
+        gpsTrackingData() {
+            return this.gpsData.map(gpsRow => {
+                return {
+                    equipment: Object.keys(gpsRow).reduce((equipment, key) => {
+                        if (Object.keys(this.mappedColumnNames).indexOf(key) !== -1) {
+                            if (Array.isArray(gpsRow[key])) {
+                                let count = 0;
+                                let gpsRowArray = gpsRow[key].slice().filter(row => this.isObject(row));
+                                if (gpsRowArray.length === 0) return equipment;
+                                const equipmentData = {
+                                    image: ``,
+                                    name: ``,
+                                    price: 0
+                                };
+                                for (let i = 0; i < gpsRowArray.length; ++i) {
+                                    for (let j = 0; j < gpsRowArray.length; ++j) {
+                                        if (gpsRowArray[i].id === gpsRowArray[j].id) {
+                                            ++count;
+                                        }
+                                    }
+                                    equipmentData.image = `/storage/${gpsRowArray[i].image}`;
+                                    equipmentData.name = `${this.mappedColumnNames[key]} ${count}шт ${gpsRowArray[i].name}`;
+                                    equipmentData.price = this.multiplyTwoFloats(gpsRowArray[i].price, count);
+                                    gpsRowArray = gpsRowArray.filter(row => row.id !== gpsRowArray[i].id);
+                                }
+
+                                equipment.push(equipmentData);
+                            } else if (this.isObject(gpsRow[key])) {
+                                equipment.push({
+                                    image: `/storage/${gpsRow[key].image}`,
+                                    name: `${this.mappedColumnNames[key]} ${gpsRow[key].name}`,
+                                    price: gpsRow[key].price
+                                });
+                            }
+                        }
+                        return equipment;
+                    }, []),
+                    transportImage: gpsRow.image
+                };
+            });
+        }
+    },
     components: {
         appConnectionToPlatformTitle: ConnectionToPlatformTitle,
         appConnectionToPlatformProgramPart: ConnectionToPlatformProgramPart,
@@ -142,13 +215,42 @@ export default {
         appNDVI: NDVI,
         appCountingSeedlings: CountingSeedlings,
         appAeroVisualReviewTitle: AeroVisualReviewTitle,
-        appAeroVisualReviewData: AeroVisualReviewData
+        appAeroVisualReviewData: AeroVisualReviewData,
+        appSASMapper: SASMapper,
+        appChemicalAnalisisOfSoils: ChemicalAnalisisOfSoils,
+        appSoilHardnessMeasuring: SoilHardnessMeasuring,
+        appIntegration1C: Integration1C,
+        appPrices1C: Prices1C,
+        appOptionalServices: OptionalServices
     }
 }
 </script>
 
 <style>
+    @font-face {
+        font-family: ProximaNova;
+        src: url('/storage/fonts/Proxima Nova/Proxima Nova Regular.otf');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: ProximaNovaBold;
+        src: url('/storage/fonts/Proxima Nova/Proxima Nova Bold.otf');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: ProximaNovaBlack;
+        src: url('/storage/fonts/Proxima Nova/Proxima Nova Black.otf');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+
     #pdf {
+        font-family: ProximaNova;
         padding: 0;
         width: 1137.5px;
         height: 100%;
@@ -182,7 +284,8 @@ export default {
     #page-2 .text {
         width: 600px;
         color: white;
-        font-family: Roboto;
+        font-family: ProximaNovaBlack;
+        line-height: 1.1;
         font-size: 64px;
         margin-left: 60px;
         margin-top: -75px;
@@ -207,7 +310,7 @@ export default {
     }
 
     #page-1 .text-group {
-        font-family: Roboto;
+        font-family: ProximaNova;
         font-size: 76px !important;
         text-align: center;
         color: #fff;
@@ -216,7 +319,7 @@ export default {
     }
 
     #page-1 .text-year {
-        font-family: Roboto;
+        font-family: ProximaNova;
         font-size: 20px !important;
         text-align: center;
         color: #fff;
@@ -236,7 +339,7 @@ export default {
 
     #page-1 .text-dnipro {
         display: inline-block;
-        font-family: Roboto;
+        font-family: ProximaNova;
         font-size: 30px;
         color: #fff;
         text-align: center;

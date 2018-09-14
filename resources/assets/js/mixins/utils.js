@@ -9,6 +9,9 @@ export default {
         isObject(value) {
             return !!value && typeof value === 'object' && value.constructor === Object;
         },
+        isString(value) {
+            return typeof value === 'string';
+        },
         // Returns if a value is null
         isNull (value) {
             return value === null;

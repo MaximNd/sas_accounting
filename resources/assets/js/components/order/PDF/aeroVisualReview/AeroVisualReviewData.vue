@@ -21,6 +21,7 @@
                                     class="seasons"
                                     :style="{ 'margin-left': seasonsData.offset }">
                                     <template v-for="season in seasonsData.data">
+                                        <!-- eslint-disable-next-line -->
                                         {{ season }}<template v-for="_ in spacesTimes">&nbsp;</template>
                                     </template>
                                 </span>
@@ -156,7 +157,8 @@ export default {
 
 <style scoped>
     .aero-data-title {
-        font-family: Roboto;
+        font-family: ProximaNovaBlack;
+        color: #4D4D4D;
         font-size: 40px;
         text-align: center;
     }
@@ -166,7 +168,7 @@ export default {
     }
 
     .seasons {
-        font-family: Roboto;
+        font-family: ProximaNova;
         font-size: 18px;
     }
 

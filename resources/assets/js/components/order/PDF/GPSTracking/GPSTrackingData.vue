@@ -1,5 +1,5 @@
 <template>
-    <v-layout class="page" column>
+    <v-layout class="page gps-data-bg" column>
         <v-flex>
             <div class="gps-data-title">GPS - моніторинг</div>
         </v-flex>
@@ -40,7 +40,7 @@
         <div class="gps-data-bottom-logo">
             <appPrice
             :coordinates="{ left: '0px', top: '728px' }"
-            :price="975"
+            :price="price"
             text="Всього"
             :wrapperStyles="{ justifyContent: 'flex-end', fontSize: '20px', width: '380px', height: '60px', backgroundColor: '#00b881' }"
             :priceStyles="{ text: { 'font-size': '34px', 'margin-top': '13px' }, currency: { 'margin-right': '25px', 'margin-left': '2px', 'margin-top': '7px', 'font-size': '28px' } }" />
@@ -52,8 +52,10 @@
 <script>
 import ListItem from './listItem/ListItem';
 import Price from './../price/Price';
+import utils from './../../../../mixins/utils.js';
 
 export default {
+    mixins: [utils],
     props: {
         equipment: {
             type: Array,
@@ -65,8 +67,11 @@ export default {
         }
     },
     computed: {
+        price() {
+            return this.equipment.reduce((price, row) => (this.addTwoFloats(price, row.price)), 0.0);
+        },
         mainList() {
-            return this.equipment.slice(0, 6);
+            return this.equipment.slice(0, 7);
         },
         secondaryList() {
             return this.equipment.slice(7);
@@ -80,9 +85,13 @@ export default {
 </script>
 
 <style scoped>
+    .gps-data-bg {
+        background-color: #fff;
+    }
+
     .gps-data-title {
         width: 100%;
-        font-family: Roboto !important;
+        font-family: ProximaNovaBlack !important;
         font-size: 49px !important;
         text-align: center;
         margin-top: 40px;
@@ -112,7 +121,10 @@ export default {
     }
 
     .transport-image img {
-        max-width: 100%;
+        /* max-width: 100%; */
+        max-height: 80%;
+        margin: 0 auto;
+        display: block;
     }
 
     .gps-data-bottom-logo {

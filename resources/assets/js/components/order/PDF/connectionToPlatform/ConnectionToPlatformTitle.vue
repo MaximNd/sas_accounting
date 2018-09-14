@@ -1,6 +1,6 @@
 <template>
     <v-layout class="page" id="page-3" wrap>
-        <appServiceTitle title="Підключення до платформи SASAGRO.COM" />
+        <appServiceTitle title="Підключення <br> до платформи SASAGRO.COM" />
         <appPrice
         :price="1.5"
         :coordinates="{ left: 0, top: '678px' }"

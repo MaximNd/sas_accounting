@@ -51,20 +51,20 @@ export default {
     .price-wrapper {
         position: absolute;
         color: white;
-        font-family: Roboto;
+        font-family: ProximaNova;
         text-align: center;
         display: flex;
     }
 
-    .price-wrapper .price-text,
+    .price-wrapper .price-text {
+        font-family: ProximaNova;
+    }
+
     .price-wrapper .price {
-        /* display: inline-block; */
-        font-family: Roboto;
+        font-family: ProximaNovaBlack;
     }
 
     .price-wrapper .price-currency {
-        /* display: inline-block; */
-
-        /* position: absolute; */
+        font-family: ProximaNovaBold;
     }
 </style>
