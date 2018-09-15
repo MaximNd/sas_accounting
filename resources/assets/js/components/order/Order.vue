@@ -347,13 +347,14 @@ import EquipmentData from './EquipmentData/EquipmentData';
 import PDF from './PDF/PDF';
 import dcopy from 'deep-copy';
 import utils from './../../mixins/utils.js';
+import setStyles from './../../mixins/stylesMixins.js'
 import formatter from 'accounting';
 import diff from 'deep-diff';
 import html2pdf from 'html2pdf.js';
 import jsPDF from 'jspdf';
 
 export default {
-    mixins: [utils],
+    mixins: [utils, setStyles],
     props: {
         isCreation: {
             type: Boolean,
@@ -924,30 +925,135 @@ export default {
             }, []);
         },
         createPDF() {
-            this.loading = true;
 
-            const element = document.getElementById('pdf');
-            const opt = {
-                margin:       0,
-                filename:     'myfile.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 1 },
-                jsPDF:        { unit: 'pt', format: [852.5, 606.5], orientation: 'l' }
-            };
-
-            html2pdf().from(element).set(opt).save().then(() => { this.loading = false; });
             // this.loading = true;
-
             // const element = document.getElementById('pdf');
             // const opt = {
             //     margin:       0,
             //     filename:     'myfile.pdf',
-            //     image:        { type: 'jpeg', quality: 0.95 },
-            //     html2canvas:  { scale: 1 },
-            //     jsPDF:        { unit: 'pt', format: [852.5, 606.5], orientation: 'l' }
+            //     image:        { type: 'jpeg', quality: 0.98 },
+            //     html2canvas:  { scale: 1, dpi: 300, imageTimeout: 0 },
+            //     jsPDF:        { unit: 'pt', format, orientation: 'l' }
             // };
 
-            // // const childrenPages = Array.prototype.slice.call(document.getElementById('pdf').children);
+            // html2pdf().set(opt).from(element).save().then((...data) => {
+            //     console.log('DATA: ', data);
+            //     this.loading = false;
+            // });
+            this.loading = true;
+
+            const element = document.getElementById('pdf');
+            const format = [852.5, 606.5];
+            const opt = {
+                margin:       0,
+                filename:     'myfile.pdf',
+                image:        { type: 'jpeg', quality: 0.95 },
+                html2canvas:  { scale: 1, imageTimeout: 0, logging: false },
+                jsPDF:        { unit: 'pt', format, orientation: 'l' }
+            };
+            const childreninWrapperCount = 20;
+            const pages = 10;
+            const pageWidth = 1137.5;
+            const pageHeight = 808;
+            const children = element.children;
+            const pdfPages = children.length / 2;
+            const wrappers = [];
+            const countWrappers = Math.ceil(children.length / childreninWrapperCount);
+            const doc = new jsPDF(opt.jsPDF);
+            const pageSize = jsPDF.getPageSize(opt.jsPDF);
+            const imgPromises = [];
+
+            const getImages = () => new Promise((resolve, reject) => {
+                console.log('GET_IMG');
+                for (let i = 0; i < countWrappers; ++i) {
+                    wrappers.push(document.createElement('div'));
+                    wrappers[i].classList.add('container');
+                    wrappers[i].classList.add('fluid');
+                    const wrapperHeight = this.multiplyTwoFloats(pageHeight, pages);
+                    this.setStyles(wrappers[i], {
+                        'font-family': 'ProximaNova',
+                        padding: 0,
+                        width: '1137.5px',
+                        height: `${wrapperHeight}px`
+                    });
+                    for (let j = i * childreninWrapperCount; j < childreninWrapperCount + (i * childreninWrapperCount); ++j) {
+                        if (!children[j]) break;
+                        const clone = children[j].cloneNode(true);
+                        wrappers[i].appendChild(clone);
+
+                    }
+                    imgPromises.push(html2pdf().from(wrappers[i]).set(opt).outputImg());
+                }
+                resolve()
+            });
+
+            const setImages = () => new Promise((resolve, reject) => {
+                console.log('SET_IMG');
+                return Promise.all(imgPromises)
+                    .then(data => {
+                        let counter = 0;
+                        for (let i = 0; i < data.length; ++i) {
+                            let position = 0;
+                            for (let j = 0; j < pages + 1; ++j) {
+                                if (counter > pdfPages + 1) {
+                                    return resolve();
+                                }
+                                if(j != 0) {
+                                    doc.addPage();
+                                }
+                                doc.addImage(data[i].src, 'jpeg', opt.margin, position, pageSize.width, this.multiplyTwoFloats(format[1], pages));
+                                position = this.subtractWtoFloats(position, format[1]);
+                                console.log('POSITION: ', position);
+                                ++counter;
+                            }
+                        }
+                        resolve();
+                    })
+                    .catch(err => console.log(err))
+            });
+
+            const downloadPDF = () => new Promise((resolve, reject) => {
+                console.log('DOWNLOAD_PDF');
+                const pdf = doc.output('blob');
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(pdf);
+                link.download = `${this.orderData.name}.pdf`;
+                link.click();
+                this.loading = false;
+            });
+            console.log('START');
+
+            setTimeout(() => {
+                getImages()
+                    .then(() => setImages())
+                    .then(() => downloadPDF())
+                    .catch(err => { console.log(err); this.loading = false; });
+            }, 500);
+
+            console.log('END');
+
+            // for (let i = 0; i < countWrappers; ++i) {
+                // html2pdf().from(wrappers[0]).set(opt).outputImg().then(img => {
+
+                    // This can be whatever output you want. I prefer blob.
+
+                    // console.log('CLIP: ', clip);
+                    // console.log('DATA: ', data);
+                    // console.log('I: ', i);
+
+                // });
+            // }
+
+            // console.log('wrapper children:', wrapper.children);
+            // element.parentNode.appendChild(wrapper);
+
+
+
+
+
+
+            // const childrenPages = Array.prototype.slice.call();
+            // console.log('childrenPages:', childrenPages);
             // const pages = [
             //     document.getElementById('first-pdf-part'),
             //     document.getElementById('second-pdf-part')

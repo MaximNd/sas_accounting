@@ -72,17 +72,14 @@
         <div class="html2pdf__page-break"></div>
         <appChemicalAnalisisOfSoils />
         <div class="html2pdf__page-break"></div>
-        <!-- <appSoilHardnessMeasuring />
+        <appSoilHardnessMeasuring />
         <div class="html2pdf__page-break"></div>
         <appIntegration1C />
-        <div class="html2pdf__page-break"></div> -->
-        <!-- <appPrices1C />
-        <div class="html2pdf__page-break"></div> -->
+        <div class="html2pdf__page-break"></div>
+        <appPrices1C />
+        <div class="html2pdf__page-break"></div>
         <appOptionalServices />
         <div class="html2pdf__page-break"></div>
-        <v-layout>
-            END
-        </v-layout>
     </v-container>
 </template>
 
