@@ -316,6 +316,23 @@
                                     </v-btn>
                                 </v-flex>
                                 <v-flex xs12 sm6>
+                                    <v-dialog
+                                        v-model="pdfLoading"
+                                        persistent
+                                        width="300">
+                                        <v-card
+                                            color="primary"
+                                            dark>
+                                            <v-card-text>
+                                                Создание документа ({{ pdfProgress }}%)
+                                                <v-progress-linear
+                                                    v-model="pdfProgress"
+                                                    color="white"
+                                                    class="mb-0">
+                                                </v-progress-linear>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-dialog>
                                     <v-btn
                                         @click="createPDF"
                                         large
@@ -368,6 +385,8 @@ export default {
     },
     data() {
         return {
+            pdfProgress: 0,
+            pdfLoading: false,
             loading: false,
             isDollarRateEditing: false,
             snack: false,
@@ -925,22 +944,8 @@ export default {
             }, []);
         },
         createPDF() {
-
-            // this.loading = true;
-            // const element = document.getElementById('pdf');
-            // const opt = {
-            //     margin:       0,
-            //     filename:     'myfile.pdf',
-            //     image:        { type: 'jpeg', quality: 0.98 },
-            //     html2canvas:  { scale: 1, dpi: 300, imageTimeout: 0 },
-            //     jsPDF:        { unit: 'pt', format, orientation: 'l' }
-            // };
-
-            // html2pdf().set(opt).from(element).save().then((...data) => {
-            //     console.log('DATA: ', data);
-            //     this.loading = false;
-            // });
             this.loading = true;
+            this.pdfLoading = true;
 
             const element = document.getElementById('pdf');
             const format = [852.5, 606.5];
@@ -948,7 +953,7 @@ export default {
                 margin:       0,
                 filename:     'myfile.pdf',
                 image:        { type: 'jpeg', quality: 0.95 },
-                html2canvas:  { scale: 1, imageTimeout: 0, logging: false },
+                html2canvas:  { scale: 1, dpi: 5000, imageTimeout: 0 },
                 jsPDF:        { unit: 'pt', format, orientation: 'l' }
             };
             const childreninWrapperCount = 20;
@@ -964,7 +969,6 @@ export default {
             const imgPromises = [];
 
             const getImages = () => new Promise((resolve, reject) => {
-                console.log('GET_IMG');
                 for (let i = 0; i < countWrappers; ++i) {
                     wrappers.push(document.createElement('div'));
                     wrappers[i].classList.add('container');
@@ -988,114 +992,73 @@ export default {
             });
 
             const setImages = () => new Promise((resolve, reject) => {
-                console.log('SET_IMG');
                 return Promise.all(imgPromises)
                     .then(data => {
-                        let counter = 0;
-                        for (let i = 0; i < data.length; ++i) {
-                            let position = 0;
-                            for (let j = 0; j < pages + 1; ++j) {
-                                if (counter > pdfPages + 1) {
-                                    return resolve();
+                        setTimeout(() => {
+                            this.pdfProgress = 80;
+                        }, 100);
+                        setTimeout(() => {
+                            let counter = 0;
+                            for (let i = 0; i < data.length; ++i) {
+                                let position = 0;
+                                for (let j = 0; j < pages + 1; ++j) {
+                                    if (counter > pdfPages + 1) {
+                                        return resolve();
+                                    }
+                                    if(j != 0) {
+                                        doc.addPage();
+                                    }
+                                    doc.addImage(data[i].src, 'jpeg', opt.margin, position, pageSize.width, this.multiplyTwoFloats(format[1], pages));
+                                    position = this.subtractWtoFloats(position, format[1]);
+                                    ++counter;
                                 }
-                                if(j != 0) {
-                                    doc.addPage();
-                                }
-                                doc.addImage(data[i].src, 'jpeg', opt.margin, position, pageSize.width, this.multiplyTwoFloats(format[1], pages));
-                                position = this.subtractWtoFloats(position, format[1]);
-                                console.log('POSITION: ', position);
-                                ++counter;
                             }
-                        }
-                        resolve();
+                            resolve();
+                        }, 300);
                     })
                     .catch(err => console.log(err))
             });
 
             const downloadPDF = () => new Promise((resolve, reject) => {
-                console.log('DOWNLOAD_PDF');
-                const pdf = doc.output('blob');
-                const link = document.createElement('a');
-                link.href = window.URL.createObjectURL(pdf);
-                link.download = `${this.orderData.name}.pdf`;
-                link.click();
-                this.loading = false;
+                this.pdfProgress = 90;
+                const progressInterval = setInterval(() => {
+                    this.pdfProgress = this.addTwoFloats(this.pdfProgress, 5);
+                    if (this.pdfProgress >= 100) {
+                        clearInterval(progressInterval);
+                    }
+                }, 300);
+                setTimeout(() => {
+                    const pdf = doc.output('blob');
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(pdf);
+                    link.download = `${this.orderData.name}.pdf`;
+                    link.click();
+                    resolve();
+                }, 500);
             });
-            console.log('START');
 
             setTimeout(() => {
+                const progressInterval = setInterval(() => {
+                    this.pdfProgress = this.addTwoFloats(this.pdfProgress, 0.7);
+                    if (this.pdfProgress >= 90) {
+                        clearInterval(progressInterval);
+                    }
+                }, 1500);
                 getImages()
                     .then(() => setImages())
                     .then(() => downloadPDF())
-                    .catch(err => { console.log(err); this.loading = false; });
+                    .then(() => {
+                        this.loading = false;
+                        this.pdfLoading = false;
+                        this.pdfProgress = 0;
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        this.loading = false;
+                        this.pdfLoading = false;
+                        this.pdfProgress = 0;
+                    });
             }, 500);
-
-            console.log('END');
-
-            // for (let i = 0; i < countWrappers; ++i) {
-                // html2pdf().from(wrappers[0]).set(opt).outputImg().then(img => {
-
-                    // This can be whatever output you want. I prefer blob.
-
-                    // console.log('CLIP: ', clip);
-                    // console.log('DATA: ', data);
-                    // console.log('I: ', i);
-
-                // });
-            // }
-
-            // console.log('wrapper children:', wrapper.children);
-            // element.parentNode.appendChild(wrapper);
-
-
-
-
-
-
-            // const childrenPages = Array.prototype.slice.call();
-            // console.log('childrenPages:', childrenPages);
-            // const pages = [
-            //     document.getElementById('first-pdf-part'),
-            //     document.getElementById('second-pdf-part')
-            // ];
-            // // childrenPages.reduce((pages, childPage, index) => {
-
-            // // }, []);
-            // // for (let i = 0; i < 25; ++i) {
-
-            // // }
-
-            // // html2pdf().from(element).set(opt).save().then(() => { this.loading = false; });
-            // const exportHTMLToPDF = async (pages, outputType='blob') => {
-            //     const opt = {
-            //         margin:       0,
-            //         filename:     'myfile.pdf',
-            //         image:        { type: 'jpeg', quality: 0.98 },
-            //         html2canvas:  { dpi: 192, letterRendering: true, scale: 1 },
-            //         jsPDF:        { unit: 'pt', format: [852.5, 606.5], orientation: 'l' }
-            //     };
-            //     const doc = new jsPDF(opt.jsPDF);
-            //     const pageSize = jsPDF.getPageSize(opt.jsPDF);
-            //     for(let i = 0; i < pages.length; i++){
-            //         const page = pages[i];
-            //         console.log(page);
-            //         const pageImage = await html2pdf().from(page).set(opt).outputImg();
-            //         if(i != 0) {
-            //             doc.addPage();
-            //         }
-            //         doc.addImage(pageImage.src, 'jpeg', opt.margin, opt.margin, pageSize.width, pageSize.height);
-            //     }
-            //     // This can be whatever output you want. I prefer blob.
-            //     const pdf = doc.output('blob');
-            //     // console.log(pdf);
-            //     var link = document.createElement('a');
-            //     link.href = window.URL.createObjectURL(pdf);
-            //     link.download = "Report_" + new Date() + ".pdf";
-            //     link.click();
-            //     // return pdf;
-            // };
-
-            // exportHTMLToPDF(pages);
         }
     },
     created() {
