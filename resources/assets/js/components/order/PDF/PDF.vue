@@ -80,6 +80,8 @@
         <div class="html2pdf__page-break"></div>
         <appOptionalServices />
         <div class="html2pdf__page-break"></div>
+        <appContacts />
+        <div class="html2pdf__page-break"></div>
     </v-container>
 </template>
 
@@ -115,6 +117,8 @@ import Integration1C from './1CIntegration/1CIntegration';
 import Prices1C from './1CIntegration/1CPrices';
 
 import OptionalServices from './optionalServices/OptionalServices';
+
+import Contacts from './contacts/Contacts';
 
 export default {
     mixins: [utils],
@@ -218,7 +222,8 @@ export default {
         appSoilHardnessMeasuring: SoilHardnessMeasuring,
         appIntegration1C: Integration1C,
         appPrices1C: Prices1C,
-        appOptionalServices: OptionalServices
+        appOptionalServices: OptionalServices,
+        appContacts: Contacts
     }
 }
 </script>
