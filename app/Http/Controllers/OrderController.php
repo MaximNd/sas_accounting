@@ -138,12 +138,15 @@ class OrderController extends Controller
             'GPSData.toDelete' => 'array',
             'GPSData.toAdd' => 'array',
             'GPSData.toUpdate' => 'array',
+            'optional_services.toDelete' => 'array',
+            'optional_services.toAdd' => 'array',
+            'optional_services.toUpdate' => 'array',
             'log.before' => 'required|string',
             'log.after' => 'required|string'
         ]);
 
         DB::transaction(function () use ($request, $id) {
-            $orderDataToUpdate = $request->except(['GPSData', 'log']);
+            $orderDataToUpdate = $request->except(['GPSData', 'optional_services', 'log']);
 //            dd($orderDataToUpdate);
             if (count($orderDataToUpdate) > 0) {
                 $orderDataToUpdate['services'] = json_encode($orderDataToUpdate['services']);
@@ -164,6 +167,24 @@ class OrderController extends Controller
             if (count($GPSDataToUpdate) > 0) {
                 for ($i = 0; $i < count($GPSDataToUpdate); ++$i) {
                     GPSData::where('id', '=', $GPSDataToUpdate[$i]['id'])->update($GPSDataToUpdate[$i]);
+                }
+            }
+
+            $optionalServicesToDelete = $request->input('optional_services.toDelete');
+            $optionalServicesToAdd = $request->input('optional_services.toAdd');
+            $optionalServicesToUpdate = $request->input('optional_services.toUpdate');
+            if (count($optionalServicesToDelete) > 0) {
+                OptionalService::destroy($optionalServicesToDelete);
+            }
+            if (count($optionalServicesToAdd) > 0) {
+                for ($i = 0; $i < count($optionalServicesToAdd); ++$i) {
+                    $optionalServicesToAdd[$i]['order_id'] = $id;
+                }
+                OptionalService::insert($optionalServicesToAdd);
+            }
+            if (count($optionalServicesToUpdate) > 0) {
+                for ($i = 0; $i < count($optionalServicesToUpdate); ++$i) {
+                    OptionalService::where('id', '=', $optionalServicesToUpdate[$i]['id'])->update($optionalServicesToUpdate[$i]);
                 }
             }
 

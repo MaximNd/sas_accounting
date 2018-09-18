@@ -54639,7 +54639,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.bg-card[data-v-4c323b99] {\n    background-color: transparent;\n}\n.gps-tracking-header[data-v-4c323b99] {\n    font-size: 28px !important;\n}\n", ""]);
+exports.push([module.i, "\n.bg-card[data-v-4c323b99] {\n    background-color: transparent;\n}\n.gps-tracking-header[data-v-4c323b99],\n.pdf-preview[data-v-4c323b99] {\n    text-align: center;\n    font-size: 28px !important;\n}\n", ""]);
 
 // exports
 
@@ -55033,6 +55033,33 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -55064,6 +55091,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return {
             pdfProgress: 0,
             pdfLoading: false,
+            orderUpdating: false,
             loading: false,
             isDollarRateEditing: false,
             snack: false,
@@ -55511,6 +55539,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         updateOrder: function updateOrder() {
             var _this11 = this;
 
+            this.loading = true;
+            this.orderUpdating = true;
             var oldOrderData = {
                 name: this.oldOrder.name,
                 client: this.oldOrder.client,
@@ -55580,13 +55610,53 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 return row1.id - row2.id;
             });
 
-            var editedGPSDataIndices = this.getEditedGPSDataIndices(restOldOrderGPSData, restUpdatedOrderGPSData);
+            var editedGPSDataIndices = this.getEditedDataIndices(restOldOrderGPSData, restUpdatedOrderGPSData);
 
             var restOldChangedOrderGPSData = restOldOrderGPSData.filter(function (_, index) {
                 return editedGPSDataIndices.includes(index);
             });
             var restUpdatedChangedOrderGPSData = restUpdatedOrderGPSData.filter(function (_, index) {
                 return editedGPSDataIndices.includes(index);
+            });
+
+            // OPTIONAL_SERVICES
+            var oldOrderOptionalServices = this.oldOrder.optional_services;
+            var updatedOrderOptionalServices = this.orderData.optional_services;
+
+            var deletedOptionalServices = oldOrderOptionalServices.filter(function (oldOptionalService) {
+                return !updatedOrderOptionalServices.find(function (updatedOptionalService) {
+                    return updatedOptionalService.id === oldOptionalService.id;
+                });
+            });
+
+            var addedOptionalServices = updatedOrderOptionalServices.filter(function (updatedOptionalService) {
+                return !oldOrderOptionalServices.find(function (oldOptionalService) {
+                    return oldOptionalService.id === updatedOptionalService.id;
+                });
+            });
+
+            var restOldOrderOptionalServices = oldOrderOptionalServices.filter(function (oldOptionalService) {
+                return !deletedOptionalServices.find(function (deletedOptionalService) {
+                    return deletedOptionalService.id === oldOptionalService.id;
+                });
+            }).sort(function (row1, row2) {
+                return row1.id - row2.id;
+            });
+            var restUpdatedOrderOptionalServices = updatedOrderOptionalServices.filter(function (updatedOptionalService) {
+                return !addedOptionalServices.find(function (addedOptionalService) {
+                    return addedOptionalService.id === updatedOptionalService.id;
+                });
+            }).sort(function (row1, row2) {
+                return row1.id - row2.id;
+            });
+
+            var editedOptionalServicesIndices = this.getEditedDataIndices(restOldOrderOptionalServices, restUpdatedOrderOptionalServices);
+
+            var restOldChangedOrderOptionalServices = restOldOrderOptionalServices.filter(function (_, index) {
+                return editedOptionalServicesIndices.includes(index);
+            });
+            var restUpdatedChangedOrderOptionalServices = restUpdatedOrderOptionalServices.filter(function (_, index) {
+                return editedOptionalServicesIndices.includes(index);
             });
 
             var orderDataLog = this.parseOrderDiffData(__WEBPACK_IMPORTED_MODULE_9_deep_diff___default()(oldOrderData, updatedOrderData));
@@ -55597,6 +55667,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                     services: oldOrderServicesData,
                     gpsData: {
                         changed: restOldChangedOrderGPSData
+                    },
+                    optional_services: {
+                        changed: restOldChangedOrderOptionalServices
                     }
                 }),
                 after: JSON.stringify({
@@ -55606,6 +55679,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                         deleted: deletedGPSData,
                         added: addedGPSData,
                         changed: restUpdatedChangedOrderGPSData
+                    },
+                    optional_services: {
+                        deleted: deletedOptionalServices,
+                        added: addedOptionalServices,
+                        changed: restOldChangedOrderOptionalServices
                     }
                 })
             };
@@ -55614,6 +55692,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 services: updatedOrderServicesData.map(function (service) {
                     return service.id;
                 }),
+                optional_services: {
+                    toDelete: deletedOptionalServices.map(function (row) {
+                        return row.id;
+                    }),
+                    toAdd: addedOptionalServices,
+                    toUpdate: restUpdatedChangedOrderOptionalServices
+                },
                 GPSData: {
                     toDelete: deletedGPSData.map(function (row) {
                         return row.id;
@@ -55664,6 +55749,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 var data = _ref5.data;
 
                 console.log(data);
+                _this11.loading = false;
+                _this11.orderUpdating = false;
+                _this11.snackColor = 'success';
+                _this11.snackText = 'Сохранено';
+                _this11.snack = true;
+            }).catch(function (err) {
+                _this11.loading = false;
+                _this11.orderUpdating = false;
+                _this11.snackColor = 'error';
+                _this11.snackText = 'Ошибка!';
+                _this11.snack = true;
             });
             console.log('NEW DATA:', newOrderData);
         },
@@ -55677,8 +55773,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 return log;
             }, log);
         },
-        getEditedGPSDataIndices: function getEditedGPSDataIndices(restOldOrderGPSData, restUpdatedOrderGPSData) {
-            var differences = __WEBPACK_IMPORTED_MODULE_9_deep_diff___default()(restOldOrderGPSData, restUpdatedOrderGPSData);
+        getEditedDataIndices: function getEditedDataIndices(restOldOrderData, restUpdatedOrderData) {
+            var differences = __WEBPACK_IMPORTED_MODULE_9_deep_diff___default()(restOldOrderData, restUpdatedOrderData);
             if (this.isNull(differences) || this.isUndefined(differences)) return [];
             return differences.reduce(function (indices, difference) {
                 var index = difference.path[0];
@@ -55700,7 +55796,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 margin: 0,
                 filename: 'myfile.pdf',
                 image: { type: 'jpeg', quality: 0.95 },
-                html2canvas: { scale: 1, dpi: 5000, imageTimeout: 0 },
+                html2canvas: { scale: 1, imageTimeout: 0 },
                 jsPDF: { unit: 'pt', format: format, orientation: 'l' }
             };
             var childreninWrapperCount = 20;
@@ -73820,8 +73916,6 @@ var render = function() {
     "v-card",
     { staticClass: "elevation-0 bg-card" },
     [
-      _c("appPDF", { attrs: { gpsData: _vm.orderData.GPSData } }),
-      _vm._v(" "),
       _c(
         "v-card",
         [
@@ -74884,6 +74978,54 @@ var render = function() {
                                     { attrs: { xs12: "", sm6: "" } },
                                     [
                                       _c(
+                                        "v-dialog",
+                                        {
+                                          attrs: {
+                                            persistent: "",
+                                            width: "300"
+                                          },
+                                          model: {
+                                            value: _vm.orderUpdating,
+                                            callback: function($$v) {
+                                              _vm.orderUpdating = $$v
+                                            },
+                                            expression: "orderUpdating"
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "v-card",
+                                            {
+                                              attrs: {
+                                                color: "primary",
+                                                dark: ""
+                                              }
+                                            },
+                                            [
+                                              _c(
+                                                "v-card-text",
+                                                [
+                                                  _vm._v(
+                                                    "\n                                            Обновление файлов..\n                                            "
+                                                  ),
+                                                  _c("v-progress-linear", {
+                                                    staticClass: "mb-0",
+                                                    attrs: {
+                                                      color: "white",
+                                                      indeterminate: ""
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
                                         "v-btn",
                                         {
                                           attrs: {
@@ -75014,6 +75156,48 @@ var render = function() {
         ],
         1
       ),
+      _vm._v(" "),
+      !_vm.isCreation
+        ? _c(
+            "v-expansion-panel",
+            { staticClass: "mt-3", attrs: { popout: "" } },
+            [
+              _c(
+                "v-expansion-panel-content",
+                { staticClass: "elevation-1", attrs: { lazy: "" } },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "headline pdf-preview",
+                      attrs: { slot: "header" },
+                      slot: "header"
+                    },
+                    [_vm._v("PDF превью")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c("appPDF", {
+                            attrs: { gpsData: _vm.orderData.GPSData }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "v-snackbar",

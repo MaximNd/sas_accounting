@@ -1,8 +1,5 @@
 <template>
     <v-card class="elevation-0 bg-card">
-
-        <appPDF :gpsData="orderData.GPSData"></appPDF>
-
         <v-card>
             <v-card-text>
                 <v-form>
@@ -305,6 +302,23 @@
                         <v-container fluid grid-list-md>
                             <v-layout wrap justify-center>
                                 <v-flex xs12 sm6>
+                                    <v-dialog
+                                        v-model="orderUpdating"
+                                        persistent
+                                        width="300">
+                                        <v-card
+                                            color="primary"
+                                            dark>
+                                            <v-card-text>
+                                                Обновление файлов..
+                                                <v-progress-linear
+                                                    color="white"
+                                                    class="mb-0"
+                                                    indeterminate>
+                                                </v-progress-linear>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-dialog>
                                     <v-btn
                                         @click="updateOrder"
                                         large
@@ -350,6 +364,19 @@
             </v-card-actions>
         </v-card>
 
+        <v-expansion-panel popout class="mt-3" v-if="!isCreation">
+            <v-expansion-panel-content
+                lazy
+                class="elevation-1">
+                <div slot="header" class="headline pdf-preview">PDF превью</div>
+                <v-card>
+                    <v-card-text>
+                        <appPDF :gpsData="orderData.GPSData"></appPDF>
+                    </v-card-text>
+                </v-card>
+            </v-expansion-panel-content>
+        </v-expansion-panel>
+
         <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor">
             {{ snackText }}
         </v-snackbar>
@@ -387,6 +414,7 @@ export default {
         return {
             pdfProgress: 0,
             pdfLoading: false,
+            orderUpdating: false,
             loading: false,
             isDollarRateEditing: false,
             snack: false,
@@ -794,6 +822,8 @@ export default {
                 this.axios.post('/cache', { cache: this.newCachedData });
         },
         updateOrder() {
+            this.loading = true;
+            this.orderUpdating = true;
             const oldOrderData = {
                 name: this.oldOrder.name,
                 client: this.oldOrder.client,
@@ -843,10 +873,26 @@ export default {
             const restOldOrderGPSData = oldOrderGPSData.filter(oldGPSDataRow => !deletedGPSData.find(deletedGPSDataRow => deletedGPSDataRow.id === oldGPSDataRow.id)).sort((row1, row2) => row1.id - row2.id);
             const restUpdatedOrderGPSData = updatedOrderGPSData.filter(updatedGPSDataRow => !addedGPSData.find(addedGPSDataRow => addedGPSDataRow.id === updatedGPSDataRow.id)).sort((row1, row2) => row1.id - row2.id);
 
-            const editedGPSDataIndices = this.getEditedGPSDataIndices(restOldOrderGPSData, restUpdatedOrderGPSData);
+            const editedGPSDataIndices = this.getEditedDataIndices(restOldOrderGPSData, restUpdatedOrderGPSData);
 
             const restOldChangedOrderGPSData = restOldOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
             const restUpdatedChangedOrderGPSData = restUpdatedOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
+
+            // OPTIONAL_SERVICES
+            const oldOrderOptionalServices = this.oldOrder.optional_services;
+            const updatedOrderOptionalServices = this.orderData.optional_services;
+
+            const deletedOptionalServices = oldOrderOptionalServices.filter(oldOptionalService => !updatedOrderOptionalServices.find(updatedOptionalService => updatedOptionalService.id === oldOptionalService.id));
+
+            const addedOptionalServices = updatedOrderOptionalServices.filter(updatedOptionalService => !oldOrderOptionalServices.find(oldOptionalService => oldOptionalService.id === updatedOptionalService.id));
+
+            const restOldOrderOptionalServices = oldOrderOptionalServices.filter(oldOptionalService => !deletedOptionalServices.find(deletedOptionalService => deletedOptionalService.id === oldOptionalService.id)).sort((row1, row2) => row1.id - row2.id);
+            const restUpdatedOrderOptionalServices = updatedOrderOptionalServices.filter(updatedOptionalService => !addedOptionalServices.find(addedOptionalService => addedOptionalService.id === updatedOptionalService.id)).sort((row1, row2) => row1.id - row2.id);
+
+            const editedOptionalServicesIndices = this.getEditedDataIndices(restOldOrderOptionalServices, restUpdatedOrderOptionalServices);
+
+            const restOldChangedOrderOptionalServices = restOldOrderOptionalServices.filter((_, index) => editedOptionalServicesIndices.includes(index));
+            const restUpdatedChangedOrderOptionalServices = restUpdatedOrderOptionalServices.filter((_, index) => editedOptionalServicesIndices.includes(index));
 
             const orderDataLog = this.parseOrderDiffData(diff(oldOrderData, updatedOrderData));
 
@@ -856,6 +902,9 @@ export default {
                     services: oldOrderServicesData,
                     gpsData: {
                         changed: restOldChangedOrderGPSData
+                    },
+                    optional_services: {
+                        changed: restOldChangedOrderOptionalServices
                     }
                 }),
                 after: JSON.stringify({
@@ -865,6 +914,11 @@ export default {
                         deleted: deletedGPSData,
                         added: addedGPSData,
                         changed: restUpdatedChangedOrderGPSData
+                    },
+                    optional_services: {
+                        deleted: deletedOptionalServices,
+                        added: addedOptionalServices,
+                        changed: restOldChangedOrderOptionalServices
                     }
                 })
             };
@@ -872,6 +926,11 @@ export default {
             const newOrderData = {
                 ...orderDataLog.after,
                 services: updatedOrderServicesData.map(service => service.id),
+                optional_services: {
+                    toDelete: deletedOptionalServices.map(row => row.id),
+                    toAdd: addedOptionalServices,
+                    toUpdate: restUpdatedChangedOrderOptionalServices
+                },
                 GPSData: {
                     toDelete: deletedGPSData.map(row => row.id),
                     toAdd: addedGPSData.map(row => {
@@ -919,6 +978,18 @@ export default {
             this.axios.put(`/orders/${this.$route.params.id}`, newOrderData)
                 .then(({data}) => {
                     console.log(data);
+                    this.loading = false;
+                    this.orderUpdating = false;
+                    this.snackColor = 'success';
+                    this.snackText = 'Сохранено';
+                    this.snack = true;
+                })
+                .catch(err => {
+                    this.loading = false;
+                    this.orderUpdating = false;
+                    this.snackColor = 'error';
+                    this.snackText = 'Ошибка!';
+                    this.snack = true;
                 });
             console.log('NEW DATA:', newOrderData);
         },
@@ -932,8 +1003,8 @@ export default {
                 return log;
             }, log);
         },
-        getEditedGPSDataIndices(restOldOrderGPSData, restUpdatedOrderGPSData) {
-            const differences = diff(restOldOrderGPSData, restUpdatedOrderGPSData);
+        getEditedDataIndices(restOldOrderData, restUpdatedOrderData) {
+            const differences = diff(restOldOrderData, restUpdatedOrderData);
             if (this.isNull(differences) || this.isUndefined(differences)) return [];
             return differences.reduce((indices, difference) => {
                 const index = difference.path[0];
@@ -953,7 +1024,7 @@ export default {
                 margin:       0,
                 filename:     'myfile.pdf',
                 image:        { type: 'jpeg', quality: 0.95 },
-                html2canvas:  { scale: 1, dpi: 5000, imageTimeout: 0 },
+                html2canvas:  { scale: 1, imageTimeout: 0 },
                 jsPDF:        { unit: 'pt', format, orientation: 'l' }
             };
             const childreninWrapperCount = 20;
@@ -1091,7 +1162,9 @@ export default {
     .bg-card {
         background-color: transparent;
     }
-    .gps-tracking-header {
+    .gps-tracking-header,
+    .pdf-preview {
+        text-align: center;
         font-size: 28px !important;
     }
 </style>

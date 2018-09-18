@@ -9,7 +9,8 @@ class OptionalService extends Model
     protected $fillable = [
         'name',
         'price',
-        'comment'
+        'comment',
+        'order_id'
     ];
 
     public function order() {
