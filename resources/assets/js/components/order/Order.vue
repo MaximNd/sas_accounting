@@ -1,382 +1,396 @@
 <template>
     <v-card class="elevation-0 bg-card">
-        <v-card>
-            <v-card-text>
-                <v-form>
-                    <v-container grid-list-md>
-                        <v-layout justify-start wrap>
-                            <v-flex xs12 md3 offset-md2>
-                                <v-text-field
-                                    label="Дата курса доллара"
-                                    :readonly="true"
-                                    v-model="orderData.dollar_date">
-                                </v-text-field>
-                            </v-flex>
-                            <v-flex xs12 md3>
-                                <v-text-field
-                                    label="Курс Доллара"
-                                    :readonly="!isDollarRateEditing"
-                                    v-model="orderData.dollar_rate">
-                                    <v-slide-x-reverse-transition
-                                        slot="append-outer"
-                                        mode="out-in">
-                                        <v-icon
-                                            :color="isDollarRateEditing ? 'success' : 'info'"
-                                            :key="`icon-${isDollarRateEditing}`"
-                                            @click="isDollarRateEditing = !isDollarRateEditing"
-                                            v-text="isDollarRateEditing ? 'done_all' : 'edit'"
-                                        ></v-icon>
-                                    </v-slide-x-reverse-transition>
-                                </v-text-field>
-                            </v-flex>
-                        </v-layout>
-                        <v-layout v-if="isCreation" wrap :justify-center="$vuetify.breakpoint.mdAndUp" :justify-start="$vuetify.breakpoint.smAndDown">
-                            <v-flex xs12 sm7 md6>
-                                <v-autocomplete
-                                    v-if="!isClientCreation"
-                                    v-model="orderData.client"
-                                    :items="clients"
-                                    hide-selected
-                                    item-text="text"
-                                    item-value="id"
-                                    label="Вибирете клиента"
-                                    hint="Если в списке нету нужного клиента, то вы можете его создать"
-                                    persistent-hint>
-                                </v-autocomplete>
-                                <appCreateClient
-                                    v-if="isClientCreation"
-                                    :clients="clients"
-                                    @existingClientSelected="selectExistingClient"
-                                    @clientCreated="selectCreatedClient">
-                                </appCreateClient>
-                            </v-flex>
-                            <v-flex xs12 sm3 md2>
-                                <v-btn :block="$vuetify.breakpoint.xsOnly" color="primary" @click="isClientCreation = !isClientCreation">
-                                    <v-icon small left>compare_arrows</v-icon>
-                                    {{ switcherBtnText }}
-                                </v-btn>
-                            </v-flex>
-                        </v-layout>
-                        <v-layout v-else wrap justify-start>
-                            <v-flex xs12 offset-md2 md6>
-                                <v-text-field
-                                    label="Клиент"
-                                    readonly
-                                    :value="orderData.client && `${orderData.client.person_full_name} (${orderData.client.company_name})`">
-                                </v-text-field>
-                            </v-flex>
-                        </v-layout>
-                        <v-layout wrap>
-                            <v-flex xs12 offset-md2 md9 lg8 xl6>
-                                <v-layout wrap>
-                                    <v-flex xs12 class="mt-3">
-                                        <div class="title font-weight-regular">
-                                            Статусы заказа:
-                                        </div>
-                                    </v-flex>
-                                    <v-flex xs12 sm6 md4>
-                                         <v-switch
-                                            color="success"
-                                            :label="isSentStatus"
-                                            v-model="orderData.statuses.is_sent">
-                                        </v-switch>
-                                    </v-flex>
-                                    <v-flex xs12 sm6 md4>
-                                        <v-switch
-                                            color="success"
-                                            :label="isAgreedStatus"
-                                            v-model="orderData.statuses.is_agreed">
-                                        </v-switch>
-                                    </v-flex>
-                                    <v-flex xs12 sm6 md4>
-                                        <v-switch
-                                            color="success"
-                                            :label="isPaidStatus"
-                                            v-model="orderData.statuses.is_paid">
-                                        </v-switch>
-                                    </v-flex>
-                                    <v-flex xs12 sm6 md4>
-                                        <v-switch
-                                            color="success"
-                                            :label="isInstallationFinishedStatus"
-                                            v-model="orderData.statuses.is_installation_finished">
-                                        </v-switch>
-                                    </v-flex>
-                                </v-layout>
-                            </v-flex>
-                            <v-flex xs12 offset-md2 md6>
-                                <v-text-field v-model="orderData.name" label="Название заказа"></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 offset-md2 md6>
-                                <v-text-field v-model="orderData.area" label="Площадь" :suffix="`${priceForArea}$`"></v-text-field>
-                            </v-flex>
-                        </v-layout>
-                        <v-layout wrap v-if="services.length > 0">
-                            <v-flex xs12 offset-md2 class="mt-2">
-                                <div class="title font-weight-regular">
-                                    Услуги:
-                                </div>
-                            </v-flex>
-                            <v-flex xs12 offset-md2 md10 v-for="(service, index) in services" :key="`service-${index}`">
-                                <v-checkbox :style="{ padding: 0, margin: index !== 0 ? 0 : false }" :label="service.name" v-model="orderData.services" :value="service"></v-checkbox>
-                            </v-flex>
-                            <v-flex xs12 offset-md2 class="mt-2">
-                                <div class="title font-weight-regular">
-                                    Дополнительные услуги:
-                                </div>
-                                <div class="mt-2">
-                                    <v-btn @click="addOptionalService" style="margin-left: 0;" color="success">Добавить</v-btn>
-                                </div>
-                            </v-flex>
-                            <v-flex xs12 offset-md2 md6 v-for="(optionalService, index) in orderData.optional_services" :key="`optional-service-${index}`">
-                                <v-card>
-                                    <v-card-text>
-                                        <v-text-field
-                                            label="Название"
-                                            v-model="orderData.optional_services[index].name">
-                                        </v-text-field>
-                                        <v-text-field
-                                            label="Цена"
-                                            v-model="orderData.optional_services[index].price">
-                                        </v-text-field>
-                                        <v-textarea
-                                            label="Комментарий"
-                                            v-model="orderData.optional_services[index].comment">
-                                        </v-textarea>
-                                    </v-card-text>
-                                    <v-card-actions>
-                                        <v-btn @click="deleteOptionalService(index)" color="error">Удалить</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                </v-form>
-            </v-card-text>
-        </v-card>
-
-        <v-card class="mt-3 mb-5">
-            <v-card-title class="justify-center" primary-title>
-                <div class="headline gps-tracking-header">GPS-трекинг</div>
-            </v-card-title>
-            <v-card-text>
-                <appGPSData
-                    v-if="orderData.GPSData"
-                    ref="GPSData"
-                    :orderGPSData="orderData.GPSData"
-                    :gpsTrackers="gpsTrackers"
-                    :fuelLevelSensors="fuelLevelSensors"
-                    :fuelFlowmeters="fuelFlowmeters"
-                    :identification="identification"
-                    :optionalEquipment="optionalEquipment"
-                    :pricesForEquipment="pricesForEquipment"
-                    :allEquipmentPrice="allEquipmentPrice"
-                    :allInstallationPrice="allInstallationPrice"
-                    :cachedData="allCacheData"
-                    :defaultRowCount="defaultRowCount"
-                    @update:orderGPSData="updateOrderGPSData"
-                    @add-nested-data:orderGPSData="addNestedDataInOrderGPSData"
-                    @delete-nested-data:orderGPSData="deleteNestedDataInOrderGPSData"
-                    @copy-values:orderGPSData="copySelectedInOrderGPSData"
-                    @drag-n-drop-gps-data="dragNDropGPSData"
-                    @rowAdded="addRowToOrderGPSData"
-                    @delete:rows="deleteRowsFromOrderGPSData">
-                </appGPSData>
-                <v-progress-linear
-                    v-else
-                    :width="10"
-                    :size="100"
-                    color="primary"
-                    indeterminate>
-                </v-progress-linear>
-            </v-card-text>
-            <v-card-text>
-                <v-layout wrap>
-                    <v-flex order-xs2 order-sm1 xs12 sm6>
-                        <v-container fluid grid-list-xs>
+        <template v-if="!isCreation && initialized">
+            <v-card>
+                <v-card-text>
+                    <v-form>
+                        <v-container grid-list-md>
+                            <v-layout justify-start wrap>
+                                <v-flex xs12 md3 offset-md2>
+                                    <v-text-field
+                                        label="Дата курса доллара"
+                                        :readonly="true"
+                                        v-model="orderData.dollar_date">
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex xs12 md3>
+                                    <v-text-field
+                                        label="Курс Доллара"
+                                        :readonly="!isDollarRateEditing"
+                                        v-model="orderData.dollar_rate">
+                                        <v-slide-x-reverse-transition
+                                            slot="append-outer"
+                                            mode="out-in">
+                                            <v-icon
+                                                :color="isDollarRateEditing ? 'success' : 'info'"
+                                                :key="`icon-${isDollarRateEditing}`"
+                                                @click="isDollarRateEditing = !isDollarRateEditing"
+                                                v-text="isDollarRateEditing ? 'done_all' : 'edit'"
+                                            ></v-icon>
+                                        </v-slide-x-reverse-transition>
+                                    </v-text-field>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout v-if="isCreation" wrap :justify-center="$vuetify.breakpoint.mdAndUp" :justify-start="$vuetify.breakpoint.smAndDown">
+                                <v-flex xs12 sm7 md6>
+                                    <v-autocomplete
+                                        v-if="!isClientCreation"
+                                        v-model="orderData.client"
+                                        :items="clients"
+                                        hide-selected
+                                        item-text="text"
+                                        item-value="id"
+                                        label="Вибирете клиента"
+                                        hint="Если в списке нету нужного клиента, то вы можете его создать"
+                                        persistent-hint>
+                                    </v-autocomplete>
+                                    <appCreateClient
+                                        v-if="isClientCreation"
+                                        :clients="clients"
+                                        @existingClientSelected="selectExistingClient"
+                                        @clientCreated="selectCreatedClient">
+                                    </appCreateClient>
+                                </v-flex>
+                                <v-flex xs12 sm3 md2>
+                                    <v-btn :block="$vuetify.breakpoint.xsOnly" color="primary" @click="isClientCreation = !isClientCreation">
+                                        <v-icon small left>compare_arrows</v-icon>
+                                        {{ switcherBtnText }}
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout v-else wrap justify-start>
+                                <v-flex xs12 offset-md2 md6>
+                                    <v-text-field
+                                        label="Клиент"
+                                        readonly
+                                        :value="orderData.client && `${orderData.client.person_full_name} (${orderData.client.company_name})`">
+                                    </v-text-field>
+                                </v-flex>
+                            </v-layout>
                             <v-layout wrap>
-                                <v-flex xs12 md8 lg6 xl4>
-                                    <v-text-field
-                                        label="Монтаж оборудования"
-                                        readonly
-                                        :value="allInstallationPrice"
-                                        append-icon="₴">
-                                    </v-text-field>
+                                <v-flex xs12 offset-md2 md9 lg8 xl6>
+                                    <v-layout wrap>
+                                        <v-flex xs12 class="mt-3">
+                                            <div class="title font-weight-regular">
+                                                Статусы заказа:
+                                            </div>
+                                        </v-flex>
+                                        <v-flex xs12 sm6 md4>
+                                            <v-switch
+                                                color="success"
+                                                :label="isSentStatus"
+                                                v-model="orderData.statuses.is_sent">
+                                            </v-switch>
+                                        </v-flex>
+                                        <v-flex xs12 sm6 md4>
+                                            <v-switch
+                                                color="success"
+                                                :label="isAgreedStatus"
+                                                v-model="orderData.statuses.is_agreed">
+                                            </v-switch>
+                                        </v-flex>
+                                        <v-flex xs12 sm6 md4>
+                                            <v-switch
+                                                color="success"
+                                                :label="isPaidStatus"
+                                                v-model="orderData.statuses.is_paid">
+                                            </v-switch>
+                                        </v-flex>
+                                        <v-flex xs12 sm6 md4>
+                                            <v-switch
+                                                color="success"
+                                                :label="isInstallationFinishedStatus"
+                                                v-model="orderData.statuses.is_installation_finished">
+                                            </v-switch>
+                                        </v-flex>
+                                    </v-layout>
                                 </v-flex>
-                                <v-flex xs8></v-flex>
-                                <v-flex xs12 md8 lg6 xl4>
-                                    <v-text-field
-                                        label="Оборудование"
-                                        readonly
-                                        :value="allEquipmentPrice"
-                                        append-icon="₴">
-                                    </v-text-field>
+                                <v-flex xs12 offset-md2 md6>
+                                    <v-text-field v-model="orderData.name" label="Название заказа"></v-text-field>
                                 </v-flex>
-                                <v-flex xs8></v-flex>
-                                <v-flex xs12 md8 lg6 xl4>
-                                    <v-text-field
-                                        label="Дней командировки"
-                                        hint="Фиксированая цена 720 грн/день"
-                                        persistent-hint
-                                        v-model="orderData.days">
-                                    </v-text-field>
+                                <v-flex xs12 offset-md2 md6>
+                                    <v-text-field v-model="orderData.area" label="Площадь" :suffix="`${priceForArea}$`"></v-text-field>
                                 </v-flex>
-                                <v-flex xs8></v-flex>
-                                <v-flex xs12 md8 lg6 xl4>
-                                    <v-text-field
-                                        label="Командировки / проживание"
-                                        readonly
-                                        :value="priceForDays"
-                                        append-icon="₴">
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex xs8></v-flex>
-                                <v-flex xs12 md8 lg6 xl4>
-                                    <v-text-field
-                                        label="Цена за 1км"
-                                        v-model="orderData.price_for_transportation_per_km"
-                                        append-icon="₴">
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex xs8></v-flex>
-                                <v-flex xs12 md8 lg6 xl4>
-                                    <v-text-field
-                                        label="Растояние км"
-                                        v-model="orderData.transportation_kms">
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex xs8></v-flex>
-                                <v-flex xs12 md8 lg6 xl4>
-                                    <v-text-field
-                                        label="Количество поездок"
-                                        v-model="orderData.number_of_trips"
-                                        :type="'number'"
-                                        min="1">
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex xs8></v-flex>
-                                <v-flex xs12 md8 lg6 xl4>
-                                    <v-text-field
-                                        label="Маршрут"
-                                        v-model="orderData.route">
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex xs8></v-flex>
-                                <v-flex xs12 md8 lg6 xl4>
-                                    <v-text-field
-                                        label="Транспортные расходы"
-                                        readonly
-                                        :value="transportationPrice"
-                                        append-icon="₴">
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex xs8></v-flex>
-                                <v-flex xs12 class="mt-4">
-                                    <div class="text-xs-left display-1 font-weight-bold">
-                                        СУММА ВСЕГО: {{ formattedFinalPrice }}
+                            </v-layout>
+                            <v-layout wrap v-if="services.length > 0">
+                                <v-flex xs12 offset-md2 class="mt-2">
+                                    <div class="title font-weight-regular">
+                                        Услуги:
                                     </div>
                                 </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-flex>
-                    <v-flex order-xs1 order-sm2 xs12 sm6>
-                        <appEquipmentData
-                            v-if="orderData.GPSData"
-                            :orderGPSData="orderData.GPSData">
-                        </appEquipmentData>
-                    </v-flex>
-                </v-layout>
-            </v-card-text>
-            <v-card-actions>
-                <v-layout justify-center class="mb-4">
-                    <v-flex v-if="isCreation" xs12 sm11 md3>
-                        <v-btn
-                            block large color="primary"
-                            :loading="orderInCreation"
-                            :disabled="orderInCreation"
-                            @click="createOrder">
-                            Создать заказ
-                        </v-btn>
-                    </v-flex>
-                    <v-flex v-else xs12 md8>
-                        <v-container fluid grid-list-md>
-                            <v-layout wrap justify-center>
-                                <v-flex xs12 sm6>
-                                    <v-dialog
-                                        v-model="orderUpdating"
-                                        persistent
-                                        width="300">
-                                        <v-card
-                                            color="primary"
-                                            dark>
-                                            <v-card-text>
-                                                Обновление файлов..
-                                                <v-progress-linear
-                                                    color="white"
-                                                    class="mb-0"
-                                                    indeterminate>
-                                                </v-progress-linear>
-                                            </v-card-text>
-                                        </v-card>
-                                    </v-dialog>
-                                    <v-btn
-                                        @click="updateOrder"
-                                        large
-                                        block
-                                        color="info"
-                                        :disabled="loading"
-                                        :loading="loading">
-                                            <v-icon left>backup</v-icon>Сохранить
-                                    </v-btn>
+                                <v-flex xs12 offset-md2 md10 v-for="(service, index) in services" :key="`service-${index}`">
+                                    <v-checkbox :style="{ padding: 0, margin: index !== 0 ? 0 : false }" :label="service.name" v-model="orderData.services" :value="service"></v-checkbox>
                                 </v-flex>
-                                <v-flex xs12 sm6>
-                                    <v-dialog
-                                        v-model="pdfLoading"
-                                        persistent
-                                        width="300">
-                                        <v-card
-                                            color="primary"
-                                            dark>
-                                            <v-card-text>
-                                                Создание документа ({{ pdfProgress }}%)
-                                                <v-progress-linear
-                                                    v-model="pdfProgress"
-                                                    color="white"
-                                                    class="mb-0">
-                                                </v-progress-linear>
-                                            </v-card-text>
-                                        </v-card>
-                                    </v-dialog>
-                                    <v-btn
-                                        @click="createPDF"
-                                        large
-                                        block
-                                        color="primary"
-                                        :disabled="loading"
-                                        :loading="loading">
-                                            Скачать PDF <v-icon right>get_app</v-icon>
-                                    </v-btn>
+                                <v-flex xs12 offset-md2 class="mt-2">
+                                    <div class="title font-weight-regular">
+                                        Дополнительные услуги:
+                                    </div>
+                                    <div class="mt-2">
+                                        <v-btn @click="addOptionalService" style="margin-left: 0;" color="success">Добавить</v-btn>
+                                    </div>
+                                </v-flex>
+                                <v-flex xs12 offset-md2 md6 v-for="(optionalService, index) in orderData.optional_services" :key="`optional-service-${index}`">
+                                    <v-card>
+                                        <v-card-text>
+                                            <v-text-field
+                                                label="Название"
+                                                v-model="orderData.optional_services[index].name">
+                                            </v-text-field>
+                                            <v-text-field
+                                                label="Цена"
+                                                v-model="orderData.optional_services[index].price">
+                                            </v-text-field>
+                                            <v-textarea
+                                                label="Комментарий"
+                                                v-model="orderData.optional_services[index].comment">
+                                            </v-textarea>
+                                        </v-card-text>
+                                        <v-card-actions>
+                                            <v-btn @click="deleteOptionalService(index)" color="error">Удалить</v-btn>
+                                        </v-card-actions>
+                                    </v-card>
                                 </v-flex>
                             </v-layout>
                         </v-container>
-                    </v-flex>
-                </v-layout>
-            </v-card-actions>
-        </v-card>
+                    </v-form>
+                </v-card-text>
+            </v-card>
 
-        <v-expansion-panel popout class="mt-3" v-if="!isCreation">
-            <v-expansion-panel-content
-                lazy
-                class="elevation-1">
-                <div slot="header" class="headline pdf-preview">PDF превью</div>
-                <v-card>
-                    <v-card-text>
-                        <appPDF :gpsData="orderData.GPSData"></appPDF>
-                    </v-card-text>
-                </v-card>
-            </v-expansion-panel-content>
-        </v-expansion-panel>
+            <v-card class="mt-3 mb-5">
+                <v-card-title class="justify-center" primary-title>
+                    <div class="headline gps-tracking-header">GPS-трекинг</div>
+                </v-card-title>
+                <v-card-text>
+                    <appGPSData
+                        v-if="orderData.GPSData"
+                        ref="GPSData"
+                        :orderGPSData="orderData.GPSData"
+                        :gpsTrackers="gpsTrackers"
+                        :fuelLevelSensors="fuelLevelSensors"
+                        :fuelFlowmeters="fuelFlowmeters"
+                        :identification="identification"
+                        :optionalEquipment="optionalEquipment"
+                        :pricesForEquipment="pricesForEquipment"
+                        :allEquipmentPrice="allEquipmentPrice"
+                        :allInstallationPrice="allInstallationPrice"
+                        :cachedData="allCacheData"
+                        :defaultRowCount="defaultRowCount"
+                        @update:orderGPSData="updateOrderGPSData"
+                        @add-nested-data:orderGPSData="addNestedDataInOrderGPSData"
+                        @delete-nested-data:orderGPSData="deleteNestedDataInOrderGPSData"
+                        @copy-values:orderGPSData="copySelectedInOrderGPSData"
+                        @drag-n-drop-gps-data="dragNDropGPSData"
+                        @rowAdded="addRowToOrderGPSData"
+                        @delete:rows="deleteRowsFromOrderGPSData">
+                    </appGPSData>
+                    <v-progress-linear
+                        v-else
+                        :width="10"
+                        :size="100"
+                        color="primary"
+                        indeterminate>
+                    </v-progress-linear>
+                </v-card-text>
+                <v-card-text>
+                    <v-layout wrap>
+                        <v-flex order-xs2 order-sm1 xs12 sm6>
+                            <v-container fluid grid-list-xs>
+                                <v-layout wrap>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
+                                            label="Монтаж оборудования"
+                                            readonly
+                                            :value="allInstallationPrice"
+                                            append-icon="₴">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
+                                            label="Оборудование"
+                                            readonly
+                                            :value="allEquipmentPrice"
+                                            append-icon="₴">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
+                                            label="Дней командировки"
+                                            hint="Фиксированая цена 720 грн/день"
+                                            persistent-hint
+                                            v-model="orderData.days">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
+                                            label="Командировки / проживание"
+                                            readonly
+                                            :value="priceForDays"
+                                            append-icon="₴">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
+                                            label="Цена за 1км"
+                                            v-model="orderData.price_for_transportation_per_km"
+                                            append-icon="₴">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
+                                            label="Растояние км"
+                                            v-model="orderData.transportation_kms">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
+                                            label="Количество поездок"
+                                            v-model="orderData.number_of_trips"
+                                            :type="'number'"
+                                            min="1">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
+                                            label="Маршрут"
+                                            v-model="orderData.route">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
+                                            label="Транспортные расходы"
+                                            readonly
+                                            :value="transportationPrice"
+                                            append-icon="₴">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 class="mt-4">
+                                        <div class="text-xs-left display-1 font-weight-bold">
+                                            СУММА ВСЕГО: {{ formattedFinalPrice }}
+                                        </div>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+                        </v-flex>
+                        <v-flex order-xs1 order-sm2 xs12 sm6>
+                            <appEquipmentData
+                                v-if="orderData.GPSData"
+                                :orderGPSData="orderData.GPSData">
+                            </appEquipmentData>
+                        </v-flex>
+                    </v-layout>
+                </v-card-text>
+                <v-card-actions>
+                    <v-layout justify-center class="mb-4">
+                        <v-flex v-if="isCreation" xs12 sm11 md3>
+                            <v-btn
+                                block large color="primary"
+                                :loading="orderInCreation"
+                                :disabled="orderInCreation"
+                                @click="createOrder">
+                                Создать заказ
+                            </v-btn>
+                        </v-flex>
+                        <v-flex v-else xs12 md8>
+                            <v-container fluid grid-list-md>
+                                <v-layout wrap justify-center>
+                                    <v-flex xs12 sm6>
+                                        <v-dialog
+                                            v-model="orderUpdating"
+                                            persistent
+                                            width="300">
+                                            <v-card
+                                                color="primary"
+                                                dark>
+                                                <v-card-text>
+                                                    Обновление данных..
+                                                    <v-progress-linear
+                                                        color="white"
+                                                        class="mb-0"
+                                                        indeterminate>
+                                                    </v-progress-linear>
+                                                </v-card-text>
+                                            </v-card>
+                                        </v-dialog>
+                                        <v-btn
+                                            @click="updateOrder"
+                                            large
+                                            block
+                                            color="info"
+                                            :disabled="loading"
+                                            :loading="loading">
+                                                <v-icon left>backup</v-icon>Сохранить
+                                        </v-btn>
+                                    </v-flex>
+                                    <v-flex xs12 sm6>
+                                        <v-dialog
+                                            v-model="pdfLoading"
+                                            persistent
+                                            width="300">
+                                            <v-card
+                                                color="primary"
+                                                dark>
+                                                <v-card-text>
+                                                    Создание документа ({{ pdfProgress }}%)
+                                                    <v-progress-linear
+                                                        v-model="pdfProgress"
+                                                        color="white"
+                                                        class="mb-0">
+                                                    </v-progress-linear>
+                                                </v-card-text>
+                                            </v-card>
+                                        </v-dialog>
+                                        <v-btn
+                                            @click="createPDF"
+                                            large
+                                            block
+                                            color="primary"
+                                            :disabled="loading"
+                                            :loading="loading">
+                                                Скачать PDF <v-icon right>get_app</v-icon>
+                                        </v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+                        </v-flex>
+                    </v-layout>
+                </v-card-actions>
+            </v-card>
 
+            <v-expansion-panel popout class="mt-3" v-if="!isCreation">
+                <v-expansion-panel-content
+                    lazy
+                    class="elevation-1">
+                    <div slot="header" class="headline pdf-preview">PDF превью</div>
+                    <v-card>
+                        <v-card-text>
+                            <appPDF :gpsData="orderData.GPSData"></appPDF>
+                        </v-card-text>
+                    </v-card>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+        </template>
+        <template v-else>
+            <v-layout wrap>
+                <v-flex xs12 d-flex justify-center>
+                    <v-progress-circular
+                        :width="10"
+                        :size="150"
+                        color="primary"
+                        indeterminate>
+                        Инициализация...
+                    </v-progress-circular>
+                </v-flex>
+            </v-layout>
+        </template>
         <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor">
             {{ snackText }}
         </v-snackbar>
@@ -412,6 +426,7 @@ export default {
     },
     data() {
         return {
+            initialized: false,
             pdfProgress: 0,
             pdfLoading: false,
             orderUpdating: false,
@@ -443,6 +458,7 @@ export default {
                 cn03: [],
                 rs01: []
             },
+            priceList: [],
             cachedData: [],
             newCachedData: [],
             orderInCreation: false,
@@ -591,12 +607,23 @@ export default {
         }
     },
     watch: {
+        order: {
+            deep: true,
+            handler() {
+                this.initOrder();
+                this.loading = false;
+                this.orderUpdating = false;
+                this.snackColor = 'success';
+                this.snackText = 'Сохранено';
+                this.snack = true;
+            }
+        }
         // services(newValue) {
         //     this.orderData.services = this.services.map(service => ({ id: service.id, name: service.name, price: service.price, value: false }));
         // }
     },
     methods: {
-        initOrder(priceList) {
+        initOrder() {
             let copyOrder = dcopy(this.order);
             copyOrder.services = copyOrder.services.map(serviceID => this.services.find(service => service.id === serviceID));
             let id = 0;
@@ -606,9 +633,9 @@ export default {
                 }
                 return Object.keys(gpsDataRow).reduce((newRow, key) => {
                     if (key !== 'id' && typeof gpsDataRow[key] === 'number') {
-                        newRow[key] = priceList.find(data => data.id === gpsDataRow[key]);
+                        newRow[key] = this.priceList.find(data => data.id === gpsDataRow[key]);
                     } else if (Array.isArray(gpsDataRow[key])) {
-                        newRow[key] = gpsDataRow[key].map(id => priceList.find(data => data.id === id));
+                        newRow[key] = gpsDataRow[key].map(id => this.priceList.find(data => data.id === id));
                     } else if (typeof gpsDataRow[key] === 'string') {
                         newRow[key] = gpsDataRow[key];
                     } else if (this.isNull(gpsDataRow[key]) || this.isUndefined(gpsDataRow[key])) {
@@ -639,6 +666,8 @@ export default {
             this.orderData.services = newOrderData.services;
             this.orderData.optional_services = newOrderData.optional_services;
             this.orderData.GPSData = newOrderData.gps_data;
+
+            this.initialized = true;
         },
         addCache(column, value) {
             this.newCachedData.push({ column_name: column, value });
@@ -812,7 +841,6 @@ export default {
 
             this.axios.post('/orders', orderData)
                 .then(({data}) => {
-                    console.log(data);
                     this.$router.push(`/orders/${data.id}`);
                 })
                 .catch(err => (console.log(err)))
@@ -822,8 +850,7 @@ export default {
                 this.axios.post('/cache', { cache: this.newCachedData });
         },
         updateOrder() {
-            this.loading = true;
-            this.orderUpdating = true;
+            // MAIN_DATA
             const oldOrderData = {
                 name: this.oldOrder.name,
                 client: this.oldOrder.client,
@@ -858,6 +885,7 @@ export default {
                 transportation_kms: this.orderData.transportation_kms,
                 route: this.orderData.route
             };
+
             // SERVICES
             const oldOrderServicesData = this.oldOrder.services;
             const updatedOrderServicesData = this.orderData.services;
@@ -865,6 +893,26 @@ export default {
             // GPS_DATA
             const oldOrderGPSData = this.oldOrder.gps_data;
             const updatedOrderGPSData = this.orderData.GPSData;
+
+            // OPTIONAL_SERVICES
+            const oldOrderOptionalServices = this.oldOrder.optional_services;
+            const updatedOrderOptionalServices = this.orderData.optional_services;
+
+            if(this.isUndefined(diff(oldOrderData, updatedOrderData)) &&
+                this.isUndefined(diff(oldOrderServicesData, updatedOrderServicesData)) &&
+                this.isUndefined(diff(oldOrderGPSData, updatedOrderGPSData)) &&
+                this.isUndefined(diff(oldOrderOptionalServices, updatedOrderOptionalServices))) {
+                this.snackColor = 'warning';
+                this.snackText = 'Нет изменений';
+                this.snack = true;
+                return;
+            }
+
+            this.loading = true;
+            this.orderUpdating = true;
+
+
+
 
             const deletedGPSData = oldOrderGPSData.filter(oldGPSDataRow => !updatedOrderGPSData.find(updatedGPSDataRow => updatedGPSDataRow.id === oldGPSDataRow.id));
 
@@ -878,9 +926,7 @@ export default {
             const restOldChangedOrderGPSData = restOldOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
             const restUpdatedChangedOrderGPSData = restUpdatedOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
 
-            // OPTIONAL_SERVICES
-            const oldOrderOptionalServices = this.oldOrder.optional_services;
-            const updatedOrderOptionalServices = this.orderData.optional_services;
+
 
             const deletedOptionalServices = oldOrderOptionalServices.filter(oldOptionalService => !updatedOrderOptionalServices.find(updatedOptionalService => updatedOptionalService.id === oldOptionalService.id));
 
@@ -977,12 +1023,7 @@ export default {
 
             this.axios.put(`/orders/${this.$route.params.id}`, newOrderData)
                 .then(({data}) => {
-                    console.log(data);
-                    this.loading = false;
-                    this.orderUpdating = false;
-                    this.snackColor = 'success';
-                    this.snackText = 'Сохранено';
-                    this.snack = true;
+                    this.$emit('order:update', data);
                 })
                 .catch(err => {
                     this.loading = false;
@@ -991,7 +1032,6 @@ export default {
                     this.snackText = 'Ошибка!';
                     this.snack = true;
                 });
-            console.log('NEW DATA:', newOrderData);
         },
         parseOrderDiffData(differences) {
             const log = { before: {}, after: {} };
@@ -1142,7 +1182,8 @@ export default {
         } else {
             this.$store.dispatch('getPriseList')
                 .then(data => {
-                    this.initOrder(data);
+                    this.priceList = data;
+                    this.initOrder();
                 });
         }
         this.getCachedData();

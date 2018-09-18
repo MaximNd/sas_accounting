@@ -145,9 +145,10 @@ class OrderController extends Controller
             'log.after' => 'required|string'
         ]);
 
-        DB::transaction(function () use ($request, $id) {
+        return DB::transaction(function () use ($request, $id) {
             $orderDataToUpdate = $request->except(['GPSData', 'optional_services', 'log']);
 //            dd($orderDataToUpdate);
+
             if (count($orderDataToUpdate) > 0) {
                 $orderDataToUpdate['services'] = json_encode($orderDataToUpdate['services']);
                 Order::where('id', '=', $id)->update($orderDataToUpdate);
@@ -196,8 +197,9 @@ class OrderController extends Controller
                 'after' => $request->input('log.after')
             ]);
             $orderLog->save();
-        });
 
+            return Order::with('client')->with('gpsData')->with('optionalServices')->find($id);
+        });
     }
 
     public function deleteOrder(Request $request, $id) {

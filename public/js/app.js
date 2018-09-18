@@ -55060,6 +55060,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -55089,6 +55103,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     },
     data: function data() {
         return {
+            initialized: false,
             pdfProgress: 0,
             pdfLoading: false,
             orderUpdating: false,
@@ -55120,6 +55135,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 cn03: [],
                 rs01: []
             },
+            priceList: [],
             cachedData: [],
             newCachedData: [],
             orderInCreation: false,
@@ -55267,12 +55283,23 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
     }),
     watch: {
+        order: {
+            deep: true,
+            handler: function handler() {
+                this.initOrder();
+                this.loading = false;
+                this.orderUpdating = false;
+                this.snackColor = 'success';
+                this.snackText = 'Сохранено';
+                this.snack = true;
+            }
+        }
         // services(newValue) {
         //     this.orderData.services = this.services.map(service => ({ id: service.id, name: service.name, price: service.price, value: false }));
         // }
     },
     methods: {
-        initOrder: function initOrder(priceList) {
+        initOrder: function initOrder() {
             var _this5 = this;
 
             var copyOrder = __WEBPACK_IMPORTED_MODULE_5_deep_copy___default()(this.order);
@@ -55288,12 +55315,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 }
                 return Object.keys(gpsDataRow).reduce(function (newRow, key) {
                     if (key !== 'id' && typeof gpsDataRow[key] === 'number') {
-                        newRow[key] = priceList.find(function (data) {
+                        newRow[key] = _this5.priceList.find(function (data) {
                             return data.id === gpsDataRow[key];
                         });
                     } else if (Array.isArray(gpsDataRow[key])) {
                         newRow[key] = gpsDataRow[key].map(function (id) {
-                            return priceList.find(function (data) {
+                            return _this5.priceList.find(function (data) {
                                 return data.id === id;
                             });
                         });
@@ -55327,6 +55354,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             this.orderData.services = newOrderData.services;
             this.orderData.optional_services = newOrderData.optional_services;
             this.orderData.GPSData = newOrderData.gps_data;
+
+            this.initialized = true;
         },
         addCache: function addCache(column, value) {
             this.newCachedData.push({ column_name: column, value: value });
@@ -55526,7 +55555,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             this.axios.post('/orders', orderData).then(function (_ref4) {
                 var data = _ref4.data;
 
-                console.log(data);
                 _this10.$router.push('/orders/' + data.id);
             }).catch(function (err) {
                 return console.log(err);
@@ -55539,8 +55567,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         updateOrder: function updateOrder() {
             var _this11 = this;
 
-            this.loading = true;
-            this.orderUpdating = true;
+            // MAIN_DATA
             var oldOrderData = {
                 name: this.oldOrder.name,
                 client: this.oldOrder.client,
@@ -55575,6 +55602,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 transportation_kms: this.orderData.transportation_kms,
                 route: this.orderData.route
             };
+
             // SERVICES
             var oldOrderServicesData = this.oldOrder.services;
             var updatedOrderServicesData = this.orderData.services;
@@ -55582,6 +55610,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             // GPS_DATA
             var oldOrderGPSData = this.oldOrder.gps_data;
             var updatedOrderGPSData = this.orderData.GPSData;
+
+            // OPTIONAL_SERVICES
+            var oldOrderOptionalServices = this.oldOrder.optional_services;
+            var updatedOrderOptionalServices = this.orderData.optional_services;
+
+            if (this.isUndefined(__WEBPACK_IMPORTED_MODULE_9_deep_diff___default()(oldOrderData, updatedOrderData)) && this.isUndefined(__WEBPACK_IMPORTED_MODULE_9_deep_diff___default()(oldOrderServicesData, updatedOrderServicesData)) && this.isUndefined(__WEBPACK_IMPORTED_MODULE_9_deep_diff___default()(oldOrderGPSData, updatedOrderGPSData)) && this.isUndefined(__WEBPACK_IMPORTED_MODULE_9_deep_diff___default()(oldOrderOptionalServices, updatedOrderOptionalServices))) {
+                this.snackColor = 'warning';
+                this.snackText = 'Нет изменений';
+                this.snack = true;
+                return;
+            }
+
+            this.loading = true;
+            this.orderUpdating = true;
 
             var deletedGPSData = oldOrderGPSData.filter(function (oldGPSDataRow) {
                 return !updatedOrderGPSData.find(function (updatedGPSDataRow) {
@@ -55618,10 +55660,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             var restUpdatedChangedOrderGPSData = restUpdatedOrderGPSData.filter(function (_, index) {
                 return editedGPSDataIndices.includes(index);
             });
-
-            // OPTIONAL_SERVICES
-            var oldOrderOptionalServices = this.oldOrder.optional_services;
-            var updatedOrderOptionalServices = this.orderData.optional_services;
 
             var deletedOptionalServices = oldOrderOptionalServices.filter(function (oldOptionalService) {
                 return !updatedOrderOptionalServices.find(function (updatedOptionalService) {
@@ -55748,12 +55786,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             this.axios.put('/orders/' + this.$route.params.id, newOrderData).then(function (_ref5) {
                 var data = _ref5.data;
 
-                console.log(data);
-                _this11.loading = false;
-                _this11.orderUpdating = false;
-                _this11.snackColor = 'success';
-                _this11.snackText = 'Сохранено';
-                _this11.snack = true;
+                _this11.$emit('order:update', data);
             }).catch(function (err) {
                 _this11.loading = false;
                 _this11.orderUpdating = false;
@@ -55761,7 +55794,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 _this11.snackText = 'Ошибка!';
                 _this11.snack = true;
             });
-            console.log('NEW DATA:', newOrderData);
         },
         parseOrderDiffData: function parseOrderDiffData(differences) {
             var log = { before: {}, after: {} };
@@ -55920,7 +55952,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             this.defaultRowCount = 4;
         } else {
             this.$store.dispatch('getPriseList').then(function (data) {
-                _this13.initOrder(data);
+                _this13.priceList = data;
+                _this13.initOrder();
             });
         }
         this.getCachedData();
@@ -73916,634 +73949,213 @@ var render = function() {
     "v-card",
     { staticClass: "elevation-0 bg-card" },
     [
-      _c(
-        "v-card",
-        [
-          _c(
-            "v-card-text",
-            [
-              _c(
-                "v-form",
-                [
-                  _c(
-                    "v-container",
-                    { attrs: { "grid-list-md": "" } },
-                    [
-                      _c(
-                        "v-layout",
-                        { attrs: { "justify-start": "", wrap: "" } },
-                        [
-                          _c(
-                            "v-flex",
-                            { attrs: { xs12: "", md3: "", "offset-md2": "" } },
-                            [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Дата курса доллара",
-                                  readonly: true
-                                },
-                                model: {
-                                  value: _vm.orderData.dollar_date,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.orderData, "dollar_date", $$v)
-                                  },
-                                  expression: "orderData.dollar_date"
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-flex",
-                            { attrs: { xs12: "", md3: "" } },
-                            [
-                              _c(
-                                "v-text-field",
-                                {
-                                  attrs: {
-                                    label: "Курс Доллара",
-                                    readonly: !_vm.isDollarRateEditing
-                                  },
-                                  model: {
-                                    value: _vm.orderData.dollar_rate,
-                                    callback: function($$v) {
-                                      _vm.$set(
-                                        _vm.orderData,
-                                        "dollar_rate",
-                                        $$v
-                                      )
-                                    },
-                                    expression: "orderData.dollar_rate"
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "v-slide-x-reverse-transition",
-                                    {
-                                      attrs: {
-                                        slot: "append-outer",
-                                        mode: "out-in"
-                                      },
-                                      slot: "append-outer"
-                                    },
-                                    [
-                                      _c("v-icon", {
-                                        key: "icon-" + _vm.isDollarRateEditing,
-                                        attrs: {
-                                          color: _vm.isDollarRateEditing
-                                            ? "success"
-                                            : "info"
-                                        },
-                                        domProps: {
-                                          textContent: _vm._s(
-                                            _vm.isDollarRateEditing
-                                              ? "done_all"
-                                              : "edit"
-                                          )
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            _vm.isDollarRateEditing = !_vm.isDollarRateEditing
-                                          }
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _vm.isCreation
-                        ? _c(
-                            "v-layout",
-                            {
-                              attrs: {
-                                wrap: "",
-                                "justify-center":
-                                  _vm.$vuetify.breakpoint.mdAndUp,
-                                "justify-start":
-                                  _vm.$vuetify.breakpoint.smAndDown
-                              }
-                            },
-                            [
-                              _c(
-                                "v-flex",
-                                { attrs: { xs12: "", sm7: "", md6: "" } },
-                                [
-                                  !_vm.isClientCreation
-                                    ? _c("v-autocomplete", {
-                                        attrs: {
-                                          items: _vm.clients,
-                                          "hide-selected": "",
-                                          "item-text": "text",
-                                          "item-value": "id",
-                                          label: "Вибирете клиента",
-                                          hint:
-                                            "Если в списке нету нужного клиента, то вы можете его создать",
-                                          "persistent-hint": ""
-                                        },
-                                        model: {
-                                          value: _vm.orderData.client,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.orderData,
-                                              "client",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "orderData.client"
-                                        }
-                                      })
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _vm.isClientCreation
-                                    ? _c("appCreateClient", {
-                                        attrs: { clients: _vm.clients },
-                                        on: {
-                                          existingClientSelected:
-                                            _vm.selectExistingClient,
-                                          clientCreated: _vm.selectCreatedClient
-                                        }
-                                      })
-                                    : _vm._e()
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-flex",
-                                { attrs: { xs12: "", sm3: "", md2: "" } },
-                                [
-                                  _c(
-                                    "v-btn",
-                                    {
-                                      attrs: {
-                                        block: _vm.$vuetify.breakpoint.xsOnly,
-                                        color: "primary"
-                                      },
-                                      on: {
-                                        click: function($event) {
-                                          _vm.isClientCreation = !_vm.isClientCreation
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c(
-                                        "v-icon",
-                                        { attrs: { small: "", left: "" } },
-                                        [_vm._v("compare_arrows")]
-                                      ),
-                                      _vm._v(
-                                        "\n                                " +
-                                          _vm._s(_vm.switcherBtnText) +
-                                          "\n                            "
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        : _c(
-                            "v-layout",
-                            { attrs: { wrap: "", "justify-start": "" } },
-                            [
-                              _c(
-                                "v-flex",
-                                {
-                                  attrs: { xs12: "", "offset-md2": "", md6: "" }
-                                },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Клиент",
-                                      readonly: "",
-                                      value:
-                                        _vm.orderData.client &&
-                                        _vm.orderData.client.person_full_name +
-                                          " (" +
-                                          _vm.orderData.client.company_name +
-                                          ")"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                      _vm._v(" "),
-                      _c(
-                        "v-layout",
-                        { attrs: { wrap: "" } },
-                        [
-                          _c(
-                            "v-flex",
-                            {
-                              attrs: {
-                                xs12: "",
-                                "offset-md2": "",
-                                md9: "",
-                                lg8: "",
-                                xl6: ""
-                              }
-                            },
-                            [
-                              _c(
-                                "v-layout",
-                                { attrs: { wrap: "" } },
-                                [
-                                  _c(
-                                    "v-flex",
-                                    {
-                                      staticClass: "mt-3",
-                                      attrs: { xs12: "" }
-                                    },
-                                    [
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "title font-weight-regular"
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                        Статусы заказа:\n                                    "
-                                          )
-                                        ]
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-flex",
-                                    { attrs: { xs12: "", sm6: "", md4: "" } },
-                                    [
-                                      _c("v-switch", {
-                                        attrs: {
-                                          color: "success",
-                                          label: _vm.isSentStatus
-                                        },
-                                        model: {
-                                          value: _vm.orderData.statuses.is_sent,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.orderData.statuses,
-                                              "is_sent",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "orderData.statuses.is_sent"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-flex",
-                                    { attrs: { xs12: "", sm6: "", md4: "" } },
-                                    [
-                                      _c("v-switch", {
-                                        attrs: {
-                                          color: "success",
-                                          label: _vm.isAgreedStatus
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.orderData.statuses.is_agreed,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.orderData.statuses,
-                                              "is_agreed",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "orderData.statuses.is_agreed"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-flex",
-                                    { attrs: { xs12: "", sm6: "", md4: "" } },
-                                    [
-                                      _c("v-switch", {
-                                        attrs: {
-                                          color: "success",
-                                          label: _vm.isPaidStatus
-                                        },
-                                        model: {
-                                          value: _vm.orderData.statuses.is_paid,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.orderData.statuses,
-                                              "is_paid",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "orderData.statuses.is_paid"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-flex",
-                                    { attrs: { xs12: "", sm6: "", md4: "" } },
-                                    [
-                                      _c("v-switch", {
-                                        attrs: {
-                                          color: "success",
-                                          label:
-                                            _vm.isInstallationFinishedStatus
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.orderData.statuses
-                                              .is_installation_finished,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.orderData.statuses,
-                                              "is_installation_finished",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "orderData.statuses.is_installation_finished"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-flex",
-                            { attrs: { xs12: "", "offset-md2": "", md6: "" } },
-                            [
-                              _c("v-text-field", {
-                                attrs: { label: "Название заказа" },
-                                model: {
-                                  value: _vm.orderData.name,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.orderData, "name", $$v)
-                                  },
-                                  expression: "orderData.name"
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-flex",
-                            { attrs: { xs12: "", "offset-md2": "", md6: "" } },
-                            [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Площадь",
-                                  suffix: _vm.priceForArea + "$"
-                                },
-                                model: {
-                                  value: _vm.orderData.area,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.orderData, "area", $$v)
-                                  },
-                                  expression: "orderData.area"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _vm.services.length > 0
-                        ? _c(
-                            "v-layout",
-                            { attrs: { wrap: "" } },
-                            [
-                              _c(
-                                "v-flex",
-                                {
-                                  staticClass: "mt-2",
-                                  attrs: { xs12: "", "offset-md2": "" }
-                                },
-                                [
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "title font-weight-regular"
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                Услуги:\n                            "
-                                      )
-                                    ]
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _vm._l(_vm.services, function(service, index) {
-                                return _c(
+      !_vm.isCreation && _vm.initialized
+        ? [
+            _c(
+              "v-card",
+              [
+                _c(
+                  "v-card-text",
+                  [
+                    _c(
+                      "v-form",
+                      [
+                        _c(
+                          "v-container",
+                          { attrs: { "grid-list-md": "" } },
+                          [
+                            _c(
+                              "v-layout",
+                              { attrs: { "justify-start": "", wrap: "" } },
+                              [
+                                _c(
                                   "v-flex",
                                   {
-                                    key: "service-" + index,
                                     attrs: {
                                       xs12: "",
-                                      "offset-md2": "",
-                                      md10: ""
+                                      md3: "",
+                                      "offset-md2": ""
                                     }
                                   },
                                   [
-                                    _c("v-checkbox", {
-                                      style: {
-                                        padding: 0,
-                                        margin: index !== 0 ? 0 : false
-                                      },
+                                    _c("v-text-field", {
                                       attrs: {
-                                        label: service.name,
-                                        value: service
+                                        label: "Дата курса доллара",
+                                        readonly: true
                                       },
                                       model: {
-                                        value: _vm.orderData.services,
+                                        value: _vm.orderData.dollar_date,
                                         callback: function($$v) {
                                           _vm.$set(
                                             _vm.orderData,
-                                            "services",
+                                            "dollar_date",
                                             $$v
                                           )
                                         },
-                                        expression: "orderData.services"
+                                        expression: "orderData.dollar_date"
                                       }
                                     })
                                   ],
                                   1
-                                )
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "v-flex",
-                                {
-                                  staticClass: "mt-2",
-                                  attrs: { xs12: "", "offset-md2": "" }
-                                },
-                                [
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "title font-weight-regular"
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                Дополнительные услуги:\n                            "
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { staticClass: "mt-2" },
-                                    [
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          staticStyle: { "margin-left": "0" },
-                                          attrs: { color: "success" },
-                                          on: { click: _vm.addOptionalService }
-                                        },
-                                        [_vm._v("Добавить")]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _vm._l(_vm.orderData.optional_services, function(
-                                optionalService,
-                                index
-                              ) {
-                                return _c(
+                                ),
+                                _vm._v(" "),
+                                _c(
                                   "v-flex",
-                                  {
-                                    key: "optional-service-" + index,
-                                    attrs: {
-                                      xs12: "",
-                                      "offset-md2": "",
-                                      md6: ""
-                                    }
-                                  },
+                                  { attrs: { xs12: "", md3: "" } },
                                   [
                                     _c(
-                                      "v-card",
+                                      "v-text-field",
+                                      {
+                                        attrs: {
+                                          label: "Курс Доллара",
+                                          readonly: !_vm.isDollarRateEditing
+                                        },
+                                        model: {
+                                          value: _vm.orderData.dollar_rate,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.orderData,
+                                              "dollar_rate",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "orderData.dollar_rate"
+                                        }
+                                      },
                                       [
                                         _c(
-                                          "v-card-text",
+                                          "v-slide-x-reverse-transition",
+                                          {
+                                            attrs: {
+                                              slot: "append-outer",
+                                              mode: "out-in"
+                                            },
+                                            slot: "append-outer"
+                                          },
                                           [
-                                            _c("v-text-field", {
-                                              attrs: { label: "Название" },
-                                              model: {
-                                                value:
-                                                  _vm.orderData
-                                                    .optional_services[index]
-                                                    .name,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.orderData
-                                                      .optional_services[index],
-                                                    "name",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression:
-                                                  "orderData.optional_services[index].name"
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c("v-text-field", {
-                                              attrs: { label: "Цена" },
-                                              model: {
-                                                value:
-                                                  _vm.orderData
-                                                    .optional_services[index]
-                                                    .price,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.orderData
-                                                      .optional_services[index],
-                                                    "price",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression:
-                                                  "orderData.optional_services[index].price"
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c("v-textarea", {
-                                              attrs: { label: "Комментарий" },
-                                              model: {
-                                                value:
-                                                  _vm.orderData
-                                                    .optional_services[index]
-                                                    .comment,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.orderData
-                                                      .optional_services[index],
-                                                    "comment",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression:
-                                                  "orderData.optional_services[index].comment"
+                                            _c("v-icon", {
+                                              key:
+                                                "icon-" +
+                                                _vm.isDollarRateEditing,
+                                              attrs: {
+                                                color: _vm.isDollarRateEditing
+                                                  ? "success"
+                                                  : "info"
+                                              },
+                                              domProps: {
+                                                textContent: _vm._s(
+                                                  _vm.isDollarRateEditing
+                                                    ? "done_all"
+                                                    : "edit"
+                                                )
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  _vm.isDollarRateEditing = !_vm.isDollarRateEditing
+                                                }
                                               }
                                             })
                                           ],
                                           1
-                                        ),
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _vm.isCreation
+                              ? _c(
+                                  "v-layout",
+                                  {
+                                    attrs: {
+                                      wrap: "",
+                                      "justify-center":
+                                        _vm.$vuetify.breakpoint.mdAndUp,
+                                      "justify-start":
+                                        _vm.$vuetify.breakpoint.smAndDown
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "v-flex",
+                                      { attrs: { xs12: "", sm7: "", md6: "" } },
+                                      [
+                                        !_vm.isClientCreation
+                                          ? _c("v-autocomplete", {
+                                              attrs: {
+                                                items: _vm.clients,
+                                                "hide-selected": "",
+                                                "item-text": "text",
+                                                "item-value": "id",
+                                                label: "Вибирете клиента",
+                                                hint:
+                                                  "Если в списке нету нужного клиента, то вы можете его создать",
+                                                "persistent-hint": ""
+                                              },
+                                              model: {
+                                                value: _vm.orderData.client,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.orderData,
+                                                    "client",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression: "orderData.client"
+                                              }
+                                            })
+                                          : _vm._e(),
                                         _vm._v(" "),
+                                        _vm.isClientCreation
+                                          ? _c("appCreateClient", {
+                                              attrs: { clients: _vm.clients },
+                                              on: {
+                                                existingClientSelected:
+                                                  _vm.selectExistingClient,
+                                                clientCreated:
+                                                  _vm.selectCreatedClient
+                                              }
+                                            })
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-flex",
+                                      { attrs: { xs12: "", sm3: "", md2: "" } },
+                                      [
                                         _c(
-                                          "v-card-actions",
+                                          "v-btn",
+                                          {
+                                            attrs: {
+                                              block:
+                                                _vm.$vuetify.breakpoint.xsOnly,
+                                              color: "primary"
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                _vm.isClientCreation = !_vm.isClientCreation
+                                              }
+                                            }
+                                          },
                                           [
                                             _c(
-                                              "v-btn",
+                                              "v-icon",
                                               {
-                                                attrs: { color: "error" },
-                                                on: {
-                                                  click: function($event) {
-                                                    _vm.deleteOptionalService(
-                                                      index
-                                                    )
-                                                  }
-                                                }
+                                                attrs: { small: "", left: "" }
                                               },
-                                              [_vm._v("Удалить")]
+                                              [_vm._v("compare_arrows")]
+                                            ),
+                                            _vm._v(
+                                              "\n                                    " +
+                                                _vm._s(_vm.switcherBtnText) +
+                                                "\n                                "
                                             )
                                           ],
                                           1
@@ -74554,650 +74166,1286 @@ var render = function() {
                                   ],
                                   1
                                 )
-                              })
-                            ],
-                            2
-                          )
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-card",
-        { staticClass: "mt-3 mb-5" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "justify-center", attrs: { "primary-title": "" } },
-            [
-              _c("div", { staticClass: "headline gps-tracking-header" }, [
-                _vm._v("GPS-трекинг")
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card-text",
-            [
-              _vm.orderData.GPSData
-                ? _c("appGPSData", {
-                    ref: "GPSData",
-                    attrs: {
-                      orderGPSData: _vm.orderData.GPSData,
-                      gpsTrackers: _vm.gpsTrackers,
-                      fuelLevelSensors: _vm.fuelLevelSensors,
-                      fuelFlowmeters: _vm.fuelFlowmeters,
-                      identification: _vm.identification,
-                      optionalEquipment: _vm.optionalEquipment,
-                      pricesForEquipment: _vm.pricesForEquipment,
-                      allEquipmentPrice: _vm.allEquipmentPrice,
-                      allInstallationPrice: _vm.allInstallationPrice,
-                      cachedData: _vm.allCacheData,
-                      defaultRowCount: _vm.defaultRowCount
-                    },
-                    on: {
-                      "update:orderGPSData": _vm.updateOrderGPSData,
-                      "add-nested-data:orderGPSData":
-                        _vm.addNestedDataInOrderGPSData,
-                      "delete-nested-data:orderGPSData":
-                        _vm.deleteNestedDataInOrderGPSData,
-                      "copy-values:orderGPSData":
-                        _vm.copySelectedInOrderGPSData,
-                      "drag-n-drop-gps-data": _vm.dragNDropGPSData,
-                      rowAdded: _vm.addRowToOrderGPSData,
-                      "delete:rows": _vm.deleteRowsFromOrderGPSData
-                    }
-                  })
-                : _c("v-progress-linear", {
-                    attrs: {
-                      width: 10,
-                      size: 100,
-                      color: "primary",
-                      indeterminate: ""
-                    }
-                  })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card-text",
-            [
-              _c(
-                "v-layout",
-                { attrs: { wrap: "" } },
-                [
-                  _c(
-                    "v-flex",
-                    {
-                      attrs: {
-                        "order-xs2": "",
-                        "order-sm1": "",
-                        xs12: "",
-                        sm6: ""
-                      }
-                    },
-                    [
-                      _c(
-                        "v-container",
-                        { attrs: { fluid: "", "grid-list-xs": "" } },
-                        [
-                          _c(
-                            "v-layout",
-                            { attrs: { wrap: "" } },
-                            [
-                              _c(
-                                "v-flex",
-                                {
-                                  attrs: { xs12: "", md8: "", lg6: "", xl4: "" }
-                                },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Монтаж оборудования",
-                                      readonly: "",
-                                      value: _vm.allInstallationPrice,
-                                      "append-icon": "₴"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-flex", { attrs: { xs8: "" } }),
-                              _vm._v(" "),
-                              _c(
-                                "v-flex",
-                                {
-                                  attrs: { xs12: "", md8: "", lg6: "", xl4: "" }
-                                },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Оборудование",
-                                      readonly: "",
-                                      value: _vm.allEquipmentPrice,
-                                      "append-icon": "₴"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-flex", { attrs: { xs8: "" } }),
-                              _vm._v(" "),
-                              _c(
-                                "v-flex",
-                                {
-                                  attrs: { xs12: "", md8: "", lg6: "", xl4: "" }
-                                },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Дней командировки",
-                                      hint: "Фиксированая цена 720 грн/день",
-                                      "persistent-hint": ""
-                                    },
-                                    model: {
-                                      value: _vm.orderData.days,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.orderData, "days", $$v)
+                              : _c(
+                                  "v-layout",
+                                  { attrs: { wrap: "", "justify-start": "" } },
+                                  [
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        attrs: {
+                                          xs12: "",
+                                          "offset-md2": "",
+                                          md6: ""
+                                        }
                                       },
-                                      expression: "orderData.days"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-flex", { attrs: { xs8: "" } }),
-                              _vm._v(" "),
-                              _c(
-                                "v-flex",
-                                {
-                                  attrs: { xs12: "", md8: "", lg6: "", xl4: "" }
-                                },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Командировки / проживание",
-                                      readonly: "",
-                                      value: _vm.priceForDays,
-                                      "append-icon": "₴"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-flex", { attrs: { xs8: "" } }),
-                              _vm._v(" "),
-                              _c(
-                                "v-flex",
-                                {
-                                  attrs: { xs12: "", md8: "", lg6: "", xl4: "" }
-                                },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Цена за 1км",
-                                      "append-icon": "₴"
-                                    },
-                                    model: {
-                                      value:
-                                        _vm.orderData
-                                          .price_for_transportation_per_km,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.orderData,
-                                          "price_for_transportation_per_km",
-                                          $$v
-                                        )
-                                      },
-                                      expression:
-                                        "orderData.price_for_transportation_per_km"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-flex", { attrs: { xs8: "" } }),
-                              _vm._v(" "),
-                              _c(
-                                "v-flex",
-                                {
-                                  attrs: { xs12: "", md8: "", lg6: "", xl4: "" }
-                                },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: { label: "Растояние км" },
-                                    model: {
-                                      value: _vm.orderData.transportation_kms,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.orderData,
-                                          "transportation_kms",
-                                          $$v
-                                        )
-                                      },
-                                      expression: "orderData.transportation_kms"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-flex", { attrs: { xs8: "" } }),
-                              _vm._v(" "),
-                              _c(
-                                "v-flex",
-                                {
-                                  attrs: { xs12: "", md8: "", lg6: "", xl4: "" }
-                                },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Количество поездок",
-                                      type: "number",
-                                      min: "1"
-                                    },
-                                    model: {
-                                      value: _vm.orderData.number_of_trips,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.orderData,
-                                          "number_of_trips",
-                                          $$v
-                                        )
-                                      },
-                                      expression: "orderData.number_of_trips"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-flex", { attrs: { xs8: "" } }),
-                              _vm._v(" "),
-                              _c(
-                                "v-flex",
-                                {
-                                  attrs: { xs12: "", md8: "", lg6: "", xl4: "" }
-                                },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: { label: "Маршрут" },
-                                    model: {
-                                      value: _vm.orderData.route,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.orderData, "route", $$v)
-                                      },
-                                      expression: "orderData.route"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-flex", { attrs: { xs8: "" } }),
-                              _vm._v(" "),
-                              _c(
-                                "v-flex",
-                                {
-                                  attrs: { xs12: "", md8: "", lg6: "", xl4: "" }
-                                },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Транспортные расходы",
-                                      readonly: "",
-                                      value: _vm.transportationPrice,
-                                      "append-icon": "₴"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-flex", { attrs: { xs8: "" } }),
-                              _vm._v(" "),
-                              _c(
-                                "v-flex",
-                                { staticClass: "mt-4", attrs: { xs12: "" } },
-                                [
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass:
-                                        "text-xs-left display-1 font-weight-bold"
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                    СУММА ВСЕГО: " +
-                                          _vm._s(_vm.formattedFinalPrice) +
-                                          "\n                                "
-                                      )
-                                    ]
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-flex",
-                    {
-                      attrs: {
-                        "order-xs1": "",
-                        "order-sm2": "",
-                        xs12: "",
-                        sm6: ""
-                      }
-                    },
-                    [
-                      _vm.orderData.GPSData
-                        ? _c("appEquipmentData", {
-                            attrs: { orderGPSData: _vm.orderData.GPSData }
-                          })
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card-actions",
-            [
-              _c(
-                "v-layout",
-                { staticClass: "mb-4", attrs: { "justify-center": "" } },
-                [
-                  _vm.isCreation
-                    ? _c(
-                        "v-flex",
-                        { attrs: { xs12: "", sm11: "", md3: "" } },
-                        [
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: {
-                                block: "",
-                                large: "",
-                                color: "primary",
-                                loading: _vm.orderInCreation,
-                                disabled: _vm.orderInCreation
-                              },
-                              on: { click: _vm.createOrder }
-                            },
-                            [
-                              _vm._v(
-                                "\n                        Создать заказ\n                    "
-                              )
-                            ]
-                          )
-                        ],
-                        1
-                      )
-                    : _c(
-                        "v-flex",
-                        { attrs: { xs12: "", md8: "" } },
-                        [
-                          _c(
-                            "v-container",
-                            { attrs: { fluid: "", "grid-list-md": "" } },
-                            [
-                              _c(
-                                "v-layout",
-                                { attrs: { wrap: "", "justify-center": "" } },
-                                [
-                                  _c(
-                                    "v-flex",
-                                    { attrs: { xs12: "", sm6: "" } },
-                                    [
-                                      _c(
-                                        "v-dialog",
-                                        {
+                                      [
+                                        _c("v-text-field", {
                                           attrs: {
-                                            persistent: "",
-                                            width: "300"
+                                            label: "Клиент",
+                                            readonly: "",
+                                            value:
+                                              _vm.orderData.client &&
+                                              _vm.orderData.client
+                                                .person_full_name +
+                                                " (" +
+                                                _vm.orderData.client
+                                                  .company_name +
+                                                ")"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                ),
+                            _vm._v(" "),
+                            _c(
+                              "v-layout",
+                              { attrs: { wrap: "" } },
+                              [
+                                _c(
+                                  "v-flex",
+                                  {
+                                    attrs: {
+                                      xs12: "",
+                                      "offset-md2": "",
+                                      md9: "",
+                                      lg8: "",
+                                      xl6: ""
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "v-layout",
+                                      { attrs: { wrap: "" } },
+                                      [
+                                        _c(
+                                          "v-flex",
+                                          {
+                                            staticClass: "mt-3",
+                                            attrs: { xs12: "" }
                                           },
-                                          model: {
-                                            value: _vm.orderUpdating,
-                                            callback: function($$v) {
-                                              _vm.orderUpdating = $$v
-                                            },
-                                            expression: "orderUpdating"
+                                          [
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "title font-weight-regular"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                            Статусы заказа:\n                                        "
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-flex",
+                                          {
+                                            attrs: {
+                                              xs12: "",
+                                              sm6: "",
+                                              md4: ""
+                                            }
+                                          },
+                                          [
+                                            _c("v-switch", {
+                                              attrs: {
+                                                color: "success",
+                                                label: _vm.isSentStatus
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.orderData.statuses
+                                                    .is_sent,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.orderData.statuses,
+                                                    "is_sent",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "orderData.statuses.is_sent"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-flex",
+                                          {
+                                            attrs: {
+                                              xs12: "",
+                                              sm6: "",
+                                              md4: ""
+                                            }
+                                          },
+                                          [
+                                            _c("v-switch", {
+                                              attrs: {
+                                                color: "success",
+                                                label: _vm.isAgreedStatus
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.orderData.statuses
+                                                    .is_agreed,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.orderData.statuses,
+                                                    "is_agreed",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "orderData.statuses.is_agreed"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-flex",
+                                          {
+                                            attrs: {
+                                              xs12: "",
+                                              sm6: "",
+                                              md4: ""
+                                            }
+                                          },
+                                          [
+                                            _c("v-switch", {
+                                              attrs: {
+                                                color: "success",
+                                                label: _vm.isPaidStatus
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.orderData.statuses
+                                                    .is_paid,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.orderData.statuses,
+                                                    "is_paid",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "orderData.statuses.is_paid"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-flex",
+                                          {
+                                            attrs: {
+                                              xs12: "",
+                                              sm6: "",
+                                              md4: ""
+                                            }
+                                          },
+                                          [
+                                            _c("v-switch", {
+                                              attrs: {
+                                                color: "success",
+                                                label:
+                                                  _vm.isInstallationFinishedStatus
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.orderData.statuses
+                                                    .is_installation_finished,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.orderData.statuses,
+                                                    "is_installation_finished",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "orderData.statuses.is_installation_finished"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-flex",
+                                  {
+                                    attrs: {
+                                      xs12: "",
+                                      "offset-md2": "",
+                                      md6: ""
+                                    }
+                                  },
+                                  [
+                                    _c("v-text-field", {
+                                      attrs: { label: "Название заказа" },
+                                      model: {
+                                        value: _vm.orderData.name,
+                                        callback: function($$v) {
+                                          _vm.$set(_vm.orderData, "name", $$v)
+                                        },
+                                        expression: "orderData.name"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-flex",
+                                  {
+                                    attrs: {
+                                      xs12: "",
+                                      "offset-md2": "",
+                                      md6: ""
+                                    }
+                                  },
+                                  [
+                                    _c("v-text-field", {
+                                      attrs: {
+                                        label: "Площадь",
+                                        suffix: _vm.priceForArea + "$"
+                                      },
+                                      model: {
+                                        value: _vm.orderData.area,
+                                        callback: function($$v) {
+                                          _vm.$set(_vm.orderData, "area", $$v)
+                                        },
+                                        expression: "orderData.area"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _vm.services.length > 0
+                              ? _c(
+                                  "v-layout",
+                                  { attrs: { wrap: "" } },
+                                  [
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        staticClass: "mt-2",
+                                        attrs: { xs12: "", "offset-md2": "" }
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "title font-weight-regular"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                    Услуги:\n                                "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _vm._l(_vm.services, function(
+                                      service,
+                                      index
+                                    ) {
+                                      return _c(
+                                        "v-flex",
+                                        {
+                                          key: "service-" + index,
+                                          attrs: {
+                                            xs12: "",
+                                            "offset-md2": "",
+                                            md10: ""
                                           }
                                         },
                                         [
-                                          _c(
-                                            "v-card",
-                                            {
-                                              attrs: {
-                                                color: "primary",
-                                                dark: ""
-                                              }
+                                          _c("v-checkbox", {
+                                            style: {
+                                              padding: 0,
+                                              margin: index !== 0 ? 0 : false
                                             },
-                                            [
-                                              _c(
-                                                "v-card-text",
-                                                [
-                                                  _vm._v(
-                                                    "\n                                            Обновление файлов..\n                                            "
-                                                  ),
-                                                  _c("v-progress-linear", {
-                                                    staticClass: "mb-0",
-                                                    attrs: {
-                                                      color: "white",
-                                                      indeterminate: ""
-                                                    }
-                                                  })
-                                                ],
-                                                1
-                                              )
-                                            ],
-                                            1
-                                          )
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            large: "",
-                                            block: "",
-                                            color: "info",
-                                            disabled: _vm.loading,
-                                            loading: _vm.loading
-                                          },
-                                          on: { click: _vm.updateOrder }
-                                        },
-                                        [
-                                          _c(
-                                            "v-icon",
-                                            { attrs: { left: "" } },
-                                            [_vm._v("backup")]
-                                          ),
-                                          _vm._v(
-                                            "Сохранить\n                                "
-                                          )
+                                            attrs: {
+                                              label: service.name,
+                                              value: service
+                                            },
+                                            model: {
+                                              value: _vm.orderData.services,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.orderData,
+                                                  "services",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "orderData.services"
+                                            }
+                                          })
                                         ],
                                         1
                                       )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-flex",
-                                    { attrs: { xs12: "", sm6: "" } },
-                                    [
-                                      _c(
-                                        "v-dialog",
-                                        {
-                                          attrs: {
-                                            persistent: "",
-                                            width: "300"
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        staticClass: "mt-2",
+                                        attrs: { xs12: "", "offset-md2": "" }
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "title font-weight-regular"
                                           },
-                                          model: {
-                                            value: _vm.pdfLoading,
-                                            callback: function($$v) {
-                                              _vm.pdfLoading = $$v
-                                            },
-                                            expression: "pdfLoading"
-                                          }
-                                        },
-                                        [
-                                          _c(
-                                            "v-card",
-                                            {
-                                              attrs: {
-                                                color: "primary",
-                                                dark: ""
-                                              }
-                                            },
-                                            [
-                                              _c(
-                                                "v-card-text",
-                                                [
-                                                  _vm._v(
-                                                    "\n                                            Создание документа (" +
-                                                      _vm._s(_vm.pdfProgress) +
-                                                      "%)\n                                            "
-                                                  ),
-                                                  _c("v-progress-linear", {
-                                                    staticClass: "mb-0",
-                                                    attrs: { color: "white" },
-                                                    model: {
-                                                      value: _vm.pdfProgress,
-                                                      callback: function($$v) {
-                                                        _vm.pdfProgress = $$v
+                                          [
+                                            _vm._v(
+                                              "\n                                    Дополнительные услуги:\n                                "
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "mt-2" },
+                                          [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticStyle: {
+                                                  "margin-left": "0"
+                                                },
+                                                attrs: { color: "success" },
+                                                on: {
+                                                  click: _vm.addOptionalService
+                                                }
+                                              },
+                                              [_vm._v("Добавить")]
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _vm._l(
+                                      _vm.orderData.optional_services,
+                                      function(optionalService, index) {
+                                        return _c(
+                                          "v-flex",
+                                          {
+                                            key: "optional-service-" + index,
+                                            attrs: {
+                                              xs12: "",
+                                              "offset-md2": "",
+                                              md6: ""
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "v-card",
+                                              [
+                                                _c(
+                                                  "v-card-text",
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Название"
                                                       },
-                                                      expression: "pdfProgress"
-                                                    }
-                                                  })
-                                                ],
-                                                1
-                                              )
-                                            ],
-                                            1
-                                          )
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-btn",
-                                        {
+                                                      model: {
+                                                        value:
+                                                          _vm.orderData
+                                                            .optional_services[
+                                                            index
+                                                          ].name,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.orderData
+                                                              .optional_services[
+                                                              index
+                                                            ],
+                                                            "name",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "orderData.optional_services[index].name"
+                                                      }
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _c("v-text-field", {
+                                                      attrs: { label: "Цена" },
+                                                      model: {
+                                                        value:
+                                                          _vm.orderData
+                                                            .optional_services[
+                                                            index
+                                                          ].price,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.orderData
+                                                              .optional_services[
+                                                              index
+                                                            ],
+                                                            "price",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "orderData.optional_services[index].price"
+                                                      }
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _c("v-textarea", {
+                                                      attrs: {
+                                                        label: "Комментарий"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.orderData
+                                                            .optional_services[
+                                                            index
+                                                          ].comment,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.orderData
+                                                              .optional_services[
+                                                              index
+                                                            ],
+                                                            "comment",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "orderData.optional_services[index].comment"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-card-actions",
+                                                  [
+                                                    _c(
+                                                      "v-btn",
+                                                      {
+                                                        attrs: {
+                                                          color: "error"
+                                                        },
+                                                        on: {
+                                                          click: function(
+                                                            $event
+                                                          ) {
+                                                            _vm.deleteOptionalService(
+                                                              index
+                                                            )
+                                                          }
+                                                        }
+                                                      },
+                                                      [_vm._v("Удалить")]
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      }
+                                    )
+                                  ],
+                                  2
+                                )
+                              : _vm._e()
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-card",
+              { staticClass: "mt-3 mb-5" },
+              [
+                _c(
+                  "v-card-title",
+                  {
+                    staticClass: "justify-center",
+                    attrs: { "primary-title": "" }
+                  },
+                  [
+                    _c("div", { staticClass: "headline gps-tracking-header" }, [
+                      _vm._v("GPS-трекинг")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-card-text",
+                  [
+                    _vm.orderData.GPSData
+                      ? _c("appGPSData", {
+                          ref: "GPSData",
+                          attrs: {
+                            orderGPSData: _vm.orderData.GPSData,
+                            gpsTrackers: _vm.gpsTrackers,
+                            fuelLevelSensors: _vm.fuelLevelSensors,
+                            fuelFlowmeters: _vm.fuelFlowmeters,
+                            identification: _vm.identification,
+                            optionalEquipment: _vm.optionalEquipment,
+                            pricesForEquipment: _vm.pricesForEquipment,
+                            allEquipmentPrice: _vm.allEquipmentPrice,
+                            allInstallationPrice: _vm.allInstallationPrice,
+                            cachedData: _vm.allCacheData,
+                            defaultRowCount: _vm.defaultRowCount
+                          },
+                          on: {
+                            "update:orderGPSData": _vm.updateOrderGPSData,
+                            "add-nested-data:orderGPSData":
+                              _vm.addNestedDataInOrderGPSData,
+                            "delete-nested-data:orderGPSData":
+                              _vm.deleteNestedDataInOrderGPSData,
+                            "copy-values:orderGPSData":
+                              _vm.copySelectedInOrderGPSData,
+                            "drag-n-drop-gps-data": _vm.dragNDropGPSData,
+                            rowAdded: _vm.addRowToOrderGPSData,
+                            "delete:rows": _vm.deleteRowsFromOrderGPSData
+                          }
+                        })
+                      : _c("v-progress-linear", {
+                          attrs: {
+                            width: 10,
+                            size: 100,
+                            color: "primary",
+                            indeterminate: ""
+                          }
+                        })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-card-text",
+                  [
+                    _c(
+                      "v-layout",
+                      { attrs: { wrap: "" } },
+                      [
+                        _c(
+                          "v-flex",
+                          {
+                            attrs: {
+                              "order-xs2": "",
+                              "order-sm1": "",
+                              xs12: "",
+                              sm6: ""
+                            }
+                          },
+                          [
+                            _c(
+                              "v-container",
+                              { attrs: { fluid: "", "grid-list-xs": "" } },
+                              [
+                                _c(
+                                  "v-layout",
+                                  { attrs: { wrap: "" } },
+                                  [
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        attrs: {
+                                          xs12: "",
+                                          md8: "",
+                                          lg6: "",
+                                          xl4: ""
+                                        }
+                                      },
+                                      [
+                                        _c("v-text-field", {
                                           attrs: {
-                                            large: "",
-                                            block: "",
-                                            color: "primary",
-                                            disabled: _vm.loading,
-                                            loading: _vm.loading
+                                            label: "Монтаж оборудования",
+                                            readonly: "",
+                                            value: _vm.allInstallationPrice,
+                                            "append-icon": "₴"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-flex", { attrs: { xs8: "" } }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        attrs: {
+                                          xs12: "",
+                                          md8: "",
+                                          lg6: "",
+                                          xl4: ""
+                                        }
+                                      },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: {
+                                            label: "Оборудование",
+                                            readonly: "",
+                                            value: _vm.allEquipmentPrice,
+                                            "append-icon": "₴"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-flex", { attrs: { xs8: "" } }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        attrs: {
+                                          xs12: "",
+                                          md8: "",
+                                          lg6: "",
+                                          xl4: ""
+                                        }
+                                      },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: {
+                                            label: "Дней командировки",
+                                            hint:
+                                              "Фиксированая цена 720 грн/день",
+                                            "persistent-hint": ""
                                           },
-                                          on: { click: _vm.createPDF }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                        Скачать PDF "
-                                          ),
-                                          _c(
-                                            "v-icon",
-                                            { attrs: { right: "" } },
-                                            [_vm._v("get_app")]
-                                          )
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      !_vm.isCreation
-        ? _c(
-            "v-expansion-panel",
-            { staticClass: "mt-3", attrs: { popout: "" } },
-            [
-              _c(
-                "v-expansion-panel-content",
-                { staticClass: "elevation-1", attrs: { lazy: "" } },
-                [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "headline pdf-preview",
-                      attrs: { slot: "header" },
-                      slot: "header"
-                    },
-                    [_vm._v("PDF превью")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-card",
-                    [
-                      _c(
-                        "v-card-text",
-                        [
-                          _c("appPDF", {
-                            attrs: { gpsData: _vm.orderData.GPSData }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        : _vm._e(),
+                                          model: {
+                                            value: _vm.orderData.days,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                _vm.orderData,
+                                                "days",
+                                                $$v
+                                              )
+                                            },
+                                            expression: "orderData.days"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-flex", { attrs: { xs8: "" } }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        attrs: {
+                                          xs12: "",
+                                          md8: "",
+                                          lg6: "",
+                                          xl4: ""
+                                        }
+                                      },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: {
+                                            label: "Командировки / проживание",
+                                            readonly: "",
+                                            value: _vm.priceForDays,
+                                            "append-icon": "₴"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-flex", { attrs: { xs8: "" } }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        attrs: {
+                                          xs12: "",
+                                          md8: "",
+                                          lg6: "",
+                                          xl4: ""
+                                        }
+                                      },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: {
+                                            label: "Цена за 1км",
+                                            "append-icon": "₴"
+                                          },
+                                          model: {
+                                            value:
+                                              _vm.orderData
+                                                .price_for_transportation_per_km,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                _vm.orderData,
+                                                "price_for_transportation_per_km",
+                                                $$v
+                                              )
+                                            },
+                                            expression:
+                                              "orderData.price_for_transportation_per_km"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-flex", { attrs: { xs8: "" } }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        attrs: {
+                                          xs12: "",
+                                          md8: "",
+                                          lg6: "",
+                                          xl4: ""
+                                        }
+                                      },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: { label: "Растояние км" },
+                                          model: {
+                                            value:
+                                              _vm.orderData.transportation_kms,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                _vm.orderData,
+                                                "transportation_kms",
+                                                $$v
+                                              )
+                                            },
+                                            expression:
+                                              "orderData.transportation_kms"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-flex", { attrs: { xs8: "" } }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        attrs: {
+                                          xs12: "",
+                                          md8: "",
+                                          lg6: "",
+                                          xl4: ""
+                                        }
+                                      },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: {
+                                            label: "Количество поездок",
+                                            type: "number",
+                                            min: "1"
+                                          },
+                                          model: {
+                                            value:
+                                              _vm.orderData.number_of_trips,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                _vm.orderData,
+                                                "number_of_trips",
+                                                $$v
+                                              )
+                                            },
+                                            expression:
+                                              "orderData.number_of_trips"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-flex", { attrs: { xs8: "" } }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        attrs: {
+                                          xs12: "",
+                                          md8: "",
+                                          lg6: "",
+                                          xl4: ""
+                                        }
+                                      },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: { label: "Маршрут" },
+                                          model: {
+                                            value: _vm.orderData.route,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                _vm.orderData,
+                                                "route",
+                                                $$v
+                                              )
+                                            },
+                                            expression: "orderData.route"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-flex", { attrs: { xs8: "" } }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        attrs: {
+                                          xs12: "",
+                                          md8: "",
+                                          lg6: "",
+                                          xl4: ""
+                                        }
+                                      },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: {
+                                            label: "Транспортные расходы",
+                                            readonly: "",
+                                            value: _vm.transportationPrice,
+                                            "append-icon": "₴"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-flex", { attrs: { xs8: "" } }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-flex",
+                                      {
+                                        staticClass: "mt-4",
+                                        attrs: { xs12: "" }
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "text-xs-left display-1 font-weight-bold"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                        СУММА ВСЕГО: " +
+                                                _vm._s(
+                                                  _vm.formattedFinalPrice
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-flex",
+                          {
+                            attrs: {
+                              "order-xs1": "",
+                              "order-sm2": "",
+                              xs12: "",
+                              sm6: ""
+                            }
+                          },
+                          [
+                            _vm.orderData.GPSData
+                              ? _c("appEquipmentData", {
+                                  attrs: { orderGPSData: _vm.orderData.GPSData }
+                                })
+                              : _vm._e()
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-card-actions",
+                  [
+                    _c(
+                      "v-layout",
+                      { staticClass: "mb-4", attrs: { "justify-center": "" } },
+                      [
+                        _vm.isCreation
+                          ? _c(
+                              "v-flex",
+                              { attrs: { xs12: "", sm11: "", md3: "" } },
+                              [
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: {
+                                      block: "",
+                                      large: "",
+                                      color: "primary",
+                                      loading: _vm.orderInCreation,
+                                      disabled: _vm.orderInCreation
+                                    },
+                                    on: { click: _vm.createOrder }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                            Создать заказ\n                        "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          : _c(
+                              "v-flex",
+                              { attrs: { xs12: "", md8: "" } },
+                              [
+                                _c(
+                                  "v-container",
+                                  { attrs: { fluid: "", "grid-list-md": "" } },
+                                  [
+                                    _c(
+                                      "v-layout",
+                                      {
+                                        attrs: {
+                                          wrap: "",
+                                          "justify-center": ""
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "v-flex",
+                                          { attrs: { xs12: "", sm6: "" } },
+                                          [
+                                            _c(
+                                              "v-dialog",
+                                              {
+                                                attrs: {
+                                                  persistent: "",
+                                                  width: "300"
+                                                },
+                                                model: {
+                                                  value: _vm.orderUpdating,
+                                                  callback: function($$v) {
+                                                    _vm.orderUpdating = $$v
+                                                  },
+                                                  expression: "orderUpdating"
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-card",
+                                                  {
+                                                    attrs: {
+                                                      color: "primary",
+                                                      dark: ""
+                                                    }
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "v-card-text",
+                                                      [
+                                                        _vm._v(
+                                                          "\n                                                Обновление данных..\n                                                "
+                                                        ),
+                                                        _c(
+                                                          "v-progress-linear",
+                                                          {
+                                                            staticClass: "mb-0",
+                                                            attrs: {
+                                                              color: "white",
+                                                              indeterminate: ""
+                                                            }
+                                                          }
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                attrs: {
+                                                  large: "",
+                                                  block: "",
+                                                  color: "info",
+                                                  disabled: _vm.loading,
+                                                  loading: _vm.loading
+                                                },
+                                                on: { click: _vm.updateOrder }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-icon",
+                                                  { attrs: { left: "" } },
+                                                  [_vm._v("backup")]
+                                                ),
+                                                _vm._v(
+                                                  "Сохранить\n                                    "
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-flex",
+                                          { attrs: { xs12: "", sm6: "" } },
+                                          [
+                                            _c(
+                                              "v-dialog",
+                                              {
+                                                attrs: {
+                                                  persistent: "",
+                                                  width: "300"
+                                                },
+                                                model: {
+                                                  value: _vm.pdfLoading,
+                                                  callback: function($$v) {
+                                                    _vm.pdfLoading = $$v
+                                                  },
+                                                  expression: "pdfLoading"
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-card",
+                                                  {
+                                                    attrs: {
+                                                      color: "primary",
+                                                      dark: ""
+                                                    }
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "v-card-text",
+                                                      [
+                                                        _vm._v(
+                                                          "\n                                                Создание документа (" +
+                                                            _vm._s(
+                                                              _vm.pdfProgress
+                                                            ) +
+                                                            "%)\n                                                "
+                                                        ),
+                                                        _c(
+                                                          "v-progress-linear",
+                                                          {
+                                                            staticClass: "mb-0",
+                                                            attrs: {
+                                                              color: "white"
+                                                            },
+                                                            model: {
+                                                              value:
+                                                                _vm.pdfProgress,
+                                                              callback: function(
+                                                                $$v
+                                                              ) {
+                                                                _vm.pdfProgress = $$v
+                                                              },
+                                                              expression:
+                                                                "pdfProgress"
+                                                            }
+                                                          }
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                attrs: {
+                                                  large: "",
+                                                  block: "",
+                                                  color: "primary",
+                                                  disabled: _vm.loading,
+                                                  loading: _vm.loading
+                                                },
+                                                on: { click: _vm.createPDF }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                            Скачать PDF "
+                                                ),
+                                                _c(
+                                                  "v-icon",
+                                                  { attrs: { right: "" } },
+                                                  [_vm._v("get_app")]
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            !_vm.isCreation
+              ? _c(
+                  "v-expansion-panel",
+                  { staticClass: "mt-3", attrs: { popout: "" } },
+                  [
+                    _c(
+                      "v-expansion-panel-content",
+                      { staticClass: "elevation-1", attrs: { lazy: "" } },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "headline pdf-preview",
+                            attrs: { slot: "header" },
+                            slot: "header"
+                          },
+                          [_vm._v("PDF превью")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-card",
+                          [
+                            _c(
+                              "v-card-text",
+                              [
+                                _c("appPDF", {
+                                  attrs: { gpsData: _vm.orderData.GPSData }
+                                })
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              : _vm._e()
+          ]
+        : [
+            _c(
+              "v-layout",
+              { attrs: { wrap: "" } },
+              [
+                _c(
+                  "v-flex",
+                  { attrs: { xs12: "", "d-flex": "", "justify-center": "" } },
+                  [
+                    _c(
+                      "v-progress-circular",
+                      {
+                        attrs: {
+                          width: 10,
+                          size: 150,
+                          color: "primary",
+                          indeterminate: ""
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Инициализация...\n                "
+                        )
+                      ]
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ],
       _vm._v(" "),
       _c(
         "v-snackbar",
@@ -75214,7 +75462,7 @@ var render = function() {
         [_vm._v("\n        " + _vm._s(_vm.snackText) + "\n    ")]
       )
     ],
-    1
+    2
   )
 }
 var staticRenderFns = []
@@ -76038,6 +76286,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -76047,13 +76300,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             order: null
         };
     },
+
+    methods: {
+        updateOrder: function updateOrder(order) {
+            this.order = order;
+        }
+    },
     created: function created() {
         var _this = this;
 
         this.axios.get('/order/' + this.$route.params.id).then(function (_ref) {
             var data = _ref.data;
 
-            _this.order = data;
+            _this.updateOrder(data);
         }).catch(function (err) {
             return console.log(err);
         });
@@ -76090,16 +76349,21 @@ var render = function() {
             [
               _vm.order
                 ? _c("appOrder", {
-                    attrs: { order: _vm.order, isCreation: false }
+                    attrs: { order: _vm.order, isCreation: false },
+                    on: { "order:update": _vm.updateOrder }
                   })
-                : _c("v-progress-circular", {
-                    attrs: {
-                      width: 10,
-                      size: 100,
-                      color: "primary",
-                      indeterminate: ""
-                    }
-                  })
+                : _c(
+                    "v-progress-circular",
+                    {
+                      attrs: {
+                        width: 10,
+                        size: 150,
+                        color: "primary",
+                        indeterminate: ""
+                      }
+                    },
+                    [_vm._v("\n                Загрузка...\n            ")]
+                  )
             ],
             1
           )
