@@ -16689,53 +16689,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 61 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(168)
-/* template */
-var __vue_template__ = __webpack_require__(265)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\components\\CreateClient\\CreateClient.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-356ec475", Component.options)
-  } else {
-    hotAPI.reload("data-v-356ec475", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
+/* 61 */,
 /* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -41757,16 +41711,19 @@ module.exports = function (css) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__containers_users_Users_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__containers_users_Users_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__containers_clients_Clients_vue__ = __webpack_require__(166);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__containers_clients_Clients_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__containers_clients_Clients_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__containers_priceList_PriceList_vue__ = __webpack_require__(267);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__containers_priceList_PriceList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__containers_priceList_PriceList_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue__ = __webpack_require__(298);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue__ = __webpack_require__(464);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__containers_order_Order_vue__ = __webpack_require__(472);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__containers_order_Order_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__containers_order_Order_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__containers_priceListHistory_PriceListHistory_vue__ = __webpack_require__(475);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__containers_priceListHistory_PriceListHistory_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__containers_priceListHistory_PriceListHistory_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__containers_clients_client_Client_vue__ = __webpack_require__(497);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__containers_clients_client_Client_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__containers_clients_client_Client_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__containers_priceList_PriceList_vue__ = __webpack_require__(267);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__containers_priceList_PriceList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__containers_priceList_PriceList_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__containers_createOrder_CreateOrder_vue__ = __webpack_require__(298);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__containers_createOrder_CreateOrder_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__containers_createOrder_CreateOrder_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__containers_orders_Orders_vue__ = __webpack_require__(464);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__containers_orders_Orders_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__containers_orders_Orders_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__containers_order_Order_vue__ = __webpack_require__(472);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__containers_order_Order_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__containers_order_Order_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__containers_priceListHistory_PriceListHistory_vue__ = __webpack_require__(475);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__containers_priceListHistory_PriceListHistory_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13__containers_priceListHistory_PriceListHistory_vue__);
+
 
 
 
@@ -41810,25 +41767,29 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
         name: 'clients',
         component: __WEBPACK_IMPORTED_MODULE_7__containers_clients_Clients_vue___default.a
     }, {
+        path: '/clients/:id',
+        name: 'client',
+        component: __WEBPACK_IMPORTED_MODULE_8__containers_clients_client_Client_vue___default.a
+    }, {
         path: '/price-list',
         name: 'price-list',
-        component: __WEBPACK_IMPORTED_MODULE_8__containers_priceList_PriceList_vue___default.a
+        component: __WEBPACK_IMPORTED_MODULE_9__containers_priceList_PriceList_vue___default.a
     }, {
         path: '/create-order',
         name: 'create-order',
-        component: __WEBPACK_IMPORTED_MODULE_9__containers_createOrder_CreateOrder_vue___default.a
+        component: __WEBPACK_IMPORTED_MODULE_10__containers_createOrder_CreateOrder_vue___default.a
     }, {
         path: '/orders',
         name: 'orders',
-        component: __WEBPACK_IMPORTED_MODULE_10__containers_orders_Orders_vue___default.a
+        component: __WEBPACK_IMPORTED_MODULE_11__containers_orders_Orders_vue___default.a
     }, {
         path: '/orders/:id',
         name: 'order',
-        component: __WEBPACK_IMPORTED_MODULE_11__containers_order_Order_vue___default.a
+        component: __WEBPACK_IMPORTED_MODULE_12__containers_order_Order_vue___default.a
     }, {
         path: '/price-list-history',
         name: 'price-list-history',
-        component: __WEBPACK_IMPORTED_MODULE_12__containers_priceListHistory_PriceListHistory_vue___default.a
+        component: __WEBPACK_IMPORTED_MODULE_13__containers_priceListHistory_PriceListHistory_vue___default.a
     }, {
         path: '',
         name: 'home',
@@ -47561,17 +47522,21 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(494)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(167)
 /* template */
-var __vue_template__ = __webpack_require__(266)
+var __vue_template__ = __webpack_require__(496)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-6f72ab09"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -47609,8 +47574,12 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_CreateClient_CreateClient__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_CreateClient_CreateClient___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_CreateClient_CreateClient__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_client_createClient_CreateClient__ = __webpack_require__(500);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_client_createClient_CreateClient___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_client_createClient_CreateClient__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_client_editClient_EditClient__ = __webpack_require__(503);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_client_editClient_EditClient___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_client_editClient_EditClient__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_client_deleteClient_DeleteClient__ = __webpack_require__(506);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_client_deleteClient_DeleteClient___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_client_deleteClient_DeleteClient__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -47661,13 +47630,43 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            dialog: false,
+            dialogs: {
+                createDialog: false,
+                editDialog: false,
+                deleteDialog: false
+            },
             search: '',
             totalClients: 0,
             clients: [],
@@ -47675,14 +47674,25 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             pagination: {
                 rowsPerPage: 10
             },
-            headers: [{
-                text: 'Контактное лицо',
-                align: 'left',
-                value: 'person_full_name'
-            }, { text: 'Компания', value: 'company_name' }, { text: 'Площадь', value: 'area', width: '15px' }, { text: 'Телефон', value: 'telephone' }, { text: 'Коментарий', value: 'comment' }, { text: '', value: '', sortable: false }]
+            editedClient: {},
+            deletedClient: {}
         };
     },
 
+    computed: {
+        headers: function headers() {
+            var headers = [{
+                text: 'Контактное лицо',
+                align: 'left',
+                value: 'person_full_name'
+            }, { text: 'Компания', value: 'company_name' }, { text: 'Площадь', value: 'area', width: '15px' }, { text: 'Телефон', value: 'telephone' }, { text: 'Коментарий', value: 'comment' }];
+
+            if (this.$auth.check('admin')) {
+                headers.push({ text: 'Действия', align: 'right', sortable: false });
+            }
+            return headers;
+        }
+    },
     watch: {
         pagination: {
             handler: 'getClients',
@@ -47725,6 +47735,18 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 _this.loading = false;
             });
         },
+        editClient: function editClient(client) {
+            var index = this.clients.findIndex(function (clientRow) {
+                return clientRow.id === client.id;
+            });
+            this.clients.splice(index, 1, client);
+        },
+        deleteClient: function deleteClient(id) {
+            var index = this.clients.findIndex(function (client) {
+                return client.id === id;
+            });
+            this.clients.splice(index, 1);
+        },
         checkSearch: function checkSearch(value) {
             var _this2 = this;
 
@@ -47735,162 +47757,33 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 }
             }, 1500);
         },
-        closeCreateDialog: function closeCreateDialog() {
-            this.dialog = false;
-        },
         prependClient: function prependClient(client) {
             this.clients.unshift(client);
+        },
+        setEditData: function setEditData(client) {
+            this.editedClient = _extends({}, client);
+            this.openDialog('editDialog');
+        },
+        setDeleteData: function setDeleteData(client) {
+            this.deletedClient = _extends({}, client);
+            this.openDialog('deleteDialog');
+        },
+        openDialog: function openDialog(which) {
+            this.dialogs[which] = true;
+        },
+        closeDialog: function closeDialog(which) {
+            this.dialogs[which] = false;
         }
     },
     components: {
-        appCreateClient: __WEBPACK_IMPORTED_MODULE_0__components_CreateClient_CreateClient___default.a
+        appCreateClient: __WEBPACK_IMPORTED_MODULE_0__components_client_createClient_CreateClient___default.a,
+        appEditClient: __WEBPACK_IMPORTED_MODULE_1__components_client_editClient_EditClient___default.a,
+        appDeleteClient: __WEBPACK_IMPORTED_MODULE_2__components_client_deleteClient_DeleteClient___default.a
     }
 });
 
 /***/ }),
-/* 168 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_string_similarity__ = __webpack_require__(169);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_string_similarity___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_string_similarity__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        isShowCancelButton: {
-            type: Boolean,
-            default: false,
-            required: false
-        },
-        clients: {
-            type: Array,
-            default: function _default() {
-                return [];
-            },
-            required: false
-        }
-    },
-    data: function data() {
-        return {
-            pending: false,
-            similarityDialog: false,
-            similarClients: [],
-            clientData: {
-                person_full_name: '',
-                company_name: '',
-                area: '',
-                telephone: '',
-                comment: ''
-            }
-        };
-    },
-
-    computed: {
-        createClientBtnText: function createClientBtnText() {
-            return this.isShowCancelButton ? 'Создать' : 'Создать и выбрать';
-        }
-    },
-    methods: {
-        createClient: function createClient(ignoreSimilarity) {
-            var _this = this;
-
-            if (!this.isShowCancelButton && !ignoreSimilarity) {
-                this.clients.forEach(function (client) {
-                    if (__WEBPACK_IMPORTED_MODULE_0_string_similarity___default.a.compareTwoStrings(client.person_full_name, _this.clientData.person_full_name) >= 0.7 || __WEBPACK_IMPORTED_MODULE_0_string_similarity___default.a.compareTwoStrings(client.company_name, _this.clientData.company_name) >= 0.7) {
-                        _this.similarClients.push(client);
-                    }
-                });
-                if (this.similarClients.length > 0) {
-                    this.similarityDialog = true;
-                    return;
-                }
-            }
-            this.similarityDialog = false;
-            this.pending = true;
-            this.axios.post('/clients', this.clientData).then(function (_ref) {
-                var data = _ref.data;
-
-                _this.$emit('clientCreated', data);
-                _this.$emit('dialogClosed');
-            }).catch(function (err) {
-                console.log(err);
-            }).finally(function () {
-                _this.pending = false;
-            });
-        },
-        selectClient: function selectClient(client) {
-            this.$emit('existingClientSelected', client);
-            this.similarityDialog = false;
-        },
-        cancel: function cancel() {
-            this.$emit('dialogClosed');
-        },
-        cancelSimilarity: function cancelSimilarity() {
-            this.similarityDialog = false;
-            this.similarClients = [];
-        }
-    }
-});
-
-/***/ }),
+/* 168 */,
 /* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -51141,453 +51034,8 @@ module.exports = isFlattenable;
 
 
 /***/ }),
-/* 265 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-card",
-    [
-      !_vm.isShowCancelButton
-        ? _c(
-            "v-dialog",
-            {
-              attrs: { persistent: "", "max-width": "550" },
-              model: {
-                value: _vm.similarityDialog,
-                callback: function($$v) {
-                  _vm.similarityDialog = $$v
-                },
-                expression: "similarityDialog"
-              }
-            },
-            [
-              _c(
-                "v-card",
-                [
-                  _c(
-                    "v-card-title",
-                    {
-                      staticClass: "headline error white--text",
-                      attrs: { "primary-title": "" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Введенные данные совпадают с некоторыми данными уже существующих клиентов!\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-text",
-                    [
-                      _c(
-                        "v-list",
-                        _vm._l(_vm.similarClients, function(client, index) {
-                          return _c(
-                            "v-list-tile",
-                            { key: index },
-                            [
-                              _c(
-                                "v-list-tile-content",
-                                [
-                                  _c("v-list-tile-title", [
-                                    _vm._v(_vm._s(client.text))
-                                  ])
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-list-tile-action",
-                                [
-                                  _c(
-                                    "v-btn",
-                                    {
-                                      attrs: { color: "info", flat: "" },
-                                      on: {
-                                        click: function($event) {
-                                          _vm.selectClient(client)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Выбрать")]
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        })
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "error", flat: "" },
-                          nativeOn: {
-                            click: function($event) {
-                              return _vm.cancelSimilarity($event)
-                            }
-                          }
-                        },
-                        [_vm._v("Отмена")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "error", flat: "" },
-                          nativeOn: {
-                            click: function($event) {
-                              _vm.createClient(true)
-                            }
-                          }
-                        },
-                        [_vm._v("Игнорировать и создать нового клиента")]
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c(
-        "v-card-text",
-        [
-          _c(
-            "v-container",
-            { attrs: { "grid-list-md": "" } },
-            [
-              _c(
-                "v-layout",
-                { attrs: { wrap: "" } },
-                [
-                  _c(
-                    "v-flex",
-                    { attrs: { xs12: "" } },
-                    [
-                      _c("v-text-field", {
-                        attrs: {
-                          autofocus: "",
-                          label: "Контактное лицо",
-                          required: ""
-                        },
-                        model: {
-                          value: _vm.clientData.person_full_name,
-                          callback: function($$v) {
-                            _vm.$set(_vm.clientData, "person_full_name", $$v)
-                          },
-                          expression: "clientData.person_full_name"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-flex",
-                    { attrs: { xs12: "" } },
-                    [
-                      _c("v-text-field", {
-                        attrs: { label: "Компания", required: "" },
-                        model: {
-                          value: _vm.clientData.company_name,
-                          callback: function($$v) {
-                            _vm.$set(_vm.clientData, "company_name", $$v)
-                          },
-                          expression: "clientData.company_name"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-flex",
-                    { attrs: { xs12: "" } },
-                    [
-                      _c("v-text-field", {
-                        attrs: { label: "Площадь", required: "" },
-                        model: {
-                          value: _vm.clientData.area,
-                          callback: function($$v) {
-                            _vm.$set(_vm.clientData, "area", $$v)
-                          },
-                          expression: "clientData.area"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-flex",
-                    { attrs: { xs12: "" } },
-                    [
-                      _c("v-text-field", {
-                        attrs: { label: "Телефон", required: "" },
-                        model: {
-                          value: _vm.clientData.telephone,
-                          callback: function($$v) {
-                            _vm.$set(_vm.clientData, "telephone", $$v)
-                          },
-                          expression: "clientData.telephone"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-flex",
-                    { attrs: { xs12: "" } },
-                    [
-                      _c("v-textarea", {
-                        attrs: { label: "Коментарий", required: "" },
-                        model: {
-                          value: _vm.clientData.comment,
-                          callback: function($$v) {
-                            _vm.$set(_vm.clientData, "comment", $$v)
-                          },
-                          expression: "clientData.comment"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-card-actions",
-        [
-          _c("v-spacer"),
-          _vm._v(" "),
-          _vm.isShowCancelButton
-            ? _c(
-                "v-btn",
-                {
-                  attrs: {
-                    disabled: _vm.pending,
-                    loading: _vm.pending,
-                    color: "error",
-                    flat: ""
-                  },
-                  nativeOn: {
-                    click: function($event) {
-                      return _vm.cancel($event)
-                    }
-                  }
-                },
-                [_vm._v("Отмена")]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "v-btn",
-            {
-              attrs: {
-                disabled: _vm.pending,
-                loading: _vm.pending,
-                color: "success",
-                flat: ""
-              },
-              nativeOn: {
-                click: function($event) {
-                  _vm.createClient(false)
-                }
-              }
-            },
-            [_vm._v(_vm._s(_vm.createClientBtnText))]
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-356ec475", module.exports)
-  }
-}
-
-/***/ }),
-/* 266 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-container",
-    { attrs: { fluid: "" } },
-    [
-      _c(
-        "v-layout",
-        [
-          _c(
-            "v-flex",
-            { attrs: { xs12: "" } },
-            [
-              _c(
-                "v-card",
-                [
-                  _c(
-                    "v-card-title",
-                    [
-                      _c(
-                        "v-dialog",
-                        {
-                          attrs: { persistent: "", "max-width": "500px" },
-                          model: {
-                            value: _vm.dialog,
-                            callback: function($$v) {
-                              _vm.dialog = $$v
-                            },
-                            expression: "dialog"
-                          }
-                        },
-                        [
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { slot: "activator", color: "info" },
-                              slot: "activator"
-                            },
-                            [_vm._v("Добавить клиента")]
-                          ),
-                          _vm._v(" "),
-                          _c("appCreateClient", {
-                            attrs: { isShowCancelButton: "" },
-                            on: {
-                              dialogClosed: _vm.closeCreateDialog,
-                              clientCreated: _vm.prependClient
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c("v-text-field", {
-                        attrs: {
-                          clearable: "",
-                          value: _vm.search,
-                          "append-icon": "search",
-                          label: "Поиск",
-                          "single-line": "",
-                          "hide-details": ""
-                        },
-                        on: { input: _vm.checkSearch }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-data-table", {
-                    staticClass: "elevation-1",
-                    attrs: {
-                      "disable-initial-sort": "",
-                      headers: _vm.headers,
-                      items: _vm.clients,
-                      pagination: _vm.pagination,
-                      "total-items": _vm.totalClients,
-                      loading: _vm.loading
-                    },
-                    on: {
-                      "update:pagination": function($event) {
-                        _vm.pagination = $event
-                      }
-                    },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "items",
-                        fn: function(props) {
-                          return [
-                            _c("td", [
-                              _vm._v(_vm._s(props.item.person_full_name))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(props.item.company_name))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(props.item.area))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(props.item.telephone))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(props.item.comment))]),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "text-xs-right" },
-                              [
-                                _c("v-btn", { attrs: { color: "info" } }, [
-                                  _vm._v("Подробнее")
-                                ])
-                              ],
-                              1
-                            )
-                          ]
-                        }
-                      }
-                    ])
-                  })
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-6f72ab09", module.exports)
-  }
-}
-
-/***/ }),
+/* 265 */,
+/* 266 */,
 /* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -54651,8 +54099,8 @@ exports.push([module.i, "\n.bg-card[data-v-4c323b99] {\n    background-color: tr
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__CreateClient_CreateClient__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__CreateClient_CreateClient___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__CreateClient_CreateClient__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__client_createClient_CreateClient__ = __webpack_require__(500);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__client_createClient_CreateClient___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__client_createClient_CreateClient__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gpsData_GPSData__ = __webpack_require__(303);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gpsData_GPSData___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__gpsData_GPSData__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__EquipmentData_EquipmentData__ = __webpack_require__(309);
@@ -55974,7 +55422,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     },
 
     components: {
-        appCreateClient: __WEBPACK_IMPORTED_MODULE_1__CreateClient_CreateClient___default.a,
+        appCreateClient: __WEBPACK_IMPORTED_MODULE_1__client_createClient_CreateClient___default.a,
         appGPSData: __WEBPACK_IMPORTED_MODULE_2__gpsData_GPSData___default.a,
         appEquipmentData: __WEBPACK_IMPORTED_MODULE_3__EquipmentData_EquipmentData___default.a,
         appPDF: __WEBPACK_IMPORTED_MODULE_4__PDF_PDF___default.a
@@ -78227,6 +77675,1402 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 493 */,
+/* 494 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(495);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("882f4ee4", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6f72ab09\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Clients.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6f72ab09\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Clients.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 495 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\na[data-v-6f72ab09] {\n    text-decoration: none;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 496 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-container",
+    { attrs: { fluid: "" } },
+    [
+      _c("appEditClient", {
+        attrs: { editDialog: _vm.dialogs.editDialog, client: _vm.editedClient },
+        on: { editDialogClosed: _vm.closeDialog, clientEdited: _vm.editClient }
+      }),
+      _vm._v(" "),
+      _c("appDeleteClient", {
+        attrs: {
+          deleteDialog: _vm.dialogs.deleteDialog,
+          client: _vm.deletedClient
+        },
+        on: {
+          deleteDialogClosed: _vm.closeDialog,
+          clientDeleted: _vm.deleteClient
+        }
+      }),
+      _vm._v(" "),
+      _c(
+        "v-layout",
+        [
+          _c(
+            "v-flex",
+            { attrs: { xs12: "" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-card-title",
+                    [
+                      _c(
+                        "v-dialog",
+                        {
+                          attrs: { persistent: "", "max-width": "500px" },
+                          model: {
+                            value: _vm.dialogs.createDialog,
+                            callback: function($$v) {
+                              _vm.$set(_vm.dialogs, "createDialog", $$v)
+                            },
+                            expression: "dialogs.createDialog"
+                          }
+                        },
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { slot: "activator", color: "info" },
+                              slot: "activator"
+                            },
+                            [_vm._v("Добавить клиента")]
+                          ),
+                          _vm._v(" "),
+                          _c("appCreateClient", {
+                            attrs: { isShowCancelButton: "" },
+                            on: {
+                              dialogClosed: _vm.closeDialog,
+                              clientCreated: _vm.prependClient
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: {
+                          clearable: "",
+                          value: _vm.search,
+                          "append-icon": "search",
+                          label: "Поиск",
+                          "single-line": "",
+                          "hide-details": ""
+                        },
+                        on: { input: _vm.checkSearch }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-data-table", {
+                    staticClass: "elevation-1",
+                    attrs: {
+                      "disable-initial-sort": "",
+                      headers: _vm.headers,
+                      items: _vm.clients,
+                      pagination: _vm.pagination,
+                      "total-items": _vm.totalClients,
+                      loading: _vm.loading
+                    },
+                    on: {
+                      "update:pagination": function($event) {
+                        _vm.pagination = $event
+                      }
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "items",
+                        fn: function(props) {
+                          return [
+                            _c(
+                              "td",
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    attrs: { to: "/clients/" + props.item.id }
+                                  },
+                                  [_vm._v(_vm._s(props.item.person_full_name))]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(props.item.company_name))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(props.item.area))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(props.item.telephone))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(props.item.comment))]),
+                            _vm._v(" "),
+                            _vm.$auth.check("admin")
+                              ? _c(
+                                  "td",
+                                  { staticClass: "justify-end layout px-0" },
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        staticClass: "mr-2",
+                                        attrs: { icon: "" },
+                                        on: {
+                                          click: function($event) {
+                                            _vm.setEditData(props.item)
+                                          }
+                                        }
+                                      },
+                                      [_c("v-icon", [_vm._v("edit")])],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { icon: "" },
+                                        on: {
+                                          click: function($event) {
+                                            _vm.setDeleteData(props.item)
+                                          }
+                                        }
+                                      },
+                                      [_c("v-icon", [_vm._v("delete")])],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _vm._e()
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6f72ab09", module.exports)
+  }
+}
+
+/***/ }),
+/* 497 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(498)
+/* template */
+var __vue_template__ = __webpack_require__(499)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\containers\\clients\\client\\Client.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0f48757d", Component.options)
+  } else {
+    hotAPI.reload("data-v-0f48757d", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 498 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+/* 499 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-container",
+    { attrs: { fluid: "" } },
+    [
+      _c(
+        "v-layout",
+        [
+          _c(
+            "v-flex",
+            { attrs: { xs12: "" } },
+            [_c("v-card", [_c("v-card-text")], 1)],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0f48757d", module.exports)
+  }
+}
+
+/***/ }),
+/* 500 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(501)
+/* template */
+var __vue_template__ = __webpack_require__(502)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\client\\createClient\\CreateClient.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7812c63c", Component.options)
+  } else {
+    hotAPI.reload("data-v-7812c63c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 501 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_string_similarity__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_string_similarity___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_string_similarity__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        isShowCancelButton: {
+            type: Boolean,
+            default: false,
+            required: false
+        },
+        clients: {
+            type: Array,
+            default: function _default() {
+                return [];
+            },
+            required: false
+        }
+    },
+    data: function data() {
+        return {
+            pending: false,
+            similarityDialog: false,
+            similarClients: [],
+            clientData: {
+                person_full_name: '',
+                company_name: '',
+                area: '',
+                telephone: '',
+                comment: ''
+            }
+        };
+    },
+
+    computed: {
+        createClientBtnText: function createClientBtnText() {
+            return this.isShowCancelButton ? 'Создать' : 'Создать и выбрать';
+        }
+    },
+    methods: {
+        createClient: function createClient(ignoreSimilarity) {
+            var _this = this;
+
+            if (!this.isShowCancelButton && !ignoreSimilarity) {
+                this.clients.forEach(function (client) {
+                    if (__WEBPACK_IMPORTED_MODULE_0_string_similarity___default.a.compareTwoStrings(client.person_full_name, _this.clientData.person_full_name) >= 0.7 || __WEBPACK_IMPORTED_MODULE_0_string_similarity___default.a.compareTwoStrings(client.company_name, _this.clientData.company_name) >= 0.7) {
+                        _this.similarClients.push(client);
+                    }
+                });
+                if (this.similarClients.length > 0) {
+                    this.similarityDialog = true;
+                    return;
+                }
+            }
+            this.similarityDialog = false;
+            this.pending = true;
+            this.axios.post('/clients', this.clientData).then(function (_ref) {
+                var data = _ref.data;
+
+                _this.$emit('clientCreated', data);
+                _this.$emit('dialogClosed', 'createDialog');
+            }).catch(function (err) {
+                console.log(err);
+            }).finally(function () {
+                _this.pending = false;
+            });
+        },
+        selectClient: function selectClient(client) {
+            this.$emit('existingClientSelected', client);
+            this.similarityDialog = false;
+        },
+        cancel: function cancel() {
+            this.$emit('dialogClosed', 'createDialog');
+        },
+        cancelSimilarity: function cancelSimilarity() {
+            this.similarityDialog = false;
+            this.similarClients = [];
+        }
+    }
+});
+
+/***/ }),
+/* 502 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-card",
+    [
+      !_vm.isShowCancelButton
+        ? _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "550" },
+              model: {
+                value: _vm.similarityDialog,
+                callback: function($$v) {
+                  _vm.similarityDialog = $$v
+                },
+                expression: "similarityDialog"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-card-title",
+                    {
+                      staticClass: "headline error white--text",
+                      attrs: { "primary-title": "" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                Введенные данные совпадают с некоторыми данными уже существующих клиентов!\n            "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(
+                        "v-list",
+                        _vm._l(_vm.similarClients, function(client, index) {
+                          return _c(
+                            "v-list-tile",
+                            { key: index },
+                            [
+                              _c(
+                                "v-list-tile-content",
+                                [
+                                  _c("v-list-tile-title", [
+                                    _vm._v(_vm._s(client.text))
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-action",
+                                [
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      attrs: { color: "info", flat: "" },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.selectClient(client)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Выбрать")]
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        })
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "error", flat: "" },
+                          nativeOn: {
+                            click: function($event) {
+                              return _vm.cancelSimilarity($event)
+                            }
+                          }
+                        },
+                        [_vm._v("Отмена")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "error", flat: "" },
+                          nativeOn: {
+                            click: function($event) {
+                              _vm.createClient(true)
+                            }
+                          }
+                        },
+                        [_vm._v("Игнорировать и создать нового клиента")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "v-card-text",
+        [
+          _c(
+            "v-container",
+            { attrs: { "grid-list-md": "" } },
+            [
+              _c(
+                "v-layout",
+                { attrs: { wrap: "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          autofocus: "",
+                          label: "Контактное лицо",
+                          required: ""
+                        },
+                        model: {
+                          value: _vm.clientData.person_full_name,
+                          callback: function($$v) {
+                            _vm.$set(_vm.clientData, "person_full_name", $$v)
+                          },
+                          expression: "clientData.person_full_name"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: { label: "Компания", required: "" },
+                        model: {
+                          value: _vm.clientData.company_name,
+                          callback: function($$v) {
+                            _vm.$set(_vm.clientData, "company_name", $$v)
+                          },
+                          expression: "clientData.company_name"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: { label: "Площадь", required: "" },
+                        model: {
+                          value: _vm.clientData.area,
+                          callback: function($$v) {
+                            _vm.$set(_vm.clientData, "area", $$v)
+                          },
+                          expression: "clientData.area"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: { label: "Телефон", required: "" },
+                        model: {
+                          value: _vm.clientData.telephone,
+                          callback: function($$v) {
+                            _vm.$set(_vm.clientData, "telephone", $$v)
+                          },
+                          expression: "clientData.telephone"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "" } },
+                    [
+                      _c("v-textarea", {
+                        attrs: { label: "Коментарий", required: "" },
+                        model: {
+                          value: _vm.clientData.comment,
+                          callback: function($$v) {
+                            _vm.$set(_vm.clientData, "comment", $$v)
+                          },
+                          expression: "clientData.comment"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-card-actions",
+        [
+          _c("v-spacer"),
+          _vm._v(" "),
+          _vm.isShowCancelButton
+            ? _c(
+                "v-btn",
+                {
+                  attrs: {
+                    disabled: _vm.pending,
+                    loading: _vm.pending,
+                    color: "error",
+                    flat: ""
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      return _vm.cancel($event)
+                    }
+                  }
+                },
+                [_vm._v("Отмена")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            {
+              attrs: {
+                disabled: _vm.pending,
+                loading: _vm.pending,
+                color: "success",
+                flat: ""
+              },
+              nativeOn: {
+                click: function($event) {
+                  _vm.createClient(false)
+                }
+              }
+            },
+            [_vm._v(_vm._s(_vm.createClientBtnText))]
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7812c63c", module.exports)
+  }
+}
+
+/***/ }),
+/* 503 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(504)
+/* template */
+var __vue_template__ = __webpack_require__(505)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\client\\editClient\\EditClient.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-94518f3c", Component.options)
+  } else {
+    hotAPI.reload("data-v-94518f3c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 504 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        editDialog: {
+            type: Boolean,
+            required: true
+        },
+        client: {
+            type: Object,
+            required: true
+        }
+    },
+    data: function data() {
+        return {
+            pending: false,
+            editedClient: {
+                person_full_name: '',
+                company_name: '',
+                area: '',
+                telephone: '',
+                comment: ''
+            }
+        };
+    },
+
+    watch: {
+        client: function client(newVal) {
+            this.editedClient = _extends({}, newVal);
+        }
+    },
+    methods: {
+        editClient: function editClient() {
+            var _this = this;
+
+            this.pending = true;
+
+            this.axios.put('/clients/' + this.editedClient.id, this.editedClient).then(function (data) {
+                _this.$emit('clientEdited', _this.editedClient);
+                _this.$emit('editDialogClosed', 'editDialog');
+                _this.pending = false;
+            }).catch(function (err) {
+                console.log(err);
+                _this.pending = false;
+            });
+        },
+        closeDialog: function closeDialog() {
+            this.$emit('editDialogClosed', 'editDialog');
+        }
+    }
+});
+
+/***/ }),
+/* 505 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: { persistent: "", "max-width": "550px" },
+      model: {
+        value: _vm.editDialog,
+        callback: function($$v) {
+          _vm.editDialog = $$v
+        },
+        expression: "editDialog"
+      }
+    },
+    [
+      _c(
+        "v-card",
+        [
+          _c("v-card-title", [
+            _c("span", { staticClass: "headline" }, [
+              _vm._v("Редактировать данные клиента")
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "v-card-text",
+            [
+              _c(
+                "v-container",
+                { attrs: { "grid-list-md": "" } },
+                [
+                  _c(
+                    "v-layout",
+                    { attrs: { wrap: "" } },
+                    [
+                      _c(
+                        "v-flex",
+                        { attrs: { xs12: "" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              autofocus: "",
+                              label: "Контактное лицо",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editedClient.person_full_name,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.editedClient,
+                                  "person_full_name",
+                                  $$v
+                                )
+                              },
+                              expression: "editedClient.person_full_name"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-flex",
+                        { attrs: { xs12: "" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Компания", required: "" },
+                            model: {
+                              value: _vm.editedClient.company_name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editedClient, "company_name", $$v)
+                              },
+                              expression: "editedClient.company_name"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-flex",
+                        { attrs: { xs12: "" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Площадь", required: "" },
+                            model: {
+                              value: _vm.editedClient.area,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editedClient, "area", $$v)
+                              },
+                              expression: "editedClient.area"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-flex",
+                        { attrs: { xs12: "" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Телефон", required: "" },
+                            model: {
+                              value: _vm.editedClient.telephone,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editedClient, "telephone", $$v)
+                              },
+                              expression: "editedClient.telephone"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-flex",
+                        { attrs: { xs12: "" } },
+                        [
+                          _c("v-textarea", {
+                            attrs: { label: "Коментарий", required: "" },
+                            model: {
+                              value: _vm.editedClient.comment,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editedClient, "comment", $$v)
+                              },
+                              expression: "editedClient.comment"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: {
+                    disabled: _vm.pending,
+                    loading: _vm.pending,
+                    color: "error",
+                    flat: ""
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      return _vm.closeDialog($event)
+                    }
+                  }
+                },
+                [_vm._v("Отмена")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: {
+                    disabled: _vm.pending,
+                    loading: _vm.pending,
+                    color: "success",
+                    flat: ""
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      return _vm.editClient($event)
+                    }
+                  }
+                },
+                [_vm._v("Сохранить")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-94518f3c", module.exports)
+  }
+}
+
+/***/ }),
+/* 506 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(507)
+/* template */
+var __vue_template__ = __webpack_require__(508)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\client\\deleteClient\\DeleteClient.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-f8600d7c", Component.options)
+  } else {
+    hotAPI.reload("data-v-f8600d7c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 507 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        deleteDialog: {
+            type: Boolean,
+            required: true
+        },
+        client: {
+            type: Object,
+            required: true
+        }
+    },
+    data: function data() {
+        return {
+            pending: false
+        };
+    },
+
+    methods: {
+        deleteClient: function deleteClient() {
+            var _this = this;
+
+            this.pending = true;
+
+            this.axios.delete('/clients/' + this.client.id).then(function (data) {
+                _this.$emit('clientDeleted', _this.client.id);
+                _this.$emit('deleteDialogClosed', 'deleteDialog');
+                _this.pending = false;
+            }).catch(function (err) {
+                console.log(err);
+                _this.pending = false;
+            });
+        },
+        closeDialog: function closeDialog() {
+            this.$emit('deleteDialogClosed', 'deleteDialog');
+        }
+    }
+});
+
+/***/ }),
+/* 508 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: { persistent: "", "max-width": "300px" },
+      model: {
+        value: _vm.deleteDialog,
+        callback: function($$v) {
+          _vm.deleteDialog = $$v
+        },
+        expression: "deleteDialog"
+      }
+    },
+    [
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-card-title",
+            {
+              staticClass: "headline error white--text",
+              attrs: { "primary-title": "" }
+            },
+            [
+              _vm._v(
+                "\n            Удалить клиента: " +
+                  _vm._s(_vm.client.person_full_name) +
+                  "?\n        "
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c(
+                "v-btn",
+                {
+                  attrs: {
+                    loading: _vm.pending,
+                    disabled: _vm.pending,
+                    color: "error",
+                    flat: "",
+                    block: ""
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      return _vm.closeDialog($event)
+                    }
+                  }
+                },
+                [_vm._v("Нет")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: {
+                    loading: _vm.pending,
+                    disabled: _vm.pending,
+                    color: "success",
+                    flat: "",
+                    block: ""
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      return _vm.deleteClient($event)
+                    }
+                  }
+                },
+                [_vm._v("Да")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-f8600d7c", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

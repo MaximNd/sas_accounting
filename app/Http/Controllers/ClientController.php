@@ -47,4 +47,23 @@ class ClientController extends Controller
         $client->save();
         return $client;
     }
+
+    public function updateClient(Request $request, $id) {
+        if ($request->user()->role !== 'admin') {
+            return response()->json([
+                'message' => 'You are not allowed to update client'
+            ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
+        }
+
+        Client::where('id', '=', $id)->update($request->all());
+    }
+
+    function deleteClient(Request $request, $id) {
+        if ($request->user()->role !== 'admin') {
+            return response()->json([
+                'message' => 'You are not allowed to deleting clients'
+            ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
+        }
+        return Client::destroy($id);
+    }
 }

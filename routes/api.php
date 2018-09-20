@@ -46,6 +46,10 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::post('/clients', 'ClientController@createClient');
 
+    Route::put('/clients/{id}', 'ClientController@updateClient');
+
+    Route::delete('/clients/{id}', 'ClientController@deleteClient');
+
     // PRISE_LIST
     Route::get('/price-list', 'PriceListController@getAll');
 

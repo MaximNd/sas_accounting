@@ -108,7 +108,7 @@ export default {
             this.axios.post('/clients', this.clientData)
                 .then(({data}) => {
                     this.$emit('clientCreated', data);
-                    this.$emit('dialogClosed');
+                    this.$emit('dialogClosed', 'createDialog');
                 })
                 .catch(err => {
                     console.log(err);
@@ -122,7 +122,7 @@ export default {
             this.similarityDialog = false;
         },
         cancel() {
-            this.$emit('dialogClosed');
+            this.$emit('dialogClosed', 'createDialog');
         },
         cancelSimilarity() {
             this.similarityDialog = false;

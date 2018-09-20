@@ -1,14 +1,24 @@
 <template>
     <v-container fluid>
+        <appEditClient
+            :editDialog="dialogs.editDialog"
+            :client="editedClient"
+            @editDialogClosed="closeDialog"
+            @clientEdited="editClient" />
+        <appDeleteClient
+            :deleteDialog="dialogs.deleteDialog"
+            :client="deletedClient"
+            @deleteDialogClosed="closeDialog"
+            @clientDeleted="deleteClient" />
         <v-layout>
             <v-flex xs12>
                 <v-card>
                     <v-card-title>
-                        <v-dialog v-model="dialog" persistent max-width="500px">
+                        <v-dialog v-model="dialogs.createDialog" persistent max-width="500px">
                             <v-btn slot="activator" color="info">Добавить клиента</v-btn>
                             <appCreateClient
                                 isShowCancelButton
-                                @dialogClosed="closeCreateDialog"
+                                @dialogClosed="closeDialog"
                                 @clientCreated="prependClient">
                             </appCreateClient>
                         </v-dialog>
@@ -32,12 +42,26 @@
                         :loading="loading"
                         class="elevation-1">
                         <template slot="items" slot-scope="props">
-                            <td>{{ props.item.person_full_name }}</td>
+                            <td>
+                                <router-link :to="`/clients/${props.item.id}`">{{ props.item.person_full_name }}</router-link>
+                            </td>
                             <td>{{ props.item.company_name }}</td>
                             <td>{{ props.item.area }}</td>
                             <td>{{ props.item.telephone }}</td>
                             <td>{{ props.item.comment }}</td>
-                            <td class="text-xs-right"><v-btn color="info">Подробнее</v-btn></td>
+                            <td v-if="$auth.check('admin')" class="justify-end layout px-0">
+                                <v-btn
+                                    icon
+                                    class="mr-2"
+                                    @click="setEditData(props.item)">
+                                    <v-icon>edit</v-icon>
+                                </v-btn>
+                                <v-btn
+                                    icon
+                                    @click="setDeleteData(props.item)">
+                                    <v-icon>delete</v-icon>
+                                </v-btn>
+                            </td>
                         </template>
                     </v-data-table>
                 </v-card>
@@ -47,12 +71,18 @@
 </template>
 
 <script>
-import CreateClient from './../../components/CreateClient/CreateClient';
+import CreateClient from './../../components/client/createClient/CreateClient';
+import EditClient from './../../components/client/editClient/EditClient';
+import DeleteClient from './../../components/client/deleteClient/DeleteClient';
 
 export default {
     data () {
         return {
-            dialog: false,
+            dialogs: {
+                createDialog: false,
+                editDialog: false,
+                deleteDialog: false
+            },
             search: '',
             totalClients: 0,
             clients: [],
@@ -60,7 +90,13 @@ export default {
             pagination: {
                 rowsPerPage: 10
             },
-            headers: [
+            editedClient: {},
+            deletedClient: {}
+        };
+    },
+    computed: {
+        headers() {
+            const headers = [
                 {
                     text: 'Контактное лицо',
                     align: 'left',
@@ -70,9 +106,14 @@ export default {
                 { text: 'Площадь', value: 'area', width: '15px' },
                 { text: 'Телефон', value: 'telephone' },
                 { text: 'Коментарий', value: 'comment' },
-                { text: '', value: '', sortable: false }
-            ]
-        };
+
+            ];
+
+            if (this.$auth.check('admin')) {
+                headers.push({ text: 'Действия', align: 'right', sortable: false });
+            }
+            return headers;
+        }
     },
     watch: {
         pagination: {
@@ -108,6 +149,14 @@ export default {
                     this.loading = false;
                 });
         },
+        editClient(client) {
+            const index = this.clients.findIndex(clientRow => clientRow.id === client.id);
+            this.clients.splice(index, 1, client);
+        },
+        deleteClient(id) {
+            const index = this.clients.findIndex(client => client.id === id);
+            this.clients.splice(index, 1);
+        },
         checkSearch(value) {
             this.search = value;
             setTimeout(() => {
@@ -116,15 +165,34 @@ export default {
                 }
             }, 1500);
         },
-        closeCreateDialog() {
-            this.dialog = false;
-        },
         prependClient(client) {
             this.clients.unshift(client);
+        },
+        setEditData(client) {
+            this.editedClient = { ...client };
+            this.openDialog('editDialog');
+        },
+        setDeleteData(client) {
+            this.deletedClient = { ...client };
+            this.openDialog('deleteDialog');
+        },
+        openDialog(which) {
+            this.dialogs[which] = true;
+        },
+        closeDialog(which) {
+            this.dialogs[which] = false;
         }
     },
     components: {
-        appCreateClient: CreateClient
+        appCreateClient: CreateClient,
+        appEditClient: EditClient,
+        appDeleteClient: DeleteClient
     }
 }
 </script>
+
+<style scoped>
+    a {
+        text-decoration: none;
+    }
+</style>

@@ -1,0 +1,19 @@
+<template>
+    <v-container fluid>
+        <v-layout>
+            <v-flex xs12>
+                <v-card>
+                    <v-card-text>
+
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
+</template>
+
+<script>
+export default {
+
+}
+</script>

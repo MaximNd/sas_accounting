@@ -399,7 +399,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import CreateClient from './../CreateClient/CreateClient';
+import CreateClient from './../client/createClient/CreateClient';
 import GPSData from './gpsData/GPSData';
 import EquipmentData from './EquipmentData/EquipmentData';
 import PDF from './PDF/PDF';
