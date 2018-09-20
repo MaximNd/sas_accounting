@@ -372,7 +372,7 @@
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 16, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['reader_of_trailed_equipment_price'] || 0 : 0 }}$
                     </td>
-                    <td
+                    <!-- <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${17}`"
                         @click="selectCell($event, { index: props.index, column: 'connect_module', columnIndex: 17, value: props.item.connect_module })"
@@ -401,21 +401,21 @@
                         @click="selectCell($event, { index: props.index, column: 'connect_module_price', columnIndex: 18, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'connect_module_price', columnIndex: 18, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['connect_module_price'] || 0 : 0 }}$
-                    </td>
+                    </td> -->
                     <td
                         class="text-xs-center"
-                        :ref="`td-${props.index}-${19}`"
-                        @click="selectCell($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })"
-                        @dblclick="switchCellMode(props.index, 19, true, `can_reader-${props.index}-${19}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })">
-                        <template v-if="!editModCells[props.index][19]">
+                        :ref="`td-${props.index}-${17}`"
+                        @click="selectCell($event, { index: props.index, column: 'can_reader', columnIndex: 17, value: props.item.can_reader })"
+                        @dblclick="switchCellMode(props.index, 17, true, `can_reader-${props.index}-${17}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader', columnIndex: 17, value: props.item.can_reader })">
+                        <template v-if="!editModCells[props.index][17]">
                             {{ props.item.can_reader.name }}
                         </template>
                         <template v-else>
                             <v-autocomplete
-                                :ref="`can_reader-${props.index}-${19}`"
+                                :ref="`can_reader-${props.index}-${17}`"
                                 :value="props.item.can_reader"
-                                @change="setCellValue($event, props.index, 19, 'can_reader', `td-${props.index}-${19}`)"
+                                @change="setCellValue($event, props.index, 17, 'can_reader', `td-${props.index}-${17}`)"
                                 :items="allEquipment"
                                 item-text="name"
                                 hide-selected
@@ -427,25 +427,25 @@
                     </td>
                     <td
                         class="text-xs-center"
-                        :ref="`td-${props.index}-${20}`"
-                        @click="selectCell($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })">
+                        :ref="`td-${props.index}-${18}`"
+                        @click="selectCell($event, { index: props.index, column: 'can_reader_price', columnIndex: 18, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader_price', columnIndex: 18, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['can_reader_price'] || 0 : 0 }}$
                     </td>
                     <td
                         class="text-xs-center"
-                        :ref="`td-${props.index}-${21}`"
-                        @click="selectCell($event, { index: props.index, column: 'deaerator', columnIndex: 21, value: props.item.deaerator })"
-                        @dblclick="switchCellMode(props.index, 21, true, `deaerator-${props.index}-${21}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator', columnIndex: 21, value: props.item.deaerator })">
-                        <template v-if="!editModCells[props.index][21]">
+                        :ref="`td-${props.index}-${19}`"
+                        @click="selectCell($event, { index: props.index, column: 'deaerator', columnIndex: 19, value: props.item.deaerator })"
+                        @dblclick="switchCellMode(props.index, 19, true, `deaerator-${props.index}-${19}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator', columnIndex: 19, value: props.item.deaerator })">
+                        <template v-if="!editModCells[props.index][19]">
                             {{ props.item.deaerator.name }}
                         </template>
                         <template v-else>
                             <v-autocomplete
-                                :ref="`deaerator-${props.index}-${21}`"
+                                :ref="`deaerator-${props.index}-${19}`"
                                 :value="props.item.deaerator"
-                                @change="setCellValue($event, props.index, 21, 'deaerator', `td-${props.index}-${21}`)"
+                                @change="setCellValue($event, props.index, 19, 'deaerator', `td-${props.index}-${19}`)"
                                 :items="allEquipment"
                                 item-text="name"
                                 hide-selected
@@ -457,19 +457,19 @@
                     </td>
                     <td
                         class="text-xs-center"
-                        :ref="`td-${props.index}-${22}`"
-                        @click="selectCell($event, { index: props.index, column: 'deaerator_price', columnIndex: 22, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_price', columnIndex: 22, value: false })">
+                        :ref="`td-${props.index}-${20}`"
+                        @click="selectCell($event, { index: props.index, column: 'deaerator_price', columnIndex: 20, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_price', columnIndex: 20, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['deaerator_price'] || 0 : 0 }}$
                     </td>
                     <td
-                        :class="{ 'text-xs-center': !editModCells[props.index][23] }"
-                        :ref="`td-${props.index}-${23}`"
-                        :style="{ 'min-width': editModCells[props.index][23] ? '300px' : '10px' }"
-                        @click="selectCell($event, { index: props.index, column: 'cn03', columnIndex: 23, value: props.item.cn03 })"
-                        @dblclick="switchCellMode(props.index, 23, true, `cn03-${props.index}-${23}`, $event, false)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03', columnIndex: 23, value: props.item.cn03 })">
-                        <template v-if="!editModCells[props.index][23]">
+                        :class="{ 'text-xs-center': !editModCells[props.index][21] }"
+                        :ref="`td-${props.index}-${21}`"
+                        :style="{ 'min-width': editModCells[props.index][21] ? '300px' : '10px' }"
+                        @click="selectCell($event, { index: props.index, column: 'cn03', columnIndex: 21, value: props.item.cn03 })"
+                        @dblclick="switchCellMode(props.index, 21, true, `cn03-${props.index}-${21}`, $event, false)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03', columnIndex: 21, value: props.item.cn03 })">
+                        <template v-if="!editModCells[props.index][21]">
                             <v-list v-if="props.item.cn03.some(el => !isUndefined(el) && !isNull(el))">
                                 <template v-for="(item, textIndex) in props.item.cn03">
                                     <v-list-tile
@@ -493,9 +493,9 @@
                                 <template v-for="(_, inputIndex) in props.item.cn03.length">
                                     <v-flex xs10 :key="`cn03_input-${inputIndex}`">
                                         <v-autocomplete
-                                            :ref="`cn03-${props.index}-${23}`"
+                                            :ref="`cn03-${props.index}-${21}`"
                                             :value="props.item.cn03[inputIndex]"
-                                            @change="setCellValue($event, props.index, 23, 'cn03', `td-${props.index}-${23}`, inputIndex, false)"
+                                            @change="setCellValue($event, props.index, 21, 'cn03', `td-${props.index}-${21}`, inputIndex, false)"
                                             :items="allEquipment"
                                             item-text="name"
                                             clearable
@@ -520,7 +520,7 @@
                                     </v-btn>
                                 </v-flex>
                                 <v-flex xs12>
-                                    <v-btn color="info" small @click="switchCellMode(props.index, 23, false, `cn03-${props.index}-${23}`, $event, false)">
+                                    <v-btn color="info" small @click="switchCellMode(props.index, 21, false, `cn03-${props.index}-${21}`, $event, false)">
                                         Закрыть редактирование
                                     </v-btn>
                                 </v-flex>
@@ -529,19 +529,19 @@
                     </td>
                     <td
                         class="text-xs-center"
-                        :ref="`td-${props.index}-${24}`"
-                        @click="selectCell($event, { index: props.index, column: 'cn03_price', columnIndex: 24, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03_price', columnIndex: 24, value: false })">
+                        :ref="`td-${props.index}-${22}`"
+                        @click="selectCell($event, { index: props.index, column: 'cn03_price', columnIndex: 22, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03_price', columnIndex: 22, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['cn03_price'] || 0 : 0 }}$
                     </td>
                     <td
-                        :class="{ 'text-xs-center': !editModCells[props.index][25] }"
-                        :ref="`td-${props.index}-${25}`"
-                        :style="{ 'min-width': editModCells[props.index][25] ? '300px' : '10px' }"
-                        @click="selectCell($event, { index: props.index, column: 'rs01', columnIndex: 25, value: props.item.rs01 })"
-                        @dblclick="switchCellMode(props.index, 25, true, `rs01-${props.index}-${25}`, $event, false)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01', columnIndex: 25, value: props.item.rs01 })">
-                        <template v-if="!editModCells[props.index][25]">
+                        :class="{ 'text-xs-center': !editModCells[props.index][23] }"
+                        :ref="`td-${props.index}-${23}`"
+                        :style="{ 'min-width': editModCells[props.index][23] ? '300px' : '10px' }"
+                        @click="selectCell($event, { index: props.index, column: 'rs01', columnIndex: 23, value: props.item.rs01 })"
+                        @dblclick="switchCellMode(props.index, 23, true, `rs01-${props.index}-${23}`, $event, false)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01', columnIndex: 23, value: props.item.rs01 })">
+                        <template v-if="!editModCells[props.index][23]">
                             <v-list v-if="props.item.rs01.some(el => !isUndefined(el) && !isNull(el))">
                                 <template v-for="(item, textIndex) in props.item.rs01">
                                     <v-list-tile
@@ -565,9 +565,9 @@
                                 <template v-for="(_, inputIndex) in props.item.rs01.length">
                                     <v-flex xs10 :key="`rs01_input-${inputIndex}`">
                                         <v-autocomplete
-                                            :ref="`rs01-${props.index}-${25}`"
+                                            :ref="`rs01-${props.index}-${23}`"
                                             :value="props.item.rs01[inputIndex]"
-                                            @change="setCellValue($event, props.index, 25, 'rs01', `td-${props.index}-${25}`, inputIndex, false)"
+                                            @change="setCellValue($event, props.index, 23, 'rs01', `td-${props.index}-${23}`, inputIndex, false)"
                                             :items="allEquipment"
                                             item-text="name"
                                             clearable
@@ -592,7 +592,7 @@
                                     </v-btn>
                                 </v-flex>
                                 <v-flex xs12>
-                                    <v-btn color="info" small @click="switchCellMode(props.index, 25, false, `rs01-${props.index}-${25}`, $event, false)">
+                                    <v-btn color="info" small @click="switchCellMode(props.index, 23, false, `rs01-${props.index}-${23}`, $event, false)">
                                         Закрыть редактирование
                                     </v-btn>
                                 </v-flex>
@@ -601,19 +601,19 @@
                     </td>
                     <td
                         class="text-xs-center"
-                        :ref="`td-${props.index}-${26}`"
-                        @click="selectCell($event, { index: props.index, column: 'rs01_price', columnIndex: 26, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01_price', columnIndex: 26, value: false })">
+                        :ref="`td-${props.index}-${24}`"
+                        @click="selectCell($event, { index: props.index, column: 'rs01_price', columnIndex: 24, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01_price', columnIndex: 24, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['rs01_price'] || 0 : 0 }}$
                     </td>
                     <td
-                        :class="{ 'text-xs-center': !editModCells[props.index][27] }"
-                        :ref="`td-${props.index}-${27}`"
-                        :style="{ 'min-width': editModCells[props.index][27] ? '300px' : '10px' }"
-                        @click="selectCell($event, { index: props.index, column: 'additional_equipment', columnIndex: 27, value: props.item.additional_equipment })"
-                        @dblclick="switchCellMode(props.index, 27, true, `additional_equipment-${props.index}-${27}`, $event, false)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment', columnIndex: 27, value: props.item.additional_equipment })">
-                        <template v-if="!editModCells[props.index][27]">
+                        :class="{ 'text-xs-center': !editModCells[props.index][25] }"
+                        :ref="`td-${props.index}-${25}`"
+                        :style="{ 'min-width': editModCells[props.index][25] ? '300px' : '10px' }"
+                        @click="selectCell($event, { index: props.index, column: 'additional_equipment', columnIndex: 25, value: props.item.additional_equipment })"
+                        @dblclick="switchCellMode(props.index, 25, true, `additional_equipment-${props.index}-${25}`, $event, false)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment', columnIndex: 25, value: props.item.additional_equipment })">
+                        <template v-if="!editModCells[props.index][25]">
                             <v-list v-if="props.item.additional_equipment.some(el => !isUndefined(el) && !isNull(el))">
                                 <template v-for="(item, textIndex) in props.item.additional_equipment">
                                     <v-list-tile
@@ -637,9 +637,9 @@
                                 <template v-for="(_, inputIndex) in props.item.additional_equipment.length">
                                     <v-flex xs10 :key="`additional_equipment_input-${inputIndex}`">
                                         <v-autocomplete
-                                            :ref="`additional_equipment-${props.index}-${27}`"
+                                            :ref="`additional_equipment-${props.index}-${25}`"
                                             :value="props.item.additional_equipment[inputIndex]"
-                                            @change="setCellValue($event, props.index, 27, 'additional_equipment', `td-${props.index}-${27}`, inputIndex, false)"
+                                            @change="setCellValue($event, props.index, 25, 'additional_equipment', `td-${props.index}-${25}`, inputIndex, false)"
                                             :items="optionalEquipment"
                                             item-text="name"
                                             clearable
@@ -664,7 +664,7 @@
                                     </v-btn>
                                 </v-flex>
                                 <v-flex xs12>
-                                    <v-btn color="info" small @click="switchCellMode(props.index, 27, false, `additional_equipment-${props.index}-${27}`, $event, false)">
+                                    <v-btn color="info" small @click="switchCellMode(props.index, 25, false, `additional_equipment-${props.index}-${25}`, $event, false)">
                                         Закрыть редактирование
                                     </v-btn>
                                 </v-flex>
@@ -785,8 +785,8 @@ export default {
                 { text: 'Цена $    ', value: 'rf_id_price', sortable: false },
                 { text: 'Cчитыватель прицепного оборудования', value: 'reader_of_trailed_equipment', sortable: false },
                 { text: 'Цена $     ', value: 'reader_of_trailed_equipment_price', sortable: false },
-                { text: 'Модуль конект', value: 'connect_module', sortable: false },
-                { text: 'Цена $      ', value: 'connect_module_price', sortable: false },
+                // { text: 'Модуль конект', value: 'connect_module', sortable: false },
+                // { text: 'Цена $      ', value: 'connect_module_price', sortable: false },
                 { text: 'CAN', value: 'can_reader', sortable: false },
                 { text: 'Цена $       ', value: 'can_reader_price', sortable: false },
                 { text: 'Деаэратор', value: 'deaerator', sortable: false },

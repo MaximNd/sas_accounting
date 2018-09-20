@@ -8,6 +8,7 @@ class GPSData extends Model
 {
     protected $fillable = [
         'order_id',
+        'order',
         'image',
         'mark',
         'model',
@@ -20,7 +21,6 @@ class GPSData extends Model
         'counter',
         'rf_id',
         'reader_of_trailed_equipment',
-        'connect_module',
         'can_reader',
         'deaerator',
         'additional_equipment',

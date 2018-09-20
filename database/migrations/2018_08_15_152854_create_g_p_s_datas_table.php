@@ -19,6 +19,8 @@ class CreateGPSDatasTable extends Migration
             $table->integer('order_id')->unsigned();
             $table->foreign('order_id')->references('id')->on('orders');
 
+            $table->integer('order');
+
             $table->string('image')->nullable();
             $table->string('mark')->nullable();
             $table->string('model')->nullable();
@@ -32,13 +34,11 @@ class CreateGPSDatasTable extends Migration
             $table->integer('counter')->nullable();
             $table->integer('rf_id')->nullable();
             $table->integer('reader_of_trailed_equipment')->nullable();
-            $table->integer('connect_module')->nullable();
             $table->integer('can_reader')->nullable();
             $table->integer('deaerator')->nullable();
             $table->json('additional_equipment')->nullable();
             $table->json('cn03')->nullable();
             $table->json('rs01')->nullable();
-
 
             $table->timestamps();
         });

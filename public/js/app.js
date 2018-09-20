@@ -44659,7 +44659,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.pending = true;
             var data = {
                 client_id: 2,
-                client_secret: "HIuIatks6cOSSUBIOxyj3OZV4xfOzpNqHO9vkWqu",
+                client_secret: "dTQueUQ61EWoa8qWgaGaQGB4B8m2V4hcvXZPnzVy",
                 grant_type: 'password',
                 username: this.loginData.email,
                 password: this.loginData.password
@@ -55116,6 +55116,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             defaultRowCount: 0,
             initialGPSRowData: {
                 id: 1,
+                order: 1,
                 image: '',
                 mark: '',
                 model: '',
@@ -55128,7 +55129,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 counter: '',
                 rf_id: '',
                 reader_of_trailed_equipment: '',
-                connect_module: '',
+                // connect_module: '',
                 can_reader: '',
                 deaerator: '',
                 additional_equipment: [],
@@ -55177,6 +55178,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         },
         isInstallationFinishedStatus: function isInstallationFinishedStatus() {
             return this.orderData.statuses.is_installation_finished ? 'Монтаж закончен' : 'Монтаж не закончен';
+        },
+        isShowOrderContent: function isShowOrderContent() {
+            if (this.isCreation) {
+                return true;
+            }
+            return this.initialized;
         },
         allCacheData: function allCacheData() {
             var cache = {};
@@ -55314,7 +55321,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                     id = gpsDataRow.id;
                 }
                 return Object.keys(gpsDataRow).reduce(function (newRow, key) {
-                    if (key !== 'id' && typeof gpsDataRow[key] === 'number') {
+                    if (key !== 'id' && key !== 'order' && key !== 'order_id' && typeof gpsDataRow[key] === 'number') {
                         newRow[key] = _this5.priceList.find(function (data) {
                             return data.id === gpsDataRow[key];
                         });
@@ -55328,13 +55335,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                         newRow[key] = gpsDataRow[key];
                     } else if (_this5.isNull(gpsDataRow[key]) || _this5.isUndefined(gpsDataRow[key])) {
                         newRow[key] = '';
-                    } else if (key === 'id') {
+                    } else if (key === 'id' || key === 'order' || key === 'order_id') {
                         newRow[key] = gpsDataRow[key];
                     }
                     return newRow;
                 }, {});
             });
             this.initialGPSRowData.id = ++id;
+            this.initialGPSRowData.order = copyOrder.gps_data.length + 1;
             this.oldOrder = copyOrder;
             var newOrderData = __WEBPACK_IMPORTED_MODULE_5_deep_copy___default()(copyOrder);
             this.orderData.name = newOrderData.name;
@@ -55477,6 +55485,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                     rs01: Array.apply(null, { length: 2 })
                 }));
                 ++this.initialGPSRowData.id;
+                ++this.initialGPSRowData.order;
             }
             if (count > 0) {
                 this.saveOrderDataToLocalStorage();
@@ -55495,6 +55504,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         dragNDropGPSData: function dragNDropGPSData(newIndex, oldIndex) {
             var rowSelected = this.orderData.GPSData.splice(oldIndex, 1)[0];
             this.orderData.GPSData.splice(newIndex, 0, rowSelected);
+            for (var i = 0; i < this.orderData.GPSData.length; ++i) {
+                this.$set(this.orderData.GPSData[i], 'order', i + 1);
+            }
             this.saveOrderDataToLocalStorage();
             this.showSnackbar('info', '\u0420\u044F\u0434 \u0431\u044B\u043B \u043F\u0435\u0440\u0435\u043C\u0435\u0449\u0451\u043D');
         },
@@ -56842,7 +56854,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             pagination: {
                 rowsPerPage: 20
             },
-            headers: [{ text: '#', align: 'left', sortable: false }, { text: 'Изображение', align: 'left', sortable: false, value: 'image' }, { text: 'Марка', value: 'mark', sortable: false }, { text: 'Модель', value: 'model', sortable: false }, { text: 'Год выпуска', value: 'year_of_issue', sortable: false }, { text: 'Тип топлива', value: 'fuel_type', sortable: false }, { text: 'Мощность', value: 'power', sortable: false }, { text: 'Гос. номер', value: 'number', sortable: false }, { text: 'GPS-трекер', value: 'gps_tracker', sortable: false }, { text: 'Цена $ ', value: 'gps_tracker_price', sortable: false }, { text: 'ДУТ', value: 'fuel_gauge', sortable: false }, { text: 'Цена $  ', value: 'fuel_gauge_price', sortable: false }, { text: 'Счетчик', value: 'counter', sortable: false }, { text: 'Цена $   ', value: 'counter_price', sortable: false }, { text: 'RFID', value: 'rf_id', sortable: false }, { text: 'Цена $    ', value: 'rf_id_price', sortable: false }, { text: 'Cчитыватель прицепного оборудования', value: 'reader_of_trailed_equipment', sortable: false }, { text: 'Цена $     ', value: 'reader_of_trailed_equipment_price', sortable: false }, { text: 'Модуль конект', value: 'connect_module', sortable: false }, { text: 'Цена $      ', value: 'connect_module_price', sortable: false }, { text: 'CAN', value: 'can_reader', sortable: false }, { text: 'Цена $       ', value: 'can_reader_price', sortable: false }, { text: 'Деаэратор', value: 'deaerator', sortable: false }, { text: 'Цена $        ', value: 'deaerator_price', sortable: false }, { text: 'CN03', value: 'cn03', sortable: false }, { text: 'Цена $         ', value: 'cn03_price', sortable: false }, { text: 'RS01', value: 'rs01', sortable: false }, { text: 'Цена $          ', value: 'rs01_price', sortable: false }, { text: 'Дополнительное оборудование', value: 'additional_equipment', sortable: false }, { text: 'Цена $           ', value: 'additional_equipment_price', sortable: false }, { text: 'Монтаж оборудования ₴', value: 'installation_of_equipment_price', sortable: false }],
+            headers: [{ text: '#', align: 'left', sortable: false }, { text: 'Изображение', align: 'left', sortable: false, value: 'image' }, { text: 'Марка', value: 'mark', sortable: false }, { text: 'Модель', value: 'model', sortable: false }, { text: 'Год выпуска', value: 'year_of_issue', sortable: false }, { text: 'Тип топлива', value: 'fuel_type', sortable: false }, { text: 'Мощность', value: 'power', sortable: false }, { text: 'Гос. номер', value: 'number', sortable: false }, { text: 'GPS-трекер', value: 'gps_tracker', sortable: false }, { text: 'Цена $ ', value: 'gps_tracker_price', sortable: false }, { text: 'ДУТ', value: 'fuel_gauge', sortable: false }, { text: 'Цена $  ', value: 'fuel_gauge_price', sortable: false }, { text: 'Счетчик', value: 'counter', sortable: false }, { text: 'Цена $   ', value: 'counter_price', sortable: false }, { text: 'RFID', value: 'rf_id', sortable: false }, { text: 'Цена $    ', value: 'rf_id_price', sortable: false }, { text: 'Cчитыватель прицепного оборудования', value: 'reader_of_trailed_equipment', sortable: false }, { text: 'Цена $     ', value: 'reader_of_trailed_equipment_price', sortable: false },
+            // { text: 'Модуль конект', value: 'connect_module', sortable: false },
+            // { text: 'Цена $      ', value: 'connect_module_price', sortable: false },
+            { text: 'CAN', value: 'can_reader', sortable: false }, { text: 'Цена $       ', value: 'can_reader_price', sortable: false }, { text: 'Деаэратор', value: 'deaerator', sortable: false }, { text: 'Цена $        ', value: 'deaerator_price', sortable: false }, { text: 'CN03', value: 'cn03', sortable: false }, { text: 'Цена $         ', value: 'cn03_price', sortable: false }, { text: 'RS01', value: 'rs01', sortable: false }, { text: 'Цена $          ', value: 'rs01_price', sortable: false }, { text: 'Дополнительное оборудование', value: 'additional_equipment', sortable: false }, { text: 'Цена $           ', value: 'additional_equipment_price', sortable: false }, { text: 'Монтаж оборудования ₴', value: 'installation_of_equipment_price', sortable: false }],
             uploadImage: '/storage/upload-foto.png',
             cellsPosition: []
         };
@@ -60279,9 +60294,9 @@ var render = function() {
                           click: function($event) {
                             _vm.selectCell($event, {
                               index: props.index,
-                              column: "connect_module",
+                              column: "can_reader",
                               columnIndex: 17,
-                              value: props.item.connect_module
+                              value: props.item.can_reader
                             })
                           },
                           dblclick: function($event) {
@@ -60289,15 +60304,15 @@ var render = function() {
                               props.index,
                               17,
                               true,
-                              "connect_module-" + props.index + "-" + 17
+                              "can_reader-" + props.index + "-" + 17
                             )
                           },
                           mouseover: function($event) {
                             _vm.selectCellToCopyList($event, {
                               index: props.index,
-                              column: "connect_module",
+                              column: "can_reader",
                               columnIndex: 17,
-                              value: props.item.connect_module
+                              value: props.item.can_reader
                             })
                           }
                         }
@@ -60307,19 +60322,19 @@ var render = function() {
                           ? [
                               _vm._v(
                                 "\n                        " +
-                                  _vm._s(props.item.connect_module.name) +
+                                  _vm._s(props.item.can_reader.name) +
                                   "\n                    "
                               )
                             ]
                           : [
                               _c("v-autocomplete", {
-                                ref: "connect_module-" + props.index + "-" + 17,
+                                ref: "can_reader-" + props.index + "-" + 17,
                                 attrs: {
-                                  value: props.item.connect_module,
+                                  value: props.item.can_reader,
                                   items: _vm.allEquipment,
                                   "item-text": "name",
                                   "hide-selected": "",
-                                  label: "Вибирете модуль конект",
+                                  label: "Вибирете CAN",
                                   "single-line": "",
                                   "return-object": ""
                                 },
@@ -60329,7 +60344,7 @@ var render = function() {
                                       $event,
                                       props.index,
                                       17,
-                                      "connect_module",
+                                      "can_reader",
                                       "td-" + props.index + "-" + 17
                                     )
                                   }
@@ -60349,7 +60364,7 @@ var render = function() {
                           click: function($event) {
                             _vm.selectCell($event, {
                               index: props.index,
-                              column: "connect_module_price",
+                              column: "can_reader_price",
                               columnIndex: 18,
                               value: false
                             })
@@ -60357,119 +60372,8 @@ var render = function() {
                           mouseover: function($event) {
                             _vm.selectCellToCopyList($event, {
                               index: props.index,
-                              column: "connect_module_price",
+                              column: "can_reader_price",
                               columnIndex: 18,
-                              value: false
-                            })
-                          }
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                    " +
-                            _vm._s(
-                              _vm.pricesForEquipment.equipmentPrices[
-                                props.index
-                              ]
-                                ? _vm.pricesForEquipment.equipmentPrices[
-                                    props.index
-                                  ]["connect_module_price"] || 0
-                                : 0
-                            ) +
-                            "$\n                "
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      {
-                        ref: "td-" + props.index + "-" + 19,
-                        staticClass: "text-xs-center",
-                        on: {
-                          click: function($event) {
-                            _vm.selectCell($event, {
-                              index: props.index,
-                              column: "can_reader",
-                              columnIndex: 19,
-                              value: props.item.can_reader
-                            })
-                          },
-                          dblclick: function($event) {
-                            _vm.switchCellMode(
-                              props.index,
-                              19,
-                              true,
-                              "can_reader-" + props.index + "-" + 19
-                            )
-                          },
-                          mouseover: function($event) {
-                            _vm.selectCellToCopyList($event, {
-                              index: props.index,
-                              column: "can_reader",
-                              columnIndex: 19,
-                              value: props.item.can_reader
-                            })
-                          }
-                        }
-                      },
-                      [
-                        !_vm.editModCells[props.index][19]
-                          ? [
-                              _vm._v(
-                                "\n                        " +
-                                  _vm._s(props.item.can_reader.name) +
-                                  "\n                    "
-                              )
-                            ]
-                          : [
-                              _c("v-autocomplete", {
-                                ref: "can_reader-" + props.index + "-" + 19,
-                                attrs: {
-                                  value: props.item.can_reader,
-                                  items: _vm.allEquipment,
-                                  "item-text": "name",
-                                  "hide-selected": "",
-                                  label: "Вибирете CAN",
-                                  "single-line": "",
-                                  "return-object": ""
-                                },
-                                on: {
-                                  change: function($event) {
-                                    _vm.setCellValue(
-                                      $event,
-                                      props.index,
-                                      19,
-                                      "can_reader",
-                                      "td-" + props.index + "-" + 19
-                                    )
-                                  }
-                                }
-                              })
-                            ]
-                      ],
-                      2
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      {
-                        ref: "td-" + props.index + "-" + 20,
-                        staticClass: "text-xs-center",
-                        on: {
-                          click: function($event) {
-                            _vm.selectCell($event, {
-                              index: props.index,
-                              column: "can_reader_price",
-                              columnIndex: 20,
-                              value: false
-                            })
-                          },
-                          mouseover: function($event) {
-                            _vm.selectCellToCopyList($event, {
-                              index: props.index,
-                              column: "can_reader_price",
-                              columnIndex: 20,
                               value: false
                             })
                           }
@@ -60495,37 +60399,37 @@ var render = function() {
                     _c(
                       "td",
                       {
-                        ref: "td-" + props.index + "-" + 21,
+                        ref: "td-" + props.index + "-" + 19,
                         staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
                               index: props.index,
                               column: "deaerator",
-                              columnIndex: 21,
+                              columnIndex: 19,
                               value: props.item.deaerator
                             })
                           },
                           dblclick: function($event) {
                             _vm.switchCellMode(
                               props.index,
-                              21,
+                              19,
                               true,
-                              "deaerator-" + props.index + "-" + 21
+                              "deaerator-" + props.index + "-" + 19
                             )
                           },
                           mouseover: function($event) {
                             _vm.selectCellToCopyList($event, {
                               index: props.index,
                               column: "deaerator",
-                              columnIndex: 21,
+                              columnIndex: 19,
                               value: props.item.deaerator
                             })
                           }
                         }
                       },
                       [
-                        !_vm.editModCells[props.index][21]
+                        !_vm.editModCells[props.index][19]
                           ? [
                               _vm._v(
                                 "\n                        " +
@@ -60535,7 +60439,7 @@ var render = function() {
                             ]
                           : [
                               _c("v-autocomplete", {
-                                ref: "deaerator-" + props.index + "-" + 21,
+                                ref: "deaerator-" + props.index + "-" + 19,
                                 attrs: {
                                   value: props.item.deaerator,
                                   items: _vm.allEquipment,
@@ -60550,9 +60454,9 @@ var render = function() {
                                     _vm.setCellValue(
                                       $event,
                                       props.index,
-                                      21,
+                                      19,
                                       "deaerator",
-                                      "td-" + props.index + "-" + 21
+                                      "td-" + props.index + "-" + 19
                                     )
                                   }
                                 }
@@ -60565,14 +60469,14 @@ var render = function() {
                     _c(
                       "td",
                       {
-                        ref: "td-" + props.index + "-" + 22,
+                        ref: "td-" + props.index + "-" + 20,
                         staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
                               index: props.index,
                               column: "deaerator_price",
-                              columnIndex: 22,
+                              columnIndex: 20,
                               value: false
                             })
                           },
@@ -60580,7 +60484,7 @@ var render = function() {
                             _vm.selectCellToCopyList($event, {
                               index: props.index,
                               column: "deaerator_price",
-                              columnIndex: 22,
+                              columnIndex: 20,
                               value: false
                             })
                           }
@@ -60606,12 +60510,12 @@ var render = function() {
                     _c(
                       "td",
                       {
-                        ref: "td-" + props.index + "-" + 23,
+                        ref: "td-" + props.index + "-" + 21,
                         class: {
-                          "text-xs-center": !_vm.editModCells[props.index][23]
+                          "text-xs-center": !_vm.editModCells[props.index][21]
                         },
                         style: {
-                          "min-width": _vm.editModCells[props.index][23]
+                          "min-width": _vm.editModCells[props.index][21]
                             ? "300px"
                             : "10px"
                         },
@@ -60620,16 +60524,16 @@ var render = function() {
                             _vm.selectCell($event, {
                               index: props.index,
                               column: "cn03",
-                              columnIndex: 23,
+                              columnIndex: 21,
                               value: props.item.cn03
                             })
                           },
                           dblclick: function($event) {
                             _vm.switchCellMode(
                               props.index,
-                              23,
+                              21,
                               true,
-                              "cn03-" + props.index + "-" + 23,
+                              "cn03-" + props.index + "-" + 21,
                               $event,
                               false
                             )
@@ -60638,14 +60542,14 @@ var render = function() {
                             _vm.selectCellToCopyList($event, {
                               index: props.index,
                               column: "cn03",
-                              columnIndex: 23,
+                              columnIndex: 21,
                               value: props.item.cn03
                             })
                           }
                         }
                       },
                       [
-                        !_vm.editModCells[props.index][23]
+                        !_vm.editModCells[props.index][21]
                           ? [
                               props.item.cn03.some(function(el) {
                                 return !_vm.isUndefined(el) && !_vm.isNull(el)
@@ -60718,7 +60622,7 @@ var render = function() {
                                         [
                                           _c("v-autocomplete", {
                                             ref:
-                                              "cn03-" + props.index + "-" + 23,
+                                              "cn03-" + props.index + "-" + 21,
                                             refInFor: true,
                                             attrs: {
                                               value:
@@ -60736,12 +60640,12 @@ var render = function() {
                                                 _vm.setCellValue(
                                                   $event,
                                                   props.index,
-                                                  23,
+                                                  21,
                                                   "cn03",
                                                   "td-" +
                                                     props.index +
                                                     "-" +
-                                                    23,
+                                                    21,
                                                   inputIndex,
                                                   false
                                                 )
@@ -60828,12 +60732,12 @@ var render = function() {
                                             click: function($event) {
                                               _vm.switchCellMode(
                                                 props.index,
-                                                23,
+                                                21,
                                                 false,
                                                 "cn03-" +
                                                   props.index +
                                                   "-" +
-                                                  23,
+                                                  21,
                                                 $event,
                                                 false
                                               )
@@ -60860,14 +60764,14 @@ var render = function() {
                     _c(
                       "td",
                       {
-                        ref: "td-" + props.index + "-" + 24,
+                        ref: "td-" + props.index + "-" + 22,
                         staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
                               index: props.index,
                               column: "cn03_price",
-                              columnIndex: 24,
+                              columnIndex: 22,
                               value: false
                             })
                           },
@@ -60875,7 +60779,7 @@ var render = function() {
                             _vm.selectCellToCopyList($event, {
                               index: props.index,
                               column: "cn03_price",
-                              columnIndex: 24,
+                              columnIndex: 22,
                               value: false
                             })
                           }
@@ -60901,12 +60805,12 @@ var render = function() {
                     _c(
                       "td",
                       {
-                        ref: "td-" + props.index + "-" + 25,
+                        ref: "td-" + props.index + "-" + 23,
                         class: {
-                          "text-xs-center": !_vm.editModCells[props.index][25]
+                          "text-xs-center": !_vm.editModCells[props.index][23]
                         },
                         style: {
-                          "min-width": _vm.editModCells[props.index][25]
+                          "min-width": _vm.editModCells[props.index][23]
                             ? "300px"
                             : "10px"
                         },
@@ -60915,16 +60819,16 @@ var render = function() {
                             _vm.selectCell($event, {
                               index: props.index,
                               column: "rs01",
-                              columnIndex: 25,
+                              columnIndex: 23,
                               value: props.item.rs01
                             })
                           },
                           dblclick: function($event) {
                             _vm.switchCellMode(
                               props.index,
-                              25,
+                              23,
                               true,
-                              "rs01-" + props.index + "-" + 25,
+                              "rs01-" + props.index + "-" + 23,
                               $event,
                               false
                             )
@@ -60933,14 +60837,14 @@ var render = function() {
                             _vm.selectCellToCopyList($event, {
                               index: props.index,
                               column: "rs01",
-                              columnIndex: 25,
+                              columnIndex: 23,
                               value: props.item.rs01
                             })
                           }
                         }
                       },
                       [
-                        !_vm.editModCells[props.index][25]
+                        !_vm.editModCells[props.index][23]
                           ? [
                               props.item.rs01.some(function(el) {
                                 return !_vm.isUndefined(el) && !_vm.isNull(el)
@@ -61013,7 +60917,7 @@ var render = function() {
                                         [
                                           _c("v-autocomplete", {
                                             ref:
-                                              "rs01-" + props.index + "-" + 25,
+                                              "rs01-" + props.index + "-" + 23,
                                             refInFor: true,
                                             attrs: {
                                               value:
@@ -61031,12 +60935,12 @@ var render = function() {
                                                 _vm.setCellValue(
                                                   $event,
                                                   props.index,
-                                                  25,
+                                                  23,
                                                   "rs01",
                                                   "td-" +
                                                     props.index +
                                                     "-" +
-                                                    25,
+                                                    23,
                                                   inputIndex,
                                                   false
                                                 )
@@ -61123,12 +61027,12 @@ var render = function() {
                                             click: function($event) {
                                               _vm.switchCellMode(
                                                 props.index,
-                                                25,
+                                                23,
                                                 false,
                                                 "rs01-" +
                                                   props.index +
                                                   "-" +
-                                                  25,
+                                                  23,
                                                 $event,
                                                 false
                                               )
@@ -61155,14 +61059,14 @@ var render = function() {
                     _c(
                       "td",
                       {
-                        ref: "td-" + props.index + "-" + 26,
+                        ref: "td-" + props.index + "-" + 24,
                         staticClass: "text-xs-center",
                         on: {
                           click: function($event) {
                             _vm.selectCell($event, {
                               index: props.index,
                               column: "rs01_price",
-                              columnIndex: 26,
+                              columnIndex: 24,
                               value: false
                             })
                           },
@@ -61170,7 +61074,7 @@ var render = function() {
                             _vm.selectCellToCopyList($event, {
                               index: props.index,
                               column: "rs01_price",
-                              columnIndex: 26,
+                              columnIndex: 24,
                               value: false
                             })
                           }
@@ -61196,12 +61100,12 @@ var render = function() {
                     _c(
                       "td",
                       {
-                        ref: "td-" + props.index + "-" + 27,
+                        ref: "td-" + props.index + "-" + 25,
                         class: {
-                          "text-xs-center": !_vm.editModCells[props.index][27]
+                          "text-xs-center": !_vm.editModCells[props.index][25]
                         },
                         style: {
-                          "min-width": _vm.editModCells[props.index][27]
+                          "min-width": _vm.editModCells[props.index][25]
                             ? "300px"
                             : "10px"
                         },
@@ -61210,16 +61114,16 @@ var render = function() {
                             _vm.selectCell($event, {
                               index: props.index,
                               column: "additional_equipment",
-                              columnIndex: 27,
+                              columnIndex: 25,
                               value: props.item.additional_equipment
                             })
                           },
                           dblclick: function($event) {
                             _vm.switchCellMode(
                               props.index,
-                              27,
+                              25,
                               true,
-                              "additional_equipment-" + props.index + "-" + 27,
+                              "additional_equipment-" + props.index + "-" + 25,
                               $event,
                               false
                             )
@@ -61228,14 +61132,14 @@ var render = function() {
                             _vm.selectCellToCopyList($event, {
                               index: props.index,
                               column: "additional_equipment",
-                              columnIndex: 27,
+                              columnIndex: 25,
                               value: props.item.additional_equipment
                             })
                           }
                         }
                       },
                       [
-                        !_vm.editModCells[props.index][27]
+                        !_vm.editModCells[props.index][25]
                           ? [
                               props.item.additional_equipment.some(function(
                                 el
@@ -61323,7 +61227,7 @@ var render = function() {
                                                 "additional_equipment-" +
                                                 props.index +
                                                 "-" +
-                                                27,
+                                                25,
                                               refInFor: true,
                                               attrs: {
                                                 value:
@@ -61345,12 +61249,12 @@ var render = function() {
                                                   _vm.setCellValue(
                                                     $event,
                                                     props.index,
-                                                    27,
+                                                    25,
                                                     "additional_equipment",
                                                     "td-" +
                                                       props.index +
                                                       "-" +
-                                                      27,
+                                                      25,
                                                     inputIndex,
                                                     false
                                                   )
@@ -61442,12 +61346,12 @@ var render = function() {
                                             click: function($event) {
                                               _vm.switchCellMode(
                                                 props.index,
-                                                27,
+                                                25,
                                                 false,
                                                 "additional_equipment-" +
                                                   props.index +
                                                   "-" +
-                                                  27,
+                                                  25,
                                                 $event,
                                                 false
                                               )
@@ -73949,7 +73853,7 @@ var render = function() {
     "v-card",
     { staticClass: "elevation-0 bg-card" },
     [
-      !_vm.isCreation && _vm.initialized
+      _vm.isShowOrderContent
         ? [
             _c(
               "v-card",

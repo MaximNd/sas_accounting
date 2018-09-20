@@ -85,7 +85,9 @@ class OrderController extends Controller
     }
 
     public function getOrder($id) {
-        return Order::with('client')->with('gpsData')->with('optionalServices')->find($id);
+        return Order::with('client')->with(['gpsData' => function ($q) {
+            $q->orderBy('order', 'asc');
+        }])->with('optionalServices')->find($id);
     }
 
     public function getOrders(Request $request) {
@@ -198,7 +200,9 @@ class OrderController extends Controller
             ]);
             $orderLog->save();
 
-            return Order::with('client')->with('gpsData')->with('optionalServices')->find($id);
+            return Order::with('client')->with(['gpsData' => function ($q) {
+                $q->orderBy('order', 'asc');
+            }])->with('optionalServices')->find($id);
         });
     }
 

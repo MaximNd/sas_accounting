@@ -1,6 +1,6 @@
 <template>
     <v-card class="elevation-0 bg-card">
-        <template v-if="!isCreation && initialized">
+        <template v-if="isShowOrderContent">
             <v-card>
                 <v-card-text>
                     <v-form>
@@ -439,6 +439,7 @@ export default {
             defaultRowCount: 0,
             initialGPSRowData: {
                 id: 1,
+                order: 1,
                 image: '',
                 mark: '',
                 model: '',
@@ -451,7 +452,7 @@ export default {
                 counter: '',
                 rf_id: '',
                 reader_of_trailed_equipment: '',
-                connect_module: '',
+                // connect_module: '',
                 can_reader: '',
                 deaerator: '',
                 additional_equipment: [],
@@ -507,6 +508,12 @@ export default {
         },
         isInstallationFinishedStatus() {
             return this.orderData.statuses.is_installation_finished ? 'Монтаж закончен' : 'Монтаж не закончен';
+        },
+        isShowOrderContent() {
+            if (this.isCreation) {
+                return true;
+            }
+            return this.initialized;
         },
         allCacheData() {
             const cache = {};
@@ -632,7 +639,7 @@ export default {
                     id = gpsDataRow.id;
                 }
                 return Object.keys(gpsDataRow).reduce((newRow, key) => {
-                    if (key !== 'id' && typeof gpsDataRow[key] === 'number') {
+                    if (key !== 'id' && key !== 'order' && key !== 'order_id' && typeof gpsDataRow[key] === 'number') {
                         newRow[key] = this.priceList.find(data => data.id === gpsDataRow[key]);
                     } else if (Array.isArray(gpsDataRow[key])) {
                         newRow[key] = gpsDataRow[key].map(id => this.priceList.find(data => data.id === id));
@@ -640,13 +647,14 @@ export default {
                         newRow[key] = gpsDataRow[key];
                     } else if (this.isNull(gpsDataRow[key]) || this.isUndefined(gpsDataRow[key])) {
                         newRow[key] = '';
-                    } else if (key === 'id') {
+                    } else if (key === 'id' || key === 'order' || key === 'order_id') {
                         newRow[key] = gpsDataRow[key];
                     }
                     return newRow;
                 }, {});
             });
             this.initialGPSRowData.id = ++id;
+            this.initialGPSRowData.order = copyOrder.gps_data.length + 1;
             this.oldOrder = copyOrder;
             const newOrderData = dcopy(copyOrder);
             this.orderData.name = newOrderData.name;
@@ -770,6 +778,7 @@ export default {
                     rs01: Array.apply(null, { length: 2 })
                 });
                 ++this.initialGPSRowData.id;
+                ++this.initialGPSRowData.order;
             }
             if (count > 0) {
                 this.saveOrderDataToLocalStorage();
@@ -786,6 +795,9 @@ export default {
         dragNDropGPSData(newIndex, oldIndex) {
             const rowSelected = this.orderData.GPSData.splice(oldIndex, 1)[0];
             this.orderData.GPSData.splice(newIndex, 0, rowSelected);
+            for (let i = 0; i < this.orderData.GPSData.length; ++i) {
+                this.$set(this.orderData.GPSData[i], 'order', i + 1);
+            }
             this.saveOrderDataToLocalStorage();
             this.showSnackbar('info', `Ряд был перемещён`);
         },
