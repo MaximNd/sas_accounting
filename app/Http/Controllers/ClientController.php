@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Client;
-use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
 {
     public function getAllClients() {
         return Client::orderBy('person_full_name')->get();
+    }
+
+    public function getClient($id) {
+        return Client::with('orders')->find($id);
     }
 
     public function getClients(Request $request) {

@@ -40,9 +40,11 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::delete('/users/{id}', 'UserController@deleteUser');
 
     // CLIENTS
-    Route::get('/clients', 'ClientController@getClients');
-
     Route::get('/clients/all', 'ClientController@getAllClients');
+
+    Route::get('/clients/{id}', 'ClientController@getClient');
+    
+    Route::get('/clients', 'ClientController@getClients');
 
     Route::post('/clients', 'ClientController@createClient');
 

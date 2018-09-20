@@ -75021,10 +75021,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        clientOrders: {
+            type: Array,
+            required: false,
+            default: null
+        }
+    },
     data: function data() {
         return {
             deleteDialog: false,
@@ -75037,15 +75078,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 sortBy: 'created_at',
                 descending: true
             },
-            headers: [{
-                text: 'Название',
-                align: 'left',
-                value: 'name'
-            }, { text: 'Клиент', value: 'client.person_full_name' }, { text: 'Компания', value: 'client.company_name' }, { text: 'Площадь', value: 'area', width: '15px' }, { text: 'Статус отправки', value: 'is_sent' }, { text: 'Статус согласования', value: 'is_agreed' }, { text: 'Статус оплаты', value: 'is_paid' }, { text: 'Статус монтажа', value: 'is_installation_finished' }, { text: 'Дата создания', value: 'created_at' }],
             deletingOrder: {}
         };
     },
 
+    computed: {
+        headers: function headers() {
+            var headers = [{
+                text: 'Название',
+                align: 'left',
+                value: 'name'
+            }];
+            if (!this.clientOrders) {
+                headers.push({ text: 'Клиент', value: 'client.person_full_name' }, { text: 'Компания', value: 'client.company_name' });
+            }
+
+            headers.push({ text: 'Площадь', value: 'area', width: '15px' }, { text: 'Статус отправки', value: 'is_sent' }, { text: 'Статус согласования', value: 'is_agreed' }, { text: 'Статус оплаты', value: 'is_paid' }, { text: 'Статус монтажа', value: 'is_installation_finished' }, { text: 'Дата создания', value: 'created_at' });
+            if (this.$auth.check('admin')) {
+                headers.push({ text: 'Удаление', value: '', align: 'right', sortable: false });
+            }
+            return headers;
+        }
+    },
     watch: {
         pagination: {
             handler: 'getOrders',
@@ -75056,6 +75110,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getOrders: function getOrders() {
             var _this = this;
 
+            if (this.clientOrders) return;
             this.loading = true;
             var _pagination = this.pagination,
                 sortBy = _pagination.sortBy,
@@ -75112,12 +75167,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.deleteDialog = false;
         }
     },
-    created: function created() {
-        if (this.$auth.check('admin')) {
-            this.headers.push({ text: 'Удаление', value: '', align: 'right', sortable: false });
-        }
-    },
-
     components: {
         appDeleteOrder: __WEBPACK_IMPORTED_MODULE_0__components_order_deleteOrder_DeleteOrder___default.a
     }
@@ -75364,185 +75413,359 @@ var render = function() {
                     [
                       _c("v-spacer"),
                       _vm._v(" "),
-                      _c("v-text-field", {
-                        attrs: {
-                          clearable: "",
-                          value: _vm.search,
-                          "append-icon": "search",
-                          label: "Поиск",
-                          "single-line": "",
-                          "hide-details": ""
-                        },
-                        on: { input: _vm.checkSearch, change: _vm.getOrders }
-                      })
+                      _vm.clientOrders
+                        ? _c("v-text-field", {
+                            attrs: {
+                              clearable: "",
+                              "append-icon": "search",
+                              label: "Поиск",
+                              "single-line": "",
+                              "hide-details": ""
+                            },
+                            model: {
+                              value: _vm.search,
+                              callback: function($$v) {
+                                _vm.search = $$v
+                              },
+                              expression: "search"
+                            }
+                          })
+                        : _c("v-text-field", {
+                            attrs: {
+                              clearable: "",
+                              value: _vm.search,
+                              "append-icon": "search",
+                              label: "Поиск",
+                              "single-line": "",
+                              "hide-details": ""
+                            },
+                            on: {
+                              input: _vm.checkSearch,
+                              change: _vm.getOrders
+                            }
+                          })
                     ],
                     1
                   ),
                   _vm._v(" "),
-                  _c("v-data-table", {
-                    staticClass: "elevation-1",
-                    attrs: {
-                      headers: _vm.headers,
-                      items: _vm.orders,
-                      pagination: _vm.pagination,
-                      "total-items": _vm.totalOrders,
-                      loading: _vm.loading
-                    },
-                    on: {
-                      "update:pagination": function($event) {
-                        _vm.pagination = $event
-                      }
-                    },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "items",
-                        fn: function(props) {
-                          return [
-                            _c(
-                              "td",
-                              [
+                  _vm.clientOrders
+                    ? _c("v-data-table", {
+                        staticClass: "elevation-1",
+                        attrs: {
+                          headers: _vm.headers,
+                          items: _vm.clientOrders,
+                          search: _vm.search
+                        },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "items",
+                            fn: function(props) {
+                              return [
                                 _c(
-                                  "router-link",
-                                  { attrs: { to: "/orders/" + props.item.id } },
-                                  [_vm._v(_vm._s(props.item.name))]
-                                )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              [
+                                  "td",
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        attrs: {
+                                          to: "/orders/" + props.item.id
+                                        }
+                                      },
+                                      [_vm._v(_vm._s(props.item.name))]
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(props.item.area))]),
+                                _vm._v(" "),
                                 _c(
-                                  "router-link",
+                                  "td",
                                   {
-                                    attrs: {
-                                      to: "/clients/" + props.item.client.id
+                                    class: {
+                                      "error--text": !props.item.is_sent,
+                                      "success--text": props.item.is_sent
                                     }
                                   },
                                   [
                                     _vm._v(
-                                      _vm._s(props.item.client.person_full_name)
+                                      _vm._s(
+                                        props.item.is_sent
+                                          ? "Отправленный"
+                                          : "Неотправленный"
+                                      )
                                     )
                                   ]
-                                )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c("td", [
-                              _vm._v(_vm._s(props.item.client.company_name))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(props.item.area))]),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                class: {
-                                  "error--text": !props.item.is_sent,
-                                  "success--text": props.item.is_sent
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  _vm._s(
-                                    props.item.is_sent
-                                      ? "Отправленный"
-                                      : "Неотправленный"
-                                  )
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                class: {
-                                  "error--text": !props.item.is_agreed,
-                                  "success--text": props.item.is_agreed
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  _vm._s(
-                                    props.item.is_agreed
-                                      ? "Согласованный"
-                                      : "Несогласованный"
-                                  )
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                class: {
-                                  "error--text": !props.item.is_paid,
-                                  "success--text": props.item.is_paid
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  _vm._s(
-                                    props.item.is_paid
-                                      ? "Оплаченный"
-                                      : "Неоплаченный"
-                                  )
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                class: {
-                                  "error--text": !props.item
-                                    .is_installation_finished,
-                                  "success--text":
-                                    props.item.is_installation_finished
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  _vm._s(
-                                    props.item.is_paid
-                                      ? "Закончен"
-                                      : "Не закончен"
-                                  )
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(props.item.created_at))]),
-                            _vm._v(" "),
-                            _vm.$auth.check("admin")
-                              ? _c(
+                                ),
+                                _vm._v(" "),
+                                _c(
                                   "td",
-                                  { staticClass: "justify-center layout px-0" },
+                                  {
+                                    class: {
+                                      "error--text": !props.item.is_agreed,
+                                      "success--text": props.item.is_agreed
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        props.item.is_agreed
+                                          ? "Согласованный"
+                                          : "Несогласованный"
+                                      )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    class: {
+                                      "error--text": !props.item.is_paid,
+                                      "success--text": props.item.is_paid
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        props.item.is_paid
+                                          ? "Оплаченный"
+                                          : "Неоплаченный"
+                                      )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    class: {
+                                      "error--text": !props.item
+                                        .is_installation_finished,
+                                      "success--text":
+                                        props.item.is_installation_finished
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        props.item.is_paid
+                                          ? "Закончен"
+                                          : "Не закончен"
+                                      )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(_vm._s(props.item.created_at))
+                                ]),
+                                _vm._v(" "),
+                                _vm.$auth.check("admin")
+                                  ? _c(
+                                      "td",
+                                      {
+                                        staticClass:
+                                          "justify-center layout px-0"
+                                      },
+                                      [
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            attrs: { icon: "" },
+                                            on: {
+                                              click: function($event) {
+                                                _vm.setDeleteOrder(props.item)
+                                              }
+                                            }
+                                          },
+                                          [_c("v-icon", [_vm._v("delete")])],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e()
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    : _c("v-data-table", {
+                        staticClass: "elevation-1",
+                        attrs: {
+                          headers: _vm.headers,
+                          items: _vm.orders,
+                          pagination: _vm.pagination,
+                          "total-items": _vm.totalOrders,
+                          loading: _vm.loading
+                        },
+                        on: {
+                          "update:pagination": function($event) {
+                            _vm.pagination = $event
+                          }
+                        },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "items",
+                            fn: function(props) {
+                              return [
+                                _c(
+                                  "td",
                                   [
                                     _c(
-                                      "v-btn",
+                                      "router-link",
                                       {
-                                        attrs: { icon: "" },
-                                        on: {
-                                          click: function($event) {
-                                            _vm.setDeleteOrder(props.item)
-                                          }
+                                        attrs: {
+                                          to: "/orders/" + props.item.id
                                         }
                                       },
-                                      [_c("v-icon", [_vm._v("delete")])],
-                                      1
+                                      [_vm._v(_vm._s(props.item.name))]
                                     )
                                   ],
                                   1
-                                )
-                              : _vm._e()
-                          ]
-                        }
-                      }
-                    ])
-                  })
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        attrs: {
+                                          to: "/clients/" + props.item.client.id
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            props.item.client.person_full_name
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(_vm._s(props.item.client.company_name))
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(props.item.area))]),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    class: {
+                                      "error--text": !props.item.is_sent,
+                                      "success--text": props.item.is_sent
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        props.item.is_sent
+                                          ? "Отправленный"
+                                          : "Неотправленный"
+                                      )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    class: {
+                                      "error--text": !props.item.is_agreed,
+                                      "success--text": props.item.is_agreed
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        props.item.is_agreed
+                                          ? "Согласованный"
+                                          : "Несогласованный"
+                                      )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    class: {
+                                      "error--text": !props.item.is_paid,
+                                      "success--text": props.item.is_paid
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        props.item.is_paid
+                                          ? "Оплаченный"
+                                          : "Неоплаченный"
+                                      )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    class: {
+                                      "error--text": !props.item
+                                        .is_installation_finished,
+                                      "success--text":
+                                        props.item.is_installation_finished
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        props.item.is_paid
+                                          ? "Закончен"
+                                          : "Не закончен"
+                                      )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(_vm._s(props.item.created_at))
+                                ]),
+                                _vm._v(" "),
+                                _vm.$auth.check("admin")
+                                  ? _c(
+                                      "td",
+                                      {
+                                        staticClass:
+                                          "justify-center layout px-0"
+                                      },
+                                      [
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            attrs: { icon: "" },
+                                            on: {
+                                              click: function($event) {
+                                                _vm.setDeleteOrder(props.item)
+                                              }
+                                            }
+                                          },
+                                          [_c("v-icon", [_vm._v("delete")])],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e()
+                              ]
+                            }
+                          }
+                        ])
+                      })
                 ],
                 1
               )
@@ -77968,6 +78191,29 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__orders_Orders__ = __webpack_require__(464);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__orders_Orders___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__orders_Orders__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -77983,7 +78229,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            client: {
+                id: '',
+                person_full_name: '',
+                company_name: '',
+                area: '',
+                telephone: '',
+                comment: '',
+                orders: []
+            }
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        this.axios.get('/clients/' + this.$route.params.id).then(function (_ref) {
+            var data = _ref.data;
+
+            _this.client = data;
+        }).catch(function (err) {
+            console.log(err);
+        });
+    },
+
+    components: {
+        appOrders: __WEBPACK_IMPORTED_MODULE_0__orders_Orders___default.a
+    }
+});
 
 /***/ }),
 /* 499 */
@@ -78003,7 +78280,173 @@ var render = function() {
           _c(
             "v-flex",
             { attrs: { xs12: "" } },
-            [_c("v-card", [_c("v-card-text")], 1)],
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(
+                        "v-layout",
+                        { attrs: { "justify-start": "", wrap: "" } },
+                        [
+                          _c(
+                            "v-flex",
+                            {
+                              attrs: {
+                                xs12: "",
+                                sm7: "",
+                                "offset-sm3": "",
+                                lg4: "",
+                                "offset-lg4": ""
+                              }
+                            },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Контактное лицо",
+                                  readonly: ""
+                                },
+                                model: {
+                                  value: _vm.client.person_full_name,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.client,
+                                      "person_full_name",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "client.person_full_name"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            {
+                              attrs: {
+                                xs12: "",
+                                sm7: "",
+                                "offset-sm3": "",
+                                lg4: "",
+                                "offset-lg4": ""
+                              }
+                            },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Компания", readonly: "" },
+                                model: {
+                                  value: _vm.client.company_name,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.client, "company_name", $$v)
+                                  },
+                                  expression: "client.company_name"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            {
+                              attrs: {
+                                xs12: "",
+                                sm7: "",
+                                "offset-sm3": "",
+                                lg4: "",
+                                "offset-lg4": ""
+                              }
+                            },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Площадь", readonly: "" },
+                                model: {
+                                  value: _vm.client.area,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.client, "area", $$v)
+                                  },
+                                  expression: "client.area"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            {
+                              attrs: {
+                                xs12: "",
+                                sm7: "",
+                                "offset-sm3": "",
+                                lg4: "",
+                                "offset-lg4": ""
+                              }
+                            },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Телефон", readonly: "" },
+                                model: {
+                                  value: _vm.client.telephone,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.client, "telephone", $$v)
+                                  },
+                                  expression: "client.telephone"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            {
+                              attrs: {
+                                xs12: "",
+                                sm7: "",
+                                "offset-sm3": "",
+                                lg4: "",
+                                "offset-lg4": ""
+                              }
+                            },
+                            [
+                              _c("v-textarea", {
+                                attrs: { label: "Коментарий", readonly: "" },
+                                model: {
+                                  value: _vm.client.comment,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.client, "comment", $$v)
+                                  },
+                                  expression: "client.comment"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c("appOrders", {
+                        attrs: { clientOrders: _vm.client.orders }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
             1
           )
         ],

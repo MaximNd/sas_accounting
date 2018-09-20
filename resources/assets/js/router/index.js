@@ -7,6 +7,7 @@ import ResetPassword from './../containers/auth/reset/ResetPassword.vue';
 import Profile from './../containers/profile/Profile.vue';
 import Users from './../containers/users/Users.vue';
 import Clients from './../containers/clients/Clients.vue';
+import Client from './../containers/clients/client/Client.vue';
 import PriceList from './../containers/priceList/PriceList.vue';
 import CreateOrder from './../containers/createOrder/CreateOrder.vue';
 import Orders from './../containers/orders/Orders.vue';
@@ -46,6 +47,11 @@ export default new Router({
         path: '/clients',
         name: 'clients',
         component: Clients
+    },
+    {
+        path: '/clients/:id',
+        name: 'client',
+        component: Client
     },
     {
         path: '/price-list',
