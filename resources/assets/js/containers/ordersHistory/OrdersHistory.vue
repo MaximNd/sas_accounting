@@ -71,7 +71,7 @@
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
-                                    <v-container fluid grid-list-xs v-if="props.item.type === 'Обновление'">
+                                    <v-container fluid grid-list-xs v-else-if="props.item.type === 'Обновление'">
                                         <v-layout wrap>
                                             <v-flex xs12 sm6 v-if="updatedData[props.index].orderData.before.length > 0">
                                                 <v-card>
@@ -257,25 +257,25 @@
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
-                                    <!-- <v-container fluid v-if="$auth.check('admin') && props.item.type === 'Удаление'">
-                                        <v-layout wrap v-if="props.item.equipment.deleted_at">
+                                    <v-container fluid v-else-if="$auth.check('admin') && props.item.type === 'Удаление'">
+                                        <v-layout wrap v-if="props.item.order.deleted_at">
                                             <v-flex xs12 sm6 md4 lg3>
                                                 <p class="title" style="margin: 0; line-height: 2.2!important;">
                                                     Нажмите чтобы восстановить:
                                                 </p>
                                             </v-flex>
                                             <v-flex xs12 sm3>
-                                                <v-btn :loading="restoring" :disabled="restoring" @click="restore(props.item.equipment.id)" class="white--text" color="purple">Восстановить</v-btn>
+                                                <v-btn :loading="restoring" :disabled="restoring" @click="restore(props.item.order.id)" class="white--text" color="purple">Восстановить</v-btn>
                                             </v-flex>
                                         </v-layout>
                                         <v-layout v-else>
                                             <v-flex xs12>
                                                 <p class="red--text text--darken-4 title" style="margin: 0; line-height: 2.2!important;">
-                                                    На данный момент восстановление невозможно, так как оборудование/услуга восстановлена!
+                                                    На данный момент восстановление невозможно, так как этот заказ уже восстановлен!
                                                 </p>
                                             </v-flex>
                                         </v-layout>
-                                    </v-container> -->
+                                    </v-container>
                                 </v-card-text>
                             </v-card>
                         </template>
@@ -381,10 +381,10 @@ export default {
         createdData() {
             return this.ordersHistory.reduce((createdData, ordersHistoryData, index) => {
                 if (ordersHistoryData.type === 'Создание') {
-                    createdData.push([JSON.parse(ordersHistoryData.after)]);
+                    createdData[index] = [JSON.parse(ordersHistoryData.after)];
                 }
                 return createdData;
-            }, []);
+            }, {});
         },
         updatedData() {
             return this.ordersHistory.reduce((updatedData, ordersHistoryData, index) => {
@@ -491,11 +491,12 @@ export default {
                     updatedData[index].gpsData.deleted = after.gpsData.deleted;
                 }
                 return updatedData;
-            }, []);
+            }, {});
         },
         isServicesChanged() {
             if (!this.updatedData) return [];
-            return this.updatedData.map(data => {
+            return Object.keys(this.updatedData).map(key => {
+                const data = this.updatedData[key];
                 const servicesBefore = data.services.before;
                 const servicesAfter = data.services.after;
                 for (let i = 0; i < servicesBefore.length; ++i) {
@@ -560,7 +561,10 @@ export default {
             this.restoring = true;
             this.axios.put(`/orders/${id}/restore`)
                 .then(() => this.getOrdersHistory())
-                .catch(err => console.log(err));
+                .catch(err => {
+                    console.log(err);
+                    this.restoring = true;
+                });
         }
     },
     created() {

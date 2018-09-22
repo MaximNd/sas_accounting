@@ -79253,10 +79253,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         createdData: function createdData() {
             return this.ordersHistory.reduce(function (createdData, ordersHistoryData, index) {
                 if (ordersHistoryData.type === 'Создание') {
-                    createdData.push([JSON.parse(ordersHistoryData.after)]);
+                    createdData[index] = [JSON.parse(ordersHistoryData.after)];
                 }
                 return createdData;
-            }, []);
+            }, {});
         },
         updatedData: function updatedData() {
             var _this = this;
@@ -79370,11 +79370,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     })();
                 }
                 return updatedData;
-            }, []);
+            }, {});
         },
         isServicesChanged: function isServicesChanged() {
+            var _this2 = this;
+
             if (!this.updatedData) return [];
-            return this.updatedData.map(function (data) {
+            return Object.keys(this.updatedData).map(function (key) {
+                var data = _this2.updatedData[key];
                 var servicesBefore = data.services.before;
                 var servicesAfter = data.services.after;
                 for (var i = 0; i < servicesBefore.length; ++i) {
@@ -79395,7 +79398,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     },
     methods: {
         getOrdersHistory: function getOrdersHistory() {
-            var _this2 = this;
+            var _this3 = this;
 
             this.loading = true;
             var _pagination = this.pagination,
@@ -79419,23 +79422,23 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.axios.get('/orders/logs', { params: params }).then(function (_ref) {
                 var data = _ref.data;
 
-                _this2.totalOrdersHistoryItems = data.total;
-                _this2.ordersHistory = data.data;
-                _this2.loading = false;
-                _this2.restoring = false;
+                _this3.totalOrdersHistoryItems = data.total;
+                _this3.ordersHistory = data.data;
+                _this3.loading = false;
+                _this3.restoring = false;
             }).catch(function (err) {
                 console.log(err);
-                _this2.loading = false;
-                _this2.restoring = false;
+                _this3.loading = false;
+                _this3.restoring = false;
             });
         },
         checkSearch: function checkSearch(value) {
-            var _this3 = this;
+            var _this4 = this;
 
             this.search = value;
             setTimeout(function () {
-                if (_this3.search === value) {
-                    _this3.getOrdersHistory();
+                if (_this4.search === value) {
+                    _this4.getOrdersHistory();
                 }
             }, 1500);
         },
@@ -79445,22 +79448,23 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }
         },
         restore: function restore(id) {
-            var _this4 = this;
+            var _this5 = this;
 
             this.restoring = true;
             this.axios.put('/orders/' + id + '/restore').then(function () {
-                return _this4.getOrdersHistory();
+                return _this5.getOrdersHistory();
             }).catch(function (err) {
-                return console.log(err);
+                console.log(err);
+                _this5.restoring = true;
             });
         }
     },
     created: function created() {
-        var _this5 = this;
+        var _this6 = this;
 
         setTimeout(function () {
-            console.log('BEFORE: ', JSON.parse(_this5.ordersHistory[0].before));
-            console.log('AFTER: ', JSON.parse(_this5.ordersHistory[0].after));
+            console.log('BEFORE: ', JSON.parse(_this6.ordersHistory[0].before));
+            console.log('AFTER: ', JSON.parse(_this6.ordersHistory[0].after));
         }, 4000);
     },
 
@@ -80633,1120 +80637,734 @@ var render = function() {
                                           ],
                                           1
                                         )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    props.item.type === "Обновление"
-                                      ? _c(
-                                          "v-container",
-                                          {
-                                            attrs: {
-                                              fluid: "",
-                                              "grid-list-xs": ""
-                                            }
-                                          },
-                                          [
-                                            _c(
-                                              "v-layout",
-                                              { attrs: { wrap: "" } },
-                                              [
-                                                _vm.updatedData[props.index]
-                                                  .orderData.before.length > 0
-                                                  ? _c(
-                                                      "v-flex",
-                                                      {
-                                                        attrs: {
-                                                          xs12: "",
-                                                          sm6: ""
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-card",
-                                                          [
-                                                            _c("v-card-title", [
-                                                              _c("h4", [
-                                                                _vm._v(
-                                                                  "Данные заказа До:"
-                                                                )
-                                                              ])
-                                                            ]),
-                                                            _vm._v(" "),
-                                                            _c("v-divider"),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "v-list",
-                                                              {
-                                                                attrs: {
-                                                                  dense: ""
-                                                                }
-                                                              },
-                                                              _vm._l(
-                                                                _vm.updatedData[
-                                                                  props.index
-                                                                ].orderData
-                                                                  .before,
-                                                                function(
-                                                                  beforeData,
-                                                                  index
-                                                                ) {
-                                                                  return _c(
-                                                                    "v-list-tile",
-                                                                    {
-                                                                      key:
-                                                                        "order-data-before-" +
-                                                                        index
-                                                                    },
-                                                                    [
-                                                                      _c(
-                                                                        "v-list-tile-content",
-                                                                        {
-                                                                          class: {
-                                                                            "red--text darken-4--text":
-                                                                              beforeData.isChanged
-                                                                          }
-                                                                        },
-                                                                        [
-                                                                          _vm._v(
-                                                                            _vm._s(
-                                                                              beforeData.text
-                                                                            ) +
-                                                                              ":"
-                                                                          )
-                                                                        ]
-                                                                      ),
-                                                                      _vm._v(
-                                                                        " "
-                                                                      ),
-                                                                      _c(
-                                                                        "v-list-tile-content",
-                                                                        {
-                                                                          class: {
-                                                                            "align-end": true,
-                                                                            "red--text darken-4--text":
-                                                                              beforeData.isChanged
-                                                                          }
-                                                                        },
-                                                                        [
-                                                                          _vm._v(
-                                                                            _vm._s(
-                                                                              beforeData.value
-                                                                            )
-                                                                          )
-                                                                        ]
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  )
-                                                                }
-                                                              )
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                                  : _vm._e(),
-                                                _vm._v(" "),
-                                                _vm.updatedData[props.index]
-                                                  .orderData.after.length > 0
-                                                  ? _c(
-                                                      "v-flex",
-                                                      {
-                                                        attrs: {
-                                                          xs12: "",
-                                                          sm6: ""
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-card",
-                                                          [
-                                                            _c("v-card-title", [
-                                                              _c("h4", [
-                                                                _vm._v(
-                                                                  "Данные заказа После:"
-                                                                )
-                                                              ])
-                                                            ]),
-                                                            _vm._v(" "),
-                                                            _c("v-divider"),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "v-list",
-                                                              {
-                                                                attrs: {
-                                                                  dense: ""
-                                                                }
-                                                              },
-                                                              _vm._l(
-                                                                _vm.updatedData[
-                                                                  props.index
-                                                                ].orderData
-                                                                  .after,
-                                                                function(
-                                                                  afterData,
-                                                                  index
-                                                                ) {
-                                                                  return _c(
-                                                                    "v-list-tile",
-                                                                    {
-                                                                      key:
-                                                                        "order-data-after-" +
-                                                                        index
-                                                                    },
-                                                                    [
-                                                                      _c(
-                                                                        "v-list-tile-content",
-                                                                        {
-                                                                          class: {
-                                                                            "success--text":
-                                                                              afterData.isChanged
-                                                                          }
-                                                                        },
-                                                                        [
-                                                                          _vm._v(
-                                                                            _vm._s(
-                                                                              afterData.text
-                                                                            ) +
-                                                                              ":"
-                                                                          )
-                                                                        ]
-                                                                      ),
-                                                                      _vm._v(
-                                                                        " "
-                                                                      ),
-                                                                      _c(
-                                                                        "v-list-tile-content",
-                                                                        {
-                                                                          class: {
-                                                                            "align-end": true,
-                                                                            "success--text":
-                                                                              afterData.isChanged
-                                                                          }
-                                                                        },
-                                                                        [
-                                                                          _vm._v(
-                                                                            _vm._s(
-                                                                              afterData.value
-                                                                            )
-                                                                          )
-                                                                        ]
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  )
-                                                                }
-                                                              )
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                                  : _vm._e()
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _vm.isServicesChanged[props.index]
-                                              ? _c(
-                                                  "v-layout",
-                                                  { attrs: { wrap: "" } },
-                                                  [
-                                                    _c(
-                                                      "v-flex",
-                                                      {
-                                                        attrs: {
-                                                          xs12: "",
-                                                          sm6: ""
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-card",
-                                                          [
-                                                            _c("v-card-title", [
-                                                              _c("h4", [
-                                                                _vm._v(
-                                                                  "Сервисы До:"
-                                                                )
-                                                              ])
-                                                            ]),
-                                                            _vm._v(" "),
-                                                            _c("v-divider"),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "v-list",
-                                                              {
-                                                                attrs: {
-                                                                  dense: ""
-                                                                }
-                                                              },
-                                                              _vm._l(
-                                                                _vm.updatedData[
-                                                                  props.index
-                                                                ].services
-                                                                  .before,
-                                                                function(
-                                                                  beforeData,
-                                                                  index
-                                                                ) {
-                                                                  return _c(
-                                                                    "v-list-tile",
-                                                                    {
-                                                                      key:
-                                                                        "services-before-" +
-                                                                        index
-                                                                    },
-                                                                    [
-                                                                      _c(
-                                                                        "v-list-tile-content",
-                                                                        {
-                                                                          class: {
-                                                                            "red--text darken-4--text":
-                                                                              beforeData.deleted
-                                                                          }
-                                                                        },
-                                                                        [
-                                                                          _vm._v(
-                                                                            _vm._s(
-                                                                              beforeData.name
-                                                                            ) +
-                                                                              ":"
-                                                                          )
-                                                                        ]
-                                                                      ),
-                                                                      _vm._v(
-                                                                        " "
-                                                                      ),
-                                                                      _c(
-                                                                        "v-list-tile-content",
-                                                                        {
-                                                                          class: {
-                                                                            "align-end": true,
-                                                                            "red--text darken-4--text":
-                                                                              beforeData.deleted
-                                                                          }
-                                                                        },
-                                                                        [
-                                                                          _vm._v(
-                                                                            _vm._s(
-                                                                              beforeData.price
-                                                                            ) +
-                                                                              "$"
-                                                                          )
-                                                                        ]
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  )
-                                                                }
-                                                              )
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ],
-                                                      1
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "v-flex",
-                                                      {
-                                                        attrs: {
-                                                          xs12: "",
-                                                          sm6: ""
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-card",
-                                                          [
-                                                            _c("v-card-title", [
-                                                              _c("h4", [
-                                                                _vm._v(
-                                                                  "Сервисы После:"
-                                                                )
-                                                              ])
-                                                            ]),
-                                                            _vm._v(" "),
-                                                            _c("v-divider"),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "v-list",
-                                                              {
-                                                                attrs: {
-                                                                  dense: ""
-                                                                }
-                                                              },
-                                                              _vm._l(
-                                                                _vm.updatedData[
-                                                                  props.index
-                                                                ].services
-                                                                  .after,
-                                                                function(
-                                                                  afterData,
-                                                                  index
-                                                                ) {
-                                                                  return _c(
-                                                                    "v-list-tile",
-                                                                    {
-                                                                      key:
-                                                                        "services-after-" +
-                                                                        index
-                                                                    },
-                                                                    [
-                                                                      _c(
-                                                                        "v-list-tile-content",
-                                                                        {
-                                                                          class: {
-                                                                            "success--text":
-                                                                              afterData.added
-                                                                          }
-                                                                        },
-                                                                        [
-                                                                          _vm._v(
-                                                                            _vm._s(
-                                                                              afterData.name
-                                                                            ) +
-                                                                              ":"
-                                                                          )
-                                                                        ]
-                                                                      ),
-                                                                      _vm._v(
-                                                                        " "
-                                                                      ),
-                                                                      _c(
-                                                                        "v-list-tile-content",
-                                                                        {
-                                                                          class: {
-                                                                            "align-end": true,
-                                                                            "success--text":
-                                                                              afterData.added
-                                                                          }
-                                                                        },
-                                                                        [
-                                                                          _vm._v(
-                                                                            _vm._s(
-                                                                              afterData.price
-                                                                            ) +
-                                                                              "$"
-                                                                          )
-                                                                        ]
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  )
-                                                                }
-                                                              )
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-layout",
-                                              { attrs: { wrap: "" } },
-                                              [
-                                                _vm.updatedData[props.index]
-                                                  .optional_services.after.added
-                                                  .length > 0
-                                                  ? _c(
-                                                      "v-flex",
-                                                      {
-                                                        staticClass: "mt-3",
-                                                        attrs: { xs12: "" }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass:
-                                                              "headline success--text mb-2"
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "Добавленые Дополнительные сервисы"
-                                                            )
-                                                          ]
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c("v-data-table", {
-                                                          staticClass:
-                                                            "elevation-1",
+                                      : props.item.type === "Обновление"
+                                        ? _c(
+                                            "v-container",
+                                            {
+                                              attrs: {
+                                                fluid: "",
+                                                "grid-list-xs": ""
+                                              }
+                                            },
+                                            [
+                                              _c(
+                                                "v-layout",
+                                                { attrs: { wrap: "" } },
+                                                [
+                                                  _vm.updatedData[props.index]
+                                                    .orderData.before.length > 0
+                                                    ? _c(
+                                                        "v-flex",
+                                                        {
                                                           attrs: {
-                                                            headers:
-                                                              _vm.optionalServicesHeaders,
-                                                            items:
-                                                              _vm.updatedData[
-                                                                props.index
-                                                              ]
-                                                                .optional_services
-                                                                .after.added,
-                                                            "hide-actions": ""
-                                                          },
-                                                          scopedSlots: _vm._u([
-                                                            {
-                                                              key: "items",
-                                                              fn: function(
-                                                                nestedProps
-                                                              ) {
-                                                                return [
-                                                                  _c("td", [
+                                                            xs12: "",
+                                                            sm6: ""
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "v-card",
+                                                            [
+                                                              _c(
+                                                                "v-card-title",
+                                                                [
+                                                                  _c("h4", [
                                                                     _vm._v(
-                                                                      _vm._s(
-                                                                        nestedProps
-                                                                          .item
-                                                                          .name
-                                                                      )
-                                                                    )
-                                                                  ]),
-                                                                  _vm._v(" "),
-                                                                  _c("td", [
-                                                                    _vm._v(
-                                                                      _vm._s(
-                                                                        nestedProps
-                                                                          .item
-                                                                          .price
-                                                                      )
-                                                                    )
-                                                                  ]),
-                                                                  _vm._v(" "),
-                                                                  _c("td", [
-                                                                    _vm._v(
-                                                                      _vm._s(
-                                                                        nestedProps
-                                                                          .item
-                                                                          .comment
-                                                                      )
+                                                                      "Данные заказа До:"
                                                                     )
                                                                   ])
                                                                 ]
-                                                              }
-                                                            }
-                                                          ])
-                                                        })
-                                                      ],
-                                                      1
-                                                    )
-                                                  : _vm._e(),
-                                                _vm._v(" "),
-                                                _vm.updatedData[props.index]
-                                                  .optional_services.after
-                                                  .deleted.length > 0
-                                                  ? _c(
-                                                      "v-flex",
-                                                      {
-                                                        staticClass: "mt-3",
-                                                        attrs: { xs12: "" }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass:
-                                                              "headline red--text darken-4--text mb-2"
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "Удаленные Дополнительные сервисы"
-                                                            )
-                                                          ]
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c("v-data-table", {
-                                                          staticClass:
-                                                            "elevation-1",
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c("v-divider"),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "v-list",
+                                                                {
+                                                                  attrs: {
+                                                                    dense: ""
+                                                                  }
+                                                                },
+                                                                _vm._l(
+                                                                  _vm
+                                                                    .updatedData[
+                                                                    props.index
+                                                                  ].orderData
+                                                                    .before,
+                                                                  function(
+                                                                    beforeData,
+                                                                    index
+                                                                  ) {
+                                                                    return _c(
+                                                                      "v-list-tile",
+                                                                      {
+                                                                        key:
+                                                                          "order-data-before-" +
+                                                                          index
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-list-tile-content",
+                                                                          {
+                                                                            class: {
+                                                                              "red--text darken-4--text":
+                                                                                beforeData.isChanged
+                                                                            }
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              _vm._s(
+                                                                                beforeData.text
+                                                                              ) +
+                                                                                ":"
+                                                                            )
+                                                                          ]
+                                                                        ),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        _c(
+                                                                          "v-list-tile-content",
+                                                                          {
+                                                                            class: {
+                                                                              "align-end": true,
+                                                                              "red--text darken-4--text":
+                                                                                beforeData.isChanged
+                                                                            }
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              _vm._s(
+                                                                                beforeData.value
+                                                                              )
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    )
+                                                                  }
+                                                                )
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                    : _vm._e(),
+                                                  _vm._v(" "),
+                                                  _vm.updatedData[props.index]
+                                                    .orderData.after.length > 0
+                                                    ? _c(
+                                                        "v-flex",
+                                                        {
                                                           attrs: {
-                                                            headers:
-                                                              _vm.optionalServicesHeaders,
-                                                            items:
-                                                              _vm.updatedData[
-                                                                props.index
-                                                              ]
-                                                                .optional_services
-                                                                .after.deleted,
-                                                            "hide-actions": ""
-                                                          },
-                                                          scopedSlots: _vm._u([
-                                                            {
-                                                              key: "items",
-                                                              fn: function(
-                                                                nestedProps
-                                                              ) {
-                                                                return [
-                                                                  _c("td", [
+                                                            xs12: "",
+                                                            sm6: ""
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "v-card",
+                                                            [
+                                                              _c(
+                                                                "v-card-title",
+                                                                [
+                                                                  _c("h4", [
                                                                     _vm._v(
-                                                                      _vm._s(
-                                                                        nestedProps
-                                                                          .item
-                                                                          .name
-                                                                      )
-                                                                    )
-                                                                  ]),
-                                                                  _vm._v(" "),
-                                                                  _c("td", [
-                                                                    _vm._v(
-                                                                      _vm._s(
-                                                                        nestedProps
-                                                                          .item
-                                                                          .price
-                                                                      )
-                                                                    )
-                                                                  ]),
-                                                                  _vm._v(" "),
-                                                                  _c("td", [
-                                                                    _vm._v(
-                                                                      _vm._s(
-                                                                        nestedProps
-                                                                          .item
-                                                                          .comment
-                                                                      )
+                                                                      "Данные заказа После:"
                                                                     )
                                                                   ])
                                                                 ]
-                                                              }
-                                                            }
-                                                          ])
-                                                        })
-                                                      ],
-                                                      1
-                                                    )
-                                                  : _vm._e(),
-                                                _vm._v(" "),
-                                                _vm.updatedData[props.index]
-                                                  .optional_services.after
-                                                  .changed.length > 0
-                                                  ? _c(
-                                                      "v-flex",
-                                                      {
-                                                        staticClass: "mt-3",
-                                                        attrs: { xs12: "" }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "div",
-                                                          {
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c("v-divider"),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "v-list",
+                                                                {
+                                                                  attrs: {
+                                                                    dense: ""
+                                                                  }
+                                                                },
+                                                                _vm._l(
+                                                                  _vm
+                                                                    .updatedData[
+                                                                    props.index
+                                                                  ].orderData
+                                                                    .after,
+                                                                  function(
+                                                                    afterData,
+                                                                    index
+                                                                  ) {
+                                                                    return _c(
+                                                                      "v-list-tile",
+                                                                      {
+                                                                        key:
+                                                                          "order-data-after-" +
+                                                                          index
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-list-tile-content",
+                                                                          {
+                                                                            class: {
+                                                                              "success--text":
+                                                                                afterData.isChanged
+                                                                            }
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              _vm._s(
+                                                                                afterData.text
+                                                                              ) +
+                                                                                ":"
+                                                                            )
+                                                                          ]
+                                                                        ),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        _c(
+                                                                          "v-list-tile-content",
+                                                                          {
+                                                                            class: {
+                                                                              "align-end": true,
+                                                                              "success--text":
+                                                                                afterData.isChanged
+                                                                            }
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              _vm._s(
+                                                                                afterData.value
+                                                                              )
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    )
+                                                                  }
+                                                                )
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                    : _vm._e()
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _vm.isServicesChanged[props.index]
+                                                ? _c(
+                                                    "v-layout",
+                                                    { attrs: { wrap: "" } },
+                                                    [
+                                                      _c(
+                                                        "v-flex",
+                                                        {
+                                                          attrs: {
+                                                            xs12: "",
+                                                            sm6: ""
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "v-card",
+                                                            [
+                                                              _c(
+                                                                "v-card-title",
+                                                                [
+                                                                  _c("h4", [
+                                                                    _vm._v(
+                                                                      "Сервисы До:"
+                                                                    )
+                                                                  ])
+                                                                ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c("v-divider"),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "v-list",
+                                                                {
+                                                                  attrs: {
+                                                                    dense: ""
+                                                                  }
+                                                                },
+                                                                _vm._l(
+                                                                  _vm
+                                                                    .updatedData[
+                                                                    props.index
+                                                                  ].services
+                                                                    .before,
+                                                                  function(
+                                                                    beforeData,
+                                                                    index
+                                                                  ) {
+                                                                    return _c(
+                                                                      "v-list-tile",
+                                                                      {
+                                                                        key:
+                                                                          "services-before-" +
+                                                                          index
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-list-tile-content",
+                                                                          {
+                                                                            class: {
+                                                                              "red--text darken-4--text":
+                                                                                beforeData.deleted
+                                                                            }
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              _vm._s(
+                                                                                beforeData.name
+                                                                              ) +
+                                                                                ":"
+                                                                            )
+                                                                          ]
+                                                                        ),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        _c(
+                                                                          "v-list-tile-content",
+                                                                          {
+                                                                            class: {
+                                                                              "align-end": true,
+                                                                              "red--text darken-4--text":
+                                                                                beforeData.deleted
+                                                                            }
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              _vm._s(
+                                                                                beforeData.price
+                                                                              ) +
+                                                                                "$"
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    )
+                                                                  }
+                                                                )
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        ],
+                                                        1
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-flex",
+                                                        {
+                                                          attrs: {
+                                                            xs12: "",
+                                                            sm6: ""
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "v-card",
+                                                            [
+                                                              _c(
+                                                                "v-card-title",
+                                                                [
+                                                                  _c("h4", [
+                                                                    _vm._v(
+                                                                      "Сервисы После:"
+                                                                    )
+                                                                  ])
+                                                                ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c("v-divider"),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "v-list",
+                                                                {
+                                                                  attrs: {
+                                                                    dense: ""
+                                                                  }
+                                                                },
+                                                                _vm._l(
+                                                                  _vm
+                                                                    .updatedData[
+                                                                    props.index
+                                                                  ].services
+                                                                    .after,
+                                                                  function(
+                                                                    afterData,
+                                                                    index
+                                                                  ) {
+                                                                    return _c(
+                                                                      "v-list-tile",
+                                                                      {
+                                                                        key:
+                                                                          "services-after-" +
+                                                                          index
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-list-tile-content",
+                                                                          {
+                                                                            class: {
+                                                                              "success--text":
+                                                                                afterData.added
+                                                                            }
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              _vm._s(
+                                                                                afterData.name
+                                                                              ) +
+                                                                                ":"
+                                                                            )
+                                                                          ]
+                                                                        ),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        _c(
+                                                                          "v-list-tile-content",
+                                                                          {
+                                                                            class: {
+                                                                              "align-end": true,
+                                                                              "success--text":
+                                                                                afterData.added
+                                                                            }
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              _vm._s(
+                                                                                afterData.price
+                                                                              ) +
+                                                                                "$"
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    )
+                                                                  }
+                                                                )
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                    ],
+                                                    1
+                                                  )
+                                                : _vm._e(),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-layout",
+                                                { attrs: { wrap: "" } },
+                                                [
+                                                  _vm.updatedData[props.index]
+                                                    .optional_services.after
+                                                    .added.length > 0
+                                                    ? _c(
+                                                        "v-flex",
+                                                        {
+                                                          staticClass: "mt-3",
+                                                          attrs: { xs12: "" }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "headline success--text mb-2"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "Добавленые Дополнительные сервисы"
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c("v-data-table", {
                                                             staticClass:
-                                                              "headline info--text mb-2"
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "Обновленные Дополнительные сервисы"
-                                                            )
-                                                          ]
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "v-layout",
-                                                          {
-                                                            attrs: { wrap: "" }
-                                                          },
-                                                          [
-                                                            _vm._l(
-                                                              _vm.updatedData[
-                                                                props.index
-                                                              ]
-                                                                .optional_services
-                                                                .before.changed
-                                                                .length,
-                                                              function(index) {
-                                                                return [
-                                                                  _c(
-                                                                    "v-flex",
-                                                                    {
-                                                                      key:
-                                                                        "optional-services-before-" +
-                                                                        index,
-                                                                      attrs: {
-                                                                        xs12:
-                                                                          "",
-                                                                        sm6: ""
-                                                                      }
-                                                                    },
-                                                                    [
-                                                                      _c(
-                                                                        "v-card",
-                                                                        [
-                                                                          _c(
-                                                                            "v-card-title",
-                                                                            [
-                                                                              _c(
-                                                                                "h4",
-                                                                                [
-                                                                                  _vm._v(
-                                                                                    "До:"
-                                                                                  )
-                                                                                ]
-                                                                              )
-                                                                            ]
-                                                                          ),
-                                                                          _vm._v(
-                                                                            " "
-                                                                          ),
-                                                                          _c(
-                                                                            "v-divider"
-                                                                          ),
-                                                                          _vm._v(
-                                                                            " "
-                                                                          ),
-                                                                          _c(
-                                                                            "v-list",
-                                                                            {
-                                                                              attrs: {
-                                                                                dense:
-                                                                                  ""
-                                                                              }
-                                                                            },
-                                                                            [
-                                                                              _c(
-                                                                                "v-list-tile",
-                                                                                [
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "red--text darken-4--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .name !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .name
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        Название:\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  ),
-                                                                                  _vm._v(
-                                                                                    " "
-                                                                                  ),
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "align-end": true,
-                                                                                        "red--text darken-4--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .name !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .name
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        " +
-                                                                                          _vm._s(
-                                                                                            _vm
-                                                                                              .updatedData[
-                                                                                              props
-                                                                                                .index
-                                                                                            ]
-                                                                                              .optional_services
-                                                                                              .before
-                                                                                              .changed[
-                                                                                              index -
-                                                                                                1
-                                                                                            ]
-                                                                                              .name
-                                                                                          ) +
-                                                                                          "\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  )
-                                                                                ],
-                                                                                1
-                                                                              ),
-                                                                              _vm._v(
-                                                                                " "
-                                                                              ),
-                                                                              _c(
-                                                                                "v-list-tile",
-                                                                                [
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "red--text darken-4--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .price !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .price
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        Цена:\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  ),
-                                                                                  _vm._v(
-                                                                                    " "
-                                                                                  ),
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "align-end": true,
-                                                                                        "red--text darken-4--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .price !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .price
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        " +
-                                                                                          _vm._s(
-                                                                                            _vm
-                                                                                              .updatedData[
-                                                                                              props
-                                                                                                .index
-                                                                                            ]
-                                                                                              .optional_services
-                                                                                              .before
-                                                                                              .changed[
-                                                                                              index -
-                                                                                                1
-                                                                                            ]
-                                                                                              .price
-                                                                                          ) +
-                                                                                          "$\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  )
-                                                                                ],
-                                                                                1
-                                                                              ),
-                                                                              _vm._v(
-                                                                                " "
-                                                                              ),
-                                                                              _c(
-                                                                                "v-list-tile",
-                                                                                [
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "red--text darken-4--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .comment !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .comment
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        Комментарий:\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  ),
-                                                                                  _vm._v(
-                                                                                    " "
-                                                                                  ),
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "align-end": true,
-                                                                                        "red--text darken-4--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .comment !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .comment
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        " +
-                                                                                          _vm._s(
-                                                                                            _vm
-                                                                                              .updatedData[
-                                                                                              props
-                                                                                                .index
-                                                                                            ]
-                                                                                              .optional_services
-                                                                                              .before
-                                                                                              .changed[
-                                                                                              index -
-                                                                                                1
-                                                                                            ]
-                                                                                              .comment
-                                                                                          ) +
-                                                                                          "\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  )
-                                                                                ],
-                                                                                1
-                                                                              )
-                                                                            ],
-                                                                            1
+                                                              "elevation-1",
+                                                            attrs: {
+                                                              headers:
+                                                                _vm.optionalServicesHeaders,
+                                                              items:
+                                                                _vm.updatedData[
+                                                                  props.index
+                                                                ]
+                                                                  .optional_services
+                                                                  .after.added,
+                                                              "hide-actions": ""
+                                                            },
+                                                            scopedSlots: _vm._u(
+                                                              [
+                                                                {
+                                                                  key: "items",
+                                                                  fn: function(
+                                                                    nestedProps
+                                                                  ) {
+                                                                    return [
+                                                                      _c("td", [
+                                                                        _vm._v(
+                                                                          _vm._s(
+                                                                            nestedProps
+                                                                              .item
+                                                                              .name
                                                                           )
-                                                                        ],
-                                                                        1
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  ),
-                                                                  _vm._v(" "),
-                                                                  _c(
-                                                                    "v-flex",
-                                                                    {
-                                                                      key:
-                                                                        "optional-services-after-" +
-                                                                        index,
-                                                                      attrs: {
-                                                                        xs12:
-                                                                          "",
-                                                                        sm6: ""
-                                                                      }
-                                                                    },
-                                                                    [
-                                                                      _c(
-                                                                        "v-card",
-                                                                        [
-                                                                          _c(
-                                                                            "v-card-title",
-                                                                            [
-                                                                              _c(
-                                                                                "h4",
-                                                                                [
-                                                                                  _vm._v(
-                                                                                    "После:"
-                                                                                  )
-                                                                                ]
-                                                                              )
-                                                                            ]
-                                                                          ),
-                                                                          _vm._v(
-                                                                            " "
-                                                                          ),
-                                                                          _c(
-                                                                            "v-divider"
-                                                                          ),
-                                                                          _vm._v(
-                                                                            " "
-                                                                          ),
-                                                                          _c(
-                                                                            "v-list",
-                                                                            {
-                                                                              attrs: {
-                                                                                dense:
-                                                                                  ""
-                                                                              }
-                                                                            },
-                                                                            [
-                                                                              _c(
-                                                                                "v-list-tile",
-                                                                                [
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "success--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .name !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .name
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        Название:\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  ),
-                                                                                  _vm._v(
-                                                                                    " "
-                                                                                  ),
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "align-end": true,
-                                                                                        "success--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .name !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .name
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        " +
-                                                                                          _vm._s(
+                                                                        )
+                                                                      ]),
+                                                                      _vm._v(
+                                                                        " "
+                                                                      ),
+                                                                      _c("td", [
+                                                                        _vm._v(
+                                                                          _vm._s(
+                                                                            nestedProps
+                                                                              .item
+                                                                              .price
+                                                                          )
+                                                                        )
+                                                                      ]),
+                                                                      _vm._v(
+                                                                        " "
+                                                                      ),
+                                                                      _c("td", [
+                                                                        _vm._v(
+                                                                          _vm._s(
+                                                                            nestedProps
+                                                                              .item
+                                                                              .comment
+                                                                          )
+                                                                        )
+                                                                      ])
+                                                                    ]
+                                                                  }
+                                                                }
+                                                              ]
+                                                            )
+                                                          })
+                                                        ],
+                                                        1
+                                                      )
+                                                    : _vm._e(),
+                                                  _vm._v(" "),
+                                                  _vm.updatedData[props.index]
+                                                    .optional_services.after
+                                                    .deleted.length > 0
+                                                    ? _c(
+                                                        "v-flex",
+                                                        {
+                                                          staticClass: "mt-3",
+                                                          attrs: { xs12: "" }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "headline red--text darken-4--text mb-2"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "Удаленные Дополнительные сервисы"
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c("v-data-table", {
+                                                            staticClass:
+                                                              "elevation-1",
+                                                            attrs: {
+                                                              headers:
+                                                                _vm.optionalServicesHeaders,
+                                                              items:
+                                                                _vm.updatedData[
+                                                                  props.index
+                                                                ]
+                                                                  .optional_services
+                                                                  .after
+                                                                  .deleted,
+                                                              "hide-actions": ""
+                                                            },
+                                                            scopedSlots: _vm._u(
+                                                              [
+                                                                {
+                                                                  key: "items",
+                                                                  fn: function(
+                                                                    nestedProps
+                                                                  ) {
+                                                                    return [
+                                                                      _c("td", [
+                                                                        _vm._v(
+                                                                          _vm._s(
+                                                                            nestedProps
+                                                                              .item
+                                                                              .name
+                                                                          )
+                                                                        )
+                                                                      ]),
+                                                                      _vm._v(
+                                                                        " "
+                                                                      ),
+                                                                      _c("td", [
+                                                                        _vm._v(
+                                                                          _vm._s(
+                                                                            nestedProps
+                                                                              .item
+                                                                              .price
+                                                                          )
+                                                                        )
+                                                                      ]),
+                                                                      _vm._v(
+                                                                        " "
+                                                                      ),
+                                                                      _c("td", [
+                                                                        _vm._v(
+                                                                          _vm._s(
+                                                                            nestedProps
+                                                                              .item
+                                                                              .comment
+                                                                          )
+                                                                        )
+                                                                      ])
+                                                                    ]
+                                                                  }
+                                                                }
+                                                              ]
+                                                            )
+                                                          })
+                                                        ],
+                                                        1
+                                                      )
+                                                    : _vm._e(),
+                                                  _vm._v(" "),
+                                                  _vm.updatedData[props.index]
+                                                    .optional_services.after
+                                                    .changed.length > 0
+                                                    ? _c(
+                                                        "v-flex",
+                                                        {
+                                                          staticClass: "mt-3",
+                                                          attrs: { xs12: "" }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "headline info--text mb-2"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "Обновленные Дополнительные сервисы"
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "v-layout",
+                                                            {
+                                                              attrs: {
+                                                                wrap: ""
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._l(
+                                                                _vm.updatedData[
+                                                                  props.index
+                                                                ]
+                                                                  .optional_services
+                                                                  .before
+                                                                  .changed
+                                                                  .length,
+                                                                function(
+                                                                  index
+                                                                ) {
+                                                                  return [
+                                                                    _c(
+                                                                      "v-flex",
+                                                                      {
+                                                                        key:
+                                                                          "optional-services-before-" +
+                                                                          index,
+                                                                        attrs: {
+                                                                          xs12:
+                                                                            "",
+                                                                          sm6:
+                                                                            ""
+                                                                        }
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-card",
+                                                                          [
+                                                                            _c(
+                                                                              "v-card-title",
+                                                                              [
+                                                                                _c(
+                                                                                  "h4",
+                                                                                  [
+                                                                                    _vm._v(
+                                                                                      "До:"
+                                                                                    )
+                                                                                  ]
+                                                                                )
+                                                                              ]
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "v-divider"
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "v-list",
+                                                                              {
+                                                                                attrs: {
+                                                                                  dense:
+                                                                                    ""
+                                                                                }
+                                                                              },
+                                                                              [
+                                                                                _c(
+                                                                                  "v-list-tile",
+                                                                                  [
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "red--text darken-4--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .name !==
                                                                                             _vm
                                                                                               .updatedData[
                                                                                               props
@@ -81759,96 +81377,96 @@ var render = function() {
                                                                                                 1
                                                                                             ]
                                                                                               .name
-                                                                                          ) +
-                                                                                          "\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  )
-                                                                                ],
-                                                                                1
-                                                                              ),
-                                                                              _vm._v(
-                                                                                " "
-                                                                              ),
-                                                                              _c(
-                                                                                "v-list-tile",
-                                                                                [
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "success--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .price !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .price
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        Цена:\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  ),
-                                                                                  _vm._v(
-                                                                                    " "
-                                                                                  ),
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "align-end": true,
-                                                                                        "success--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .price !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .price
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        " +
-                                                                                          _vm._s(
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        Название:\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    ),
+                                                                                    _vm._v(
+                                                                                      " "
+                                                                                    ),
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "align-end": true,
+                                                                                          "red--text darken-4--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .name !==
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .after
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .name
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        " +
+                                                                                            _vm._s(
+                                                                                              _vm
+                                                                                                .updatedData[
+                                                                                                props
+                                                                                                  .index
+                                                                                              ]
+                                                                                                .optional_services
+                                                                                                .before
+                                                                                                .changed[
+                                                                                                index -
+                                                                                                  1
+                                                                                              ]
+                                                                                                .name
+                                                                                            ) +
+                                                                                            "\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    )
+                                                                                  ],
+                                                                                  1
+                                                                                ),
+                                                                                _vm._v(
+                                                                                  " "
+                                                                                ),
+                                                                                _c(
+                                                                                  "v-list-tile",
+                                                                                  [
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "red--text darken-4--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .price !==
                                                                                             _vm
                                                                                               .updatedData[
                                                                                               props
@@ -81861,96 +81479,96 @@ var render = function() {
                                                                                                 1
                                                                                             ]
                                                                                               .price
-                                                                                          ) +
-                                                                                          "$\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  )
-                                                                                ],
-                                                                                1
-                                                                              ),
-                                                                              _vm._v(
-                                                                                " "
-                                                                              ),
-                                                                              _c(
-                                                                                "v-list-tile",
-                                                                                [
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "success--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .comment !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .comment
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        Комментарий:\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  ),
-                                                                                  _vm._v(
-                                                                                    " "
-                                                                                  ),
-                                                                                  _c(
-                                                                                    "v-list-tile-content",
-                                                                                    {
-                                                                                      class: {
-                                                                                        "align-end": true,
-                                                                                        "success--text":
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .before
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .comment !==
-                                                                                          _vm
-                                                                                            .updatedData[
-                                                                                            props
-                                                                                              .index
-                                                                                          ]
-                                                                                            .optional_services
-                                                                                            .after
-                                                                                            .changed[
-                                                                                            index -
-                                                                                              1
-                                                                                          ]
-                                                                                            .comment
-                                                                                      }
-                                                                                    },
-                                                                                    [
-                                                                                      _vm._v(
-                                                                                        "\n                                                                        " +
-                                                                                          _vm._s(
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        Цена:\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    ),
+                                                                                    _vm._v(
+                                                                                      " "
+                                                                                    ),
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "align-end": true,
+                                                                                          "red--text darken-4--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .price !==
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .after
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .price
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        " +
+                                                                                            _vm._s(
+                                                                                              _vm
+                                                                                                .updatedData[
+                                                                                                props
+                                                                                                  .index
+                                                                                              ]
+                                                                                                .optional_services
+                                                                                                .before
+                                                                                                .changed[
+                                                                                                index -
+                                                                                                  1
+                                                                                              ]
+                                                                                                .price
+                                                                                            ) +
+                                                                                            "$\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    )
+                                                                                  ],
+                                                                                  1
+                                                                                ),
+                                                                                _vm._v(
+                                                                                  " "
+                                                                                ),
+                                                                                _c(
+                                                                                  "v-list-tile",
+                                                                                  [
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "red--text darken-4--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .comment !==
                                                                                             _vm
                                                                                               .updatedData[
                                                                                               props
@@ -81963,202 +81581,755 @@ var render = function() {
                                                                                                 1
                                                                                             ]
                                                                                               .comment
-                                                                                          ) +
-                                                                                          "\n                                                                    "
-                                                                                      )
-                                                                                    ]
-                                                                                  )
-                                                                                ],
-                                                                                1
-                                                                              )
-                                                                            ],
-                                                                            1
-                                                                          )
-                                                                        ],
-                                                                        1
-                                                                      )
-                                                                    ],
-                                                                    1
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        Комментарий:\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    ),
+                                                                                    _vm._v(
+                                                                                      " "
+                                                                                    ),
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "align-end": true,
+                                                                                          "red--text darken-4--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .comment !==
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .after
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .comment
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        " +
+                                                                                            _vm._s(
+                                                                                              _vm
+                                                                                                .updatedData[
+                                                                                                props
+                                                                                                  .index
+                                                                                              ]
+                                                                                                .optional_services
+                                                                                                .before
+                                                                                                .changed[
+                                                                                                index -
+                                                                                                  1
+                                                                                              ]
+                                                                                                .comment
+                                                                                            ) +
+                                                                                            "\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    )
+                                                                                  ],
+                                                                                  1
+                                                                                )
+                                                                              ],
+                                                                              1
+                                                                            )
+                                                                          ],
+                                                                          1
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    ),
+                                                                    _vm._v(" "),
+                                                                    _c(
+                                                                      "v-flex",
+                                                                      {
+                                                                        key:
+                                                                          "optional-services-after-" +
+                                                                          index,
+                                                                        attrs: {
+                                                                          xs12:
+                                                                            "",
+                                                                          sm6:
+                                                                            ""
+                                                                        }
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-card",
+                                                                          [
+                                                                            _c(
+                                                                              "v-card-title",
+                                                                              [
+                                                                                _c(
+                                                                                  "h4",
+                                                                                  [
+                                                                                    _vm._v(
+                                                                                      "После:"
+                                                                                    )
+                                                                                  ]
+                                                                                )
+                                                                              ]
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "v-divider"
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "v-list",
+                                                                              {
+                                                                                attrs: {
+                                                                                  dense:
+                                                                                    ""
+                                                                                }
+                                                                              },
+                                                                              [
+                                                                                _c(
+                                                                                  "v-list-tile",
+                                                                                  [
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "success--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .name !==
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .after
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .name
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        Название:\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    ),
+                                                                                    _vm._v(
+                                                                                      " "
+                                                                                    ),
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "align-end": true,
+                                                                                          "success--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .name !==
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .after
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .name
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        " +
+                                                                                            _vm._s(
+                                                                                              _vm
+                                                                                                .updatedData[
+                                                                                                props
+                                                                                                  .index
+                                                                                              ]
+                                                                                                .optional_services
+                                                                                                .after
+                                                                                                .changed[
+                                                                                                index -
+                                                                                                  1
+                                                                                              ]
+                                                                                                .name
+                                                                                            ) +
+                                                                                            "\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    )
+                                                                                  ],
+                                                                                  1
+                                                                                ),
+                                                                                _vm._v(
+                                                                                  " "
+                                                                                ),
+                                                                                _c(
+                                                                                  "v-list-tile",
+                                                                                  [
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "success--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .price !==
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .after
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .price
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        Цена:\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    ),
+                                                                                    _vm._v(
+                                                                                      " "
+                                                                                    ),
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "align-end": true,
+                                                                                          "success--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .price !==
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .after
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .price
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        " +
+                                                                                            _vm._s(
+                                                                                              _vm
+                                                                                                .updatedData[
+                                                                                                props
+                                                                                                  .index
+                                                                                              ]
+                                                                                                .optional_services
+                                                                                                .after
+                                                                                                .changed[
+                                                                                                index -
+                                                                                                  1
+                                                                                              ]
+                                                                                                .price
+                                                                                            ) +
+                                                                                            "$\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    )
+                                                                                  ],
+                                                                                  1
+                                                                                ),
+                                                                                _vm._v(
+                                                                                  " "
+                                                                                ),
+                                                                                _c(
+                                                                                  "v-list-tile",
+                                                                                  [
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "success--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .comment !==
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .after
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .comment
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        Комментарий:\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    ),
+                                                                                    _vm._v(
+                                                                                      " "
+                                                                                    ),
+                                                                                    _c(
+                                                                                      "v-list-tile-content",
+                                                                                      {
+                                                                                        class: {
+                                                                                          "align-end": true,
+                                                                                          "success--text":
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .before
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .comment !==
+                                                                                            _vm
+                                                                                              .updatedData[
+                                                                                              props
+                                                                                                .index
+                                                                                            ]
+                                                                                              .optional_services
+                                                                                              .after
+                                                                                              .changed[
+                                                                                              index -
+                                                                                                1
+                                                                                            ]
+                                                                                              .comment
+                                                                                        }
+                                                                                      },
+                                                                                      [
+                                                                                        _vm._v(
+                                                                                          "\n                                                                        " +
+                                                                                            _vm._s(
+                                                                                              _vm
+                                                                                                .updatedData[
+                                                                                                props
+                                                                                                  .index
+                                                                                              ]
+                                                                                                .optional_services
+                                                                                                .after
+                                                                                                .changed[
+                                                                                                index -
+                                                                                                  1
+                                                                                              ]
+                                                                                                .comment
+                                                                                            ) +
+                                                                                            "\n                                                                    "
+                                                                                        )
+                                                                                      ]
+                                                                                    )
+                                                                                  ],
+                                                                                  1
+                                                                                )
+                                                                              ],
+                                                                              1
+                                                                            )
+                                                                          ],
+                                                                          1
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    )
+                                                                  ]
+                                                                }
+                                                              )
+                                                            ],
+                                                            2
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                    : _vm._e()
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _vm.updatedData[props.index]
+                                                .gpsData.added.length > 0 ||
+                                              _vm.updatedData[props.index]
+                                                .gpsData.deleted.length > 0 ||
+                                              _vm.updatedData[props.index]
+                                                .gpsData.changed.length > 0
+                                                ? _c(
+                                                    "v-layout",
+                                                    {
+                                                      staticClass: "mt-3",
+                                                      attrs: { wrap: "" }
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "v-flex",
+                                                        { attrs: { xs12: "" } },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "headline text-xs-center mb-2"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "GPS-трекинг"
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _vm.updatedData[
+                                                        props.index
+                                                      ].gpsData.added.length > 0
+                                                        ? _c(
+                                                            "v-flex",
+                                                            {
+                                                              attrs: {
+                                                                xs12: ""
+                                                              }
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "div",
+                                                                {
+                                                                  staticClass:
+                                                                    "headline success--text mb-2"
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    "Добавленые"
                                                                   )
                                                                 ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "appGpsDataHistoryTable",
+                                                                {
+                                                                  attrs: {
+                                                                    items:
+                                                                      _vm
+                                                                        .updatedData[
+                                                                        props
+                                                                          .index
+                                                                      ].gpsData
+                                                                        .added
+                                                                  }
+                                                                }
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        : _vm._e(),
+                                                      _vm._v(" "),
+                                                      _vm.updatedData[
+                                                        props.index
+                                                      ].gpsData.deleted.length >
+                                                      0
+                                                        ? _c(
+                                                            "v-flex",
+                                                            {
+                                                              staticClass:
+                                                                "mt-3",
+                                                              attrs: {
+                                                                xs12: ""
                                                               }
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "div",
+                                                                {
+                                                                  staticClass:
+                                                                    "headline red--text darken-4--text mb-2"
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    "Удаленные"
+                                                                  )
+                                                                ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "appGpsDataHistoryTable",
+                                                                {
+                                                                  attrs: {
+                                                                    items:
+                                                                      _vm
+                                                                        .updatedData[
+                                                                        props
+                                                                          .index
+                                                                      ].gpsData
+                                                                        .deleted
+                                                                  }
+                                                                }
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        : _vm._e(),
+                                                      _vm._v(" "),
+                                                      _vm.updatedData[
+                                                        props.index
+                                                      ].gpsData.changed.length >
+                                                      0
+                                                        ? _c(
+                                                            "v-flex",
+                                                            {
+                                                              staticClass:
+                                                                "mt-3",
+                                                              attrs: {
+                                                                xs12: ""
+                                                              }
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "div",
+                                                                {
+                                                                  staticClass:
+                                                                    "headline info--text mb-2"
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    "Обновленные"
+                                                                  )
+                                                                ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "appGpsDataHistoryTable",
+                                                                {
+                                                                  attrs: {
+                                                                    withChanged:
+                                                                      "",
+                                                                    items:
+                                                                      _vm
+                                                                        .updatedData[
+                                                                        props
+                                                                          .index
+                                                                      ].gpsData
+                                                                        .changed
+                                                                  }
+                                                                }
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        : _vm._e()
+                                                    ],
+                                                    1
+                                                  )
+                                                : _vm._e()
+                                            ],
+                                            1
+                                          )
+                                        : _vm.$auth.check("admin") &&
+                                          props.item.type === "Удаление"
+                                          ? _c(
+                                              "v-container",
+                                              { attrs: { fluid: "" } },
+                                              [
+                                                props.item.order.deleted_at
+                                                  ? _c(
+                                                      "v-layout",
+                                                      { attrs: { wrap: "" } },
+                                                      [
+                                                        _c(
+                                                          "v-flex",
+                                                          {
+                                                            attrs: {
+                                                              xs12: "",
+                                                              sm6: "",
+                                                              md4: "",
+                                                              lg3: ""
+                                                            }
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "p",
+                                                              {
+                                                                staticClass:
+                                                                  "title",
+                                                                staticStyle: {
+                                                                  margin: "0",
+                                                                  "line-height":
+                                                                    "2.2!important"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                                                Нажмите чтобы восстановить:\n                                            "
+                                                                )
+                                                              ]
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-flex",
+                                                          {
+                                                            attrs: {
+                                                              xs12: "",
+                                                              sm3: ""
+                                                            }
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "v-btn",
+                                                              {
+                                                                staticClass:
+                                                                  "white--text",
+                                                                attrs: {
+                                                                  loading:
+                                                                    _vm.restoring,
+                                                                  disabled:
+                                                                    _vm.restoring,
+                                                                  color:
+                                                                    "purple"
+                                                                },
+                                                                on: {
+                                                                  click: function(
+                                                                    $event
+                                                                  ) {
+                                                                    _vm.restore(
+                                                                      props.item
+                                                                        .order
+                                                                        .id
+                                                                    )
+                                                                  }
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "Восстановить"
+                                                                )
+                                                              ]
                                                             )
                                                           ],
-                                                          2
+                                                          1
                                                         )
                                                       ],
                                                       1
                                                     )
-                                                  : _vm._e()
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _vm.updatedData[props.index].gpsData
-                                              .added.length > 0 ||
-                                            _vm.updatedData[props.index].gpsData
-                                              .deleted.length > 0 ||
-                                            _vm.updatedData[props.index].gpsData
-                                              .changed.length > 0
-                                              ? _c(
-                                                  "v-layout",
-                                                  {
-                                                    staticClass: "mt-3",
-                                                    attrs: { wrap: "" }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "v-flex",
-                                                      { attrs: { xs12: "" } },
+                                                  : _c(
+                                                      "v-layout",
                                                       [
                                                         _c(
-                                                          "div",
+                                                          "v-flex",
                                                           {
-                                                            staticClass:
-                                                              "headline text-xs-center mb-2"
+                                                            attrs: { xs12: "" }
                                                           },
                                                           [
-                                                            _vm._v(
-                                                              "GPS-трекинг"
+                                                            _c(
+                                                              "p",
+                                                              {
+                                                                staticClass:
+                                                                  "red--text text--darken-4 title",
+                                                                staticStyle: {
+                                                                  margin: "0",
+                                                                  "line-height":
+                                                                    "2.2!important"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                                                На данный момент восстановление невозможно, так как этот заказ уже восстановлен!\n                                            "
+                                                                )
+                                                              ]
                                                             )
                                                           ]
                                                         )
-                                                      ]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _vm.updatedData[props.index]
-                                                      .gpsData.added.length > 0
-                                                      ? _c(
-                                                          "v-flex",
-                                                          {
-                                                            attrs: { xs12: "" }
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "div",
-                                                              {
-                                                                staticClass:
-                                                                  "headline success--text mb-2"
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "Добавленые"
-                                                                )
-                                                              ]
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "appGpsDataHistoryTable",
-                                                              {
-                                                                attrs: {
-                                                                  items:
-                                                                    _vm
-                                                                      .updatedData[
-                                                                      props
-                                                                        .index
-                                                                    ].gpsData
-                                                                      .added
-                                                                }
-                                                              }
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      : _vm._e(),
-                                                    _vm._v(" "),
-                                                    _vm.updatedData[props.index]
-                                                      .gpsData.deleted.length >
-                                                    0
-                                                      ? _c(
-                                                          "v-flex",
-                                                          {
-                                                            staticClass: "mt-3",
-                                                            attrs: { xs12: "" }
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "div",
-                                                              {
-                                                                staticClass:
-                                                                  "headline red--text darken-4--text mb-2"
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "Удаленные"
-                                                                )
-                                                              ]
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "appGpsDataHistoryTable",
-                                                              {
-                                                                attrs: {
-                                                                  items:
-                                                                    _vm
-                                                                      .updatedData[
-                                                                      props
-                                                                        .index
-                                                                    ].gpsData
-                                                                      .deleted
-                                                                }
-                                                              }
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      : _vm._e(),
-                                                    _vm._v(" "),
-                                                    _vm.updatedData[props.index]
-                                                      .gpsData.changed.length >
-                                                    0
-                                                      ? _c(
-                                                          "v-flex",
-                                                          {
-                                                            staticClass: "mt-3",
-                                                            attrs: { xs12: "" }
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "div",
-                                                              {
-                                                                staticClass:
-                                                                  "headline info--text mb-2"
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "Обновленные"
-                                                                )
-                                                              ]
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "appGpsDataHistoryTable",
-                                                              {
-                                                                attrs: {
-                                                                  withChanged:
-                                                                    "",
-                                                                  items:
-                                                                    _vm
-                                                                      .updatedData[
-                                                                      props
-                                                                        .index
-                                                                    ].gpsData
-                                                                      .changed
-                                                                }
-                                                              }
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      : _vm._e()
-                                                  ],
-                                                  1
-                                                )
-                                              : _vm._e()
-                                          ],
-                                          1
-                                        )
-                                      : _vm._e()
+                                                      ],
+                                                      1
+                                                    )
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e()
                                   ],
                                   1
                                 )
