@@ -266,13 +266,13 @@ export default {
                 .then(({data}) => {
                     this.totalPriceListHistoryItems = data.total;
                     this.priceListHistory = data.data;//.map(data => ({ ...data, before: JSON.parse(data.before), after: JSON.parse(data.after) }));
+                    this.loading = false;
+                    this.restoring = false;
                 })
                 .catch(err => {
                     console.log(err);
-                })
-                .finally(() => {
                     this.loading = false;
-                    this.restoring = false
+                    this.restoring = false;
                 });
         },
         checkSearch(value) {

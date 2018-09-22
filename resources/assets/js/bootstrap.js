@@ -21,6 +21,11 @@
       };
 }(Element.prototype));
 (function(e) {
+    if (!e.startsWith) {
+        e.startsWith = function(search, pos) {
+            return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
+        };
+    }
     if (!e.endsWith) {
         e.endsWith = function(search, this_len) {
             if (this_len === undefined || this_len > this.length) {
@@ -30,6 +35,35 @@
         };
     }
 }(String.prototype));
+(function(e) {
+    if (!e.includes) {
+        Object.defineProperty(e, 'includes', {
+            value: function(searchElement, fromIndex) {
+                if (this == null) {
+                    throw new TypeError('"this" is null or not defined');
+                }
+                var o = Object(this);
+                var len = o.length >>> 0;
+                if (len === 0) {
+                    return false;
+                }
+                var n = fromIndex | 0;
+                var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+
+                function sameValueZero(x, y) {
+                    return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
+                }
+                while (k < len) {
+                    if (sameValueZero(o[k], searchElement)) {
+                        return true;
+                    }
+                    k++;
+                }
+                return false;
+            }
+        });
+    }
+}(Array.prototype));
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

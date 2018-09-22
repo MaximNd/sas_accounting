@@ -81,7 +81,12 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::put('/orders/{id}', 'OrderController@updateOrder');
 
+    Route::put('/orders/{id}/restore', 'OrderController@restoreOrder');
+
     Route::delete('/orders/{id}', 'OrderController@deleteOrder');
+
+    // ORDERS_LOGS
+    Route::get('/orders/logs', 'OrderLogController@getLogs');
 
     // CACHED_DATA
     Route::get('/cache', 'CachedDataController@getCachedData');

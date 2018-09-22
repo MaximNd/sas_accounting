@@ -13,6 +13,7 @@ import CreateOrder from './../containers/createOrder/CreateOrder.vue';
 import Orders from './../containers/orders/Orders.vue';
 import Order from './../containers/order/Order.vue';
 import PriceListHistory from './../containers/priceListHistory/PriceListHistory.vue';
+import OrdersHistory from './../containers/ordersHistory/OrdersHistory.vue';
 
 Vue.use(Router);
 
@@ -77,6 +78,11 @@ export default new Router({
         path: '/price-list-history',
         name: 'price-list-history',
         component: PriceListHistory
+    },
+    {
+        path: '/orders-history',
+        name: 'orders-history',
+        component: OrdersHistory
     },
     {
         path: '',

@@ -367,7 +367,6 @@
 
             <v-expansion-panel popout class="mt-3" v-if="!isCreation">
                 <v-expansion-panel-content
-                    lazy
                     class="elevation-1">
                     <div slot="header" class="headline pdf-preview">PDF превью</div>
                     <v-card>
@@ -976,7 +975,7 @@ export default {
                     optional_services: {
                         deleted: deletedOptionalServices,
                         added: addedOptionalServices,
-                        changed: restOldChangedOrderOptionalServices
+                        changed: restUpdatedChangedOrderOptionalServices
                     }
                 })
             };

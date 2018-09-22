@@ -71,11 +71,13 @@ class OrderController extends Controller
             }
             $order->optionalServices()->saveMany($orderOptionalServices);
 
+            $order['client'] = $order->client;
+
             $log = new OrderLog([
                 'type' => 'Создание',
                 'user_id' => $request->user()->id,
-                'before' => '[]',
-                'after' => '[]'
+                'before' => '{}',
+                'after' => $order->toJson()
             ]);
             $order->logs()->save($log);
             return $order;
@@ -218,6 +220,27 @@ class OrderController extends Controller
                 'order_id' => $id,
                 'user_id' => $request->user()->id,
                 'type' => 'Удаление',
+                'before' => "{}",
+                'after' => "{}"
+            ]);
+            $orderLog->save();
+        });
+    }
+
+    public function restoreOrder(Request $request, $id) {
+        if ($request->user()->role !== 'admin') {
+            return response()->json([
+                'message' => 'You are not allowed to restore Orders'
+            ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
+        }
+        DB::transaction(function () use ($request, $id) {
+            Order::withTrashed()
+                ->where('id', '=', $id)
+                ->restore();
+            $orderLog = new OrderLog([
+                'order_id' => $id,
+                'user_id' => $request->user()->id,
+                'type' => 'Восстановление',
                 'before' => "{}",
                 'after' => "{}"
             ]);
