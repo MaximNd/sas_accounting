@@ -37,12 +37,16 @@ export default {
             this.$store.dispatch('deleteEquipment', this.service.id)
                 .then((data) => {
                     this.$emit('deleteDialogClosed', 'deleteDialog');
+                    this.$emit('service-deleted');
+                    this.pending = false;
                 })
                 .catch(err => {
                     console.log(err);
+                    this.$emit('service:error');
+                    this.pending = false;
                 })
                 .finally(() => {
-                    this.pending = false;
+
                 });
         },
         closeDialog() {

@@ -24,11 +24,7 @@ export default {
         }
     },
     created() {
-        // if (parseInt(this.$auth.user().id) === parseInt(this.$route.params.id)) {
         this.user = this.$auth.user();
-        // } else {
-            // TODO Fetch User by ID
-        // }
     },
     components: {
         appProfileData: ProfileData

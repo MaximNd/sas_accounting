@@ -11,6 +11,7 @@ import { store } from './store/store';
 import VueAuth from '@websanova/vue-auth';
 import Vuetify from 'vuetify';
 import VueAxios from 'vue-axios';
+import VeeValidate from 'vee-validate';
 import axios from 'axios';
 import 'vuetify/dist/vuetify.min.css'
 
@@ -20,6 +21,7 @@ import router from './router';
 Vue.router = router;
 Vue.use(VueAxios, axios)
 Vue.use(Vuetify);
+Vue.use(VeeValidate);
 
 Vue.use(VueAuth, {
     rolesVar: 'role',

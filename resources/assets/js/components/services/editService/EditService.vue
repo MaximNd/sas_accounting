@@ -8,10 +8,21 @@
                 <v-container grid-list-md>
                     <v-layout wrap>
                         <v-flex xs12>
-                            <v-text-field v-model="editedService.name" label="Название"></v-text-field>
+                            <v-text-field
+                                v-validate="'required'"
+                                data-vv-name="name"
+                                :error-messages="errors.collect('name')"
+                                v-model="editedService.name"
+                                label="Название"></v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                            <v-text-field v-model="editedService.price" append-icon="attach_money" label="Цена за гектар"></v-text-field>
+                            <v-text-field
+                                v-validate="'required|decimal:2'"
+                                data-vv-name="price"
+                                :error-messages="errors.collect('price')"
+                                v-model="editedService.price"
+                                append-icon="attach_money"
+                                label="Цена за гектар"></v-text-field>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -50,29 +61,37 @@ export default {
     },
     methods: {
         editService() {
-            this.pending = true;
-            const payload = {
-                id: this.service.id,
-                isService: true,
-                service: {
-                    name: this.editedService.name,
-                    price: this.editedService.price,
-                    type: 'Услуга'
-                },
-                log: {
-                    before: JSON.stringify(this.service),
-                    after: JSON.stringify(this.editedService)
-                }
-            };
-            this.$store.dispatch('editEquipment', payload)
-                .then((data) => {
-                    this.$emit('editDialogClosed', 'editDialog');
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-                .finally(() => {
-                    this.pending = false;
+            this.$validator.validateAll()
+                .then(isValid => {
+                    if (!isValid) {
+                        this.$emit('validation:error');
+                        return;
+                    }
+                    this.pending = true;
+                    const payload = {
+                        id: this.service.id,
+                        isService: true,
+                        service: {
+                            name: this.editedService.name,
+                            price: this.editedService.price,
+                            type: 'Услуга'
+                        },
+                        log: {
+                            before: JSON.stringify(this.service),
+                            after: JSON.stringify(this.editedService)
+                        }
+                    };
+                    this.$store.dispatch('editEquipment', payload)
+                        .then((data) => {
+                            this.$emit('editDialogClosed', 'editDialog');
+                            this.$emit('service-updated');
+                            this.pending = false;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            this.$emit('service:error');
+                            this.pending = false;
+                        });
                 });
         },
         closeDialog() {

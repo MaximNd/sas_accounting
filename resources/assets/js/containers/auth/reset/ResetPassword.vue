@@ -6,14 +6,35 @@
                     <v-card-media src="/images/logo.png" :contain="true" height="100px"></v-card-media>
                     <v-form @submit.prevent="resetPassword">
                         <v-card-text>
+                            <v-text-field
+                                style="display:none;"
+                                v-validate="'required|email'"
+                                data-vv-name="email"
+                                v-model="data.email"
+                                required></v-text-field>
                             <v-flex xs12>
-                                <v-text-field autofocus v-model="data.email" label="Email" required></v-text-field>
+                                <v-text-field
+                                    v-validate="'required'"
+                                    data-vv-name="password"
+                                    name="password"
+                                    :error-messages="errors.collect('password')"
+                                    ref="password"
+                                    type="password"
+                                    v-model="data.password"
+                                    label="Пароль"
+                                    required></v-text-field>
                             </v-flex>
                             <v-flex xs12>
-                                <v-text-field type="password" v-model="data.password" label="Password" required></v-text-field>
-                            </v-flex>
-                            <v-flex xs12>
-                                <v-text-field type="password" v-model="data.password_confirmation" label="Password confirmation" required></v-text-field>
+                                <v-text-field
+                                    target="password"
+                                    v-validate="'required|confirmed:password'"
+                                    data-vv-name="password_confirmation"
+                                    :error-messages="errors.collect('password_confirmation')"
+                                    ref="password_confirmation"
+                                    type="password"
+                                    v-model="data.password_confirmation"
+                                    label="Подтверждение пароля"
+                                    required></v-text-field>
                             </v-flex>
                         </v-card-text>
                         <v-card-actions>
@@ -34,6 +55,8 @@
 </template>
 
 <script>
+import { Validator } from 'vee-validate';
+
 export default {
     data() {
         return {
@@ -48,10 +71,17 @@ export default {
     },
     methods: {
         resetPassword() {
-            this.pending = true;
-            this.axios.post('/password/reset', this.data)
+            this.$validator.validateAll()
+                .then(isValid => {
+                    if (!isValid) return;
+                    this.pending = true;
+                    return this.axios.post('/password/reset', this.data)
+                })
                 .then(res => {
-                    this.$router.push('/login');
+                    if (res) {
+                        this.$router.push('/login');
+                        localStorage.removeItem('email_for_password_reset');
+                    }
                 })
                 .catch(err => {
                     this.pending = false;
@@ -61,7 +91,7 @@ export default {
     },
     created() {
         this.data.token = this.$route.params.token;
-        console.log(this.data);
+        this.data.email = localStorage.getItem('email_for_password_reset');
     }
 }
 </script>

@@ -28,19 +28,50 @@
             <v-container grid-list-md>
                 <v-layout wrap>
                     <v-flex xs12>
-                        <v-text-field autofocus v-model="clientData.person_full_name" label="Контактное лицо" required></v-text-field>
+                        <v-text-field
+                            v-validate="'required'"
+                            data-vv-name="person_full_name"
+                            :error-messages="errors.collect('person_full_name')"
+                            autofocus
+                            v-model="clientData.person_full_name"
+                            label="Контактное лицо"
+                            required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field v-model="clientData.company_name" label="Компания" required></v-text-field>
+                        <v-text-field
+                            v-validate="'required'"
+                            data-vv-name="company_name"
+                            :error-messages="errors.collect('company_name')"
+                            v-model="clientData.company_name"
+                            label="Компания"
+                            required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field v-model="clientData.area" label="Площадь" required></v-text-field>
+                        <v-text-field
+                            v-validate="'required|decimal:2'"
+                            data-vv-name="area"
+                            :error-messages="errors.collect('area')"
+                            v-model="clientData.area"
+                            label="Площадь"
+                            required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field v-model="clientData.telephone" label="Телефон" required></v-text-field>
+                        <v-text-field
+                            v-validate="'required|max:20'"
+                            data-vv-name="telephone"
+                            :error-messages="errors.collect('telephone')"
+                            v-model="clientData.telephone"
+                            label="Телефон"
+                            required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-textarea v-model="clientData.comment" label="Коментарий" required></v-textarea>
+                        <v-textarea
+                            v-validate="'required'"
+                            data-vv-name="comment"
+                            :error-messages="errors.collect('comment')"
+                            v-model="clientData.comment"
+                            label="Коментарий"
+                            required></v-textarea>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -90,31 +121,38 @@ export default {
     },
     methods: {
         createClient(ignoreSimilarity) {
-            if (!this.isShowCancelButton && !ignoreSimilarity) {
-                this.clients.forEach(client => {
-                    if (stringSimilarity.compareTwoStrings(client.person_full_name, this.clientData.person_full_name) >= 0.7 ||
-                        stringSimilarity.compareTwoStrings(client.company_name, this.clientData.company_name) >= 0.7
-                    ) {
-                        this.similarClients.push(client);
+            this.$validator.validateAll()
+                .then(isValid => {
+                    if (!isValid) {
+                        this.$emit('validation:error');
+                        return;
                     }
-                });
-                if (this.similarClients.length > 0) {
-                    this.similarityDialog = true;
-                    return;
-                }
-            }
-            this.similarityDialog = false;
-            this.pending = true;
-            this.axios.post('/clients', this.clientData)
-                .then(({data}) => {
-                    this.$emit('clientCreated', data);
-                    this.$emit('dialogClosed', 'createDialog');
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-                .finally(() => {
-                    this.pending = false;
+                    if (!this.isShowCancelButton && !ignoreSimilarity) {
+                        this.clients.forEach(client => {
+                            if (stringSimilarity.compareTwoStrings(client.person_full_name, this.clientData.person_full_name) >= 0.7 ||
+                                stringSimilarity.compareTwoStrings(client.company_name, this.clientData.company_name) >= 0.7
+                            ) {
+                                this.similarClients.push(client);
+                            }
+                        });
+                        if (this.similarClients.length > 0) {
+                            this.similarityDialog = true;
+                            return;
+                        }
+                    }
+                    this.similarityDialog = false;
+                    this.pending = true;
+                    this.axios.post('/clients', this.clientData)
+                        .then(({data}) => {
+                            this.$emit('clientCreated', data);
+                            this.$emit('dialogClosed', 'createDialog');
+                            this.pending = false;
+                        })
+                        .catch(err => {
+                            this.$emit('client:error');
+                            this.pending = false;
+                            console.log(err);
+                        });
                 });
         },
         selectClient(client) {

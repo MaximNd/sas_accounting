@@ -8,10 +8,21 @@
                 <v-container grid-list-md>
                     <v-layout wrap>
                         <v-flex xs12>
-                            <v-text-field v-model="newService.name" label="Название"></v-text-field>
+                            <v-text-field
+                                v-validate="'required'"
+                                data-vv-name="name"
+                                :error-messages="errors.collect('name')"
+                                v-model="newService.name"
+                                label="Название"></v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                            <v-text-field v-model="newService.price" append-icon="attach_money" label="Цена за гектар"></v-text-field>
+                            <v-text-field
+                                v-validate="'required|decimal:2'"
+                                data-vv-name="price"
+                                :error-messages="errors.collect('price')"
+                                v-model="newService.price"
+                                append-icon="attach_money"
+                                label="Цена за гектар"></v-text-field>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -45,16 +56,24 @@ export default {
     },
     methods: {
         createService() {
-            this.pending = true;
-            this.$store.dispatch('createEquipment', this.newService)
-                .then((data) => {
-                    this.$emit('createDialogClosed', 'createDialog');
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-                .finally(() => {
-                    this.pending = false;
+            this.$validator.validateAll()
+                .then(isValid => {
+                    if (!isValid) {
+                        this.$emit('validation:error');
+                        return;
+                    }
+                    this.pending = true;
+                    this.$store.dispatch('createEquipment', this.newService)
+                        .then((data) => {
+                            this.$emit('createDialogClosed', 'createDialog');
+                            this.$emit('service-created');
+                            this.pending = false;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            this.$emit('service:error');
+                            this.pending = false;
+                        });
                 });
         },
         closeDialog() {

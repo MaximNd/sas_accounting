@@ -33,6 +33,8 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::get('/users', 'UserController@gatAllUsers');
 
+    Route::get('/users/unique-email/{email}', 'UserController@checkUniqueEmail');
+
     Route::post('/users', 'UserController@registerUser');
 
     Route::post('/users/{id}', 'UserController@updateUser');

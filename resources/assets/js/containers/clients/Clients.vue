@@ -4,11 +4,14 @@
             :editDialog="dialogs.editDialog"
             :client="editedClient"
             @editDialogClosed="closeDialog"
-            @clientEdited="editClient" />
+            @clientEdited="editClient"
+            @client:error="setSnackBar('error', 'Ошибка!');"
+            @validation:error="setSnackBar('error', 'Неверно введенные данные!')" />
         <appDeleteClient
             :deleteDialog="dialogs.deleteDialog"
             :client="deletedClient"
             @deleteDialogClosed="closeDialog"
+            @client:error="setSnackBar('error', 'Ошибка!');"
             @clientDeleted="deleteClient" />
         <v-layout>
             <v-flex xs12>
@@ -19,7 +22,9 @@
                             <appCreateClient
                                 isShowCancelButton
                                 @dialogClosed="closeDialog"
-                                @clientCreated="prependClient">
+                                @clientCreated="prependClient"
+                                @client:error="setSnackBar('error', 'Ошибка!');"
+                                @validation:error="setSnackBar('error', 'Неверно введенные данные!')">
                             </appCreateClient>
                         </v-dialog>
                         <v-spacer></v-spacer>
@@ -67,6 +72,9 @@
                 </v-card>
             </v-flex>
         </v-layout>
+        <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor" bottom right>
+            {{ snackText }}
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -78,6 +86,10 @@ import DeleteClient from './../../components/client/deleteClient/DeleteClient';
 export default {
     data () {
         return {
+            snack: false,
+            snackTimeout: 2000,
+            snackColor: '',
+            snackText: '',
             dialogs: {
                 createDialog: false,
                 editDialog: false,
@@ -152,10 +164,12 @@ export default {
         editClient(client) {
             const index = this.clients.findIndex(clientRow => clientRow.id === client.id);
             this.clients.splice(index, 1, client);
+            this.setSnackBar('success', 'Данные клиента обновлены!');
         },
         deleteClient(id) {
             const index = this.clients.findIndex(client => client.id === id);
             this.clients.splice(index, 1);
+            this.setSnackBar('success', 'Клиент удален!');
         },
         checkSearch(value) {
             this.search = value;
@@ -167,6 +181,7 @@ export default {
         },
         prependClient(client) {
             this.clients.unshift(client);
+            this.setSnackBar('success', 'Клиент добавлен');
         },
         setEditData(client) {
             this.editedClient = { ...client };
@@ -181,6 +196,11 @@ export default {
         },
         closeDialog(which) {
             this.dialogs[which] = false;
+        },
+        setSnackBar(statusColor, statusText) {
+            this.snack = true;
+            this.snackColor = statusColor;
+            this.snackText = statusText;
         }
     },
     components: {

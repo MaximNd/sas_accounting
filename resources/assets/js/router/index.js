@@ -22,67 +22,106 @@ export default new Router({
     {
         path: '/login',
         name: 'login',
-        component: Login
+        component: Login,
+        meta: {
+            auth: false
+        }
     },
     {
         path: '/password/forgot',
         name: 'forgot-password',
-        component: ForgotPassword
+        component: ForgotPassword,
+        meta: {
+            auth: false
+        }
     },
     {
         path: '/password/reset/:token',
         name: 'reset-password',
-        component: ResetPassword
+        component: ResetPassword,
+        meta: {
+            auth: false
+        }
     },
     {
         path: '/profile',
         name: 'profile',
-        component: Profile
+        component: Profile,
+        meta: {
+            auth: true
+        }
     },
     {
         path: '/users',
         name: 'users',
-        component: Users
+        component: Users,
+        meta: {
+            auth: true
+        }
     },
     {
         path: '/clients',
         name: 'clients',
-        component: Clients
+        component: Clients,
+        meta: {
+            auth: true
+        }
     },
     {
         path: '/clients/:id',
         name: 'client',
-        component: Client
+        component: Client,
+        meta: {
+            auth: true
+        }
     },
     {
         path: '/price-list',
         name: 'price-list',
-        component: PriceList
+        component: PriceList,
+        meta: {
+            auth: true
+        }
     },
     {
         path: '/create-order',
         name: 'create-order',
-        component: CreateOrder
+        component: CreateOrder,
+        meta: {
+            auth: true
+        }
     },
     {
         path: '/orders',
         name: 'orders',
-        component: Orders
+        component: Orders,
+        meta: {
+            auth: true
+        }
     },
     {
         path: '/orders/:id',
         name: 'order',
-        component: Order
+        component: Order,
+        meta: {
+            auth: true
+        }
     },
     {
         path: '/price-list-history',
         name: 'price-list-history',
-        component: PriceListHistory
+        component: PriceListHistory,
+        meta: {
+            auth: true
+        }
     },
     {
         path: '/orders-history',
         name: 'orders-history',
-        component: OrdersHistory
+        component: OrdersHistory,
+        meta: {
+            auth: true
+        }
     },
     {
         path: '',

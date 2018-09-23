@@ -4,7 +4,8 @@
             <v-flex xs12>
                 <appCreateAccount
                     @account:created="addUser"
-                    @account:error="setSnackBar('error', 'Ошибка!');">
+                    @account:error="setSnackBar('error', 'Ошибка!');"
+                    @validation:error="setSnackBar('error', 'Неверно введенные данные!')">
                 </appCreateAccount>
             </v-flex>
             <v-flex xs12 sm6 md4 v-for="(user, index) in users" :key="`user-${index}`">
@@ -14,13 +15,8 @@
                     @deleteUser="deleteUser(index)"></appProfileData>
             </v-flex>
         </v-layout>
-        <v-snackbar
-            v-model="snackbar"
-            :timeout="2000"
-            :color="statusColor"
-            auto-height
-            right>
-            {{ statusText }}
+        <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor" bottom right>
+            {{ snackText }}
         </v-snackbar>
     </v-container>
 </template>
@@ -32,9 +28,10 @@ import ProfileData from './../../components/profileData/ProfileData';
 export default {
     data() {
         return {
-            statusText: '',
-            statusColor: '',
-            snackbar: false,
+            snack: false,
+            snackTimeout: 2000,
+            snackColor: '',
+            snackText: '',
             users: []
         };
     },
@@ -74,11 +71,12 @@ export default {
         },
         deleteUser(index) {
             this.users.splice(index, 1);
+            this.setSnackBar('success', 'Аккаунт удален');
         },
         setSnackBar(statusColor, statusText) {
-            this.snackbar = true;
-            this.statusColor = statusColor;
-            this.statusText = statusText;
+            this.snack = true;
+            this.snackColor = statusColor;
+            this.snackText = statusText;
         }
     },
     created() {

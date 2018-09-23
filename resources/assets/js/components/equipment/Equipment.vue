@@ -4,19 +4,27 @@
             v-if="$auth.check('admin')"
             :editDialog="dialogs.editDialog"
             :equipment="editedEquipment"
-            @editDialogClosed="closeDialog">
+            @editDialogClosed="closeDialog"
+            @validation:error="setSnackBar('error', 'Неверно введенные данные!')"
+            @equipment-updated="setSnackBar('success', 'Оборудование обновлено!')"
+            @equipment:error="setSnackBar('error', 'Ошибка!')">
         </appEditEquipmentDialog>
         <appCreateEquipmentDialog
             v-if="$auth.check('admin')"
             :createDialog="dialogs.createDialog"
             :type="type"
-            @createDialogClosed="closeDialog">
+            @createDialogClosed="closeDialog"
+            @validation:error="setSnackBar('error', 'Неверно введенные данные!')"
+            @equipment-created="setSnackBar('success', 'Оборудование создано!')"
+            @equipment:error="setSnackBar('error', 'Ошибка!')" >
         </appCreateEquipmentDialog>
         <appDeleteEquipmentDialog
             v-if="$auth.check('admin')"
             :deleteDialog="dialogs.deleteDialog"
             :equipment="deletedEquipment"
-            @deleteDialogClosed="closeDialog">
+            @deleteDialogClosed="closeDialog"
+            @equipment-deleted="setSnackBar('success', 'Оборудование удалено!')"
+            @equipment:error="setSnackBar('error', 'Ошибка!')">
         </appDeleteEquipmentDialog>
         <v-card-title>
             <v-btn v-if="$auth.check('admin')" color="primary" @click="openDialog('createDialog')">Создать</v-btn>
@@ -60,6 +68,9 @@
                 </td>
             </template>
         </v-data-table>
+        <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor" bottom right>
+            {{ snackText }}
+        </v-snackbar>
     </v-card>
 </template>
 
@@ -81,6 +92,10 @@ export default {
     },
     data() {
         return {
+            snack: false,
+            snackTimeout: 2000,
+            snackColor: '',
+            snackText: '',
             search: '',
             dialogs: {
                 createDialog: false,
@@ -150,6 +165,11 @@ export default {
         },
         closeDialog(which) {
             this.dialogs[which] = false;
+        },
+        setSnackBar(statusColor, statusText) {
+            this.snack = true;
+            this.snackColor = statusColor;
+            this.snackText = statusText;
         }
     },
     components: {

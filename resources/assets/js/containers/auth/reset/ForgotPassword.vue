@@ -7,7 +7,16 @@
                     <v-form @submit.prevent="sendEmail">
                         <v-card-text>
                             <v-flex xs12>
-                                <v-text-field hint="На данный E-Mail адрес будет отправлена ссылка для сброса пароля" persistent-hint autofocus v-model="email" label="Email" required></v-text-field>
+                                <v-text-field
+                                    v-validate="'required|email'"
+                                    data-vv-name="email"
+                                    :error-messages="errors.collect('email')"
+                                    hint="На данный E-Mail адрес будет отправлена ссылка для сброса пароля"
+                                    persistent-hint
+                                    autofocus
+                                    v-model="email"
+                                    label="Email"
+                                    required></v-text-field>
                             </v-flex>
                         </v-card-text>
                         <v-card-actions>
@@ -29,6 +38,7 @@
 
 <script>
 export default {
+
     data() {
         return {
             email: '',
@@ -37,12 +47,14 @@ export default {
     },
     methods: {
         sendEmail() {
-            // let formData = new FormData();
-            // formData.append('email', this.email);
-            this.pending = true;
-            this.axios.post('/password/email', { email: this.email })
+            this.$validator.validateAll()
+                .then(isValid => {
+                    if (!isValid) return;
+                    this.pending = true;
+                    localStorage.setItem('email_for_password_reset', this.email );
+                    return this.axios.post('/password/email', { email: this.email });
+                })
                 .then(res => {
-                    console.log(res);
                     this.pending = false;
                 })
                 .catch(err => {

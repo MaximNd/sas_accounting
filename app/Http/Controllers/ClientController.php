@@ -43,7 +43,7 @@ class ClientController extends Controller
             'person_full_name' => 'required',
             'company_name' => 'required',
             'area' => 'required',
-            'telephone' => 'required'
+            'telephone' => 'required|max:20'
         ]);
 
         $client = new Client($request->all());

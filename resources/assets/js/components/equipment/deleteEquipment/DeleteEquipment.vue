@@ -36,12 +36,13 @@ export default {
             this.pending = true;
             this.$store.dispatch('deleteEquipment', this.equipment.id)
                 .then((data) => {
+                    this.$emit('equipment-deleted');
                     this.$emit('deleteDialogClosed', 'deleteDialog');
+                    this.pending = false;
                 })
                 .catch(err => {
                     console.log(err);
-                })
-                .finally(() => {
+                    this.$emit('equipment:error');
                     this.pending = false;
                 });
         },

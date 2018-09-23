@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Validator;
 
 class UserController extends Controller
 {
@@ -107,6 +108,21 @@ class UserController extends Controller
             ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
         }
         return User::destroy($id);
+    }
+
+    public function checkUniqueEmail($email) {
+        $validator = Validator::make(['email' => $email], [
+            'email' => 'required|email|unique:users',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        } else {
+            return response()->json(['success' => true, 'message' => 'success'], 200);
+        }
     }
 
     private function storeUserImage($request) {

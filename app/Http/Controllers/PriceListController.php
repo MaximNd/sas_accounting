@@ -32,11 +32,13 @@ class PriceListController extends Controller
             ]);
         } else {
             $this->validate($request, [
-                'image' => 'image',
+                'image' => 'required|image',
                 'name' => 'required',
                 'incoming_price' => 'required|numeric',
                 'price' => 'required|numeric',
                 'installation_price_for_one' => 'required|numeric',
+                'installation_price_for_two' => 'nullable|numeric',
+                'installation_price_for_three' => 'nullable|numeric',
                 'description' => 'string'
             ]);
         }

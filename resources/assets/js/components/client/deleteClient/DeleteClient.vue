@@ -42,6 +42,7 @@ export default {
                     this.pending = false;
                 })
                 .catch(err => {
+                    this.$emit('client:error');
                     console.log(err);
                     this.pending = false;
                 })

@@ -36,13 +36,19 @@
                 :oldUserData="user"
                 :dialog="updateDialog"
                 @dialogClosed="closeDialog('updateDialog')"
-                @userDataUpdated="updateUserData"></appUpdateProfileData>
+                @userDataUpdated="updateUserData"
+                @validation-error="setSnack('error', 'Неверно введенные данные!')"
+                @update-error="setSnack('error', 'Ошибка!')">
+                </appUpdateProfileData>
             <appDeleteUser
                 :user="user"
                 :dialog="deleteDialog"
                 @dialogClosed="closeDialog('deleteDialog')"
                 @userDeleted="deleteUser"></appDeleteUser>
         </v-card-actions>
+        <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor" bottom right>
+            {{ snackText }}
+        </v-snackbar>
     </v-card>
 </template>
 
@@ -53,6 +59,10 @@ import DeleteUser from './deleteUser/DeleteUser';
 export default {
     data() {
         return {
+            snack: false,
+            snackTimeout: 2000,
+            snackColor: '',
+            snackText: '',
             updateDialog: false,
             deleteDialog: false
         };
@@ -80,9 +90,15 @@ export default {
         },
         updateUserData(user) {
             this.$emit('updatedUserData', user);
+            this.setSnack('success', 'Профиль обновлен');
         },
         deleteUser() {
             this.$emit('deleteUser');
+        },
+        setSnack(color, text) {
+            this.snack = true;
+            this.snackColor = color;
+            this.snackText = text;
         }
     },
     components: {
@@ -95,7 +111,6 @@ export default {
 <style scoped>
     .userData {
         font-size: 18px;
-        /* font-weight: 400; */
         margin-bottom: 20px;
     }
 

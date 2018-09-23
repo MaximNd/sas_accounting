@@ -8,19 +8,29 @@
                 <v-container grid-list-md>
                     <v-layout wrap>
                         <v-flex xs12>
-                            <v-text-field autofocus v-model="editedClient.person_full_name" label="Контактное лицо" required></v-text-field>
+                            <v-text-field autofocus v-model="editedClient.person_full_name" label="Контактное лицо"></v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                            <v-text-field v-model="editedClient.company_name" label="Компания" required></v-text-field>
+                            <v-text-field v-model="editedClient.company_name" label="Компания"></v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                            <v-text-field v-model="editedClient.area" label="Площадь" required></v-text-field>
+                            <v-text-field
+                                v-validate="'decimal:2'"
+                                data-vv-name="area"
+                                :error-messages="errors.collect('area')"
+                                v-model="editedClient.area"
+                                label="Площадь"></v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                            <v-text-field v-model="editedClient.telephone" label="Телефон" required></v-text-field>
+                            <v-text-field
+                                v-validate="'max:20'"
+                                data-vv-name="telephone"
+                                :error-messages="errors.collect('telephone')"
+                                v-model="editedClient.telephone"
+                                label="Телефон"></v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                            <v-textarea v-model="editedClient.comment" label="Коментарий" required></v-textarea>
+                            <v-textarea v-model="editedClient.comment" label="Коментарий"></v-textarea>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -65,17 +75,23 @@ export default {
     },
     methods: {
         editClient() {
-            this.pending = true;
-
-            this.axios.put(`/clients/${this.editedClient.id}`, this.editedClient)
-                .then((data) => {
-                    this.$emit('clientEdited', this.editedClient);
-                    this.$emit('editDialogClosed', 'editDialog');
-                    this.pending = false;
-                })
-                .catch(err => {
-                    console.log(err);
-                    this.pending = false;
+            this.$validator.validateAll()
+                .then(isValid => {
+                    if (!isValid) {
+                        this.$emit('validation:error');
+                        return;
+                    }
+                    this.pending = true;
+                    this.axios.put(`/clients/${this.editedClient.id}`, this.editedClient)
+                        .then((data) => {
+                            this.$emit('clientEdited', this.editedClient);
+                            this.$emit('editDialogClosed', 'editDialog');
+                            this.pending = false;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            this.pending = false;
+                        });
                 });
         },
         closeDialog() {
