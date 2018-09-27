@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/{any}', function () {
-    return view('index');
-})->where('any', '.*');
+Route::get('/{any}', 'IndexController@any')->where('any', '.*');
 
 // Route::group(['middleware' => ['web', 'guest']], function() {
 //     // Forgot Password

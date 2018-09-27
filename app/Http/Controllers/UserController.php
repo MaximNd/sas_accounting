@@ -15,6 +15,10 @@ use Validator;
 class UserController extends Controller
 {
 
+    function getUser(Request $request) {
+        return $request->user();
+    }
+
     function getUserById($id) {
         return User::findOrFail($id);
     }
@@ -84,7 +88,7 @@ class UserController extends Controller
             $imageName = $this->storeUserImage($request);
         }
         $password = bin2hex(random_bytes(10));
-//        Mail::to($request->email)->send(new AccountDataCreated($request->email, $password));
+        Mail::to($request->email)->send(new AccountDataCreated($request->email, $password));
         $hashed_password = Hash::make($password);
         $user = new User([
             'role' => $request->role,

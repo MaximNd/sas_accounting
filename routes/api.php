@@ -13,9 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get('/user', 'UserController@getUser');
 
 Route::group(['middleware' => ['guest']], function() {
     // Forgot Password
@@ -26,7 +24,6 @@ Route::group(['middleware' => ['guest']], function() {
     Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 });
 
-// TODO ADD AUTH MIDDLEWARES
 Route::group(['middleware' => ['auth:api']], function() {
     // USERS
     Route::get('/users/{id}', 'UserController@getUserById');
