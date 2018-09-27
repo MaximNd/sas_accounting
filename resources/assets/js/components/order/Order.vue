@@ -1152,9 +1152,12 @@ export default {
                 setTimeout(() => {
                     const pdf = doc.output('blob');
                     const link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(pdf);
-                    link.download = `${this.orderData.name}.pdf`;
+                    link.setAttribute('href', window.URL.createObjectURL(pdf));
+                    link.setAttribute('download', `${this.orderData.name}.pdf`);
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
                     link.click();
+                    document.body.removeChild(link);
                     resolve();
                 }, 500);
             });
