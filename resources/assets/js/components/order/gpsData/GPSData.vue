@@ -28,15 +28,16 @@
                         ::
                     </td>
                     <td
+                        class="text-xs-center"
                         :ref="`td-${props.index}-${0}`"
                         @click="selectCell($event, { index: props.index, column: 'image', columnIndex: 0, value: props.item.image })"
                         @mouseenter="selectCellToCopyList($event, { index: props.index, column: 'image', columnIndex: 0, value: props.item.image })">
-                        <v-avatar
+                        <!-- <v-avatar
                             @dblclick="onPickFile(`image-${props.index}`)"
                             size="40"
-                            tile>
-                            <img :style="{cursor: 'pointer','object-fit': 'cover',width: '40px',height: '40px'}" :src="props.item.image === '' ? uploadImage : props.item.image" alt="image">
-                        </v-avatar>
+                            tile> -->
+                            <img @dblclick="onPickFile(`image-${props.index}`)" :style="{cursor: 'pointer', 'margin-top': props.item.image === '' ? '6px' : false, 'max-width': props.item.image === '' ? '40%' : '80%'}" :src="props.item.image === '' ? uploadImage : props.item.image" alt="image">
+                        <!-- </v-avatar> -->
                         <input @change="onFilePicked($event, props.index)" style="display:none;" type="file" :ref="`image-${props.index}`">
                     </td>
                     <td
@@ -909,8 +910,8 @@ export default {
             const table = document.querySelector('#gps-data-table table').getBoundingClientRect();
 
             return {
-                width: box.width,
-                height: box.height,
+                width: Math.round(box.width),
+                height: Math.round(box.height),
                 top: box.top - table.top,
                 left: box.left - table.left
             };
@@ -965,7 +966,8 @@ export default {
             if (this.bordersSelectData.corner.el === null) {
                 this.createBorder('corner', true);
             }
-
+            console.log('ANCHOR_COORDS: ', anchorCoords);
+            console.log('ANCHOR: ', anchor);
             this.normalizeSelectBorders(anchorCoords, anchor);
             this.normalizeCorner(anchorCoords, anchor);
             this.normalizeStylesSelectBordersAndCorner();
@@ -973,10 +975,11 @@ export default {
         },
         findTDEl(event) {
             let index = 0;
-            for (let i = 0; event.path[i].tagName != 'TD'; ++i) {
+            const path = event.composedPath();
+            for (let i = 0; path[i].tagName != 'TD'; ++i) {
                 ++index;
             }
-            return index === 0 ? event.target : event.path[index];
+            return index === 0 ? event.target : path[index];
         },
         clickOnTD(td) {
             this.$nextTick(() => {

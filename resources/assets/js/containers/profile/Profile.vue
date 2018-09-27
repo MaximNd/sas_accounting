@@ -1,7 +1,7 @@
 <template>
     <v-container fluid v-if="$auth.ready()">
         <v-layout align-start justify-start>
-            <v-flex sm12 md10 lg8 xl4>
+            <v-flex sm12 md10 lg6 xl4>
                 <appProfileData :user="user" @updatedUserData="updateUser" />
             </v-flex>
         </v-layout>

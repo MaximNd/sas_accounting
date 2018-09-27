@@ -1,9 +1,9 @@
 <template>
     <v-container class="bg-primary" fluid v-if="$auth.ready()">
         <v-layout row fill-height align-center justify-center>
-            <v-flex sm12 md5 lg4 xl3>
-                <v-card class="pl-3 pr-3 pb-4 pt-2">
-                    <v-card-media src="/images/logo.png" :contain="true" height="100px"></v-card-media>
+            <v-flex xs12 sm7 md5 lg4 xl3>
+                <v-card :class="loginCardClasses">
+                    <v-card-media src="/images/logo.png" contain height="100px"></v-card-media>
                     <v-form @submit.prevent="loginUser">
                         <v-card-text>
                             <v-flex xs12>
@@ -36,6 +36,7 @@
                                     type="submit"
                                     @click.prevent="loginUser"
                                     color="primary"
+                                    :block="$vuetify.breakpoint.xsOnly"
                                     :loading="pending"
                                     :disabled="pending">Войти<v-icon right>send</v-icon></v-btn>
                             </v-layout>
@@ -67,6 +68,14 @@
                 },
                 pending: false
             };
+        },
+        computed: {
+            loginCardClasses() {
+                if (this.$vuetify.breakpoint.xsOnly) {
+                    return 'pl-1 pr-1 pb-1 pt-1';
+                }
+                return 'pl-3 pr-3 pb-4 pt-2';
+            }
         },
         methods: {
             loginUser() {

@@ -37,7 +37,7 @@
                         :headers="headers"
                         :items="clientOrders"
                         :search="search"
-                        class="elevation-1">
+                        class="elevation-1 table-fonts">
                         <template slot="items" slot-scope="props">
                             <td><router-link :to="`/orders/${props.item.id}`">{{ props.item.name }}</router-link></td>
                             <td>{{ props.item.area }}</td>
@@ -62,10 +62,10 @@
                         :pagination.sync="pagination"
                         :total-items="totalOrders"
                         :loading="loading"
-                        class="elevation-1">
+                        class="elevation-1 table-fonts">
                         <template slot="items" slot-scope="props">
-                            <td><router-link :to="`/orders/${props.item.id}`">{{ props.item.name }}</router-link></td>
-                            <td><router-link :to="`/clients/${props.item.client.id}`">{{ props.item.client.person_full_name }}</router-link></td>
+                            <td class="text-no-wrap"><router-link :to="`/orders/${props.item.id}`">{{ props.item.name }}</router-link></td>
+                            <td class="text-no-wrap"><router-link :to="`/clients/${props.item.client.id}`">{{ props.item.client.person_full_name }}</router-link></td>
                             <td>{{ props.item.client.company_name }}</td>
                             <td>{{ props.item.area }}</td>
                             <td :class="{ 'error--text': !props.item.is_sent, 'success--text': props.item.is_sent }">{{ props.item.is_sent ? 'Отправленный' : 'Неотправленный' }}</td>
@@ -125,13 +125,13 @@ export default {
             ];
             if (!this.clientOrders) {
                 headers.push(
-                    { text: 'Клиент', value: 'client.person_full_name' },
-                    { text: 'Компания', value: 'client.company_name' }
+                    { text: 'Клиент', width: '100', value: 'client.person_full_name' },
+                    { text: 'Компания', width: '100', value: 'client.company_name' }
                 );
             }
 
             headers.push(
-                { text: 'Площадь', value: 'area', width: '15px' },
+                { text: 'Площадь', width: '10', value: 'area', width: '15px' },
                 { text: 'Статус отправки', value: 'is_sent' },
                 { text: 'Статус согласования', value: 'is_agreed' },
                 { text: 'Статус оплаты', value: 'is_paid' },
@@ -210,5 +210,9 @@ export default {
 <style scoped>
     a {
         text-decoration: none;
+    }
+
+    .table-fonts {
+        font-size: 11px !important;
     }
 </style>
