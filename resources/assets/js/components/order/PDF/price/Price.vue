@@ -10,7 +10,6 @@
 export default {
     props: {
         price: {
-            type: Number,
             required: true
         },
         text: {

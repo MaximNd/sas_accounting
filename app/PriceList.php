@@ -12,6 +12,7 @@ class PriceList extends Model
     protected $fillable = [
         'image',
         'name',
+        'pdf_layout',
         'incoming_price',
         'price',
         'installation_price_for_one',

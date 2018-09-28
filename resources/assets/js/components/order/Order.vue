@@ -371,7 +371,7 @@
                     <div slot="header" class="headline pdf-preview">PDF превью</div>
                     <v-card>
                         <v-card-text>
-                            <appPDF :gpsData="orderData.GPSData"></appPDF>
+                            <appPDF :services="orderData.services" :gpsData="orderData.GPSData"></appPDF>
                         </v-card-text>
                     </v-card>
                 </v-expansion-panel-content>

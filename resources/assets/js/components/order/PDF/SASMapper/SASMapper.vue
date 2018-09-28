@@ -27,7 +27,7 @@
             <p>Зшиття<br>знімків</p>
         </div>
         <appPrice
-            :price="1.8"
+            :price="price"
             :coordinates="{ left: '78px', top: '670px' }"
             :wrapperStyles="{ fontSize: '18px', width: '200px', height: '60px', backgroundColor: '#00aa77' }"
             :priceStyles="{ text: { 'font-size': '29px', 'margin-top': '14px' }, currency: { 'margin-left': '2px', 'margin-top': '8px', 'font-size': '24px' } }" />
@@ -39,6 +39,11 @@
 import Price from './../price/Price';
 
 export default {
+    props: {
+        price: {
+            required: true
+        }
+    },
     components: {
         appPrice: Price
     }

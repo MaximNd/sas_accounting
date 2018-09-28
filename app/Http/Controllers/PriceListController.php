@@ -28,7 +28,8 @@ class PriceListController extends Controller
         if ($request->input('type') === 'Услуга') {
             $this->validate($request, [
                 'name' => 'required',
-                'price' => 'required|numeric'
+                'price' => 'required|numeric',
+                'pdf_layout' => ['required', Rule::in(['Підключення до платформи SASAGRO.COM', 'Картування полів Дронами', 'Картування полів Фізичний обмір', 'Облік земельного банку', 'GPS моніторинг', 'Патрулювання', 'NDVI', 'Підрахунок всходів', 'Фото/відео', 'SAS Mapper', 'Хімічний аналіз грунтів', 'Вимірювання твердості грунту', 'Інтеграція 1С і Cropio з супроводом'])]
             ]);
         } else {
             $this->validate($request, [
@@ -71,7 +72,7 @@ class PriceListController extends Controller
     public function update(Request $request, $id) {
         if ($request->user()->role !== 'admin') {
             return response()->json([
-                'message' => 'You are not allowed to register new user'
+                'message' => 'You are not allowed to update priseLIST'
             ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
         }
 
@@ -85,6 +86,7 @@ class PriceListController extends Controller
             'equipment.type' => Rule::in(['GPS-трекеры', 'Датчики уровня топлива', 'Расходомеры топлива', 'Идентификация', 'Дополнительное оборудование']),
             'service.price' => 'numeric',
             'service.type' => Rule::in(['Услуга']),
+            'service.pdf_layout' => ['required', Rule::in(['Підключення до платформи SASAGRO.COM', 'Картування полів Дронами', 'Картування полів Фізичний обмір', 'Облік земельного банку', 'GPS моніторинг', 'Патрулювання', 'NDVI', 'Підрахунок всходів', 'Фото/відео', 'SAS Mapper', 'Хімічний аналіз грунтів', 'Вимірювання твердості грунту', 'Інтеграція 1С і Cropio з супроводом'])],
             'log.before' => 'required|string',
             'log.after' => 'required|string'
         ]);

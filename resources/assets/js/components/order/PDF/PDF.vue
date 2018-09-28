@@ -1,91 +1,124 @@
 <template>
     <v-container v-if="gpsData" fluid id="pdf">
-        <v-layout class="page" id="page-1" wrap>
-            <v-flex xs12 class="main-logo-container">
-                <img class="main-logo-img" src="/storage/image0.png" alt="">
-            </v-flex>
-            <v-flex xs12>
-                <p class="text-group">GROUP</p>
-                <p class="text-year font-weight-light">Since 1998</p>
-            </v-flex>
-            <v-flex xs12>
-                <v-layout justify-space-around align-center>
-                    <v-flex xs3>
-                        <img class="bottom-imgs" src="/storage/image8.png" alt="">
-                    </v-flex>
-                    <v-flex xs5>
-                        <img class="bottom-imgs agrosphera-img" src="/storage/image7.png" alt="">
-                    </v-flex>
-                    <v-flex xs2>
-                        <div class="last-bottom-img-wrapper">
-                            <img class="dnipro-img bottom-imgs" src="/storage/image9.png" alt="">
-                            <span class="text-dnipro font-weight-medium">Dnipro</span>
-                        </div>
-                    </v-flex>
-                </v-layout>
-            </v-flex>
-        </v-layout>
-        <div class="html2pdf__page-break"></div>
-        <v-layout class="page" id="page-2" wrap>
-            <div class="logo">
-                <img src="/storage/image8.png" alt="logo">
-            </div>
-            <div class="text">
-                Рішення для ефективного агроменеджменту
-            </div>
-        </v-layout>
-        <div class="html2pdf__page-break"></div>
-        <appConnectionToPlatformTitle />
-        <div class="html2pdf__page-break"></div>
-        <appConnectionToPlatformProgramPart />
-        <div class="html2pdf__page-break"></div>
-        <appFieldsMapping byDrones />
-        <div class="html2pdf__page-break"></div>
-        <appFieldsMapping :byDrones="false" />
-        <div class="html2pdf__page-break"></div>
-        <appLandBankRegistrationTitle />
-        <div class="html2pdf__page-break"></div>
-        <appLandBankRegistrationList />
-        <div class="html2pdf__page-break"></div>
-        <appGPSTrackingTitle />
-        <div class="html2pdf__page-break"></div>
-        <template v-for="(gpsData, index) in gpsTrackingData">
-            <appGPSTrackingData
-            :key="`gps-data-${index}`"
-            :equipment="gpsData.equipment"
-            :transportImage="gpsData.transportImage" />
-            <div class="html2pdf__page-break" :key="`gps-data-page-break-${index}`"></div>
+        <template v-if="!oneServicePreview">
+            <v-layout class="page" id="page-1" wrap>
+                <v-flex xs12 class="main-logo-container">
+                    <img class="main-logo-img" src="/storage/image0.png" alt="">
+                </v-flex>
+                <v-flex xs12>
+                    <p class="text-group">GROUP</p>
+                    <p class="text-year font-weight-light">Since 1998</p>
+                </v-flex>
+                <v-flex xs12>
+                    <v-layout justify-space-around align-center>
+                        <v-flex xs3>
+                            <img class="bottom-imgs" src="/storage/image8.png" alt="">
+                        </v-flex>
+                        <v-flex xs5>
+                            <img class="bottom-imgs agrosphera-img" src="/storage/image7.png" alt="">
+                        </v-flex>
+                        <v-flex xs2>
+                            <div class="last-bottom-img-wrapper">
+                                <img class="dnipro-img bottom-imgs" src="/storage/image9.png" alt="">
+                                <span class="text-dnipro font-weight-medium">Dnipro</span>
+                            </div>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+            </v-layout>
+            <div class="html2pdf__page-break"></div>
+            <v-layout class="page" id="page-2" wrap>
+                <div class="logo">
+                    <img src="/storage/image8.png" alt="logo">
+                </div>
+                <div class="text">
+                    Рішення для ефективного агроменеджменту
+                </div>
+            </v-layout>
+            <div class="html2pdf__page-break"></div>
         </template>
-        <appPatrol />
-        <div class="html2pdf__page-break"></div>
-        <appNDVI />
-        <div class="html2pdf__page-break"></div>
-        <appCountingSeedlings />
-        <div class="html2pdf__page-break"></div>
-        <appAeroVisualReviewTitle />
-        <div class="html2pdf__page-break"></div>
-        <appAeroVisualReviewData page="first" />
-        <div class="html2pdf__page-break"></div>
-        <appAeroVisualReviewData page="second" />
-        <div class="html2pdf__page-break"></div>
-        <appSASMapper />
-        <div class="html2pdf__page-break"></div>
-        <appChemicalAnalisisOfSoils />
-        <div class="html2pdf__page-break"></div>
-        <appSoilHardnessMeasuring />
-        <div class="html2pdf__page-break"></div>
-        <appIntegration1C />
-        <div class="html2pdf__page-break"></div>
-        <appPrices1C />
-        <div class="html2pdf__page-break"></div>
-        <appOptionalServices />
-        <div class="html2pdf__page-break"></div>
-        <appContacts />
-        <div class="html2pdf__page-break"></div>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.CONNEC_TO_PLATFORM]">
+            <appConnectionToPlatformTitle :price="servicesPreviewNames[pdfLayoutNames.CONNEC_TO_PLATFORM].price" />
+            <div class="html2pdf__page-break"></div>
+            <appConnectionToPlatformProgramPart />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.FIELD_MAPPING_BY_DRONES]">
+            <appFieldsMapping :price="servicesPreviewNames[pdfLayoutNames.FIELD_MAPPING_BY_DRONES].price" byDrones />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.FIELD_MAPPING_BY_PHYSICAL_MEASUREMENT]">
+            <appFieldsMapping :price="servicesPreviewNames[pdfLayoutNames.FIELD_MAPPING_BY_PHYSICAL_MEASUREMENT].price" :byDrones="false" />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.LAND_BANK_ACCOUNTING]">
+            <appLandBankRegistrationTitle />
+            <div class="html2pdf__page-break"></div>
+            <appLandBankRegistrationList  :price="servicesPreviewNames[pdfLayoutNames.LAND_BANK_ACCOUNTING].price" />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.GPS_TRACKING]">
+            <appGPSTrackingTitle />
+            <div class="html2pdf__page-break"></div>
+            <template v-for="(gpsData, index) in gpsTrackingData">
+                <appGPSTrackingData
+                :key="`gps-data-${index}`"
+                :equipment="gpsData.equipment"
+                :transportImage="gpsData.transportImage" />
+                <div class="html2pdf__page-break" :key="`gps-data-page-break-${index}`"></div>
+            </template>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.PARTOL]">
+            <appPatrol :price="servicesPreviewNames[pdfLayoutNames.PARTOL].price" />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.NDVI]">
+            <appNDVI :price="servicesPreviewNames[pdfLayoutNames.NDVI].price" />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.COUNTING_SEEDLINGS]">
+            <appCountingSeedlings :price="servicesPreviewNames[pdfLayoutNames.COUNTING_SEEDLINGS].price" />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.PHOTO_VIDEO]">
+            <appAeroVisualReviewTitle />
+            <div class="html2pdf__page-break"></div>
+            <appAeroVisualReviewData page="first" />
+            <div class="html2pdf__page-break"></div>
+            <appAeroVisualReviewData page="second" />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.SAS_MAPPER]">
+            <appSASMapper :price="servicesPreviewNames[pdfLayoutNames.SAS_MAPPER].price" />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.CHEMICAL_SOIL_ANALYSIS]">
+            <appChemicalAnalisisOfSoils :price="servicesPreviewNames[pdfLayoutNames.CHEMICAL_SOIL_ANALYSIS].price" />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.MEASURING_THE_HARDNESS_OF_THE_SOIL]">
+            <appSoilHardnessMeasuring :price="servicesPreviewNames[pdfLayoutNames.MEASURING_THE_HARDNESS_OF_THE_SOIL].price" />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.INTEGRATION_1C]">
+            <appIntegration1C />
+            <div class="html2pdf__page-break"></div>
+            <appPrices1C />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="optionalServices.length > 0">
+            <appOptionalServices />
+            <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="!oneServicePreview">
+            <appContacts />
+            <div class="html2pdf__page-break"></div>
+        </template>
     </v-container>
 </template>
 
 <script>
+import pdfLayoutNames from './../../../constants/ServicesPreviewNames.js';
 import utils from './../../../mixins/utils.js';
 import ConnectionToPlatformTitle from './connectionToPlatform/ConnectionToPlatformTitle';
 import ConnectionToPlatformProgramPart from './connectionToPlatform/ConnectionToPlatformProgramPart';
@@ -123,10 +156,25 @@ import Contacts from './contacts/Contacts';
 export default {
     mixins: [utils],
     props: {
+        oneServicePreview: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         gpsData: {
             type: Array,
             required: false,
-            default: []
+            default: () => []
+        },
+        services: {
+            type: Array,
+            required: false,
+            default: () => []
+        },
+        optionalServices: {
+            type: Array,
+            required: false,
+            default: () => []
         }
     },
     data() {
@@ -202,6 +250,17 @@ export default {
                     transportImage: gpsRow.image
                 };
             });
+        },
+        servicesPreviewNames() {
+            return this.services.reduce((selectedServices, service) => {
+                selectedServices[service.pdf_layout] = {
+                    ...service
+                };
+                return selectedServices;
+            }, {});
+        },
+        pdfLayoutNames() {
+            return pdfLayoutNames;
         }
     },
     components: {

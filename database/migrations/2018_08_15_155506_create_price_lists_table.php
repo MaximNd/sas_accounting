@@ -24,6 +24,7 @@ class CreatePriceListsTable extends Migration
             $table->double('installation_price_for_two')->nullable();
             $table->double('installation_price_for_three')->nullable();
             $table->string('type');
+            $table->string('pdf_layout')->nullable();
             $table->text('description')->nullable();
             $table->softDeletes();
 

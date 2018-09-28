@@ -11,14 +11,17 @@ import ServiceData from './../serviceData/ServiceData';
 
 export default {
     props: {
+        price: {
+            required: true
+        },
         byDrones: {
             type: Boolean,
             required: true
         }
     },
-    data() {
-        return {
-            drones: {
+    computed: {
+        drones() {
+            return {
                 title: 'Картування полів',
                 subtitle: 'Дронами',
                 data: [
@@ -31,12 +34,14 @@ export default {
                     { icon: '/storage/image28.png', text: 'Висока ціна' },
                     { icon: '/storage/image28.png', text: 'Мала швидкість обміру' }
                 ],
-                price: 1,
+                price: this.price || '0',
                 coordinates: { left: '378px', top: '670px' },
                 wrapperStyles: { fontSize: '20px', width: '200px', height: '70px', backgroundColor: '#009769' },
                 priceStyles: { text: { 'font-size': '31px', 'margin-top': '20px' }, currency: { 'margin-left': '2px', 'margin-top': '12px', 'font-size': '26px' } }
-            },
-            physicalMeasure: {
+            };
+        },
+        physicalMeasure() {
+            return {
                 title: 'Картування полів',
                 subtitle: 'Фізичний обмір',
                 data: [
@@ -48,12 +53,12 @@ export default {
                     { icon: '/storage/image28.png', text: 'Точність 15см' },
                     { icon: '/storage/image28.png', text: 'Неможливість обміру за наявності посівів' }
                 ],
-                price: 0.7,
+                price: this.price || '0',
                 coordinates: { left: '378px', top: '670px' },
                 wrapperStyles: { fontSize: '20px', width: '200px', height: '70px', backgroundColor: '#009769' },
                 priceStyles: { text: { 'font-size': '31px', 'margin-top': '20px' }, currency: { 'margin-left': '2px', 'margin-top': '12px', 'font-size': '26px' } }
-            }
-        };
+            };
+        }
     },
     components: {
         appLeftImage: LeftImage,
