@@ -107,8 +107,12 @@
             <div class="html2pdf__page-break"></div>
         </template>
         <template v-if="optionalServices.length > 0">
-            <appOptionalServices />
-            <div class="html2pdf__page-break"></div>
+            <template v-for="(optionalService, index) in optionalServices">
+                <appOptionalServices
+                :key="`optional-service-${index}`"
+                :optionalService="optionalService" />
+                <div class="html2pdf__page-break" :key="`optional-service-page-break-${index}`"></div>
+            </template>
         </template>
         <template v-if="!oneServicePreview">
             <appContacts />
