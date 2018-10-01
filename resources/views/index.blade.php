@@ -23,6 +23,8 @@
                 height: 100%;
                 z-index: 1000;
                 background: #fff;
+                pointer-events: auto;
+                transition: opacity 1s ease 1s;
             }
             #page-preloader .spinner {
                 width: 300px;
@@ -32,6 +34,7 @@
                 left: 50%;
                 transform: translate(-50%,-50%);
                 display: block;
+                pointer-events: none;
             }
             #page-preloader .spinner .logo {
                 width: 100%;
@@ -39,13 +42,9 @@
                 background: url("{{ asset('images/preloader.gif') }}") center center no-repeat;
                 background-size: contain;
             }
-            @keyframes fadeOut {
-                from {
-                    opacity: 1;
-                }
-                to {
-                    opacity: 0;
-                }
+            .done {
+                opacity: 0;
+                pointer-events: none !important;
             }
         </style>
     </head>
@@ -62,12 +61,10 @@
             console.log('HELLO');
             document.body.onload = function() {
                 var preloader = document.getElementById('page-preloader');
+                preloader.classList.add('done');
                 setTimeout(function() {
-                    preloader.style.animation = 'fadeOut 1s';
-                    setTimeout(function() {
-                        preloader.style.display = 'none';
-                    }, 1000)
-                }, 1000);
+                    preloader.style.display = 'none';
+                }, 2000);
             };
         </script>
         <script src="{{ asset('js/app.js') }}"></script>
