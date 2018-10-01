@@ -23,7 +23,7 @@ export default {
         addTwoFloats(fl1, fl2) {
             return parseFloat((fl1 + fl2).toFixed(2));
         },
-        subtractWtoFloats(fl1, fl2) {
+        subtractTwoFloats(fl1, fl2) {
             return parseFloat((fl1 - fl2).toFixed(2));
         },
         multiplyTwoFloats(fl1, fl2) {

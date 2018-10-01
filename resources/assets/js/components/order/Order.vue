@@ -271,12 +271,6 @@
                                             append-icon="₴">
                                         </v-text-field>
                                     </v-flex>
-                                    <v-flex xs8></v-flex>
-                                    <v-flex xs12 class="mt-4">
-                                        <div class="text-xs-left display-1 font-weight-bold">
-                                            СУММА ВСЕГО: {{ formattedFinalPrice }}
-                                        </div>
-                                    </v-flex>
                                 </v-layout>
                             </v-container>
                         </v-flex>
@@ -285,6 +279,19 @@
                                 v-if="orderData.GPSData"
                                 :orderGPSData="orderData.GPSData">
                             </appEquipmentData>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout>
+                        <v-flex xs12>
+                            <v-container fluid grid-list-xs>
+                                <v-layout>
+                                    <v-flex xs12>
+                                        <div class="text-xs-left display-1 font-weight-bold">
+                                            СУММА ВСЕГО: {{ formattedFinalPrice }}
+                                        </div>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
                         </v-flex>
                     </v-layout>
                 </v-card-text>
@@ -409,6 +416,7 @@ import formatter from 'accounting';
 import diff from 'deep-diff';
 import html2pdf from 'html2pdf.js';
 import jsPDF from 'jspdf';
+import pdfLayoutNames from './../../constants/ServicesPreviewNames.js';
 
 export default {
     mixins: [utils, setStyles],
@@ -846,9 +854,13 @@ export default {
                 transportation_kms: this.orderData.transportation_kms,
                 route: this.orderData.route,
                 services: this.getServicesIDs(),
-                optional_services: this.orderData.optional_services,
-                GPSData: this.getGPSDataIDs()
+                optional_services: this.orderData.optional_services
             };
+            if (this.orderData.services.find(service => service.pdf_layout === pdfLayoutNames.GPS_TRACKING)) {
+                orderData.GPSData = this.getGPSDataIDs();
+            } else {
+                orderData.GPSData = [];
+            }
 
             this.axios.post('/orders', orderData)
                 .then(({data}) => {
@@ -1068,6 +1080,7 @@ export default {
         createPDF() {
             this.loading = true;
             this.pdfLoading = true;
+            this.pdfProgress = 0;
 
             const element = document.getElementById('pdf');
             const format = [852.5, 606.5];
@@ -1120,20 +1133,21 @@ export default {
                             this.pdfProgress = 80;
                         }, 100);
                         setTimeout(() => {
-                            let counter = 0;
+                            let counter = 1;
                             for (let i = 0; i < data.length; ++i) {
                                 let position = 0;
-                                for (let j = 0; j < pages + 1; ++j) {
-                                    if (counter > pdfPages + 1) {
-                                        return resolve();
-                                    }
+                                for (let j = 0; j < pages; ++j) {
                                     if(j != 0) {
                                         doc.addPage();
                                     }
                                     doc.addImage(data[i].src, 'jpeg', opt.margin, position, pageSize.width, this.multiplyTwoFloats(format[1], pages));
-                                    position = this.subtractWtoFloats(position, format[1]);
+                                    if (counter >= pdfPages) {
+                                        return resolve();
+                                    }
+                                    position = this.subtractTwoFloats(position, format[1]);
                                     ++counter;
                                 }
+                                doc.addPage();
                             }
                             resolve();
                         }, 300);
@@ -1148,7 +1162,7 @@ export default {
                     if (this.pdfProgress >= 100) {
                         clearInterval(progressInterval);
                     }
-                }, 300);
+                }, 200);
                 setTimeout(() => {
                     const pdf = doc.output('blob');
                     const link = document.createElement('a');
