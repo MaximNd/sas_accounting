@@ -53,18 +53,20 @@
                 <td v-if="isShowInstallationPrice.forTwo" class="text-xs-right">{{ props.item.installation_price_for_two }}</td>
                 <td v-if="isShowInstallationPrice.forThree" class="text-xs-right">{{ props.item.installation_price_for_three }}</td>
                 <td class="text-xs-right">{{ props.item.description }}</td>
-                <td v-if="$auth.check('admin')" class="justify-end layout px-0">
-                    <v-btn
-                        icon
-                        class="mr-2"
-                        @click="setEditData(props.item)">
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-                    <v-btn
-                        icon
-                        @click="setDeleteData(props.item)">
-                        <v-icon>delete</v-icon>
-                    </v-btn>
+                <td v-if="$auth.check('admin')" class="px-0">
+                    <v-layout justify-end align-center>
+                        <v-btn
+                            icon
+                            class="mr-2"
+                            @click="setEditData(props.item)">
+                            <v-icon>edit</v-icon>
+                        </v-btn>
+                        <v-btn
+                            icon
+                            @click="setDeleteData(props.item)">
+                            <v-icon>delete</v-icon>
+                        </v-btn>
+                    </v-layout>
                 </td>
             </template>
         </v-data-table>
