@@ -416,7 +416,7 @@
                     class="elevation-1">
                     <div slot="header" class="headline pdf-preview">PDF превью</div>
                     <v-card>
-                        <v-card-text>
+                        <v-card-text :class="{ 'pdf-preview-overflow': $vuetify.breakpoint.lgAndDown }">
                             <appPDF :optionalServices="orderData.optional_services" :services="orderData.services" :gpsData="orderData.GPSData"></appPDF>
                         </v-card-text>
                     </v-card>
@@ -1443,5 +1443,10 @@ export default {
     .pdf-preview {
         text-align: center;
         font-size: 28px !important;
+    }
+    .pdf-preview-overflow {
+        padding: 0;
+        margin: 0 auto;
+        overflow-x: scroll;
     }
 </style>
