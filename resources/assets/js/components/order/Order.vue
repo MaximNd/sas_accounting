@@ -16,11 +16,35 @@
                         <v-container grid-list-md>
                             <v-layout justify-start wrap>
                                 <v-flex xs12 md3 offset-md2>
-                                    <v-text-field
-                                        label="Дата курса доллара"
-                                        :readonly="true"
-                                        v-model="orderData.dollar_date">
-                                    </v-text-field>
+                                    <v-menu
+                                        ref="dollarDateMenu"
+                                        slot="append-outer"
+                                        :close-on-content-click="false"
+                                        v-model="dollarDateCalendar"
+                                        :nudge-right="33"
+                                        :return-value.sync="orderData.dollar_date"
+                                        lazy
+                                        transition="scale-transition"
+                                        offset-y
+                                        full-width
+                                        min-width="290px">
+                                        <v-text-field
+                                            slot="activator"
+                                            v-model="orderData.dollar_date"
+                                            label="Дата курса доллара"
+                                            readonly>
+                                            <div :slot="$vuetify.breakpoint.smAndDown ? 'append-outer' : 'prepend'">
+                                                <v-icon
+                                                    color="info">
+                                                    date_range
+                                                </v-icon>
+                                            </div>
+                                        </v-text-field>
+                                        <v-date-picker
+                                            v-model="orderData.dollar_date"
+                                            @input="$refs.dollarDateMenu.save(orderData.dollar_date)"
+                                            :max="new Date().toISOString().slice(0, 10)"></v-date-picker>
+                                    </v-menu>
                                 </v-flex>
                                 <v-flex xs12 md3>
                                     <v-text-field
@@ -33,7 +57,7 @@
                                             <v-icon
                                                 :color="isDollarRateEditing ? 'success' : 'info'"
                                                 :key="`icon-${isDollarRateEditing}`"
-                                                @click="isDollarRateEditing = !isDollarRateEditing"
+                                                @click="switchDollarEditing"
                                                 v-text="isDollarRateEditing ? 'done_all' : 'edit'"
                                             ></v-icon>
                                         </v-slide-x-reverse-transition>
@@ -455,6 +479,7 @@ export default {
             loading: false,
             isDollarRateEditing: false,
             snack: false,
+            dollarDateCalendar: false,
             snackColor: '',
             snackText: '',
             snackTimeout: 1500,
@@ -492,7 +517,7 @@ export default {
                 statuses: { is_sent: false, is_agreed: false, is_paid: false, is_installation_finished: false },
                 area: '',
                 dollar_rate: 0.00,
-                dollar_date: '',
+                dollar_date: new Date().toISOString().slice(0, 10),
                 days: '',
                 price_for_day: 720,
                 price_for_transportation_per_km: '',
@@ -635,6 +660,9 @@ export default {
             }
             return this.initialized;
         },
+        formattedDollarDate() {
+            return this.orderData.dollar_date.split('-').join('');
+        },
         allCacheData() {
             const cache = {};
             [...this.cachedData, ...this.newCachedData].forEach((cacheData) => {
@@ -764,6 +792,9 @@ export default {
                 }, {});
             });
             this.orderData.services = this.orderData.services.map(orderService => this.services.find(service => service.id === orderService.id));
+        },
+        'orderData.dollar_date'() {
+            this.getDollarRate(this.formattedDollarDate);
         }
         // services(newValue) {
         //     this.orderData.services = this.services.map(service => ({ id: service.id, name: service.name, price: service.price, value: false }));
@@ -847,13 +878,25 @@ export default {
                 })
                 .catch(err => (console.log(err)));
         },
-        getDollarRate() {
-            this.axios.get('/order/dollar-rate')
+        getDollarRate(date) {
+            this.axios.get(`/order/dollar-rate/${date}`)
             .then(({data}) => {
                 this.orderData.dollar_rate = data[0].rate;
-                this.orderData.dollar_date = data[0].exchangedate;
+                this.showSnackbar('success', 'Курс доллара установлен');
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err);
+                this.showSnackbar('error', 'Ошибка!');
+            })
+        },
+        switchDollarEditing() {
+            this.isDollarRateEditing = !this.isDollarRateEditing;
+            if (!this.isDollarRateEditing) {
+                this.saveOrderDataToLocalStorage();
+                this.showSnackbar('success', 'Данные сохранены!');
+            } else {
+                this.showSnackbar('info', 'Редактирование курса доллара');
+            }
         },
         recalculatePrices() {
             this.loading = true;
@@ -1368,7 +1411,7 @@ export default {
     },
     created() {
         if (this.isCreation) {
-            this.getDollarRate();
+            this.getDollarRate(this.formattedDollarDate);
             this.getClients();
             this.$store.dispatch('getPriseList');
             this.orderData.GPSData = [];

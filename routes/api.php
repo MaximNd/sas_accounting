@@ -68,7 +68,7 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::get('/price-list/logs', 'PriceListLogController@getLogs');
 
     // ORDERS
-    Route::get('/order/dollar-rate', 'OrderController@dollarRate');
+    Route::get('/order/dollar-rate/{date}', 'OrderController@dollarRate');
 
     Route::get('/order/{id}', 'OrderController@getOrder');
 
