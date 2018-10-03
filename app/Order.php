@@ -50,6 +50,10 @@ class Order extends Model
         return $this->hasMany('App\OptionalService', 'order_id');
     }
 
+    public function prices() {
+        return $this->hasMany('App\OrderPrices', 'order_id');
+    }
+
     public function logs() {
         return $this->hasMany('App\OrderLog', 'order_id');
     }

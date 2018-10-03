@@ -5,6 +5,9 @@ const state = {
 };
 
 const getters = {
+    priceList(state) {
+        return state.equipmentList;
+    },
     gpsTrackers(state) {
         return state.equipmentList.filter(equipment => equipment.type === 'GPS-трекеры');
     },

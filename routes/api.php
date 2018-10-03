@@ -87,6 +87,9 @@ Route::group(['middleware' => ['auth:api']], function() {
     // ORDERS_LOGS
     Route::get('/orders/logs', 'OrderLogController@getLogs');
 
+    // ORDER_PRICES
+    Route::post('/order-prices/{order_id}', 'OrderPricesController@createOrderPrices');
+
     // CACHED_DATA
     Route::get('/cache', 'CachedDataController@getCachedData');
 

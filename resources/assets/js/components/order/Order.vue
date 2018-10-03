@@ -4,6 +4,15 @@
             <v-card>
                 <v-card-text>
                     <v-form>
+                        <template v-if="!isCreation">
+                            <v-btn @click="recalculatePrices" :disabled="loading" :loading="loading" color="primary">Пересчитать цены</v-btn>
+                            <v-select
+                                v-model="selectedPrices"
+                                :items="orderData.prices"
+                                item-text="created_at"
+                                return-object>
+                            </v-select>
+                        </template>
                         <v-container grid-list-md>
                             <v-layout justify-start wrap>
                                 <v-flex xs12 md3 offset-md2>
@@ -119,7 +128,13 @@
                                     </div>
                                 </v-flex>
                                 <v-flex xs12 offset-md2 md10 v-for="(service, index) in services" :key="`service-${index}`">
-                                    <v-checkbox :style="{ padding: 0, margin: index !== 0 ? 0 : false }" :label="service.name" v-model="orderData.services" :value="service"></v-checkbox>
+                                    <v-checkbox
+                                        :key="`service-checkbox-${index}`"
+                                        :style="{ padding: 0, margin: index !== 0 ? 0 : false }"
+                                        :label="service.name"
+                                        v-model="orderData.services"
+                                        :value="service">
+                                        </v-checkbox>
                                 </v-flex>
                                 <v-flex xs12 offset-md2 class="mt-2">
                                     <div class="title font-weight-regular">
@@ -466,11 +481,11 @@ export default {
                 cn03: [],
                 rs01: []
             },
-            priceList: [],
             cachedData: [],
             newCachedData: [],
             orderInCreation: false,
             oldOrder: {},
+            selectedPrices: null,
             orderData: {
                 name: '',
                 client: null,
@@ -484,6 +499,7 @@ export default {
                 number_of_trips: 2,
                 transportation_kms: '',
                 route: '',
+                prices: [],
                 services: [],
                 optional_services: [],
                 GPSData: null
@@ -493,14 +509,111 @@ export default {
         };
     },
     computed: {
-        ...mapGetters([
-            'gpsTrackers',
-            'fuelLevelSensors',
-            'fuelFlowmeters',
-            'identification',
-            'optionalEquipment',
-            'services'
-        ]),
+        ...mapGetters({
+            'newPriceList': 'priceList',
+            'gps': 'gpsTrackers',
+            'fuelLvl': 'fuelLevelSensors',
+            'fuelFlmtrs': 'fuelFlowmeters',
+            'idfication': 'identification',
+            'optEquip': 'optionalEquipment',
+            'srvcs': 'services'
+        }),
+        gpsTrackers() {
+            if (this.isCreation) return this.gps;
+            return this.gps.map(gpsRow => {
+                let updatedPrices = [];
+                if (!this.isUndefined(this.selectedPrices) && !this.isNull(this.selectedPrices)) {
+                    updatedPrices = this.selectedPrices.prices.find(row => row.id === gpsRow.id);
+                }
+                return {
+                    ...gpsRow,
+                    ...updatedPrices
+                }
+            });
+        },
+        fuelLevelSensors() {
+            if (this.isCreation) return this.fuelLvl;
+            return this.fuelLvl.map(fuelLvlRow => {
+                let updatedPrices = [];
+                if (!this.isUndefined(this.selectedPrices) && !this.isNull(this.selectedPrices)) {
+                    updatedPrices = this.selectedPrices.prices.find(row => row.id === fuelLvlRow.id);
+                }
+                return {
+                    ...fuelLvlRow,
+                    ...updatedPrices
+                }
+            });
+        },
+        fuelFlowmeters() {
+            if (this.isCreation) {
+                return this.fuelFlmtrs;
+            }
+            return this.fuelFlmtrs.map(fuelFlmtrsRow => {
+                let updatedPrices = [];
+                if (!this.isUndefined(this.selectedPrices) && !this.isNull(this.selectedPrices)) {
+                    updatedPrices = this.selectedPrices.prices.find(row => row.id === fuelFlmtrsRow.id);
+                }
+                return {
+                    ...fuelFlmtrsRow,
+                    ...updatedPrices
+                }
+            });
+        },
+        identification() {
+            if (this.isCreation) {
+                return this.idfication;
+            }
+            return this.idfication.map(idficationRow => {
+                let updatedPrices = [];
+                if (!this.isUndefined(this.selectedPrices) && !this.isNull(this.selectedPrices)) {
+                    updatedPrices = this.selectedPrices.prices.find(row => row.id === idficationRow.id);
+                }
+                return {
+                    ...idficationRow,
+                    ...updatedPrices
+                }
+            });
+        },
+        optionalEquipment() {
+            if (this.isCreation) {
+                return this.optEquip;
+            }
+            return this.optEquip.map(optEquipRow => {
+                let updatedPrices = [];
+                if (!this.isUndefined(this.selectedPrices) && !this.isNull(this.selectedPrices)) {
+                    updatedPrices = this.selectedPrices.prices.find(row => row.id === optEquipRow.id);
+                }
+                return {
+                    ...optEquipRow,
+                    ...updatedPrices
+                }
+            });
+        },
+        services() {
+            if (this.isCreation) {
+                return this.srvcs;
+            }
+            return this.srvcs.map(srvcsRow => {
+                let updatedPrices = [];
+                if (!this.isUndefined(this.selectedPrices) && !this.isNull(this.selectedPrices)) {
+                    updatedPrices = this.selectedPrices.prices.find(row => row.id === srvcsRow.id);
+                }
+                return {
+                    ...srvcsRow,
+                    ...updatedPrices
+                }
+            });
+        },
+        priceList() {
+            return [
+                ...this.gpsTrackers,
+                ...this.fuelLevelSensors,
+                ...this.fuelFlowmeters,
+                ...this.identification,
+                ...this.optionalEquipment,
+                ...this.services
+            ];
+        },
         switcherBtnText() {
             return this.isClientCreation ? 'Выбрать клиента' : 'Создать клиента';
         },
@@ -631,6 +744,26 @@ export default {
                 this.snackText = 'Сохранено';
                 this.snack = true;
             }
+        },
+        selectedPrices(newVal) {
+            console.log(newVal);
+            this.orderData.prices = this.orderData.prices.map(prices => ({
+                ...prices,
+                is_current: prices.id === newVal.id
+            }));
+            this.orderData.GPSData = this.orderData.GPSData.map(gpsDataRow => {
+                return Object.keys(gpsDataRow).reduce((newGpsDataRow, key) => {
+                    if (this.isObject(gpsDataRow[key])) {
+                        newGpsDataRow[key] = this.priceList.find(priceListRow => priceListRow.id === gpsDataRow[key].id);
+                    } else if (Array.isArray(gpsDataRow[key])) {
+                        newGpsDataRow[key] = gpsDataRow[key].map(gpsItem => (!this.isUndefined(gpsItem) && !this.isNull(gpsItem)) ? this.priceList.find(priceListRow => priceListRow.id === gpsItem.id) : gpsItem);
+                    } else {
+                        newGpsDataRow[key] = gpsDataRow[key];
+                    }
+                    return newGpsDataRow;
+                }, {});
+            });
+            this.orderData.services = this.orderData.services.map(orderService => this.services.find(service => service.id === orderService.id));
         }
         // services(newValue) {
         //     this.orderData.services = this.services.map(service => ({ id: service.id, name: service.name, price: service.price, value: false }));
@@ -681,7 +814,9 @@ export default {
             this.orderData.services = newOrderData.services;
             this.orderData.optional_services = newOrderData.optional_services;
             this.orderData.GPSData = newOrderData.gps_data;
+            this.orderData.prices = newOrderData.prices;
 
+            this.selectedPrices = this.orderData.prices.find(pricesRow => pricesRow.is_current);
             this.initialized = true;
         },
         addCache(column, value) {
@@ -719,6 +854,23 @@ export default {
                 this.orderData.dollar_date = data[0].exchangedate;
             })
             .catch(err => console.log(err))
+        },
+        recalculatePrices() {
+            this.loading = true;
+            // const newPrices = this.getPricesData(this.newPriceList);
+            this.axios.post(`/order-prices/${this.$route.params.id}`)
+                .then(({data}) => {
+                    this.orderData.prices.forEach(pricesRow => { pricesRow.is_current = false; });
+                    this.orderData.prices.unshift(data);
+                    this.selectedPrices = data;
+                    this.loading = false;
+                    this.showSnackbar('success', 'Цены были успешно пересчитаны');
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.loading = false;
+                    this.showSnackbar('error', 'Ошибка!');
+                });
         },
         showSnackbar(snackColor, snackText) {
             this.snackColor = snackColor;
@@ -808,6 +960,16 @@ export default {
             this.saveOrderDataToLocalStorage();
             this.showSnackbar('info', `Ряд был перемещён`);
         },
+        getPricesData(data) {
+            const priceList = data || this.priceList;
+            return priceList.map(priceListRow => ({
+                id: priceListRow.id,
+                price: priceListRow.price,
+                installation_price_for_one: priceListRow.installation_price_for_one,
+                installation_price_for_two: priceListRow.installation_price_for_two,
+                installation_price_for_three: priceListRow.installation_price_for_three
+            }));
+        },
         getServicesIDs() {
             return this.orderData.services.reduce((services, service) => {
                 services.push(service.id);
@@ -853,6 +1015,7 @@ export default {
                 number_of_trips: this.orderData.number_of_trips,
                 transportation_kms: this.orderData.transportation_kms,
                 route: this.orderData.route,
+                prices: this.getPricesData(),
                 services: this.getServicesIDs(),
                 optional_services: this.orderData.optional_services
             };
@@ -921,10 +1084,15 @@ export default {
             const oldOrderOptionalServices = this.oldOrder.optional_services;
             const updatedOrderOptionalServices = this.orderData.optional_services;
 
+            // SAVED_PRICES
+            const oldOrderPrices = this.oldOrder.prices;
+            const updatedOrderPrices = this.orderData.prices;
+
             if(this.isUndefined(diff(oldOrderData, updatedOrderData)) &&
                 this.isUndefined(diff(oldOrderServicesData, updatedOrderServicesData)) &&
                 this.isUndefined(diff(oldOrderGPSData, updatedOrderGPSData)) &&
-                this.isUndefined(diff(oldOrderOptionalServices, updatedOrderOptionalServices))) {
+                this.isUndefined(diff(oldOrderOptionalServices, updatedOrderOptionalServices)) &&
+                this.isUndefined(diff(oldOrderPrices, updatedOrderPrices))) {
                 this.snackColor = 'warning';
                 this.snackText = 'Нет изменений';
                 this.snack = true;
@@ -934,8 +1102,7 @@ export default {
             this.loading = true;
             this.orderUpdating = true;
 
-
-
+            const currentOrderPricesID = updatedOrderPrices.find(orderPriceRow => orderPriceRow.is_current).id;
 
             const deletedGPSData = oldOrderGPSData.filter(oldGPSDataRow => !updatedOrderGPSData.find(updatedGPSDataRow => updatedGPSDataRow.id === oldGPSDataRow.id));
 
@@ -948,8 +1115,6 @@ export default {
 
             const restOldChangedOrderGPSData = restOldOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
             const restUpdatedChangedOrderGPSData = restUpdatedOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
-
-
 
             const deletedOptionalServices = oldOrderOptionalServices.filter(oldOptionalService => !updatedOrderOptionalServices.find(updatedOptionalService => updatedOptionalService.id === oldOptionalService.id));
 
@@ -994,6 +1159,7 @@ export default {
 
             const newOrderData = {
                 ...orderDataLog.after,
+                currentOrderPricesID,
                 services: updatedOrderServicesData.map(service => service.id),
                 optional_services: {
                     toDelete: deletedOptionalServices.map(row => row.id),
@@ -1209,8 +1375,7 @@ export default {
             this.defaultRowCount = 4;
         } else {
             this.$store.dispatch('getPriseList')
-                .then(data => {
-                    this.priceList = data;
+                .then(() => {
                     this.initOrder();
                 });
         }

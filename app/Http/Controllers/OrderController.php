@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\OptionalService;
 use App\GPSData;
+use App\OrderPrices;
 use App\OrderLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -48,13 +49,15 @@ class OrderController extends Controller
             'transportation_kms' => 'required|numeric',
             'route' => 'required',
             'services' => 'required',
-            'optional_services' => 'array|nullable',
-            'GPSData' => 'required|array'
+            'optional_services' => 'nullable|array',
+            'GPSData' => 'nullable|array',
+            'prices' => 'array'
         ]);
 
         $result = DB::transaction(function() use ($request) {
-            $order = new Order($request->except(['GPSData', 'optional_services']));
+            $order = new Order($request->except(['GPSData', 'optional_services', 'prices']));
             $order->save();
+
             $gpsData = $request->input('GPSData');
             $gpsDataLength = count($gpsData);
             $orderGPSData = [];
@@ -62,6 +65,13 @@ class OrderController extends Controller
                 $orderGPSData[] = new GPSData($gpsData[$i]);
             }
             $order->gpsData()->saveMany($orderGPSData);
+
+            $savedPrices = $request->input('prices');
+            $newOrderPrices = new OrderPrices([
+                'prices' => $savedPrices,
+                'is_current' => true
+            ]);
+            $order->prices()->save($newOrderPrices);
 
             $optionalServices = $request->input('optional_services');
             $optionalServicesLength = count($optionalServices);
@@ -87,9 +97,15 @@ class OrderController extends Controller
     }
 
     public function getOrder($id) {
-        return Order::with('client')->with(['gpsData' => function ($q) {
-            $q->orderBy('order', 'asc');
-        }])->with('optionalServices')->find($id);
+        return Order::with('client')
+                ->with(['gpsData' => function ($q) {
+                    $q->orderBy('order', 'asc');
+                }])
+                ->with('optionalServices')
+                ->with(['prices' => function ($q) {
+                    $q->orderBy('id', 'desc');
+                }])
+                ->find($id);
     }
 
     public function getOrders(Request $request) {
@@ -139,6 +155,7 @@ class OrderController extends Controller
             'price_for_transportation_per_km' => 'numeric',
             'number_of_trips' => 'numeric',
             'transportation_kms' => 'numeric',
+            'currentOrderPricesID' => 'numeric',
             'GPSData.toDelete' => 'array',
             'GPSData.toAdd' => 'array',
             'GPSData.toUpdate' => 'array',
@@ -150,7 +167,15 @@ class OrderController extends Controller
         ]);
 
         return DB::transaction(function () use ($request, $id) {
-            $orderDataToUpdate = $request->except(['GPSData', 'optional_services', 'log']);
+            OrderPrices::where('order_id', '=', $id)
+                ->update([
+                    'is_current' => false
+                ]);
+            OrderPrices::where('id', '=', $request->input('currentOrderPricesID'))
+                ->update([
+                    'is_current' => true
+                ]);
+            $orderDataToUpdate = $request->except(['GPSData', 'optional_services', 'log', 'currentOrderPricesID']);
 //            dd($orderDataToUpdate);
 
             if (count($orderDataToUpdate) > 0) {
@@ -202,9 +227,15 @@ class OrderController extends Controller
             ]);
             $orderLog->save();
 
-            return Order::with('client')->with(['gpsData' => function ($q) {
-                $q->orderBy('order', 'asc');
-            }])->with('optionalServices')->find($id);
+            return Order::with('client')
+                    ->with(['gpsData' => function ($q) {
+                        $q->orderBy('order', 'asc');
+                    }])
+                    ->with('optionalServices')
+                    ->with(['prices' => function ($q) {
+                        $q->orderBy('id', 'desc');
+                    }])
+                    ->find($id);
         });
     }
 
