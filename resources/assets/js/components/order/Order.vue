@@ -196,40 +196,42 @@
             </v-card>
 
             <v-card class="mt-3 mb-5">
-                <v-card-title class="justify-center" primary-title>
-                    <div class="headline gps-tracking-header">GPS-трекинг</div>
-                </v-card-title>
-                <v-card-text>
-                    <appGPSData
-                        v-if="orderData.GPSData"
-                        ref="GPSData"
-                        :orderGPSData="orderData.GPSData"
-                        :gpsTrackers="gpsTrackers"
-                        :fuelLevelSensors="fuelLevelSensors"
-                        :fuelFlowmeters="fuelFlowmeters"
-                        :identification="identification"
-                        :optionalEquipment="optionalEquipment"
-                        :pricesForEquipment="pricesForEquipment"
-                        :allEquipmentPrice="allEquipmentPrice"
-                        :allInstallationPrice="allInstallationPrice"
-                        :cachedData="allCacheData"
-                        :defaultRowCount="defaultRowCount"
-                        @update:orderGPSData="updateOrderGPSData"
-                        @add-nested-data:orderGPSData="addNestedDataInOrderGPSData"
-                        @delete-nested-data:orderGPSData="deleteNestedDataInOrderGPSData"
-                        @copy-values:orderGPSData="copySelectedInOrderGPSData"
-                        @drag-n-drop-gps-data="dragNDropGPSData"
-                        @rowAdded="addRowToOrderGPSData"
-                        @delete:rows="deleteRowsFromOrderGPSData">
-                    </appGPSData>
-                    <v-progress-linear
-                        v-else
-                        :width="10"
-                        :size="100"
-                        color="primary"
-                        indeterminate>
-                    </v-progress-linear>
-                </v-card-text>
+                <template v-if="isGPSServiceSelected">
+                    <v-card-title class="justify-center" primary-title>
+                        <div class="headline gps-tracking-header">GPS-трекинг</div>
+                    </v-card-title>
+                    <v-card-text>
+                        <appGPSData
+                            v-if="orderData.GPSData"
+                            ref="GPSData"
+                            :orderGPSData="orderData.GPSData"
+                            :gpsTrackers="gpsTrackers"
+                            :fuelLevelSensors="fuelLevelSensors"
+                            :fuelFlowmeters="fuelFlowmeters"
+                            :identification="identification"
+                            :optionalEquipment="optionalEquipment"
+                            :pricesForEquipment="pricesForEquipment"
+                            :allEquipmentPrice="allEquipmentPrice"
+                            :allInstallationPrice="allInstallationPrice"
+                            :cachedData="allCacheData"
+                            :defaultRowCount="defaultRowCount"
+                            @update:orderGPSData="updateOrderGPSData"
+                            @add-nested-data:orderGPSData="addNestedDataInOrderGPSData"
+                            @delete-nested-data:orderGPSData="deleteNestedDataInOrderGPSData"
+                            @copy-values:orderGPSData="copySelectedInOrderGPSData"
+                            @drag-n-drop-gps-data="dragNDropGPSData"
+                            @rowAdded="addRowToOrderGPSData"
+                            @delete:rows="deleteRowsFromOrderGPSData">
+                        </appGPSData>
+                        <v-progress-linear
+                            v-else
+                            :width="10"
+                            :size="100"
+                            color="primary"
+                            indeterminate>
+                        </v-progress-linear>
+                    </v-card-text>
+                </template>
                 <v-card-text>
                     <v-layout wrap>
                         <v-flex order-xs2 order-sm1 xs12 sm6>
@@ -660,6 +662,9 @@ export default {
             }
             return this.initialized;
         },
+        isGPSServiceSelected() {
+            return this.orderData.services.find(service => service.pdf_layout === pdfLayoutNames.GPS_TRACKING);
+        },
         formattedDollarDate() {
             return this.orderData.dollar_date.split('-').join('');
         },
@@ -1062,7 +1067,7 @@ export default {
                 services: this.getServicesIDs(),
                 optional_services: this.orderData.optional_services
             };
-            if (this.orderData.services.find(service => service.pdf_layout === pdfLayoutNames.GPS_TRACKING)) {
+            if (this.isGPSServiceSelected) {
                 orderData.GPSData = this.getGPSDataIDs();
             } else {
                 orderData.GPSData = [];
