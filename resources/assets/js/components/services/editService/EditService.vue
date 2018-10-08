@@ -161,7 +161,7 @@ export default {
     },
     watch: {
         service(newVal) {
-            this.editedService = { ...newVal };
+            this.editedService = { ...newVal, prices_for_ranges: newVal.prices_for_ranges.map(row => ({ ...row })) };
         }
     },
     methods: {
