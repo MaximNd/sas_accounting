@@ -14,10 +14,19 @@
             <v-divider></v-divider>
             <v-list two-line dense>
                 <v-list-tile class="white--text" active-class="menu-active" v-for="(item, index) in menuItems" :key="index" :to="item.link">
-                    <v-list-tile-action style="font-size: 30px !important;">
-                        <v-icon large>{{ item.icon }}</v-icon>
+                    <v-list-tile-action
+                        :style="{
+                            'font-size': $vuetify.breakpoint.lgAndDown ? '30px !important' : false
+                        }">
+                        <v-icon
+                            :large="$vuetify.breakpoint.lgAndDown"
+                            :x-large="$vuetify.breakpoint.xlOnly">{{ item.icon }}</v-icon>
                     </v-list-tile-action>
-                    <v-list-tile-content style="font-size: 12px;">
+                    <v-list-tile-content
+                        :style="{
+                            'font-size': $vuetify.breakpoint.lgAndDown ? '12px' : '15px',
+                            'margin-left': $vuetify.breakpoint.lgAndDown ? false : '10px'
+                        }">
                         <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
