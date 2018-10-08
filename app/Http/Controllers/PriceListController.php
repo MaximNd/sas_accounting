@@ -90,15 +90,19 @@ class PriceListController extends Controller
             'equipment.installation_price_for_two' => 'nullable|numeric',
             'equipment.installation_price_for_three' => 'nullable|numeric',
             'equipment.type' => Rule::in(['GPS-трекеры', 'Датчики уровня топлива', 'Расходомеры топлива', 'Идентификация', 'Дополнительное оборудование']),
-            'service.price' => 'numeric',
+            'service.price' => 'numeric|nullable',
+            'service.prices_for_ranges' => 'array|nullable',
             'service.type' => Rule::in(['Услуга']),
             'service.pdf_layout' => Rule::in(['Підключення до платформи SASAGRO.COM', 'Картування полів Дронами', 'Картування полів Фізичний обмір', 'Облік земельного банку', 'GPS моніторинг', 'Патрулювання', 'NDVI', 'Підрахунок всходів', 'Фото/відео', 'SAS Mapper', 'Хімічний аналіз грунтів', 'Вимірювання твердості грунту', 'Інтеграція 1С і Cropio з супроводом']),
             'log.before' => 'required|string',
             'log.after' => 'required|string'
         ]);
+//        dd($request->input('service'));
         DB::transaction(function () use ($request, $id) {
             if ($request->input('isService')) {
-                PriceList::where('id', $id)->update($request->input('service'));
+                $serviceDataToUpdate = $request->input('service');
+                $serviceDataToUpdate['prices_for_ranges'] = json_encode($serviceDataToUpdate['prices_for_ranges']);
+                PriceList::where('id', $id)->update($serviceDataToUpdate);
             } else {
                 PriceList::where('id', $id)->update($request->input('equipment'));
             }
