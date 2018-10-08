@@ -63,6 +63,18 @@
                                                             <v-list-tile-content v-else :class="{ 'align-end': true, 'red--text darken-4--text': beforeData.isChanged }">{{ beforeData.value }}</v-list-tile-content>
                                                         </v-list-tile>
                                                     </v-list>
+                                                    <v-data-table
+                                                        v-if="updatedData[props.index].before1CService"
+                                                        :headers="service1CHeaders"
+                                                        :items="updatedData[props.index].before1CService"
+                                                        hide-actions
+                                                        class="elevation-1 mt-1">
+                                                        <template slot="items" slot-scope="nestedProps">
+                                                            <td>{{ nestedProps.item.from }}</td>
+                                                            <td>{{ nestedProps.item.to }}</td>
+                                                            <td>{{ nestedProps.item.price }}$</td>
+                                                        </template>
+                                                    </v-data-table>
                                                 </v-card>
                                             </v-flex>
                                             <v-flex xs12 sm6>
@@ -78,6 +90,18 @@
                                                             <v-list-tile-content v-else :class="{ 'align-end': true, 'success--text': afterData.isChanged }">{{ afterData.value }}</v-list-tile-content>
                                                         </v-list-tile>
                                                     </v-list>
+                                                    <v-data-table
+                                                        v-if="updatedData[props.index].after1CService"
+                                                        :headers="service1CHeaders"
+                                                        :items="updatedData[props.index].after1CService"
+                                                        hide-actions
+                                                        class="elevation-1 mt-1">
+                                                        <template slot="items" slot-scope="nestedProps">
+                                                            <td>{{ nestedProps.item.from }}</td>
+                                                            <td>{{ nestedProps.item.to }}</td>
+                                                            <td>{{ nestedProps.item.price }}$</td>
+                                                        </template>
+                                                    </v-data-table>
                                                 </v-card>
                                             </v-flex>
                                         </v-layout>
@@ -97,12 +121,24 @@
                                                         <td>{{ nestedProps.item.name }}</td>
                                                         <td v-if="createdData[props.index].items[0].type !== 'Услуга'" class="text-xs-right">{{ nestedProps.item.type }}</td>
                                                         <td v-if="createdData[props.index].items[0].type !== 'Услуга'" class="text-xs-right">{{ nestedProps.item.incoming_price }}</td>
-                                                        <td class="text-xs-right">{{ nestedProps.item.price }}</td>
+                                                        <td v-if="!createdData[props.index].is1CService" class="text-xs-right">{{ nestedProps.item.price }}</td>
                                                         <td v-if="createdData[props.index].items[0].type !== 'Услуга'" class="text-xs-right">{{ nestedProps.item.installation_price_for_one }}</td>
                                                         <td v-if="createdData[props.index].items[0].type !== 'Услуга'" class="text-xs-right">{{ nestedProps.item.installation_price_for_two }}</td>
                                                         <td v-if="createdData[props.index].items[0].type !== 'Услуга'" class="text-xs-right">{{ nestedProps.item.installation_price_for_three }}</td>
                                                         <td v-if="createdData[props.index].items[0].type !== 'Услуга'" class="text-xs-right">{{ nestedProps.item.description }}</td>
                                                         <td v-if="createdData[props.index].items[0].type === 'Услуга'" class="text-xs-right">{{ nestedProps.item.created_at }}</td>
+                                                    </template>
+                                                </v-data-table>
+                                                <v-data-table
+                                                    v-if="createdData[props.index].is1CService"
+                                                    :headers="service1CHeaders"
+                                                    :items="createdData[props.index].items[0].prices_for_ranges"
+                                                    hide-actions
+                                                    class="elevation-1 mt-1">
+                                                    <template slot="items" slot-scope="nestedProps">
+                                                        <td>{{ nestedProps.item.from }}</td>
+                                                        <td>{{ nestedProps.item.to }}</td>
+                                                        <td>{{ nestedProps.item.price }}$</td>
                                                     </template>
                                                 </v-data-table>
                                             </v-flex>
@@ -138,9 +174,16 @@
 </template>
 
 <script>
+import pdfLayoutNames from './../../constants/ServicesPreviewNames.js';
+
 export default {
     data() {
         return {
+            service1CHeaders: [
+                { text: 'Гектаров от', align: 'left', sortable: false },
+                { text: 'Гектаров до', align: 'left', sortable: false },
+                { text: 'Цена', align: 'left', sortable: false },
+            ],
             createdDataHeaders: {
                 equipment: [
                     { text: 'Изображение', align: 'left', value: 'image', sortable: false },
@@ -156,6 +199,10 @@ export default {
                 service: [
                     { text: 'Название', align: 'left', value: 'name', sortable: false },
                     { text: 'Цена $', align: 'right', value: 'price', sortable: false },
+                    { text: 'Дата создания', align: 'right', value: 'created_at', sortable: false }
+                ],
+                service1c: [
+                    { text: 'Название', align: 'left', value: 'name', sortable: false },
                     { text: 'Дата создания', align: 'right', value: 'created_at', sortable: false }
                 ]
             },
@@ -174,6 +221,9 @@ export default {
                 service: {
                     name: 'Назване',
                     price: 'Цена'
+                },
+                service1c: {
+                    name: 'Назване'
                 }
             },
             search: '',
@@ -205,10 +255,13 @@ export default {
             return this.priceListHistory.reduce((createdData, priceListHistoryData, index) => {
                 if (priceListHistoryData.type === 'Создание') {
                     const isService = priceListHistoryData.equipment.type === 'Услуга';
-                    const key = isService ? 'service' : 'equipment';
+                    const item = JSON.parse(priceListHistoryData.after);
+                    const is1CService = item.pdf_layout === pdfLayoutNames.INTEGRATION_1C;
+                    const key = isService ? (is1CService ? 'service1c' : 'service') : 'equipment';
                     createdData[index] = {
                         headers: this.createdDataHeaders[key],
-                        items: [JSON.parse(priceListHistoryData.after)]
+                        items: [item],
+                        is1CService
                     };
                 }
                 return createdData;
@@ -217,24 +270,34 @@ export default {
         updatedData() {
             return this.priceListHistory.reduce((updatedData, priceListHistoryData, index) => {
                 if (priceListHistoryData.type === 'Обновление') {
-                    const isService = priceListHistoryData.equipment.type === 'Услуга';
-                    const keyForPermissibleKeys = isService ? 'service' : 'equipment';
-                    const permissibleKeys = Object.keys(this.permissibleKeysMap[keyForPermissibleKeys]);
-                    updatedData[index] = { before: [], after: [] };
                     const before = JSON.parse(priceListHistoryData.before);
                     const after = JSON.parse(priceListHistoryData.after);
+                    const isService = priceListHistoryData.equipment.type === 'Услуга';
+                    const isBefore1CService = before.pdf_layout === pdfLayoutNames.INTEGRATION_1C;
+                    const isAfter1CService = after.pdf_layout === pdfLayoutNames.INTEGRATION_1C;
+                    const keyForBeforePermissibleKeys = isService ? (isBefore1CService ? 'service1c' : 'service') : 'equipment';
+                    const keyForAfterPermissibleKeys = isService ? (isAfter1CService ? 'service1c' : 'service') : 'equipment';
+                    const permissibleKeysForBefore = Object.keys(this.permissibleKeysMap[keyForBeforePermissibleKeys]);
+                    const permissibleKeysForAfter = Object.keys(this.permissibleKeysMap[keyForAfterPermissibleKeys]);
+                    updatedData[index] = { before: [], after: [] };
                     updatedData[index].before = Object.keys(before).reduce((beforeData, key) => {
-                        if (permissibleKeys.includes(key)) {
-                            beforeData.push({ text: this.permissibleKeysMap[keyForPermissibleKeys][key], value: before[key], isChanged: before[key] !== after[key] });
+                        if (permissibleKeysForBefore.includes(key)) {
+                            beforeData.push({ text: this.permissibleKeysMap[keyForBeforePermissibleKeys][key], value: before[key], isChanged: before[key] !== after[key] });
                         }
                         return beforeData;
                     }, []);
+                    if (isBefore1CService) {
+                        updatedData[index].before1CService = before.prices_for_ranges;
+                    }
                     updatedData[index].after = Object.keys(after).reduce((afterData, key) => {
-                        if (permissibleKeys.includes(key)) {
-                            afterData.push({ text: this.permissibleKeysMap[keyForPermissibleKeys][key], value: after[key], isChanged: before[key] !== after[key] });
+                        if (permissibleKeysForAfter.includes(key)) {
+                            afterData.push({ text: this.permissibleKeysMap[keyForAfterPermissibleKeys][key], value: after[key], isChanged: before[key] !== after[key] });
                         }
                         return afterData;
                     }, []);
+                    if (isAfter1CService) {
+                        updatedData[index].after1CService = after.prices_for_ranges;
+                    }
                 }
                 return updatedData;
             }, {});
