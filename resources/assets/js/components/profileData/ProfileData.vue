@@ -3,18 +3,24 @@
         <v-card-text>
             <v-layout align-center justify-center>
                 <v-avatar
-                    size="250">
-                    <img :src="`/storage/${user.image}`" alt="avatar">
+                    :size="$vuetify.breakpoint.xlOnly ? 250 : 200">
+                    <img
+                        :src="`/storage/${user.image}`"
+                        :style="{
+                            width: $vuetify.breakpoint.xlOnly ? 250 : 200,
+                            height: $vuetify.breakpoint.xlOnly ? 250 : 200
+                        }"
+                        alt="avatar">
                 </v-avatar>
             </v-layout>
         </v-card-text>
         <v-card-text>
             <v-layout class="pl-3 pr-3 pb-3" wrap align-center justify-center>
-                <v-flex class="userData" xs6>ФИО:</v-flex><v-flex class="userData" xs6>{{ fullName }}</v-flex>
-                <v-flex class="userData" xs6>Должность:</v-flex><v-flex class="userData" xs6>{{ user.position }}</v-flex>
-                <v-flex class="userData" xs6>Role:</v-flex><v-flex class="userData" xs6>{{ user.role }}</v-flex>
-                <v-flex class="userData" xs6>Email:</v-flex><v-flex class="userData" xs6>{{ user.email }}</v-flex>
-                <v-flex class="userData" xs6>Тел:</v-flex><v-flex class="userData" xs6>{{ user.telephone }}</v-flex>
+                <v-flex :class="{ userData: $vuetify.breakpoint.lgAndDown, 'userData-xl': $vuetify.breakpoint.xlOnly }" xs5>ФИО:</v-flex><v-flex :class="{ userData: $vuetify.breakpoint.lgAndDown, 'userData-xl': $vuetify.breakpoint.xlOnly }" xs7>{{ fullName }}</v-flex>
+                <v-flex :class="{ userData: $vuetify.breakpoint.lgAndDown, 'userData-xl': $vuetify.breakpoint.xlOnly }" xs5>Должность:</v-flex><v-flex :class="{ userData: $vuetify.breakpoint.lgAndDown, 'userData-xl': $vuetify.breakpoint.xlOnly }" xs7>{{ user.position }}</v-flex>
+                <v-flex :class="{ userData: $vuetify.breakpoint.lgAndDown, 'userData-xl': $vuetify.breakpoint.xlOnly }" xs5>Role:</v-flex><v-flex :class="{ userData: $vuetify.breakpoint.lgAndDown, 'userData-xl': $vuetify.breakpoint.xlOnly }" xs7>{{ user.role }}</v-flex>
+                <v-flex :class="{ userData: $vuetify.breakpoint.lgAndDown, 'userData-xl': $vuetify.breakpoint.xlOnly }" xs5>Email:</v-flex><v-flex :class="{ userData: $vuetify.breakpoint.lgAndDown, 'userData-xl': $vuetify.breakpoint.xlOnly }" xs7>{{ user.email }}</v-flex>
+                <v-flex :class="{ userData: $vuetify.breakpoint.lgAndDown, 'userData-xl': $vuetify.breakpoint.xlOnly }" xs5>Тел:</v-flex><v-flex :class="{ userData: $vuetify.breakpoint.lgAndDown, 'userData-xl': $vuetify.breakpoint.xlOnly }" xs7>{{ user.telephone }}</v-flex>
             </v-layout>
         </v-card-text>
         <v-card-actions>
@@ -111,12 +117,15 @@ export default {
 <style scoped>
     .userData {
         font-size: 18px;
+        margin-bottom: 6px;
+    }
+
+    .userData-xl {
+        font-size: 18px;
         margin-bottom: 20px;
     }
 
     img {
         object-fit: cover;
-        width: 250px;
-        height: 250px;
     }
 </style>
