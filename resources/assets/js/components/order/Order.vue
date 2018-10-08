@@ -257,8 +257,27 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
+                                            label="Цена за 1 день командировки"
+                                            :readonly="!isPriceForDayEditing"
+                                            v-model="orderData.price_for_day"
+                                            append-icon="₴">
+                                            <v-slide-x-reverse-transition
+                                                slot="append-outer"
+                                                mode="out-in">
+                                                <v-icon
+                                                    :color="isPriceForDayEditing ? 'success' : 'info'"
+                                                    :key="`icon-${isPriceForDayEditing}`"
+                                                    @click="switchPriceForDayEditing"
+                                                    v-text="isPriceForDayEditing ? 'done_all' : 'edit'"
+                                                ></v-icon>
+                                            </v-slide-x-reverse-transition>
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
                                             label="Дней командировки"
-                                            hint="Фиксированая цена 720 грн/день"
+                                            :hint="`Фиксированая цена ${orderData.price_for_day} грн/день`"
                                             persistent-hint
                                             v-model="orderData.days">
                                         </v-text-field>
@@ -276,14 +295,27 @@
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
                                             label="Цена за 1км"
+                                            :readonly="!isPriceForTransportationPerKmEditing"
                                             v-model="orderData.price_for_transportation_per_km"
                                             append-icon="₴">
+                                            <v-slide-x-reverse-transition
+                                                slot="append-outer"
+                                                mode="out-in">
+                                                <v-icon
+                                                    :color="isPriceForTransportationPerKmEditing ? 'success' : 'info'"
+                                                    :key="`icon-${isPriceForTransportationPerKmEditing}`"
+                                                    @click="switchPriceForTransportationPerKmEditing"
+                                                    v-text="isPriceForTransportationPerKmEditing ? 'done_all' : 'edit'"
+                                                ></v-icon>
+                                            </v-slide-x-reverse-transition>
                                         </v-text-field>
                                     </v-flex>
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
                                             label="Растояние км"
+                                            :hint="`Фиксированая цена ${orderData.price_for_transportation_per_km} грн/км`"
+                                            persistent-hint
                                             v-model="orderData.transportation_kms">
                                         </v-text-field>
                                     </v-flex>
@@ -480,6 +512,8 @@ export default {
             orderUpdating: false,
             loading: false,
             isDollarRateEditing: false,
+            isPriceForDayEditing: false,
+            isPriceForTransportationPerKmEditing: false,
             snack: false,
             dollarDateCalendar: false,
             snackColor: '',
@@ -522,7 +556,7 @@ export default {
                 dollar_date: new Date().toISOString().slice(0, 10),
                 days: '',
                 price_for_day: 720,
-                price_for_transportation_per_km: '',
+                price_for_transportation_per_km: 4.2,
                 number_of_trips: 2,
                 transportation_kms: '',
                 route: '',
@@ -901,6 +935,24 @@ export default {
                 this.showSnackbar('success', 'Данные сохранены!');
             } else {
                 this.showSnackbar('info', 'Редактирование курса доллара');
+            }
+        },
+        switchPriceForDayEditing() {
+            this.isPriceForDayEditing = !this.isPriceForDayEditing;
+            if (!this.isPriceForDayEditing) {
+                this.saveOrderDataToLocalStorage();
+                this.showSnackbar('success', 'Данные сохранены!');
+            } else {
+                this.showSnackbar('info', 'Редактирование цены командировки за 1 день');
+            }
+        },
+        switchPriceForTransportationPerKmEditing() {
+            this.isPriceForTransportationPerKmEditing = !this.isPriceForTransportationPerKmEditing;
+            if (!this.isPriceForTransportationPerKmEditing) {
+                this.saveOrderDataToLocalStorage();
+                this.showSnackbar('success', 'Данные сохранены!');
+            } else {
+                this.showSnackbar('info', 'Редактирование цены за 1км');
             }
         },
         recalculatePrices() {
