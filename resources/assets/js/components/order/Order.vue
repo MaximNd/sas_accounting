@@ -715,7 +715,21 @@ export default {
         },
         priceForArea() {
             const area = (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);
-            const priceForServices = this.orderData.services.reduce((price, service) => this.addTwoFloats(price, this.multiplyTwoFloats(service.price, area)), 0);
+            const priceForServices = this.orderData.services.reduce((price, service) => {
+                if (service.pdf_layout === pdfLayoutNames.INTEGRATION_1C) {
+                    for (let i = 0; i < service.prices_for_ranges.length; ++i) {
+                        if (i + 1 === service.prices_for_ranges.length) {
+                            if (area >= parseFloat(service.prices_for_ranges[i].from)) {
+                                return this.addTwoFloats(price, parseFloat(service.prices_for_ranges[i].price));
+                            }
+                        } else if (area >= parseFloat(service.prices_for_ranges[i].from) && area < parseFloat(service.prices_for_ranges[i].to)) {
+                            return this.addTwoFloats(price, parseFloat(service.prices_for_ranges[i].price));
+                        }
+                    }
+                } else {
+                    return this.addTwoFloats(price, this.multiplyTwoFloats(service.price, area))
+                }
+            }, 0);
             const finalPriceForArea = this.orderData.optional_services ? this.orderData.optional_services.reduce((price, service) => this.addTwoFloats(price, this.multiplyTwoFloats(service.price, area)), priceForServices) : priceForServices;
             return finalPriceForArea;
         },
