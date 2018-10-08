@@ -26,11 +26,19 @@ class PriceListController extends Controller
         ]);
 
         if ($request->input('type') === 'Услуга') {
-            $this->validate($request, [
-                'name' => 'required',
-                'price' => 'required|numeric',
-                'pdf_layout' => ['required', Rule::in(['Підключення до платформи SASAGRO.COM', 'Картування полів Дронами', 'Картування полів Фізичний обмір', 'Облік земельного банку', 'GPS моніторинг', 'Патрулювання', 'NDVI', 'Підрахунок всходів', 'Фото/відео', 'SAS Mapper', 'Хімічний аналіз грунтів', 'Вимірювання твердості грунту', 'Інтеграція 1С і Cropio з супроводом'])]
-            ]);
+            if ($request->input('pdf_layout') === 'Інтеграція 1С і Cropio з супроводом') {
+                $this->validate($request, [
+                    'name' => 'required',
+                    'prices_for_ranges' => 'array',
+                    'pdf_layout' => 'required'
+                ]);
+            } else {
+                $this->validate($request, [
+                    'name' => 'required',
+                    'price' => 'required|numeric',
+                    'pdf_layout' => ['required', Rule::in(['Підключення до платформи SASAGRO.COM', 'Картування полів Дронами', 'Картування полів Фізичний обмір', 'Облік земельного банку', 'GPS моніторинг', 'Патрулювання', 'NDVI', 'Підрахунок всходів', 'Фото/відео', 'SAS Mapper', 'Хімічний аналіз грунтів', 'Вимірювання твердості грунту'])]
+                ]);
+            }
         } else {
             $this->validate($request, [
                 'image' => 'required|image',
@@ -43,8 +51,6 @@ class PriceListController extends Controller
                 'description' => 'string'
             ]);
         }
-
-
 
         $result = DB::transaction(function() use ($request) {
             $data = $request->all();

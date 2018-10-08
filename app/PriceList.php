@@ -15,11 +15,16 @@ class PriceList extends Model
         'pdf_layout',
         'incoming_price',
         'price',
+        'prices_for_ranges',
         'installation_price_for_one',
         'installation_price_for_two',
         'installation_price_for_three',
         'description',
         'type'
+    ];
+
+    protected $casts = [
+        'prices_for_ranges' => 'array'
     ];
 
     protected $dates = ['deleted_at'];

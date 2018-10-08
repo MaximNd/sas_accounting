@@ -15,17 +15,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Інтеграція 1С і Cropio</td>
-                            <td class="table-price">3 850$<br>(одноразово)</td>
-                        </tr>
-                        <tr>
-                            <td>Інтеграція 1С і Cropio <br> з супроводом</td>
-                            <td class="table-price">0,5$ <br> з га за рік</td>
-                        </tr>
-                        <tr>
-                            <td>Година роботи програміста</td>
-                            <td class="table-price">30$</td>
+                        <tr v-for="(price, index) in prices" :key="`price-${index}`">
+                            <td class="table-range" v-if="index + 1 === prices.length">
+                                {{ `${price.from}>` }}
+                            </td>
+                            <td class="table-range" v-else>
+                                {{ `${price.from} - ${price.to}` }}
+                            </td>
+                            <td class="table-price">
+                                {{ price.price }}$
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -44,7 +43,12 @@
 
 <script>
 export default {
-
+    props: {
+        prices: {
+            type: Array,
+            required: true
+        }
+    }
 }
 </script>
 
@@ -115,6 +119,7 @@ export default {
         padding: 5px 10px;
     }
 
+    .bg-1c .price-1c-table table td.table-range,
     .bg-1c .price-1c-table table td.table-price {
         text-align: center;
     }

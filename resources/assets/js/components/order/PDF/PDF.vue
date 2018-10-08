@@ -103,7 +103,7 @@
         <template v-if="servicesPreviewNames[pdfLayoutNames.INTEGRATION_1C]">
             <appIntegration1C />
             <div class="html2pdf__page-break"></div>
-            <appPrices1C />
+            <appPrices1C :prices="servicesPreviewNames[pdfLayoutNames.INTEGRATION_1C].prices_for_ranges" />
             <div class="html2pdf__page-break"></div>
         </template>
         <template v-if="optionalServices.length > 0">
