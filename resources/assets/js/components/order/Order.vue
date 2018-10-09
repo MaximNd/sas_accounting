@@ -30,6 +30,9 @@
                                         min-width="290px">
                                         <v-text-field
                                             slot="activator"
+                                            v-validate="'required|date_format:YYYY-MM-DD'"
+                                            data-vv-name="dollar_date"
+                                            :error-messages="errors.collect('dollar_date')"
                                             v-model="orderData.dollar_date"
                                             label="Дата курса доллара"
                                             readonly>
@@ -48,9 +51,12 @@
                                 </v-flex>
                                 <v-flex xs12 md3>
                                     <v-text-field
+                                        v-validate="'required|decimal'"
+                                        data-vv-name="dollar_rate"
+                                        :error-messages="errors.collect('dollar_rate')"
+                                        v-model="orderData.dollar_rate"
                                         label="Курс Доллара"
-                                        :readonly="!isDollarRateEditing"
-                                        v-model="orderData.dollar_rate">
+                                        :readonly="!isDollarRateEditing">
                                         <v-slide-x-reverse-transition
                                             slot="append-outer"
                                             mode="out-in">
@@ -68,6 +74,9 @@
                                 <v-flex xs12 sm7 md6>
                                     <v-autocomplete
                                         v-if="!isClientCreation"
+                                        v-validate="`required|included:${clients.map(client => client.id).join(',')}`"
+                                        data-vv-name="client"
+                                        :error-messages="errors.collect('client')"
                                         v-model="orderData.client"
                                         :items="clients"
                                         hide-selected
@@ -110,39 +119,62 @@
                                         </v-flex>
                                         <v-flex xs12 sm6 md4>
                                             <v-switch
+                                                v-validate="{ required: true, included: [true, false] }"
+                                                data-vv-name="is_sent"
+                                                :error-messages="errors.collect('is_sent')"
+                                                v-model="orderData.statuses.is_sent"
                                                 color="success"
-                                                :label="isSentStatus"
-                                                v-model="orderData.statuses.is_sent">
+                                                :label="isSentStatus">
                                             </v-switch>
                                         </v-flex>
                                         <v-flex xs12 sm6 md4>
                                             <v-switch
+                                                v-validate="{ required: true, included: [true, false] }"
+                                                data-vv-name="is_agreed"
+                                                :error-messages="errors.collect('is_agreed')"
+                                                v-model="orderData.statuses.is_agreed"
                                                 color="success"
-                                                :label="isAgreedStatus"
-                                                v-model="orderData.statuses.is_agreed">
+                                                :label="isAgreedStatus">
                                             </v-switch>
                                         </v-flex>
                                         <v-flex xs12 sm6 md4>
                                             <v-switch
+                                                v-validate="{ required: true, included: [true, false] }"
+                                                data-vv-name="is_paid"
+                                                :error-messages="errors.collect('is_paid')"
+                                                v-model="orderData.statuses.is_paid"
                                                 color="success"
-                                                :label="isPaidStatus"
-                                                v-model="orderData.statuses.is_paid">
+                                                :label="isPaidStatus">
                                             </v-switch>
                                         </v-flex>
                                         <v-flex xs12 sm6 md4>
                                             <v-switch
+                                                v-validate="{ required: true, included: [true, false] }"
+                                                data-vv-name="is_installation_finished"
+                                                :error-messages="errors.collect('is_installation_finished')"
+                                                v-model="orderData.statuses.is_installation_finished"
                                                 color="success"
-                                                :label="isInstallationFinishedStatus"
-                                                v-model="orderData.statuses.is_installation_finished">
+                                                :label="isInstallationFinishedStatus">
                                             </v-switch>
                                         </v-flex>
                                     </v-layout>
                                 </v-flex>
                                 <v-flex xs12 offset-md2 md6>
-                                    <v-text-field v-model="orderData.name" label="Название заказа"></v-text-field>
+                                    <v-text-field
+                                        v-validate="'required|max:100'"
+                                        data-vv-name="name"
+                                        :error-messages="errors.collect('name')"
+                                        v-model="orderData.name"
+                                        label="Название заказа"></v-text-field>
                                 </v-flex>
                                 <v-flex xs12 offset-md2 md6>
-                                    <v-text-field v-model="orderData.area" label="Площадь" :suffix="`${priceForArea}$`"></v-text-field>
+                                    <v-text-field
+                                        v-validate="'required|decimal:2'"
+                                        data-vv-name="area"
+                                        :error-messages="errors.collect('area')"
+                                        v-model="orderData.area"
+                                        label="Площадь"
+                                        :suffix="`${priceForArea}$`"></v-text-field>
                                 </v-flex>
                             </v-layout>
                             <v-layout wrap v-if="services.length > 0">
@@ -157,8 +189,7 @@
                                         :style="{ padding: 0, margin: index !== 0 ? 0 : false }"
                                         :label="service.name"
                                         v-model="orderData.services"
-                                        :value="service">
-                                        </v-checkbox>
+                                        :value="service"></v-checkbox>
                                 </v-flex>
                                 <v-flex xs12 offset-md2 class="mt-2">
                                     <div class="title font-weight-regular">
@@ -172,14 +203,23 @@
                                     <v-card>
                                         <v-card-text>
                                             <v-text-field
+                                                v-validate="'required|max:30'"
+                                                :data-vv-name="`optional_service_name-${index}`"
+                                                :error-messages="errors.collect(`optional_service_name-${index}`)"
                                                 label="Название"
                                                 v-model="orderData.optional_services[index].name">
                                             </v-text-field>
                                             <v-text-field
+                                                v-validate="'required|decimal:2'"
+                                                :data-vv-name="`optional_service_price-${index}`"
+                                                :error-messages="errors.collect(`optional_service_price-${index}`)"
                                                 label="Цена"
                                                 v-model="orderData.optional_services[index].price">
                                             </v-text-field>
                                             <v-textarea
+                                                v-validate="'required'"
+                                                :data-vv-name="`optional_service_comment-${index}`"
+                                                :error-messages="errors.collect(`optional_service_comment-${index}`)"
                                                 label="Комментарий"
                                                 v-model="orderData.optional_services[index].comment">
                                             </v-textarea>
@@ -239,27 +279,36 @@
                                 <v-layout wrap>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
+                                            v-validate="'required|decimal:2'"
+                                            data-vv-name="allInstallationPrice"
+                                            :error-messages="errors.collect('allInstallationPrice')"
+                                            :value="allInstallationPrice"
                                             label="Монтаж оборудования"
                                             readonly
-                                            :value="allInstallationPrice"
                                             append-icon="₴">
                                         </v-text-field>
                                     </v-flex>
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
+                                            v-validate="'required|decimal:2'"
+                                            data-vv-name="allEquipmentPrice"
+                                            :error-messages="errors.collect('allEquipmentPrice')"
+                                            :value="allEquipmentPrice"
                                             label="Оборудование"
                                             readonly
-                                            :value="allEquipmentPrice"
                                             append-icon="₴">
                                         </v-text-field>
                                     </v-flex>
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
+                                            v-validate="'required|decimal:2'"
+                                            data-vv-name="price_for_day"
+                                            :error-messages="errors.collect('price_for_day')"
+                                            v-model="orderData.price_for_day"
                                             label="Цена за 1 день командировки"
                                             :readonly="!isPriceForDayEditing"
-                                            v-model="orderData.price_for_day"
                                             append-icon="₴">
                                             <v-slide-x-reverse-transition
                                                 slot="append-outer"
@@ -276,27 +325,36 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
+                                            v-validate="'required|decimal:0'"
+                                            data-vv-name="days"
+                                            :error-messages="errors.collect('days')"
+                                            v-model="orderData.days"
                                             label="Дней командировки"
                                             :hint="`Фиксированая цена ${orderData.price_for_day} грн/день`"
-                                            persistent-hint
-                                            v-model="orderData.days">
+                                            persistent-hint>
                                         </v-text-field>
                                     </v-flex>
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
+                                            v-validate="'required|decimal:2'"
+                                            data-vv-name="priceForDays"
+                                            :error-messages="errors.collect('priceForDays')"
+                                            :value="priceForDays"
                                             label="Командировки / проживание"
                                             readonly
-                                            :value="priceForDays"
                                             append-icon="₴">
                                         </v-text-field>
                                     </v-flex>
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
+                                            v-validate="'required|decimal:2'"
+                                            data-vv-name="price_for_transportation_per_km"
+                                            :error-messages="errors.collect('price_for_transportation_per_km')"
+                                            v-model="orderData.price_for_transportation_per_km"
                                             label="Цена за 1км"
                                             :readonly="!isPriceForTransportationPerKmEditing"
-                                            v-model="orderData.price_for_transportation_per_km"
                                             append-icon="₴">
                                             <v-slide-x-reverse-transition
                                                 slot="append-outer"
@@ -313,17 +371,23 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
+                                            v-validate="'required|decimal:2'"
+                                            data-vv-name="transportation_kms"
+                                            :error-messages="errors.collect('transportation_kms')"
+                                            v-model="orderData.transportation_kms"
                                             label="Растояние км"
                                             :hint="`Фиксированая цена ${orderData.price_for_transportation_per_km} грн/км`"
-                                            persistent-hint
-                                            v-model="orderData.transportation_kms">
+                                            persistent-hint>
                                         </v-text-field>
                                     </v-flex>
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
-                                            label="Количество поездок"
+                                            v-validate="'required|decimal:0|min_value:1'"
+                                            data-vv-name="number_of_trips"
+                                            :error-messages="errors.collect('number_of_trips')"
                                             v-model="orderData.number_of_trips"
+                                            label="Количество поездок"
                                             :type="'number'"
                                             min="1">
                                         </v-text-field>
@@ -331,16 +395,22 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
-                                            label="Маршрут"
-                                            v-model="orderData.route">
+                                            v-validate="'required|max:30'"
+                                            data-vv-name="route"
+                                            :error-messages="errors.collect('route')"
+                                            v-model="orderData.route"
+                                            label="Маршрут">
                                         </v-text-field>
                                     </v-flex>
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
+                                            v-validate="'required|decimal:2'"
+                                            data-vv-name="transportationPrice"
+                                            :error-messages="errors.collect('transportationPrice')"
+                                            :value="transportationPrice"
                                             label="Транспортные расходы"
                                             readonly
-                                            :value="transportationPrice"
                                             append-icon="₴">
                                         </v-text-field>
                                     </v-flex>
