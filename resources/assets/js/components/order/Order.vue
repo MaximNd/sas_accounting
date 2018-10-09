@@ -54,7 +54,8 @@
                                         v-validate="'required|decimal'"
                                         data-vv-name="dollar_rate"
                                         :error-messages="errors.collect('dollar_rate')"
-                                        v-model="orderData.dollar_rate"
+                                        @input="replaceComma($event, orderData, 'dollar_rate')"
+                                        :value="orderData.dollar_rate"
                                         label="Курс Доллара"
                                         :readonly="!isDollarRateEditing">
                                         <v-slide-x-reverse-transition
@@ -172,7 +173,8 @@
                                         v-validate="'required|decimal:2'"
                                         data-vv-name="area"
                                         :error-messages="errors.collect('area')"
-                                        v-model="orderData.area"
+                                        @input="replaceComma($event, orderData, 'area')"
+                                        :value="orderData.area"
                                         label="Площадь"
                                         :suffix="`${priceForArea}$`"></v-text-field>
                                 </v-flex>
@@ -213,8 +215,9 @@
                                                 v-validate="'required|decimal:2'"
                                                 :data-vv-name="`optional_service_price-${index}`"
                                                 :error-messages="errors.collect(`optional_service_price-${index}`)"
-                                                label="Цена"
-                                                v-model="orderData.optional_services[index].price">
+                                                @input="replaceComma($event, orderData.optional_services[index], 'price', `optional_service_price-${index}`)"
+                                                :value="orderData.optional_services[index].price"
+                                                label="Цена">
                                             </v-text-field>
                                             <v-textarea
                                                 v-validate="'required'"
@@ -306,7 +309,8 @@
                                             v-validate="'required|decimal:2'"
                                             data-vv-name="price_for_day"
                                             :error-messages="errors.collect('price_for_day')"
-                                            v-model="orderData.price_for_day"
+                                            @input="replaceComma($event, orderData, 'price_for_day')"
+                                            :value="orderData.price_for_day"
                                             label="Цена за 1 день командировки"
                                             :readonly="!isPriceForDayEditing"
                                             append-icon="₴">
@@ -352,7 +356,8 @@
                                             v-validate="'required|decimal:2'"
                                             data-vv-name="price_for_transportation_per_km"
                                             :error-messages="errors.collect('price_for_transportation_per_km')"
-                                            v-model="orderData.price_for_transportation_per_km"
+                                            @input="replaceComma($event, orderData, 'price_for_transportation_per_km')"
+                                            :value="orderData.price_for_transportation_per_km"
                                             label="Цена за 1км"
                                             :readonly="!isPriceForTransportationPerKmEditing"
                                             append-icon="₴">
@@ -374,7 +379,8 @@
                                             v-validate="'required|decimal:2'"
                                             data-vv-name="transportation_kms"
                                             :error-messages="errors.collect('transportation_kms')"
-                                            v-model="orderData.transportation_kms"
+                                            @input="replaceComma($event, orderData, 'transportation_kms')"
+                                            :value="orderData.transportation_kms"
                                             label="Растояние км"
                                             :hint="`Фиксированая цена ${orderData.price_for_transportation_per_km} грн/км`"
                                             persistent-hint>
@@ -555,6 +561,7 @@ import PDF from './PDF/PDF';
 import dcopy from 'deep-copy';
 import utils from './../../mixins/utils.js';
 import setStyles from './../../mixins/stylesMixins.js'
+import forms from './../../mixins/forms.js';
 import formatter from 'accounting';
 import diff from 'deep-diff';
 import html2pdf from 'html2pdf.js';
@@ -562,7 +569,7 @@ import jsPDF from 'jspdf';
 import pdfLayoutNames from './../../constants/ServicesPreviewNames.js';
 
 export default {
-    mixins: [utils, setStyles],
+    mixins: [utils, setStyles, forms],
     props: {
         isCreation: {
             type: Boolean,
@@ -1182,228 +1189,242 @@ export default {
             });
         },
         createOrder() {
-            this.orderInCreation = true;
-            const orderData = {
-                client_id: this.orderData.client,
-                dollar_rate: this.orderData.dollar_rate,
-                dollar_date: this.orderData.dollar_date,
-                name: this.orderData.name,
-                is_sent: this.orderData.statuses.is_sent,
-                is_agreed: this.orderData.statuses.is_agreed,
-                is_paid: this.orderData.statuses.is_paid,
-                is_installation_finished: this.orderData.statuses.is_installation_finished,
-                area: this.orderData.area,
-                days: this.orderData.days,
-                price_for_day: this.orderData.price_for_day,
-                price_for_transportation_per_km: this.orderData.price_for_transportation_per_km,
-                number_of_trips: this.orderData.number_of_trips,
-                transportation_kms: this.orderData.transportation_kms,
-                route: this.orderData.route,
-                prices: this.getPricesData(),
-                services: this.getServicesIDs(),
-                optional_services: this.orderData.optional_services
-            };
-            if (this.isGPSServiceSelected) {
-                orderData.GPSData = this.getGPSDataIDs();
-            } else {
-                orderData.GPSData = [];
-            }
+            this.$validator.validateAll()
+                .then(isValid => {
+                    if (!isValid) {
+                        this.showSnackbar('error', this.errors.items[0].msg);
+                        return;
+                    }
+                    this.orderInCreation = true;
+                    const orderData = {
+                        client_id: this.orderData.client,
+                        dollar_rate: this.orderData.dollar_rate,
+                        dollar_date: this.orderData.dollar_date,
+                        name: this.orderData.name,
+                        is_sent: this.orderData.statuses.is_sent,
+                        is_agreed: this.orderData.statuses.is_agreed,
+                        is_paid: this.orderData.statuses.is_paid,
+                        is_installation_finished: this.orderData.statuses.is_installation_finished,
+                        area: this.orderData.area,
+                        days: this.orderData.days,
+                        price_for_day: this.orderData.price_for_day,
+                        price_for_transportation_per_km: this.orderData.price_for_transportation_per_km,
+                        number_of_trips: this.orderData.number_of_trips,
+                        transportation_kms: this.orderData.transportation_kms,
+                        route: this.orderData.route,
+                        prices: this.getPricesData(),
+                        services: this.getServicesIDs(),
+                        optional_services: this.orderData.optional_services
+                    };
+                    if (this.isGPSServiceSelected) {
+                        orderData.GPSData = this.getGPSDataIDs();
+                    } else {
+                        orderData.GPSData = [];
+                    }
 
-            this.axios.post('/orders', orderData)
-                .then(({data}) => {
-                    this.$router.push(`/orders/${data.id}`);
-                })
-                .catch(err => (console.log(err)))
-                .finally(() => (this.orderInCreation = false));
+                    this.axios.post('/orders', orderData)
+                        .then(({data}) => {
+                            this.$router.push(`/orders/${data.id}`);
+                        })
+                        .catch(err => (console.log(err)))
+                        .finally(() => (this.orderInCreation = false));
 
-            if (this.newCachedData.length > 0)
-                this.axios.post('/cache', { cache: this.newCachedData });
+                    if (this.newCachedData.length > 0)
+                        this.axios.post('/cache', { cache: this.newCachedData });
+                });
         },
         updateOrder() {
-            // MAIN_DATA
-            const oldOrderData = {
-                name: this.oldOrder.name,
-                client: this.oldOrder.client,
-                is_sent: this.oldOrder.is_sent,
-                is_agreed: this.oldOrder.is_agreed,
-                is_paid: this.oldOrder.is_paid,
-                is_installation_finished: this.oldOrder.is_installation_finished,
-                area: this.oldOrder.area,
-                dollar_rate: this.oldOrder.dollar_rate,
-                dollar_date: this.oldOrder.dollar_date,
-                days: this.oldOrder.days,
-                price_for_day: this.oldOrder.price_for_day,
-                price_for_transportation_per_km: this.oldOrder.price_for_transportation_per_km,
-                number_of_trips: this.oldOrder.number_of_trips,
-                transportation_kms: this.oldOrder.transportation_kms,
-                route: this.oldOrder.route
-            };
-            const updatedOrderData = {
-                name: this.orderData.name,
-                client: this.oldOrder.client,
-                is_sent: this.orderData.statuses.is_sent,
-                is_agreed: this.orderData.statuses.is_agreed,
-                is_paid: this.orderData.statuses.is_paid,
-                is_installation_finished: this.orderData.statuses.is_installation_finished,
-                area: this.orderData.area,
-                dollar_rate: this.orderData.dollar_rate,
-                dollar_date: this.orderData.dollar_date,
-                days: this.orderData.days,
-                price_for_day: this.orderData.price_for_day,
-                price_for_transportation_per_km: this.orderData.price_for_transportation_per_km,
-                number_of_trips: this.orderData.number_of_trips,
-                transportation_kms: this.orderData.transportation_kms,
-                route: this.orderData.route
-            };
-
-            // SERVICES
-            const oldOrderServicesData = this.oldOrder.services;
-            const updatedOrderServicesData = this.orderData.services;
-
-            // GPS_DATA
-            const oldOrderGPSData = this.oldOrder.gps_data;
-            const updatedOrderGPSData = this.orderData.GPSData;
-
-            // OPTIONAL_SERVICES
-            const oldOrderOptionalServices = this.oldOrder.optional_services;
-            const updatedOrderOptionalServices = this.orderData.optional_services;
-
-            // SAVED_PRICES
-            const oldOrderPrices = this.oldOrder.prices;
-            const updatedOrderPrices = this.orderData.prices;
-
-            if(this.isUndefined(diff(oldOrderData, updatedOrderData)) &&
-                this.isUndefined(diff(oldOrderServicesData, updatedOrderServicesData)) &&
-                this.isUndefined(diff(oldOrderGPSData, updatedOrderGPSData)) &&
-                this.isUndefined(diff(oldOrderOptionalServices, updatedOrderOptionalServices)) &&
-                this.isUndefined(diff(oldOrderPrices, updatedOrderPrices))) {
-                this.snackColor = 'warning';
-                this.snackText = 'Нет изменений';
-                this.snack = true;
-                return;
-            }
-
-            this.loading = true;
-            this.orderUpdating = true;
-
-            const currentOrderPricesID = updatedOrderPrices.find(orderPriceRow => orderPriceRow.is_current).id;
-
-            const deletedGPSData = oldOrderGPSData.filter(oldGPSDataRow => !updatedOrderGPSData.find(updatedGPSDataRow => updatedGPSDataRow.id === oldGPSDataRow.id));
-
-            const addedGPSData = updatedOrderGPSData.filter(updatedGPSDataRow => !oldOrderGPSData.find(oldGPSDataRow => oldGPSDataRow.id === updatedGPSDataRow.id));
-
-            const restOldOrderGPSData = oldOrderGPSData.filter(oldGPSDataRow => !deletedGPSData.find(deletedGPSDataRow => deletedGPSDataRow.id === oldGPSDataRow.id)).sort((row1, row2) => row1.id - row2.id);
-            const restUpdatedOrderGPSData = updatedOrderGPSData.filter(updatedGPSDataRow => !addedGPSData.find(addedGPSDataRow => addedGPSDataRow.id === updatedGPSDataRow.id)).sort((row1, row2) => row1.id - row2.id);
-
-            const editedGPSDataIndices = this.getEditedDataIndices(restOldOrderGPSData, restUpdatedOrderGPSData);
-
-            const restOldChangedOrderGPSData = restOldOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
-            const restUpdatedChangedOrderGPSData = restUpdatedOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
-
-            const deletedOptionalServices = oldOrderOptionalServices.filter(oldOptionalService => !updatedOrderOptionalServices.find(updatedOptionalService => updatedOptionalService.id === oldOptionalService.id));
-
-            const addedOptionalServices = updatedOrderOptionalServices.filter(updatedOptionalService => !oldOrderOptionalServices.find(oldOptionalService => oldOptionalService.id === updatedOptionalService.id));
-
-            const restOldOrderOptionalServices = oldOrderOptionalServices.filter(oldOptionalService => !deletedOptionalServices.find(deletedOptionalService => deletedOptionalService.id === oldOptionalService.id)).sort((row1, row2) => row1.id - row2.id);
-            const restUpdatedOrderOptionalServices = updatedOrderOptionalServices.filter(updatedOptionalService => !addedOptionalServices.find(addedOptionalService => addedOptionalService.id === updatedOptionalService.id)).sort((row1, row2) => row1.id - row2.id);
-
-            const editedOptionalServicesIndices = this.getEditedDataIndices(restOldOrderOptionalServices, restUpdatedOrderOptionalServices);
-
-            const restOldChangedOrderOptionalServices = restOldOrderOptionalServices.filter((_, index) => editedOptionalServicesIndices.includes(index));
-            const restUpdatedChangedOrderOptionalServices = restUpdatedOrderOptionalServices.filter((_, index) => editedOptionalServicesIndices.includes(index));
-
-            const orderDataLog = this.parseOrderDiffData(diff(oldOrderData, updatedOrderData));
-
-            const log = {
-                before: JSON.stringify({
-                    orderData: orderDataLog.before,
-                    services: oldOrderServicesData,
-                    gpsData: {
-                        changed: restOldChangedOrderGPSData
-                    },
-                    optional_services: {
-                        changed: restOldChangedOrderOptionalServices
+            this.$validator.validateAll()
+                .then(isValid => {
+                    if (!isValid) {
+                        this.showSnackbar('error', this.errors.items[0].msg);
+                        return;
                     }
-                }),
-                after: JSON.stringify({
-                    orderData: orderDataLog.after,
-                    services: updatedOrderServicesData,
-                    gpsData: {
-                        deleted: deletedGPSData,
-                        added: addedGPSData,
-                        changed: restUpdatedChangedOrderGPSData
-                    },
-                    optional_services: {
-                        deleted: deletedOptionalServices,
-                        added: addedOptionalServices,
-                        changed: restUpdatedChangedOrderOptionalServices
+                    // MAIN_DATA
+                    const oldOrderData = {
+                        name: this.oldOrder.name,
+                        client: this.oldOrder.client,
+                        is_sent: this.oldOrder.is_sent,
+                        is_agreed: this.oldOrder.is_agreed,
+                        is_paid: this.oldOrder.is_paid,
+                        is_installation_finished: this.oldOrder.is_installation_finished,
+                        area: this.oldOrder.area,
+                        dollar_rate: this.oldOrder.dollar_rate,
+                        dollar_date: this.oldOrder.dollar_date,
+                        days: this.oldOrder.days,
+                        price_for_day: this.oldOrder.price_for_day,
+                        price_for_transportation_per_km: this.oldOrder.price_for_transportation_per_km,
+                        number_of_trips: this.oldOrder.number_of_trips,
+                        transportation_kms: this.oldOrder.transportation_kms,
+                        route: this.oldOrder.route
+                    };
+                    const updatedOrderData = {
+                        name: this.orderData.name,
+                        client: this.oldOrder.client,
+                        is_sent: this.orderData.statuses.is_sent,
+                        is_agreed: this.orderData.statuses.is_agreed,
+                        is_paid: this.orderData.statuses.is_paid,
+                        is_installation_finished: this.orderData.statuses.is_installation_finished,
+                        area: this.orderData.area,
+                        dollar_rate: this.orderData.dollar_rate,
+                        dollar_date: this.orderData.dollar_date,
+                        days: this.orderData.days,
+                        price_for_day: this.orderData.price_for_day,
+                        price_for_transportation_per_km: this.orderData.price_for_transportation_per_km,
+                        number_of_trips: this.orderData.number_of_trips,
+                        transportation_kms: this.orderData.transportation_kms,
+                        route: this.orderData.route
+                    };
+
+                    // SERVICES
+                    const oldOrderServicesData = this.oldOrder.services;
+                    const updatedOrderServicesData = this.orderData.services;
+
+                    // GPS_DATA
+                    const oldOrderGPSData = this.oldOrder.gps_data;
+                    const updatedOrderGPSData = this.orderData.GPSData;
+
+                    // OPTIONAL_SERVICES
+                    const oldOrderOptionalServices = this.oldOrder.optional_services;
+                    const updatedOrderOptionalServices = this.orderData.optional_services;
+
+                    // SAVED_PRICES
+                    const oldOrderPrices = this.oldOrder.prices;
+                    const updatedOrderPrices = this.orderData.prices;
+
+                    if(this.isUndefined(diff(oldOrderData, updatedOrderData)) &&
+                        this.isUndefined(diff(oldOrderServicesData, updatedOrderServicesData)) &&
+                        this.isUndefined(diff(oldOrderGPSData, updatedOrderGPSData)) &&
+                        this.isUndefined(diff(oldOrderOptionalServices, updatedOrderOptionalServices)) &&
+                        this.isUndefined(diff(oldOrderPrices, updatedOrderPrices))) {
+                        this.snackColor = 'warning';
+                        this.snackText = 'Нет изменений';
+                        this.snack = true;
+                        return;
                     }
-                })
-            };
 
-            const newOrderData = {
-                ...orderDataLog.after,
-                currentOrderPricesID,
-                services: updatedOrderServicesData.map(service => service.id),
-                optional_services: {
-                    toDelete: deletedOptionalServices.map(row => row.id),
-                    toAdd: addedOptionalServices,
-                    toUpdate: restUpdatedChangedOrderOptionalServices
-                },
-                GPSData: {
-                    toDelete: deletedGPSData.map(row => row.id),
-                    toAdd: addedGPSData.map(row => {
-                        const newRow = {};
-                        Object.keys(row).forEach((key) => {
-                            const value = row[key];
-                            if (this.isObject(value)) {
-                                newRow[key] = value.id;
-                            } else if (Array.isArray(value)) {
-                                let ids = [];
-                                value.forEach(el => {
-                                    if (this.isUndefined(el) || this.isNull(el) ) return;
-                                    ids.push(el.id);
-                                });
-                                newRow[key] = JSON.stringify(ids);
-                            } else if (key !== 'order_id' && key !== 'id') {
-                                newRow[key] = value;
-                            }
-                        });
-                        return newRow;
-                    }),
-                    toUpdate: restUpdatedChangedOrderGPSData.map(row => {
-                        const newRow = {};
-                        Object.keys(row).forEach((key) => {
-                            const value = row[key];
-                            if (this.isObject(value)) {
-                                newRow[key] = value.id;
-                            } else if (Array.isArray(value)) {
-                                let ids = [];
-                                value.forEach(el => {
-                                    if (this.isUndefined(el) || this.isNull(el) ) return;
-                                    ids.push(el.id);
-                                });
-                                newRow[key] = JSON.stringify(ids);
-                            } else if (key !== 'order_id') {
-                                newRow[key] = value;
-                            }
-                        });
-                        return newRow;
-                    })
-                },
-                log
-            };
+                    this.loading = true;
+                    this.orderUpdating = true;
 
-            this.axios.put(`/orders/${this.$route.params.id}`, newOrderData)
-                .then(({data}) => {
-                    this.$emit('order:update', data);
-                })
-                .catch(err => {
-                    this.loading = false;
-                    this.orderUpdating = false;
-                    this.snackColor = 'error';
-                    this.snackText = 'Ошибка!';
-                    this.snack = true;
+                    const currentOrderPricesID = updatedOrderPrices.find(orderPriceRow => orderPriceRow.is_current).id;
+
+                    const deletedGPSData = oldOrderGPSData.filter(oldGPSDataRow => !updatedOrderGPSData.find(updatedGPSDataRow => updatedGPSDataRow.id === oldGPSDataRow.id));
+
+                    const addedGPSData = updatedOrderGPSData.filter(updatedGPSDataRow => !oldOrderGPSData.find(oldGPSDataRow => oldGPSDataRow.id === updatedGPSDataRow.id));
+
+                    const restOldOrderGPSData = oldOrderGPSData.filter(oldGPSDataRow => !deletedGPSData.find(deletedGPSDataRow => deletedGPSDataRow.id === oldGPSDataRow.id)).sort((row1, row2) => row1.id - row2.id);
+                    const restUpdatedOrderGPSData = updatedOrderGPSData.filter(updatedGPSDataRow => !addedGPSData.find(addedGPSDataRow => addedGPSDataRow.id === updatedGPSDataRow.id)).sort((row1, row2) => row1.id - row2.id);
+
+                    const editedGPSDataIndices = this.getEditedDataIndices(restOldOrderGPSData, restUpdatedOrderGPSData);
+
+                    const restOldChangedOrderGPSData = restOldOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
+                    const restUpdatedChangedOrderGPSData = restUpdatedOrderGPSData.filter((_, index) => editedGPSDataIndices.includes(index));
+
+                    const deletedOptionalServices = oldOrderOptionalServices.filter(oldOptionalService => !updatedOrderOptionalServices.find(updatedOptionalService => updatedOptionalService.id === oldOptionalService.id));
+
+                    const addedOptionalServices = updatedOrderOptionalServices.filter(updatedOptionalService => !oldOrderOptionalServices.find(oldOptionalService => oldOptionalService.id === updatedOptionalService.id));
+
+                    const restOldOrderOptionalServices = oldOrderOptionalServices.filter(oldOptionalService => !deletedOptionalServices.find(deletedOptionalService => deletedOptionalService.id === oldOptionalService.id)).sort((row1, row2) => row1.id - row2.id);
+                    const restUpdatedOrderOptionalServices = updatedOrderOptionalServices.filter(updatedOptionalService => !addedOptionalServices.find(addedOptionalService => addedOptionalService.id === updatedOptionalService.id)).sort((row1, row2) => row1.id - row2.id);
+
+                    const editedOptionalServicesIndices = this.getEditedDataIndices(restOldOrderOptionalServices, restUpdatedOrderOptionalServices);
+
+                    const restOldChangedOrderOptionalServices = restOldOrderOptionalServices.filter((_, index) => editedOptionalServicesIndices.includes(index));
+                    const restUpdatedChangedOrderOptionalServices = restUpdatedOrderOptionalServices.filter((_, index) => editedOptionalServicesIndices.includes(index));
+
+                    const orderDataLog = this.parseOrderDiffData(diff(oldOrderData, updatedOrderData));
+
+                    const log = {
+                        before: JSON.stringify({
+                            orderData: orderDataLog.before,
+                            services: oldOrderServicesData,
+                            gpsData: {
+                                changed: restOldChangedOrderGPSData
+                            },
+                            optional_services: {
+                                changed: restOldChangedOrderOptionalServices
+                            }
+                        }),
+                        after: JSON.stringify({
+                            orderData: orderDataLog.after,
+                            services: updatedOrderServicesData,
+                            gpsData: {
+                                deleted: deletedGPSData,
+                                added: addedGPSData,
+                                changed: restUpdatedChangedOrderGPSData
+                            },
+                            optional_services: {
+                                deleted: deletedOptionalServices,
+                                added: addedOptionalServices,
+                                changed: restUpdatedChangedOrderOptionalServices
+                            }
+                        })
+                    };
+
+                    const newOrderData = {
+                        ...orderDataLog.after,
+                        currentOrderPricesID,
+                        services: updatedOrderServicesData.map(service => service.id),
+                        optional_services: {
+                            toDelete: deletedOptionalServices.map(row => row.id),
+                            toAdd: addedOptionalServices,
+                            toUpdate: restUpdatedChangedOrderOptionalServices
+                        },
+                        GPSData: {
+                            toDelete: deletedGPSData.map(row => row.id),
+                            toAdd: addedGPSData.map(row => {
+                                const newRow = {};
+                                Object.keys(row).forEach((key) => {
+                                    const value = row[key];
+                                    if (this.isObject(value)) {
+                                        newRow[key] = value.id;
+                                    } else if (Array.isArray(value)) {
+                                        let ids = [];
+                                        value.forEach(el => {
+                                            if (this.isUndefined(el) || this.isNull(el) ) return;
+                                            ids.push(el.id);
+                                        });
+                                        newRow[key] = JSON.stringify(ids);
+                                    } else if (key !== 'order_id' && key !== 'id') {
+                                        newRow[key] = value;
+                                    }
+                                });
+                                return newRow;
+                            }),
+                            toUpdate: restUpdatedChangedOrderGPSData.map(row => {
+                                const newRow = {};
+                                Object.keys(row).forEach((key) => {
+                                    const value = row[key];
+                                    if (this.isObject(value)) {
+                                        newRow[key] = value.id;
+                                    } else if (Array.isArray(value)) {
+                                        let ids = [];
+                                        value.forEach(el => {
+                                            if (this.isUndefined(el) || this.isNull(el) ) return;
+                                            ids.push(el.id);
+                                        });
+                                        newRow[key] = JSON.stringify(ids);
+                                    } else if (key !== 'order_id') {
+                                        newRow[key] = value;
+                                    }
+                                });
+                                return newRow;
+                            })
+                        },
+                        log
+                    };
+
+                    this.axios.put(`/orders/${this.$route.params.id}`, newOrderData)
+                        .then(({data}) => {
+                            this.$emit('order:update', data);
+                        })
+                        .catch(err => {
+                            this.loading = false;
+                            this.orderUpdating = false;
+                            this.snackColor = 'error';
+                            this.snackText = 'Ошибка!';
+                            this.snack = true;
+                        });
                 });
         },
         parseOrderDiffData(differences) {

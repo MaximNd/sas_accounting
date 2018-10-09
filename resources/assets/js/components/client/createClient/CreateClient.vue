@@ -51,7 +51,8 @@
                             v-validate="'required|decimal:2'"
                             data-vv-name="area"
                             :error-messages="errors.collect('area')"
-                            v-model="clientData.area"
+                            @input="replaceComma($event, clientData, 'area')"
+                            :value="clientData.area"
                             label="Площадь"
                             required></v-text-field>
                     </v-flex>
@@ -85,9 +86,11 @@
 </template>
 
 <script>
+import forms from './../../../mixins/forms.js';
 import stringSimilarity from 'string-similarity';
 
 export default {
+    mixins: [forms],
     props: {
         isShowCancelButton: {
             type: Boolean,

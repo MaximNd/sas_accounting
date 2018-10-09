@@ -27,7 +27,8 @@
                                                 v-validate="'required|decimal:2'"
                                                 :data-vv-name="`ranged_from_${index}`"
                                                 :error-messages="errors.collect(`ranged_from_${index}`)"
-                                                v-model="editedService.prices_for_ranges[index].from"
+                                                @input="replaceComma($event, editedService.prices_for_ranges[index], 'from', `ranged_from_${index}`)"
+                                                :value="editedService.prices_for_ranges[index].from"
                                                 label="Гектаров от:"></v-text-field>
                                         </v-flex>
                                         <v-flex xs12 sm4>
@@ -41,7 +42,8 @@
                                                 v-validate="'required|decimal:2'"
                                                 :data-vv-name="`ranged_to_${index}`"
                                                 :error-messages="errors.collect(`ranged_to_${index}`)"
-                                                v-model="editedService.prices_for_ranges[index].to"
+                                                @input="replaceComma($event, editedService.prices_for_ranges[index], 'to', `ranged_to_${index}`)"
+                                                :value="editedService.prices_for_ranges[index].to"
                                                 label="Гектаров до:"></v-text-field>
                                         </v-flex>
                                         <v-flex xs12 sm3>
@@ -49,7 +51,8 @@
                                                 v-validate="'required|decimal:2'"
                                                 :data-vv-name="`ranged_price_${index}`"
                                                 :error-messages="errors.collect(`ranged_price_${index}`)"
-                                                v-model="editedService.prices_for_ranges[index].price"
+                                                @input="replaceComma($event, editedService.prices_for_ranges[index], 'price', `ranged_price_${index}`)"
+                                                :value="editedService.prices_for_ranges[index].price"
                                                 append-icon="attach_money"
                                                 label="Цена:"></v-text-field>
                                         </v-flex>
@@ -82,7 +85,8 @@
                                 v-validate="'required|decimal:2'"
                                 data-vv-name="price"
                                 :error-messages="errors.collect('price')"
-                                v-model="editedService.price"
+                                @input="replaceComma($event, editedService, 'price')"
+                                :value="editedService.price"
                                 append-icon="attach_money"
                                 label="Цена за гектар"></v-text-field>
                         </v-flex>
@@ -105,10 +109,12 @@
 </template>
 
 <script>
+import forms from './../../../mixins/forms.js';
 import pdfLayoutNames from './../../../constants/ServicesPreviewNames.js';
 import PDF from './../../order/PDF/PDF';
 
 export default {
+    mixins: [forms],
     props: {
         editDialog: {
             type: Boolean,

@@ -18,7 +18,8 @@
                                 v-validate="'decimal:2'"
                                 data-vv-name="area"
                                 :error-messages="errors.collect('area')"
-                                v-model="editedClient.area"
+                                @input="replaceComma($event, editedClient, 'area')"
+                                :value="editedClient.area"
                                 label="Площадь"></v-text-field>
                         </v-flex>
                         <v-flex xs12>
@@ -45,7 +46,10 @@
 </template>
 
 <script>
+import forms from './../../../mixins/forms.js';
+
 export default {
+    mixins: [forms],
     props: {
         editDialog: {
             type: Boolean,

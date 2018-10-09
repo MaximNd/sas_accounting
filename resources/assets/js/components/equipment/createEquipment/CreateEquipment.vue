@@ -38,7 +38,8 @@
                                 v-validate="'required|decimal:2'"
                                 data-vv-name="incoming_price"
                                 :error-messages="errors.collect('incoming_price')"
-                                v-model="newEquipment.incoming_price"
+                                @input="replaceComma($event, newEquipment, 'incoming_price')"
+                                :value="newEquipment.incoming_price"
                                 append-icon="attach_money"
                                 label="Входящая цена"></v-text-field>
                         </v-flex>
@@ -47,7 +48,8 @@
                                 v-validate="'required|decimal:2'"
                                 data-vv-name="price"
                                 :error-messages="errors.collect('price')"
-                                v-model="newEquipment.price"
+                                @input="replaceComma($event, newEquipment, 'price')"
+                                :value="newEquipment.price"
                                 append-icon="attach_money"
                                 label="Цена"></v-text-field>
                         </v-flex>
@@ -56,7 +58,8 @@
                                 v-validate="'required|decimal:2'"
                                 data-vv-name="installation_price_for_one"
                                 :error-messages="errors.collect('installation_price_for_one')"
-                                v-model="newEquipment.installation_price_for_one"
+                                @input="replaceComma($event, newEquipment, 'installation_price_for_one')"
+                                :value="newEquipment.installation_price_for_one"
                                 append-icon="₴"
                                 label="Стоимость монтажа 1шт."></v-text-field>
                         </v-flex>
@@ -65,7 +68,8 @@
                                 v-validate="'decimal:2'"
                                 data-vv-name="installation_price_for_two"
                                 :error-messages="errors.collect('installation_price_for_two')"
-                                v-model="newEquipment.installation_price_for_two"
+                                @input="replaceComma($event, newEquipment, 'installation_price_for_two')"
+                                :value="newEquipment.installation_price_for_two"
                                 append-icon="₴"
                                 label="Стоимость монтажа 2шт."></v-text-field>
                         </v-flex>
@@ -74,7 +78,8 @@
                                 v-validate="'decimal:2'"
                                 data-vv-name="installation_price_for_three"
                                 :error-messages="errors.collect('installation_price_for_three')"
-                                v-model="newEquipment.installation_price_for_three"
+                                @input="replaceComma($event, newEquipment, 'installation_price_for_three')"
+                                :value="newEquipment.installation_price_for_three"
                                 append-icon="₴"
                                 label="Стоимость монтажа 3шт."></v-text-field>
                         </v-flex>
@@ -94,7 +99,10 @@
 </template>
 
 <script>
+import forms from './../../../mixins/forms.js';
+
 export default {
+    mixins: [forms],
     props: {
         createDialog: {
             type: Boolean,
