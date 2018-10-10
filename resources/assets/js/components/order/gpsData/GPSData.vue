@@ -703,12 +703,36 @@
                         </template>
                     </td>
                     <td
-                        class="text-xs-center">
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${28}`"
+                        @click="selectCell($event, { index: props.index, column: 'additional_equipment_price', columnIndex: 28, value: false })"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment_price', columnIndex: 28, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['additional_equipment_price'] || 0 : 0 }}$
                     </td>
                     <td
-                        class="text-xs-center">
-                        {{ pricesForEquipment.installationPrices[props.index] }}₴
+                        class="text-xs-center"
+                        :ref="`td-${props.index}-${29}`"
+                        @click="selectCell($event, { index: props.index, column: 'manual_installation_price', columnIndex: 29, value: props.item.manual_installation_price })"
+                        @dblclick="switchCellMode(props.index, 29, true, `manual_installation_price-${props.index}-${29}`)"
+                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'manual_installation_price', columnIndex: 29, value: props.item.manual_installation_price })">
+                        <template v-if="!editModCells[props.index][29]">
+                            {{ pricesForEquipment.installationPrices[props.index] }}₴
+                        </template>
+                        <template v-else>
+                            <v-text-field
+                                v-validate="'decimal:2|min_value:0'"
+                                :data-vv-name="`manual_installation_price-${props.index}`"
+                                :error="errors.has(`manual_installation_price-${props.index}`)"
+                                :ref="`manual_installation_price-${props.index}-${29}`"
+                                :value="props.item.manual_installation_price"
+                                @change="setCellValue($event, props.index, 29, 'manual_installation_price', `td-${props.index}-${29}`)"
+                                label="Цена монтажа"
+                                single-line>
+                            </v-text-field>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 29, false, `manual_installation_price-${props.index}-${29}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
+                        </template>
                     </td>
                 </template>
             </v-data-table>
@@ -830,7 +854,7 @@ export default {
                 { text: 'Цена $           ', value: 'rs01_price', sortable: false },
                 { text: 'Дополнительное оборудование', value: 'additional_equipment', sortable: false },
                 { text: 'Цена $            ', value: 'additional_equipment_price', sortable: false },
-                { text: 'Монтаж оборудования ₴', value: 'installation_of_equipment_price', sortable: false },
+                { text: 'Монтаж оборудования ₴', value: 'manual_installation_price', sortable: false },
             ],
             uploadImage: '/storage/upload-foto.png',
             cellsPosition: []
@@ -1043,6 +1067,7 @@ export default {
                 }
             }
             const currentCell = this.findTDEl(event);
+            console.log('CURRENT CELL: ', currentCell);
             const currentCellCoords = this.getCoords(currentCell);
             if (isAddition) {
                 if (isEqualToAllIndicesOfStartData && !isColumnExist) {

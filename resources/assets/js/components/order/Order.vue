@@ -619,7 +619,8 @@ export default {
                 // deaerator: '',
                 additional_equipment: [],
                 cn03: [],
-                rs01: []
+                rs01: [],
+                manual_installation_price: 0
             },
             cachedData: [],
             newCachedData: [],
@@ -823,36 +824,43 @@ export default {
             if (!this.orderData.GPSData) return defaultPrices;
             return this.orderData.GPSData.reduce((prices, row, index) => {
                 prices.equipmentPrices.push({});
-                prices.installationPrices[index] = 0.00;
+                const isInstallationPriceManuallySet = !!row.manual_installation_price && row.manual_installation_price !== '0';
+                const manualInstallationPrice = parseFloat(row.manual_installation_price);
+                const isValidManualInstallationPrice = this.isNumber(manualInstallationPrice) && manualInstallationPrice > 0;
+                prices.installationPrices[index] = isInstallationPriceManuallySet && isValidManualInstallationPrice ? manualInstallationPrice : 0.00;
                 Object.keys(row).forEach((key) => {
                     const value = row[key];
                     const priceKey = `${key}_price`;
                     if (this.isObject(value)) {
                         prices.equipmentPrices[index][priceKey] = row[key].price;
-                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], row[key].installation_price_for_one);
+                        if (!isValidManualInstallationPrice || !isInstallationPriceManuallySet) {
+                            prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], row[key].installation_price_for_one);
+                        }
                     } else if (Array.isArray(value)) {
                         prices.equipmentPrices[index][priceKey] = 0.00;
                         value
                             .filter(el => !this.isUndefined(el) && !this.isNull(el))
                             .forEach((el, _, arr) => {
                                 prices.equipmentPrices[index][priceKey] = this.addTwoFloats(prices.equipmentPrices[index][priceKey], el.price);
-                                const arrLen = arr.length;
-                                if (arrLen >= 3) {
-                                    if (el.installation_price_for_three) {
-                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_three);
-                                    } else if (el.installation_price_for_two) {
-                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_two);
-                                    } else {
+                                if (!isValidManualInstallationPrice || !isInstallationPriceManuallySet) {
+                                    const arrLen = arr.length;
+                                    if (arrLen >= 3) {
+                                        if (el.installation_price_for_three) {
+                                            prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_three);
+                                        } else if (el.installation_price_for_two) {
+                                            prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_two);
+                                        } else {
+                                            prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
+                                        }
+                                    } else if (arrLen === 2) {
+                                        if (el.installation_price_for_two) {
+                                            prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_two);
+                                        } else {
+                                            prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
+                                        }
+                                    } else if (arrLen === 1) {
                                         prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
                                     }
-                                } else if (arrLen === 2) {
-                                    if (el.installation_price_for_two) {
-                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_two);
-                                    } else {
-                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
-                                    }
-                                } else if (arrLen === 1) {
-                                    prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
                                 }
                             });
                     }
@@ -1083,6 +1091,11 @@ export default {
         getClientWithTextValue(client) {
             return { ...client, text: `${client.person_full_name} (${client.company_name})` }
         },
+        // updateManualInstallationPrice(val, index) {
+        //     this.$set(this.orderData.GPSData[index], manualInstallationPrice, val);
+        //     this.saveOrderDataToLocalStorage();
+        //     this.showSnackbar('success', 'Данные сохранены!');
+        // },
         updateOrderGPSData(val, index, path, nestedPath = false) {
             if (nestedPath !== false) {
                 this.$set(this.orderData.GPSData[index][path], nestedPath, val);
@@ -1112,7 +1125,7 @@ export default {
                     let index = copyList[i][j].index;
                     let column = copyList[i][j].column;
 
-                    if (!column.endsWith('price')) {
+                    if (column === 'manual_installation_price' || !column.endsWith('price')) {
                         this.$set(this.orderData.GPSData[index], column, dcopy(value));
                     }
                 }
@@ -1129,6 +1142,7 @@ export default {
                     cn03: Array.apply(null, { length: 2 }),
                     rs01: Array.apply(null, { length: 2 })
                 });
+                // this.manualInstallationPrices.push(undefined);
                 ++this.initialGPSRowData.id;
                 ++this.initialGPSRowData.order;
             }
@@ -1139,6 +1153,7 @@ export default {
         },
         deleteRowsFromOrderGPSData(indices) {
             this.orderData.GPSData = this.orderData.GPSData.filter((_, index) => !indices.includes(index));
+            // this.manualInstallationPrices = this.manualInstallationPrices.filter((_, index) => !indices.includes(index));
             if (indices.length > 0) {
                 this.saveOrderDataToLocalStorage();
                 this.showSnackbar('info', `${this.declOfNum(indices.length, ['Удален', 'Удалено', 'Удалены'])} ${indices.length} ${this.declOfNum(indices.length, ['ряд', 'ряда', 'рядов'])}`);

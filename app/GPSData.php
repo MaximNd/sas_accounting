@@ -26,7 +26,8 @@ class GPSData extends Model
         'deaerator_large',
         'additional_equipment',
         'cn03',
-        'rs01'
+        'rs01',
+        'manual_installation_price'
     ];
 
     protected $casts = [

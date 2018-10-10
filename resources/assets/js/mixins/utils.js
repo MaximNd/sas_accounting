@@ -16,6 +16,10 @@ export default {
         isNull (value) {
             return value === null;
         },
+        // Returns if a value is really a number
+        isNumber (value) {
+            return typeof value === 'number' && isFinite(value);
+        },
         // Returns if a value is undefined
         isUndefined (value) {
             return typeof value === 'undefined';

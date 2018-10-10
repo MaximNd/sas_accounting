@@ -41,6 +41,8 @@ class CreateGPSDatasTable extends Migration
             $table->json('cn03')->nullable();
             $table->json('rs01')->nullable();
 
+            $table->double('manual_installation_price')->nullable();
+
             $table->timestamps();
         });
     }
