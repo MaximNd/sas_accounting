@@ -304,6 +304,8 @@ export default {
                 is_paid: 'Статус оплаты',
                 is_installation_finished: 'Статус монтажа',
                 days: 'Дней командировки',
+                installation_discount: 'Скидка на монтаж оборудования',
+                equipment_discount: 'Скидка на оборудование',
                 price_for_day: 'Командировки / проживание (₴)',
                 price_for_transportation_per_km: 'Цена за 1км (₴)',
                 number_of_trips: 'Количество поездок',
@@ -566,12 +568,6 @@ export default {
                     this.restoring = true;
                 });
         }
-    },
-    created() {
-        setTimeout(() => {
-            console.log('BEFORE: ', JSON.parse(this.ordersHistory[0].before));
-            console.log('AFTER: ', JSON.parse(this.ordersHistory[0].after));
-        }, 4000);
     },
     components: {
         appGpsDataHistoryTable: GpsDataHistoryTable
