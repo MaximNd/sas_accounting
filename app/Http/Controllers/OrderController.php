@@ -36,6 +36,8 @@ class OrderController extends Controller
             'client_id' => 'required|numeric',
             'dollar_rate' => 'required|numeric',
             'dollar_date' => 'required',
+            'installation_discount' => 'required|numeric',
+            'equipment_discount' => 'required|numeric',
             'is_sent' => 'required|boolean',
             'is_agreed' => 'required|boolean',
             'is_paid' => 'required|boolean',
@@ -149,6 +151,8 @@ class OrderController extends Controller
     public function updateOrder(Request $request, $id) {
         $this->validate($request, [
             'dollar_rate' => 'numeric',
+            'installation_discount' => 'numeric',
+            'equipment_discount' => 'numeric',
             'area' => 'numeric',
             'days' => 'numeric',
             'price_for_day' => 'numeric',

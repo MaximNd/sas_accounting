@@ -17,6 +17,8 @@ class Order extends Model
         'is_installation_finished',
         'dollar_rate',
         'dollar_date',
+        'installation_discount',
+        'equipment_discount',
         'name',
         'area',
         'days',

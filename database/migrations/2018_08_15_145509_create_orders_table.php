@@ -33,6 +33,9 @@ class CreateOrdersTable extends Migration
             $table->integer('days');
             $table->double('price_for_day');
 
+            $table->double('installation_discount')->nullable();
+            $table->double('equipment_discount')->nullable();
+
             $table->double('price_for_transportation_per_km');
             $table->integer('number_of_trips');
             $table->double('transportation_kms');

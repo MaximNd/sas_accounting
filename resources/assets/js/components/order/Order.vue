@@ -282,6 +282,18 @@
                                 <v-layout wrap>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
+                                            v-validate="'required|decimal:2|min_value:0|max_value:100'"
+                                            data-vv-name="installation_discount"
+                                            :error-messages="errors.collect('installation_discount')"
+                                            @input="replaceComma($event, orderData, 'installation_discount')"
+                                            :value="orderData.installation_discount"
+                                            label="Скидка на монтаж оборудования"
+                                            append-icon="%">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
                                             v-validate="'required|decimal:2'"
                                             data-vv-name="allInstallationPrice"
                                             :error-messages="errors.collect('allInstallationPrice')"
@@ -289,6 +301,18 @@
                                             label="Монтаж оборудования"
                                             readonly
                                             append-icon="₴">
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex xs8></v-flex>
+                                    <v-flex xs12 md8 lg6 xl4>
+                                        <v-text-field
+                                            v-validate="'required|decimal:2|min_value:0|max_value:100'"
+                                            data-vv-name="equipment_discount"
+                                            :error-messages="errors.collect('equipment_discount')"
+                                            @input="replaceComma($event, orderData, 'equipment_discount')"
+                                            :value="orderData.equipment_discount"
+                                            label="Скидка на оборудование"
+                                            append-icon="%">
                                         </v-text-field>
                                     </v-flex>
                                     <v-flex xs8></v-flex>
@@ -634,6 +658,8 @@ export default {
                 area: '',
                 dollar_rate: 0.00,
                 dollar_date: new Date().toISOString().slice(0, 10),
+                installation_discount: 0,
+                equipment_discount: 0,
                 days: '',
                 price_for_day: 720,
                 price_for_transportation_per_km: 4.2,
@@ -869,12 +895,16 @@ export default {
             }, defaultPrices);
         },
         allEquipmentPrice() {
-            return this.multiplyTwoFloats(this.pricesForEquipment.equipmentPrices.reduce((price, el) => {
+            const price = this.multiplyTwoFloats(this.pricesForEquipment.equipmentPrices.reduce((price, el) => {
                 return this.addTwoFloats(price, Object.keys(el).reduce((price, key) => this.addTwoFloats(price, el[key]), 0.00));
             }, 0.00), this.orderData.dollar_rate);
+            const discount = this.multiplyTwoFloats(price, this.divideTwoFloats(parseFloat(this.orderData.equipment_discount), 100));
+            return this.subtractTwoFloats(price, discount);
         },
         allInstallationPrice() {
-            return this.pricesForEquipment.installationPrices.reduce((price, el) => this.addTwoFloats(price, el), 0.00);
+            const price = this.pricesForEquipment.installationPrices.reduce((price, el) => this.addTwoFloats(price, el), 0.00);
+            const discount = this.multiplyTwoFloats(price, this.divideTwoFloats(parseFloat(this.orderData.installation_discount), 100));
+            return this.subtractTwoFloats(price, discount);
         },
         finalPrice() {
             return this.addTwoFloats(
@@ -976,6 +1006,8 @@ export default {
             this.orderData.area = newOrderData.area;
             this.orderData.dollar_rate = newOrderData.dollar_rate;
             this.orderData.dollar_date = newOrderData.dollar_date;
+            this.orderData.installation_discount = newOrderData.installation_discount;
+            this.orderData.equipment_discount = newOrderData.equipment_discount;
             this.orderData.days = newOrderData.days;
             this.orderData.price_for_day = newOrderData.price_for_day;
             this.orderData.price_for_transportation_per_km = newOrderData.price_for_transportation_per_km;
@@ -1091,11 +1123,6 @@ export default {
         getClientWithTextValue(client) {
             return { ...client, text: `${client.person_full_name} (${client.company_name})` }
         },
-        // updateManualInstallationPrice(val, index) {
-        //     this.$set(this.orderData.GPSData[index], manualInstallationPrice, val);
-        //     this.saveOrderDataToLocalStorage();
-        //     this.showSnackbar('success', 'Данные сохранены!');
-        // },
         updateOrderGPSData(val, index, path, nestedPath = false) {
             if (nestedPath !== false) {
                 this.$set(this.orderData.GPSData[index][path], nestedPath, val);
@@ -1142,7 +1169,6 @@ export default {
                     cn03: Array.apply(null, { length: 2 }),
                     rs01: Array.apply(null, { length: 2 })
                 });
-                // this.manualInstallationPrices.push(undefined);
                 ++this.initialGPSRowData.id;
                 ++this.initialGPSRowData.order;
             }
@@ -1153,7 +1179,6 @@ export default {
         },
         deleteRowsFromOrderGPSData(indices) {
             this.orderData.GPSData = this.orderData.GPSData.filter((_, index) => !indices.includes(index));
-            // this.manualInstallationPrices = this.manualInstallationPrices.filter((_, index) => !indices.includes(index));
             if (indices.length > 0) {
                 this.saveOrderDataToLocalStorage();
                 this.showSnackbar('info', `${this.declOfNum(indices.length, ['Удален', 'Удалено', 'Удалены'])} ${indices.length} ${this.declOfNum(indices.length, ['ряд', 'ряда', 'рядов'])}`);
@@ -1222,6 +1247,8 @@ export default {
                         is_agreed: this.orderData.statuses.is_agreed,
                         is_paid: this.orderData.statuses.is_paid,
                         is_installation_finished: this.orderData.statuses.is_installation_finished,
+                        installation_discount: this.orderData.installation_discount,
+                        equipment_discount: this.orderData.equipment_discount,
                         area: this.orderData.area,
                         days: this.orderData.days,
                         price_for_day: this.orderData.price_for_day,
@@ -1268,6 +1295,8 @@ export default {
                         area: this.oldOrder.area,
                         dollar_rate: this.oldOrder.dollar_rate,
                         dollar_date: this.oldOrder.dollar_date,
+                        installation_discount: this.oldOrder.installation_discount,
+                        equipment_discount: this.oldOrder.equipment_discount,
                         days: this.oldOrder.days,
                         price_for_day: this.oldOrder.price_for_day,
                         price_for_transportation_per_km: this.oldOrder.price_for_transportation_per_km,
@@ -1285,6 +1314,8 @@ export default {
                         area: this.orderData.area,
                         dollar_rate: this.orderData.dollar_rate,
                         dollar_date: this.orderData.dollar_date,
+                        installation_discount: this.orderData.installation_discount,
+                        equipment_discount: this.orderData.equipment_discount,
                         days: this.orderData.days,
                         price_for_day: this.orderData.price_for_day,
                         price_for_transportation_per_km: this.orderData.price_for_transportation_per_km,
