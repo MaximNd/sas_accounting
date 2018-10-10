@@ -18,7 +18,7 @@ export default {
     computed: {
         data() {
             return {
-                title: 'Хімічний аналіз ґрунтів',
+                title: 'Вимірювання твердості ґрунту',
                 data: [
                     { icon: '/storage/image85.png', text: 'Вимірювання твердості ґрунту на різних глибинах (до 45см)' },
                     { icon: '/storage/image86.png', text: 'Прив\'язка GPS кординат до кожного виміру' },
