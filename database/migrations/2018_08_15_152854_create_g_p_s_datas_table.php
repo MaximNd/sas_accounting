@@ -35,7 +35,8 @@ class CreateGPSDatasTable extends Migration
             $table->integer('rf_id')->nullable();
             $table->integer('reader_of_trailed_equipment')->nullable();
             $table->integer('can_reader')->nullable();
-            $table->integer('deaerator')->nullable();
+            $table->integer('deaerator_small')->nullable();
+            $table->integer('deaerator_large')->nullable();
             $table->json('additional_equipment')->nullable();
             $table->json('cn03')->nullable();
             $table->json('rs01')->nullable();

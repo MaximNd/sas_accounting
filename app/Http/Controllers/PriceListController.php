@@ -97,7 +97,7 @@ class PriceListController extends Controller
             'log.before' => 'required|string',
             'log.after' => 'required|string'
         ]);
-//        dd($request->input('service'));
+
         DB::transaction(function () use ($request, $id) {
             if ($request->input('isService')) {
                 $serviceDataToUpdate = $request->input('service');

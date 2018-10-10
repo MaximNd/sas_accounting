@@ -22,7 +22,8 @@ class GPSData extends Model
         'rf_id',
         'reader_of_trailed_equipment',
         'can_reader',
-        'deaerator',
+        'deaerator_small',
+        'deaerator_large',
         'additional_equipment',
         'cn03',
         'rs01'

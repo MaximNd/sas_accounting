@@ -614,7 +614,9 @@ export default {
                 reader_of_trailed_equipment: '',
                 // connect_module: '',
                 can_reader: '',
-                deaerator: '',
+                deaerator_small: '',
+                deaerator_large: '',
+                // deaerator: '',
                 additional_equipment: [],
                 cn03: [],
                 rs01: []
