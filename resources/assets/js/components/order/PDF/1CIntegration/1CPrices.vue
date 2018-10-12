@@ -10,8 +10,8 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Послуги</th>
-                            <th>Ціна, $</th>
+                            <th class="text-xs-center">Послуги</th>
+                            <th class="text-xs-center">Ціна, $</th>
                         </tr>
                     </thead>
                     <tbody>
