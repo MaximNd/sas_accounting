@@ -67,7 +67,8 @@ export default {
         font-family: ProximaNovaBlack;
         font-size: 24px;
         color: #fff;
-        padding-left: 30px;
+        padding-left: 60px;
+        padding-right: 60px;
         padding-top: 20px;
     }
 
