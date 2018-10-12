@@ -547,11 +547,12 @@
 
             <v-expansion-panel popout class="mt-3" v-if="!isCreation">
                 <v-expansion-panel-content
+                    ref="scroll-pdf-target"
                     class="elevation-1">
                     <div slot="header" class="headline pdf-preview">PDF превью</div>
                     <v-card>
                         <v-card-text :class="{ 'pdf-preview-overflow': $vuetify.breakpoint.lgAndDown }">
-                            <appPDF :optionalServices="orderData.optional_services" :services="orderData.services" :gpsData="orderData.GPSData"></appPDF>
+                            <appPDF v-scroll="onScroll" :optionalServices="orderData.optional_services" :services="orderData.services" :gpsData="orderData.GPSData"></appPDF>
                         </v-card-text>
                     </v-card>
                 </v-expansion-panel-content>
@@ -573,6 +574,21 @@
         <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor">
             {{ snackText }}
         </v-snackbar>
+        <transition
+                appear
+                enter-class=""
+                enter-active-class="animated popIn"
+                leave-class=""
+                leave-active-class="animated popOut"
+                mode="out-in">
+            <v-btn
+                v-if="isShowScrollBtn"
+                @click="scrollToPDF"
+                @dblclick="scrollToTop"
+                color="info" fixed bottom right fab>
+                <v-icon>keyboard_arrow_up</v-icon>
+            </v-btn>
+        </transition>
     </v-card>
 </template>
 
@@ -672,7 +688,8 @@ export default {
                 GPSData: null
             },
             clients: [],
-            isClientCreation: false
+            isClientCreation: false,
+            isShowScrollBtn: false
         };
     },
     computed: {
@@ -971,6 +988,19 @@ export default {
         // }
     },
     methods: {
+        onScroll(e) {
+            const pdfOffset = this.$refs['scroll-pdf-target'].$el.offsetTop;
+            const currentOffsetTop = window.pageYOffset || document.documentElement.scrollTop;
+            this.isShowScrollBtn = currentOffsetTop >= pdfOffset;
+        },
+        scrollToTop() {
+            this.$vuetify.goTo(0);
+        },
+        scrollToPDF() {
+            this.$vuetify.goTo('#pdf', {
+                offset: -150
+            });
+        },
         initOrder() {
             let copyOrder = dcopy(this.order);
             copyOrder.services = copyOrder.services.map(serviceID => this.services.find(service => service.id === serviceID));
@@ -1658,5 +1688,47 @@ export default {
         padding: 0;
         margin: 0 auto;
         overflow-x: scroll;
+    }
+    .popIn {
+        animation-name: popIn;
+    }
+    @keyframes popIn {
+        0% {
+            transform: scale3d(0, 0, 0);
+            opacity: 0;
+        } 20% {
+            opacity: 1;
+        } 40% {
+            animation-timing-function: cubic-bezier(0.47, 0, 0.745, 0.715);
+            transform: scale3d(1.08, 1.08, 1.08);
+        } 60% {
+            animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+            transform: scale3d(1, 1, 1);
+        } 80% {
+            animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+            transform: scale3d(1.03, 1.03, 1.03);
+        } 100% {
+            animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: scale3d(1, 1, 1);
+        }
+    }
+    .popOut {
+        animation-name: popOut;
+    }
+    @keyframes popOut {
+        0% {
+            animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: scale3d(1, 1, 1);
+        } 60% {
+            animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+            transform: scale3d(1.08, 1.08, 1.08);
+        } 80% {
+            opacity: 1;
+            animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+        } 100% {
+            opacity: 0;
+            animation-timing-function: cubic-bezier(0.47, 0, 0.745, 0.715);
+            transform: scale3d(0.3, 0.3, 0.3);
+        }
     }
 </style>
