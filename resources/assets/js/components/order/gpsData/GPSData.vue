@@ -1219,26 +1219,18 @@ export default {
         }
     },
     created() {
-        this.addEditModCells(this.orderGPSData.length);
-        this.addRow(this.defaultRowCount);
+        if (this.editModCells.length === 0) {
+            this.addEditModCells(this.orderGPSData.length);
+        }
+        if (this.orderGPSData.length === 0) {
+            this.addRow(this.defaultRowCount);
+        }
     },
     mounted() {
         const tableBody = document.querySelector('#gps-data-table .v-datatable tbody');
         this.tableBody = tableBody;
         tableBody.classList.add('gps-data-tbody');
         const _self = this;
-        // document.addEventListener('click', function(event) {
-        //     let target = event.target;
-        //     while (target !== document) {
-        //         console.log('IN EVENT TAGNAME: ', target.tagName);
-        //         console.log('IN EVENT TARGET: ', target);
-        //         if (target.tagName === 'TBODY') return;
-        //         target = target.parentNode;
-        //     }
-        //     console.log('IN EVENT AND HIDE');
-        //     // if (event.target.closest('.gps-data-tbody')) return;
-        //     _self.hideBordersAndCorner();
-        // }, false);
 
         Sortable.create(tableBody, {
             handle: '.handle',
