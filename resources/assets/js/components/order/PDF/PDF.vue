@@ -190,7 +190,8 @@ export default {
                 rf_id: 'RFID водія',
                 reader_of_trailed_equipment: 'Зчитувач причіпного',
                 can_reader: 'CAN reader',
-                deaerator: 'ДРТ',
+                deaerator_small: 'Деаэратор малий',
+                deaerator_large: 'Деаэратор великий',
                 cn03: 'Модуль CN03',
                 rs01: 'Модуль RS01',
                 additional_equipment: ''
