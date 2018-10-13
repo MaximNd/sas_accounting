@@ -843,10 +843,10 @@ export default {
                     for (let i = 0; i < service.prices_for_ranges.length; ++i) {
                         if (i + 1 === service.prices_for_ranges.length) {
                             if (area >= parseFloat(service.prices_for_ranges[i].from)) {
-                                return this.addTwoFloats(price, parseFloat(service.prices_for_ranges[i].price));
+                                return this.addTwoFloats(price, this.multiplyTwoFloats(parseFloat(service.prices_for_ranges[i].price), area));
                             }
                         } else if (area >= parseFloat(service.prices_for_ranges[i].from) && area < parseFloat(service.prices_for_ranges[i].to)) {
-                            return this.addTwoFloats(price, parseFloat(service.prices_for_ranges[i].price));
+                            return this.addTwoFloats(price, this.multiplyTwoFloats(parseFloat(service.prices_for_ranges[i].price), area));
                         }
                     }
                 } else {
