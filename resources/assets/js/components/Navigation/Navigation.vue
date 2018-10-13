@@ -2,12 +2,14 @@
     <v-container fluid v-if="$auth.ready()">
         <v-navigation-drawer :width="navigationDrawerWidth" :clipped="!smAndDown" v-model="drawer" app dark>
             <v-list v-if="xsOnly">
-                <v-list-tile avatar>
+                <v-list-tile avatar to="/profile" active-class="">
                     <v-list-tile-avatar>
                         <img style="object-fit: cover;width: 40px;height: 40px;" :src="`/storage/${$auth.user().image}`" alt="avatar">
                     </v-list-tile-avatar>
                     <v-list-tile-content>
-                        <v-list-tile-title>{{ `${$auth.user().last_name} ${$auth.user().first_name} ${$auth.user().mid_name}` }}</v-list-tile-title>
+                        <v-list-tile-title>
+                            {{ `${$auth.user().last_name} ${$auth.user().first_name} ${$auth.user().mid_name}` }}
+                        </v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
@@ -37,7 +39,7 @@
 
             <v-spacer></v-spacer>
             <v-toolbar-items v-if="!xsOnly">
-                <v-btn flat>
+                <v-btn flat to="/profile" active-class="">
                     <span style="font-size:12px !important;" class="mr-3">{{ `${$auth.user().last_name} ${$auth.user().first_name} ${$auth.user().mid_name}` }}</span>
                     <v-avatar
                         :size="38"
