@@ -29,15 +29,11 @@
                     </td>
                     <td
                         class="text-xs-center"
+                        :class="{ 'error-cell': errors.has(`transport-image-${props.index}`) }"
                         :ref="`td-${props.index}-${0}`"
                         @click="selectCell($event, { index: props.index, column: 'image', columnIndex: 0, value: props.item.image })"
                         @mouseenter="selectCellToCopyList($event, { index: props.index, column: 'image', columnIndex: 0, value: props.item.image })">
-                        <!-- <v-avatar
-                            @dblclick="onPickFile(`image-${props.index}`)"
-                            size="40"
-                            tile> -->
-                            <img @dblclick="onPickFile(`image-${props.index}`)" :style="{cursor: 'pointer', 'margin-top': props.item.image === '' ? '6px' : false, 'max-width': props.item.image === '' ? '40%' : '80%'}" :src="props.item.image === '' ? uploadImage : props.item.image" alt="image">
-                        <!-- </v-avatar> -->
+                        <img @dblclick="onPickFile(`image-${props.index}`)" :style="{cursor: 'pointer', 'margin-top': props.item.image === '' ? '6px' : false, 'max-width': props.item.image === '' ? '40%' : '80%'}" :src="props.item.image === '' ? uploadImage : props.item.image" alt="image">
                         <input @change="onFilePicked($event, props.index)" style="display:none;" type="file" :ref="`image-${props.index}`">
                     </td>
                     <td
@@ -1048,12 +1044,11 @@ export default {
         selectCell(event, data) {
             const cell = this.findTDEl(event);
             this.positionBorders(cell);
-            this.resetCopyList(data);
+            this.resetCopyList({ ...data, value: (this.isUndefined(data.value) || this.isNull(data.value)) ? '' : data.value });
         },
         selectCellToCopyList(event, newCell) {
             if (!this.isCornerFocused) return;
             if (newCell.index < this.copyList[0][0].index || newCell.columnIndex < this.copyList[0][0].columnIndex) return;
-            // const isPrice = newCell.column.endsWith('price');
             const isAddition = ((newCell.index > this.copyList[0][this.copyList[0].length - 1].index) || (newCell.columnIndex > this.copyList[this.copyList.length - 1][0].columnIndex));
             const isDeleteion = ((newCell.index < this.copyList[0][this.copyList[0].length - 1].index) || (newCell.columnIndex < this.copyList[this.copyList.length - 1][0].columnIndex));
             let isColumnExist = false;
@@ -1067,7 +1062,6 @@ export default {
                 }
             }
             const currentCell = this.findTDEl(event);
-            console.log('CURRENT CELL: ', currentCell);
             const currentCellCoords = this.getCoords(currentCell);
             if (isAddition) {
                 if (isEqualToAllIndicesOfStartData && !isColumnExist) {
@@ -1089,8 +1083,8 @@ export default {
                         this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) + currentCellCoords.width}px`;
                         // fill with values
                         let column = this.headers[columnIndex+1].value;
-                        // let value = newCell.column === 'image' ? false : this.orderGPSData[newCell.index][column];
-                        this.copyList.push([{ index: newCell.index, column, columnIndex, value: this.orderGPSData[newCell.index][column] }]);
+                        let value = this.orderGPSData[newCell.index][column];
+                        this.copyList.push([{ index: newCell.index, column, columnIndex, value: (this.isUndefined(value) || this.isNull(value)) ? '' : value }]);
                         ++columnIndex;
                     }
                 } else if (isMoreToAllIndicesOfStartData) {
@@ -1123,7 +1117,8 @@ export default {
                             let currentCellCoords = this.getCoords(currentCell);
                             this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) + currentCellCoords.width}px`;
                             this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) + currentCellCoords.width}px`;
-                            this.copyList.push([{ index, column, columnIndex, value: this.orderGPSData[index][column] }]);
+                            let value = this.orderGPSData[index][column];
+                            this.copyList.push([{ index, column, columnIndex, value: (this.isUndefined(value) || this.isNull(value)) ? '' : value }]);
                             for (let i = 1; i < this.copyList[0].length; ++i) {
                                 ++index;
                                 this.copyList[this.copyList.length-1].push({ index, column });
@@ -1253,14 +1248,10 @@ export default {
     .gps-data-table-no-select-text table {
         user-select: none;
     }
-    /* #gps-data-table table th {
-        padding: 0 24px !important;
-    } */
     #gps-data-table .v-table__overflow {
         position: relative;
     }
     #gps-data-table table {
-        /* position: relative; */
         border-collapse: separate;
         border-spacing: 0;
         margin: 0;
@@ -1285,26 +1276,10 @@ export default {
     #gps-data-table table td:nth-child(2) {
         padding: 0 24px;
     }
-    /* #gps-data-table table tr td:nth-child(9),
-    #gps-data-table table tr td:nth-child(10) {
-        position: relative;
-        min-width: 130px;
-        min-height: 10px;
-        background-color: red;
-    } */
     #gps-data-table table td:first-child {
         border-left: 1px solid rgba(202, 202, 202, 0.5);
         border-right: 1px solid rgba(202, 202, 202, 0.5);
     }
-    /* #gps-data-table table th {
-        padding-right: 200px;
-    }
-    #gps-data-table table th:nth-child(1),
-    #gps-data-table table th:nth-child(2),
-    #gps-data-table table th:nth-child(3) {
-        padding: 0 24px;
-    } */
-
     .border {
         position: absolute;
         font-size: 0;
@@ -1325,22 +1300,6 @@ export default {
         height: 12px;
         border: 1px solid rgb(255, 255, 255);
     }
-    /* .handsontable .wtBorder.area {
-        z-index: 8;
-    }
-    .handsontable .wtBorder.fill {
-        z-index: 6;
-    } */
-    /* #gps-data-table table td::after {
-        content: "";
-        position: absolute;
-        width: 5px;
-        height: 5px;
-        background-color: red;
-        top: 0;
-        left: 0;
-    } */
-
     .handle {
         cursor: move;
     }

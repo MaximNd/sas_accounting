@@ -1158,7 +1158,7 @@ export default {
                 this.$set(this.orderData.GPSData[index][path], nestedPath, val);
             } else {
                 this.orderData.GPSData[index][path] = val;
-                if (typeof val === 'string' && path !== 'image' && path !== 'year_of_issue' && !this.cachedData.find(el => el.value === val)) {
+                if (typeof val === 'string' && val.trim().length !== 0 && path !== 'image' && path !== 'year_of_issue' && !this.cachedData.find(el => el.value === val)) {
                     this.addCache(path, val);
                 }
             }
