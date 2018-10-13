@@ -14,7 +14,7 @@
                                         size="250">
                                         <img :src="avatarPreview === '' ? uploadAvatarImage : avatarPreview" alt="avatar">
                                     </v-avatar>
-                                    <input v-validate="'required|image'" data-vv-as="image" data-vv-name="image" @change="onFilePicked($event)" style="display:none;" type="file" ref="avatar">
+                                    <input v-validate="'image'" data-vv-as="image" data-vv-name="image" @change="onFilePicked($event)" style="display:none;" type="file" ref="avatar">
                                 </v-flex>
                                 <v-flex xs12>
                                     <div class="img-err error--text" v-if="errors.has('image')">
