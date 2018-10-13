@@ -87,8 +87,13 @@
             </td>
             <td
                 class="text-xs-center"
-                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('deaerator') }">
-                {{ props.item.deaerator.name }}
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('deaerator_small') }">
+                {{ props.item.deaerator_small.name }}
+            </td>
+            <td
+                class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('deaerator_large') }">
+                {{ props.item.deaerator_large.name }}
             </td>
             <td
                 class="text-xs-center">
@@ -189,7 +194,8 @@ export default {
                 { text: 'RFID', align: 'center', value: 'rf_id', sortable: false },
                 { text: 'Cчитыватель прицепного оборудования', align: 'center', value: 'reader_of_trailed_equipment', sortable: false },
                 { text: 'CAN', align: 'center', value: 'can_reader', sortable: false },
-                { text: 'Деаэратор', align: 'center', value: 'deaerator', sortable: false },
+                { text: 'Деаэратор малый', align: 'center', value: 'deaerator_small', sortable: false },
+                { text: 'Деаэратор большой', align: 'center', value: 'deaerator_large', sortable: false },
                 { text: 'CN03', align: 'center', value: 'cn03', sortable: false },
                 { text: 'RS01', align: 'center', value: 'rs01', sortable: false },
                 { text: 'Дополнительное оборудование', align: 'center', value: 'additional_equipment', sortable: false }
