@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card class="scroll-x-data">
         <v-card-text>
             <v-layout align-center justify-center>
                 <v-avatar
@@ -123,6 +123,10 @@ export default {
     .userData-xl {
         font-size: 18px;
         margin-bottom: 20px;
+    }
+
+    .scroll-x-data {
+        overflow-x: scroll;
     }
 
     img {
