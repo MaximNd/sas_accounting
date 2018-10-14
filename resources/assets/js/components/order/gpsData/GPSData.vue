@@ -105,6 +105,32 @@
                                 :items="cachedData.model"
                                 label="Вибирете модель"
                                 single-line>
+                                <template slot="no-data">
+                                    <v-list-tile>
+                                        <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
+                                        </v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                </template>
+                                <template
+                                    slot="item"
+                                    slot-scope="{ index, item, parent }">
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            {{ item.value }}
+                                        </v-list-tile-title>
+                                    </v-list-tile-content>
+                                    <v-spacer></v-spacer>
+                                    <v-list-tile-action @click.stop>
+                                        <v-btn
+                                            icon
+                                            @click.stop.prevent="$emit('delete:cache', item.id)">
+                                        <v-icon>clear</v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                </template>
                             </v-combobox>
                             <v-btn color="info" small @click="switchCellMode(props.index, 2, false, `model-${props.index}-${2}`, $event, false)">
                                 Закрыть редактирование
@@ -152,6 +178,32 @@
                                 :items="cachedData.fuel_type"
                                 label="Вибирете Тип топлива"
                                 single-line>
+                                <template slot="no-data">
+                                    <v-list-tile>
+                                        <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
+                                        </v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                </template>
+                                <template
+                                    slot="item"
+                                    slot-scope="{ index, item, parent }">
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            {{ item.value }}
+                                        </v-list-tile-title>
+                                    </v-list-tile-content>
+                                    <v-spacer></v-spacer>
+                                    <v-list-tile-action @click.stop>
+                                        <v-btn
+                                            icon
+                                            @click.stop.prevent="$emit('delete:cache', item.id)">
+                                        <v-icon>clear</v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                </template>
                             </v-combobox>
                             <v-btn color="info" small @click="switchCellMode(props.index, 4, false, `fuel_type-${props.index}-${4}`, $event, false)">
                                 Закрыть редактирование
@@ -176,6 +228,32 @@
                                 hide-selected
                                 label="Вибирете мощность"
                                 single-line>
+                                <template slot="no-data">
+                                    <v-list-tile>
+                                        <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
+                                        </v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                </template>
+                                <template
+                                    slot="item"
+                                    slot-scope="{ index, item, parent }">
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            {{ item.value }}
+                                        </v-list-tile-title>
+                                    </v-list-tile-content>
+                                    <v-spacer></v-spacer>
+                                    <v-list-tile-action @click.stop>
+                                        <v-btn
+                                            icon
+                                            @click.stop.prevent="$emit('delete:cache', item.id)">
+                                        <v-icon>clear</v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                </template>
                             </v-combobox>
                             <v-btn color="info" small @click="switchCellMode(props.index, 5, false, `power-${props.index}-${5}`, $event, false)">
                                 Закрыть редактирование
@@ -200,6 +278,32 @@
                                 hide-selected
                                 label="Вибирете гос. номер"
                                 single-line>
+                                <template slot="no-data">
+                                    <v-list-tile>
+                                        <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
+                                        </v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                </template>
+                                <template
+                                    slot="item"
+                                    slot-scope="{ index, item, parent }">
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            {{ item.value }}
+                                        </v-list-tile-title>
+                                    </v-list-tile-content>
+                                    <v-spacer></v-spacer>
+                                    <v-list-tile-action @click.stop>
+                                        <v-btn
+                                            icon
+                                            @click.stop.prevent="$emit('delete:cache', item.id)">
+                                        <v-icon>clear</v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                </template>
                             </v-combobox>
                             <v-btn color="info" small @click="switchCellMode(props.index, 6, false, `number-${props.index}-${6}`, $event, false)">
                                 Закрыть редактирование
