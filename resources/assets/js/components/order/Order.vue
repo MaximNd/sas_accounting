@@ -1340,67 +1340,22 @@ export default {
                         this.showSnackbar('error', this.errors.items[0].msg);
                         return;
                     }
-                    // MAIN_DATA
-                    const oldOrderData = {
-                        name: this.oldOrder.name,
-                        client: this.oldOrder.client,
-                        is_sent: this.oldOrder.is_sent,
-                        is_agreed: this.oldOrder.is_agreed,
-                        is_paid: this.oldOrder.is_paid,
-                        is_installation_finished: this.oldOrder.is_installation_finished,
-                        area: this.oldOrder.area,
-                        dollar_rate: this.oldOrder.dollar_rate,
-                        dollar_date: this.oldOrder.dollar_date,
-                        installation_discount: this.oldOrder.installation_discount,
-                        equipment_discount: this.oldOrder.equipment_discount,
-                        days: this.oldOrder.days,
-                        price_for_day: this.oldOrder.price_for_day,
-                        price_for_transportation_per_km: this.oldOrder.price_for_transportation_per_km,
-                        number_of_trips: this.oldOrder.number_of_trips,
-                        transportation_kms: this.oldOrder.transportation_kms,
-                        route: this.oldOrder.route
-                    };
-                    const updatedOrderData = {
-                        name: this.orderData.name,
-                        client: this.oldOrder.client,
-                        is_sent: this.orderData.statuses.is_sent,
-                        is_agreed: this.orderData.statuses.is_agreed,
-                        is_paid: this.orderData.statuses.is_paid,
-                        is_installation_finished: this.orderData.statuses.is_installation_finished,
-                        area: this.orderData.area,
-                        dollar_rate: this.orderData.dollar_rate,
-                        dollar_date: this.orderData.dollar_date,
-                        installation_discount: this.orderData.installation_discount,
-                        equipment_discount: this.orderData.equipment_discount,
-                        days: this.orderData.days,
-                        price_for_day: this.orderData.price_for_day,
-                        price_for_transportation_per_km: this.orderData.price_for_transportation_per_km,
-                        number_of_trips: this.orderData.number_of_trips,
-                        transportation_kms: this.orderData.transportation_kms,
-                        route: this.orderData.route
-                    };
+                    const {
+                        oldOrderData,
+                        updatedOrderData,
+                        oldOrderServicesData,
+                        updatedOrderServicesData,
+                        oldOrderGPSData,
+                        updatedOrderGPSData,
+                        oldOrderOptionalServices,
+                        updatedOrderOptionalServices,
+                        oldOrderPrices,
+                        updatedOrderPrices
+                    } = this.getOldAndUpdatedData();
 
-                    // SERVICES
-                    const oldOrderServicesData = this.oldOrder.services;
-                    const updatedOrderServicesData = this.orderData.services;
-
-                    // GPS_DATA
-                    const oldOrderGPSData = this.oldOrder.gps_data;
-                    const updatedOrderGPSData = this.orderData.GPSData;
-
-                    // OPTIONAL_SERVICES
-                    const oldOrderOptionalServices = this.oldOrder.optional_services;
-                    const updatedOrderOptionalServices = this.orderData.optional_services;
-
-                    // SAVED_PRICES
-                    const oldOrderPrices = this.oldOrder.prices;
-                    const updatedOrderPrices = this.orderData.prices;
-
-                    if(this.isUndefined(diff(oldOrderData, updatedOrderData)) &&
-                        this.isUndefined(diff(oldOrderServicesData, updatedOrderServicesData)) &&
-                        this.isUndefined(diff(oldOrderGPSData, updatedOrderGPSData)) &&
-                        this.isUndefined(diff(oldOrderOptionalServices, updatedOrderOptionalServices)) &&
-                        this.isUndefined(diff(oldOrderPrices, updatedOrderPrices))) {
+                    const old = { oldOrderData, oldOrderServicesData, oldOrderGPSData, oldOrderOptionalServices, oldOrderPrices };
+                    const updated = { updatedOrderData, updatedOrderServicesData, updatedOrderGPSData, updatedOrderOptionalServices, updatedOrderPrices };
+                    if (this.isNoCange(old, updated)) {
                         this.snackColor = 'warning';
                         this.snackText = 'Нет изменений';
                         this.snack = true;
@@ -1530,6 +1485,82 @@ export default {
                             this.snack = true;
                         });
                 });
+        },
+        isNoCange(old, updated) {
+            return this.isUndefined(diff(old.oldOrderData, updated.updatedOrderData)) &&
+            this.isUndefined(diff(old.oldOrderServicesData, updated.updatedOrderServicesData)) &&
+            this.isUndefined(diff(old.oldOrderGPSData, updated.updatedOrderGPSData)) &&
+            this.isUndefined(diff(old.oldOrderOptionalServices, updated.updatedOrderOptionalServices)) &&
+            this.isUndefined(diff(old.oldOrderPrices, updated.updatedOrderPrices));
+        },
+        getOldAndUpdatedData() {
+            // MAIN_DATA
+            const oldOrderData = {
+                name: this.oldOrder.name,
+                client: this.oldOrder.client,
+                is_sent: this.oldOrder.is_sent,
+                is_agreed: this.oldOrder.is_agreed,
+                is_paid: this.oldOrder.is_paid,
+                is_installation_finished: this.oldOrder.is_installation_finished,
+                area: this.oldOrder.area,
+                dollar_rate: this.oldOrder.dollar_rate,
+                dollar_date: this.oldOrder.dollar_date,
+                installation_discount: this.oldOrder.installation_discount,
+                equipment_discount: this.oldOrder.equipment_discount,
+                days: this.oldOrder.days,
+                price_for_day: this.oldOrder.price_for_day,
+                price_for_transportation_per_km: this.oldOrder.price_for_transportation_per_km,
+                number_of_trips: this.oldOrder.number_of_trips,
+                transportation_kms: this.oldOrder.transportation_kms,
+                route: this.oldOrder.route
+            };
+            const updatedOrderData = {
+                name: this.orderData.name,
+                client: this.oldOrder.client,
+                is_sent: this.orderData.statuses.is_sent,
+                is_agreed: this.orderData.statuses.is_agreed,
+                is_paid: this.orderData.statuses.is_paid,
+                is_installation_finished: this.orderData.statuses.is_installation_finished,
+                area: this.orderData.area,
+                dollar_rate: this.orderData.dollar_rate,
+                dollar_date: this.orderData.dollar_date,
+                installation_discount: this.orderData.installation_discount,
+                equipment_discount: this.orderData.equipment_discount,
+                days: this.orderData.days,
+                price_for_day: this.orderData.price_for_day,
+                price_for_transportation_per_km: this.orderData.price_for_transportation_per_km,
+                number_of_trips: this.orderData.number_of_trips,
+                transportation_kms: this.orderData.transportation_kms,
+                route: this.orderData.route
+            };
+
+            // SERVICES
+            const oldOrderServicesData = this.oldOrder.services;
+            const updatedOrderServicesData = this.orderData.services;
+
+            // GPS_DATA
+            const oldOrderGPSData = this.oldOrder.gps_data;
+            const updatedOrderGPSData = this.orderData.GPSData;
+
+            // OPTIONAL_SERVICES
+            const oldOrderOptionalServices = this.oldOrder.optional_services;
+            const updatedOrderOptionalServices = this.orderData.optional_services;
+
+            // SAVED_PRICES
+            const oldOrderPrices = this.oldOrder.prices;
+            const updatedOrderPrices = this.orderData.prices;
+            return {
+                oldOrderData,
+                updatedOrderData,
+                oldOrderServicesData,
+                updatedOrderServicesData,
+                oldOrderGPSData,
+                updatedOrderGPSData,
+                oldOrderOptionalServices,
+                updatedOrderOptionalServices,
+                oldOrderPrices,
+                updatedOrderPrices
+            };
         },
         parseOrderDiffData(differences) {
             const log = { before: {}, after: {} };
