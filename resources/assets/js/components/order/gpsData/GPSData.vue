@@ -103,6 +103,9 @@
                                 :value="props.item.model"
                                 @change="setCellValue($event, props.index, 2, 'model', `td-${props.index}-${2}`)"
                                 :items="cachedData.model"
+                                item-text="value"
+                                item-value="value"
+                                :return-object="false"
                                 label="Вибирете модель"
                                 single-line>
                                 <template slot="no-data">
@@ -176,6 +179,9 @@
                                 :value="props.item.fuel_type"
                                 @change="setCellValue($event, props.index, 4, 'fuel_type', `td-${props.index}-${4}`)"
                                 :items="cachedData.fuel_type"
+                                item-text="value"
+                                item-value="value"
+                                :return-object="false"
                                 label="Вибирете Тип топлива"
                                 single-line>
                                 <template slot="no-data">
@@ -225,6 +231,9 @@
                                 :value="props.item.power"
                                 @change="setCellValue($event, props.index, 5, 'power', `td-${props.index}-${5}`)"
                                 :items="cachedData.power"
+                                item-text="value"
+                                item-value="value"
+                                :return-object="false"
                                 hide-selected
                                 label="Вибирете мощность"
                                 single-line>
@@ -275,6 +284,9 @@
                                 :value="props.item.number"
                                 @change="setCellValue($event, props.index, 6, 'number', `td-${props.index}-${6}`)"
                                 :items="cachedData.number"
+                                item-text="value"
+                                item-value="value"
+                                :return-object="false"
                                 hide-selected
                                 label="Вибирете гос. номер"
                                 single-line>
