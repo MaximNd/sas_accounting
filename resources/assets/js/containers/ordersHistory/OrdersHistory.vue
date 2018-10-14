@@ -449,16 +449,27 @@ export default {
                                 (this.isObject(before) && (typeof after === 'string' || this.isNull(after) || this.isUndefined(after))) ||
                                 ((typeof before === 'string' || this.isNull(before) || this.isUndefined(before)) && this.isObject(after));
                     };
+                    // returns TRUE if prices are different
+                    const checkPriceBeforeAndAfter = (before, after) => {
+                        return ((this.isObject(before) && this.isObject(after)) && (before.price !== after.price)) ||
+                            (!this.isObject(before) || !this.isObject(after));
+                    };
 
                     for (let i = 0; i < before.gpsData.changed.length; ++i) {
                         const changedKeys = Object.keys(before.gpsData.changed[i]).reduce((changedKeys, key) => {
                             if (checkBeforeAndAfter(before.gpsData.changed[i][key], after.gpsData.changed[i][key])) {
                                 changedKeys.push(key);
+                                if (checkPriceBeforeAndAfter(before.gpsData.changed[i][key], after.gpsData.changed[i][key])) {
+                                    changedKeys.push(`${key}_price`);
+                                }
                             } else if (Array.isArray(before.gpsData.changed[i][key]) && Array.isArray(after.gpsData.changed[i][key])) {
                                 if (before.gpsData.changed[i][key].length === after.gpsData.changed[i][key].length) {
                                     for (let j = 0; j < before.gpsData.changed[i][key].length; ++j) {
                                         if (checkBeforeAndAfter(before.gpsData.changed[i][key][j], after.gpsData.changed[i][key][j])) {
                                             changedKeys.push(key);
+                                            if (checkPriceBeforeAndAfter(before.gpsData.changed[i][key][j], after.gpsData.changed[i][key][j])) {
+                                                changedKeys.push(`${key}_price`);
+                                            }
                                             break;
                                         }
                                     }

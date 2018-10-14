@@ -45,6 +45,11 @@
                 {{ props.item.gps_tracker.name }}
             </td>
             <td
+                class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('gps_tracker_price') }">
+                {{ props.item.gps_tracker.price }}
+            </td>
+            <td
                 class="text-xs-center">
                 <v-list v-if="props.item.fuel_gauge.some(el => !isUndefined(el) && !isNull(el))">
                     <template v-for="(item, textIndex) in props.item.fuel_gauge">
@@ -67,8 +72,18 @@
             </td>
             <td
                 class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('fuel_gauge_price') }">
+                {{ props.item.fuel_gauge.price }}
+            </td>
+            <td
+                class="text-xs-center"
                 :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('counter') }">
                 {{ props.item.counter.name }}
+            </td>
+            <td
+                class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('counter_price') }">
+                {{ props.item.counter.price }}
             </td>
             <td
                 class="text-xs-center"
@@ -77,8 +92,18 @@
             </td>
             <td
                 class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('rf_id_price') }">
+                {{ props.item.rf_id.price }}
+            </td>
+            <td
+                class="text-xs-center"
                 :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('reader_of_trailed_equipment') }">
                 {{ props.item.reader_of_trailed_equipment.name }}
+            </td>
+            <td
+                class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('reader_of_trailed_equipment_price') }">
+                {{ props.item.reader_of_trailed_equipment.price }}
             </td>
             <td
                 class="text-xs-center"
@@ -87,13 +112,28 @@
             </td>
             <td
                 class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('can_reader_price') }">
+                {{ props.item.can_reader.price }}
+            </td>
+            <td
+                class="text-xs-center"
                 :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('deaerator_small') }">
                 {{ props.item.deaerator_small.name }}
             </td>
             <td
                 class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('deaerator_small_price') }">
+                {{ props.item.deaerator_small.price }}
+            </td>
+            <td
+                class="text-xs-center"
                 :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('deaerator_large') }">
                 {{ props.item.deaerator_large.name }}
+            </td>
+            <td
+                class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('deaerator_large_price') }">
+                {{ props.item.deaerator_large.price }}
             </td>
             <td
                 class="text-xs-center">
@@ -117,6 +157,11 @@
                 </v-list>
             </td>
             <td
+                class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('cn03_price') }">
+                {{ props.item.cn03.price }}
+            </td>
+            <td
                 class="text-xs-center">
                 <v-list v-if="props.item.rs01.some(el => !isUndefined(el) && !isNull(el))">
                     <template v-for="(item, textIndex) in props.item.rs01">
@@ -138,6 +183,11 @@
                 </v-list>
             </td>
             <td
+                class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('rs01_price') }">
+                {{ props.item.rs01.price }}
+            </td>
+            <td
                 class="text-xs-center">
                 <v-list v-if="props.item.additional_equipment.some(el => !isUndefined(el) && !isNull(el))">
                     <template v-for="(item, textIndex) in props.item.additional_equipment">
@@ -157,6 +207,11 @@
                         ></v-divider>
                     </template>
                 </v-list>
+            </td>
+            <td
+                class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('additional_equipment_price') }">
+                {{ props.item.additional_equipment.price }}
             </td>
         </template>
     </v-data-table>
@@ -189,16 +244,27 @@ export default {
                 { text: 'Мощность', align: 'center', value: 'power', sortable: false },
                 { text: 'Гос. номер', align: 'center', value: 'number', sortable: false },
                 { text: 'GPS-трекер', align: 'center', value: 'gps_tracker', sortable: false },
+                { text: 'Цена $ ', value: 'gps_tracker_price', sortable: false },
                 { text: 'ДУТ', align: 'center', value: 'fuel_gauge', sortable: false },
+                { text: 'Цена $  ', value: 'fuel_gauge_price', sortable: false },
                 { text: 'Счетчик', align: 'center', value: 'counter', sortable: false },
+                { text: 'Цена $   ', value: 'counter_price', sortable: false },
                 { text: 'RFID', align: 'center', value: 'rf_id', sortable: false },
+                { text: 'Цена $    ', value: 'rf_id_price', sortable: false },
                 { text: 'Cчитыватель прицепного оборудования', align: 'center', value: 'reader_of_trailed_equipment', sortable: false },
+                { text: 'Цена $     ', value: 'reader_of_trailed_equipment_price', sortable: false },
                 { text: 'CAN', align: 'center', value: 'can_reader', sortable: false },
+                { text: 'Цена $       ', value: 'can_reader_price', sortable: false },
                 { text: 'Деаэратор малый', align: 'center', value: 'deaerator_small', sortable: false },
+                { text: 'Цена $        ', value: 'deaerator_small_price', sortable: false },
                 { text: 'Деаэратор большой', align: 'center', value: 'deaerator_large', sortable: false },
+                { text: 'Цена $         ', value: 'deaerator_large_price', sortable: false },
                 { text: 'CN03', align: 'center', value: 'cn03', sortable: false },
+                { text: 'Цена $          ', value: 'cn03_price', sortable: false },
                 { text: 'RS01', align: 'center', value: 'rs01', sortable: false },
-                { text: 'Дополнительное оборудование', align: 'center', value: 'additional_equipment', sortable: false }
+                { text: 'Цена $           ', value: 'rs01_price', sortable: false },
+                { text: 'Дополнительное оборудование', align: 'center', value: 'additional_equipment', sortable: false },
+                { text: 'Цена $            ', value: 'additional_equipment_price', sortable: false }
             ]
         };
     },
