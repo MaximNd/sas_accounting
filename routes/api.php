@@ -94,4 +94,6 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::get('/cache', 'CachedDataController@getCachedData');
 
     Route::post('/cache', 'CachedDataController@addCachedData');
+
+    Route::delete('/cache/{id}', 'CachedDataController@deleteCachedData');
 });

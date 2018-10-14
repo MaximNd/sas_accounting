@@ -256,7 +256,7 @@
                             :pricesForEquipment="pricesForEquipment"
                             :allEquipmentPrice="allEquipmentPrice"
                             :allInstallationPrice="allInstallationPrice"
-                            :cachedData="allCacheData"
+                            :cachedData="groupedCachedData"
                             :defaultRowCount="defaultRowCount"
                             @update:orderGPSData="updateOrderGPSData"
                             @add-nested-data:orderGPSData="addNestedDataInOrderGPSData"
@@ -264,7 +264,8 @@
                             @copy-values:orderGPSData="copySelectedInOrderGPSData"
                             @drag-n-drop-gps-data="dragNDropGPSData"
                             @rowAdded="addRowToOrderGPSData"
-                            @delete:rows="deleteRowsFromOrderGPSData">
+                            @delete:rows="deleteRowsFromOrderGPSData"
+                            @delete:cache="deleteCache">
                         </appGPSData>
                         <v-progress-linear
                             v-else
@@ -663,7 +664,6 @@ export default {
                 manual_installation_price: 0
             },
             cachedData: [],
-            newCachedData: [],
             orderInCreation: false,
             oldOrder: {},
             selectedPrices: null,
@@ -825,17 +825,27 @@ export default {
         formattedDollarDate() {
             return this.orderData.dollar_date.split('-').join('');
         },
-        allCacheData() {
-            const cache = {};
-            [...this.cachedData, ...this.newCachedData].forEach((cacheData) => {
-                if (cache[cacheData.column_name]) {
-                    cache[cacheData.column_name].push(cacheData.value);
+        groupedCachedData() {
+            return this.cachedData.reduce((groupedCache, cache) => {
+                if (groupedCache[cache.column_name]) {
+                    groupedCache[cache.column_name].push(cache);
                 } else {
-                    cache[cacheData.column_name] = [cacheData.value]
+                    groupedCache[cache.column_name] = [cache]
                 }
-            });
-            return cache;
+                return groupedCache;
+            }, {});
         },
+        // allCacheData() {
+        //     const cache = {};
+        //     [...this.cachedData, ...this.newCachedData].forEach((cacheData) => {
+        //         if (cache[cacheData.column_name]) {
+        //             cache[cacheData.column_name].push(cacheData.value);
+        //         } else {
+        //             cache[cacheData.column_name] = [cacheData.value]
+        //         }
+        //     });
+        //     return cache;
+        // },
         priceForArea() {
             const area = (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);
             const priceForServices = this.orderData.services.reduce((price, service) => {
@@ -1053,8 +1063,27 @@ export default {
             this.initialized = true;
         },
         addCache(column, value) {
-            this.newCachedData.push({ column_name: column, value });
-            localStorage.setItem('newCachedData', JSON.stringify(this.newCachedData));
+            this.axios.post('/cache', { cache: { column_name: column, value } })
+                .then(({data}) => {
+                    this.cachedData.push(data);
+                    this.showSnackbar('success', 'Данные сохранены!');
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.showSnackbar('error', 'Ошибка!');
+                });
+        },
+        deleteCache(id) {
+            this.axios.delete(`/cache/${id}`)
+                .then(() => {
+                    const index = this.cachedData.findIndex(cache => cache.id === id);
+                    this.cachedData.splice(index, 1);
+                    this.showSnackbar('success', 'Данные сохранены!');
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.showSnackbar('error', 'Ошибка!');
+                });
         },
         addOptionalService() {
             this.orderData.optional_services.push({ name: '', price: '', comment: '' });
@@ -1302,9 +1331,6 @@ export default {
                         })
                         .catch(err => (console.log(err)))
                         .finally(() => (this.orderInCreation = false));
-
-                    if (this.newCachedData.length > 0)
-                        this.axios.post('/cache', { cache: this.newCachedData });
                 });
         },
         updateOrder() {
@@ -1663,8 +1689,6 @@ export default {
                 });
         }
         this.getCachedData();
-        this.newCachedData = JSON.parse(localStorage.getItem('newCachedData')) || [];
-        // this.orderData = JSON.parse(localStorage.getItem('orderData'));
     },
     components: {
         appCreateClient: CreateClient,

@@ -12,6 +12,12 @@ class CachedDataController extends Controller
     }
 
     public function addCachedData(Request $request) {
-        CachedData::insert($request->input('cache'));
+        $cacheData = new CachedData($request->input('cache'));
+        $cacheData->save();
+        return $cacheData;
+    }
+
+    public function deleteCachedData($id) {
+        return CachedData::destroy($id);
     }
 }

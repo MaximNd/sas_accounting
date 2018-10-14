@@ -51,8 +51,37 @@
                                 :value="props.item.mark"
                                 @change="setCellValue($event, props.index, 1, 'mark', `td-${props.index}-${1}`)"
                                 :items="cachedData.mark"
+                                item-text="value"
+                                item-value="value"
+                                :return-object="false"
                                 label="Вибирете марку"
                                 single-line>
+                                <template slot="no-data">
+                                    <v-list-tile>
+                                        <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
+                                        </v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                </template>
+                                <template
+                                    slot="item"
+                                    slot-scope="{ index, item, parent }">
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            {{ item.value }}
+                                        </v-list-tile-title>
+                                    </v-list-tile-content>
+                                    <v-spacer></v-spacer>
+                                    <v-list-tile-action @click.stop>
+                                        <v-btn
+                                            icon
+                                            @click.stop.prevent="$emit('delete:cache', item.id)">
+                                        <v-icon>clear</v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                </template>
                             </v-combobox>
                             <v-btn color="info" small @click="switchCellMode(props.index, 1, false, `mark-${props.index}-${1}`, $event, false)">
                                 Закрыть редактирование
