@@ -57,7 +57,7 @@
             <appLandBankRegistrationList  :price="servicesPreviewNames[pdfLayoutNames.LAND_BANK_ACCOUNTING].price" />
             <div class="html2pdf__page-break"></div>
         </template>
-        <template v-if="servicesPreviewNames[pdfLayoutNames.GPS_TRACKING]">
+        <template v-if="servicesPreviewNames[pdfLayoutNames.ENGINEER_PROJECT]">
             <appGPSTrackingTitle />
             <div class="html2pdf__page-break"></div>
             <template v-for="(gpsData, index) in gpsTrackingData">

@@ -11,6 +11,39 @@ use Illuminate\Support\Facades\Storage;
 
 class PriceListController extends Controller
 {
+    private $pdf_layout_names = [
+        'Підключення до платформи SASAGRO.COM',
+        'Картування полів Дронами',
+        'Картування полів Фізичний обмір',
+        'Облік земельного банку',
+        'Інженерний проект',
+        'Інженерна Підтримка',
+        'Патрулювання',
+        'NDVI',
+        'Підрахунок всходів',
+        'Фото/відео',
+        'SAS Mapper',
+        'Хімічний аналіз грунтів',
+        'Вимірювання твердості грунту'
+    ];
+
+    private $pdf_layout_names_with_1C = [
+        'Підключення до платформи SASAGRO.COM',
+        'Картування полів Дронами',
+        'Картування полів Фізичний обмір',
+        'Облік земельного банку',
+        'Інженерний проект',
+        'Інженерна Підтримка',
+        'Патрулювання',
+        'NDVI',
+        'Підрахунок всходів',
+        'Фото/відео',
+        'SAS Mapper',
+        'Хімічний аналіз грунтів',
+        'Вимірювання твердості грунту',
+        'Інтеграція 1С і Cropio з супроводом'
+    ];
+
     public function getAll() {
         return PriceList::all();
     }
@@ -36,7 +69,7 @@ class PriceListController extends Controller
                 $this->validate($request, [
                     'name' => 'required',
                     'price' => 'required|numeric',
-                    'pdf_layout' => ['required', Rule::in(['Підключення до платформи SASAGRO.COM', 'Картування полів Дронами', 'Картування полів Фізичний обмір', 'Облік земельного банку', 'GPS моніторинг', 'Патрулювання', 'NDVI', 'Підрахунок всходів', 'Фото/відео', 'SAS Mapper', 'Хімічний аналіз грунтів', 'Вимірювання твердості грунту'])]
+                    'pdf_layout' => ['required', Rule::in($this->pdf_layout_names)]
                 ]);
             }
         } else {
@@ -93,7 +126,7 @@ class PriceListController extends Controller
             'service.price' => 'numeric|nullable',
             'service.prices_for_ranges' => 'array|nullable',
             'service.type' => Rule::in(['Услуга']),
-            'service.pdf_layout' => Rule::in(['Підключення до платформи SASAGRO.COM', 'Картування полів Дронами', 'Картування полів Фізичний обмір', 'Облік земельного банку', 'GPS моніторинг', 'Патрулювання', 'NDVI', 'Підрахунок всходів', 'Фото/відео', 'SAS Mapper', 'Хімічний аналіз грунтів', 'Вимірювання твердості грунту', 'Інтеграція 1С і Cropio з супроводом']),
+            'service.pdf_layout' => Rule::in($this->pdf_layout_names_with_1C),
             'log.before' => 'required|string',
             'log.after' => 'required|string'
         ]);
