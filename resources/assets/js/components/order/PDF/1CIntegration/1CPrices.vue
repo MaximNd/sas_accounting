@@ -6,34 +6,10 @@
             </div>
         </v-flex>
         <v-flex style="flex-grow:1;">
-            <div class="price-1c-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="text-xs-center">Послуги</th>
-                            <th class="text-xs-center">Ціна, $</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(price, index) in prices" :key="`price-${index}`">
-                            <td class="table-range" v-if="index + 1 === prices.length">
-                                {{ `${price.from}>` }}
-                            </td>
-                            <td class="table-range" v-else>
-                                {{ `${price.from} - ${price.to}` }}
-                            </td>
-                            <td class="table-price">
-                                {{ price.price }}$
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="notation">
-                    <p>
-                        Усі розрахунки проводимо в гривні, ціна вказана з урахуванням ПДВ.
-                    </p>
-                </div>
-            </div>
+            <appPricesTable
+                :headers="headers"
+                :data="tableData">
+            </appPricesTable>
         </v-flex>
         <div class="bottom-logo-1c">
             <img src="/storage/image4.png" alt="">
@@ -42,12 +18,30 @@
 </template>
 
 <script>
+import PricesTable from './../pricesTable/PricesTable';
+
 export default {
     props: {
         prices: {
             type: Array,
             required: true
         }
+    },
+    data() {
+        return {
+            headers: ['Кількість га', 'Ціна, $']
+        };
+    },
+    computed: {
+        tableData() {
+            return this.prices.map((pricesRow, index) => [
+                { text: (index + 1 === this.prices.length) ? `${pricesRow.from}>` : `${pricesRow.from} - ${pricesRow.to}` },
+                { text: pricesRow.price }
+            ]);
+        }
+    },
+    components: {
+        appPricesTable: PricesTable
     }
 }
 </script>
@@ -63,79 +57,6 @@ export default {
         text-align: center;
         color: #4D4D4D;
         margin-top: 25px;
-    }
-
-    .bg-1c .price-1c-table table {
-        color: #4D4D4D;
-        margin: 0 auto;
-        width: 75%;
-    }
-
-    .bg-1c .price-1c-table table tr th {
-        background-color: #28B691;
-        color: #fff;
-        font-family: ProximaNovaBold;
-        font-size: 28px;
-        padding: 5px 10px;
-    }
-
-    .bg-1c .price-1c-table table tr:nth-child(odd) td {
-        background-color: #E9E9E9;
-    }
-
-    .bg-1c .price-1c-table table tr:nth-child(even) td {
-        background-color: #F2F2F2;
-    }
-
-    .bg-1c .price-1c-table table tr:first-child td {
-        border: 2px solid #fff;
-        border-top: 4px solid #fff;
-        margin: 0;
-    }
-
-    .bg-1c .price-1c-table table tr td {
-        border: 2px solid #fff;
-        margin: 0;
-    }
-
-    .bg-1c .price-1c-table table tr:nth-child(1) th {
-        border-left: 2px solid #fff;
-        border-right: 2px solid #fff;
-        margin: 0;
-    }
-
-    .bg-1c .price-1c-table table tr:nth-child(2) th {
-        border-left: 4px solid #fff;
-        margin: 0;
-    }
-
-    .bg-1c .price-1c-table table tr {
-        margin: 0;
-    }
-
-    .bg-1c .price-1c-table table td {
-        font-family: ProximaNovaBold;
-        font-size: 28px;
-        padding: 5px 10px;
-    }
-
-    .bg-1c .price-1c-table table td.table-range,
-    .bg-1c .price-1c-table table td.table-price {
-        text-align: center;
-    }
-
-    .bg-1c .price-1c-table .notation {
-        font-family: ProximaNovaBold;
-        margin: 0 auto;
-        width: 75%;
-        font-size: 19px;
-        color: #949494;
-    }
-
-    .bg-1c .price-1c-table .notation p {
-        margin-top: 10px;
-        margin-left: 7px;
-        margin-bottom: 0;
     }
 
     .bg-1c .bottom-logo-1c {
