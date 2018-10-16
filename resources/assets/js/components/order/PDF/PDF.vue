@@ -80,6 +80,10 @@
             <appCountingSeedlings :price="servicesPreviewNames[pdfLayoutNames.COUNTING_SEEDLINGS].price" />
             <div class="html2pdf__page-break"></div>
         </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.ENGINEER_SUPPORT]">
+            <appEngineerSupport :price="servicesPreviewNames[pdfLayoutNames.ENGINEER_SUPPORT].price" />
+            <div class="html2pdf__page-break"></div>
+        </template>
         <template v-if="servicesPreviewNames[pdfLayoutNames.PHOTO_VIDEO]">
             <appAeroVisualReviewTitle />
             <div class="html2pdf__page-break"></div>
@@ -140,6 +144,8 @@ import Patrol from './patrol/Patrol';
 import NDVI from './NDVI/NDVI';
 
 import CountingSeedlings from './countingSeedlings/CountingSeedlings';
+
+import EngineerSupport from './engineerSupport/EngineerSupport';
 
 import AeroVisualReviewTitle from './aeroVisualReview/AeroVisualReviewTitle';
 import AeroVisualReviewData from './aeroVisualReview/AeroVisualReviewData';
@@ -279,6 +285,7 @@ export default {
         appPatrol: Patrol,
         appNDVI: NDVI,
         appCountingSeedlings: CountingSeedlings,
+        appEngineerSupport: EngineerSupport,
         appAeroVisualReviewTitle: AeroVisualReviewTitle,
         appAeroVisualReviewData: AeroVisualReviewData,
         appSASMapper: SASMapper,
