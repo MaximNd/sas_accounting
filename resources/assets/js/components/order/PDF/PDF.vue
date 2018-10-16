@@ -110,6 +110,14 @@
             <appPrices1C :prices="servicesPreviewNames[pdfLayoutNames.INTEGRATION_1C].prices_for_ranges" />
             <div class="html2pdf__page-break"></div>
         </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.ENGINEER_PROJECT]">
+            <appEngIneerProject
+                :gruppedEquipment="gruppedEquipment"
+                :installationPrice="installationPrice"
+                :transportPrice="transportPrice"
+                :finalPrice="finalPrice"/>
+            <div class="html2pdf__page-break"></div>
+        </template>
         <template v-if="optionalServices.length > 0">
             <template v-for="(optionalService, index) in optionalServices">
                 <appOptionalServices
@@ -159,6 +167,8 @@ import SoilHardnessMeasuring from './soilHardnessMeasuring/SoilHardnessMeasuring
 import Integration1C from './1CIntegration/1CIntegration';
 import Prices1C from './1CIntegration/1CPrices';
 
+import EngIneerProject from './engineerProject/EngineerProject';
+
 import OptionalServices from './optionalServices/OptionalServices';
 
 import Contacts from './contacts/Contacts';
@@ -185,6 +195,22 @@ export default {
             type: Array,
             required: false,
             default: () => []
+        },
+        gruppedEquipment: {
+            type: Array,
+            required: true
+        },
+        installationPrice: {
+            type: Number,
+            required: true
+        },
+        transportPrice: {
+            type: Number,
+            required: true
+        },
+        finalPrice: {
+            type: Number,
+            required: true
         }
     },
     data() {
@@ -293,6 +319,7 @@ export default {
         appSoilHardnessMeasuring: SoilHardnessMeasuring,
         appIntegration1C: Integration1C,
         appPrices1C: Prices1C,
+        appEngIneerProject: EngIneerProject,
         appOptionalServices: OptionalServices,
         appContacts: Contacts
     }

@@ -454,7 +454,7 @@
                         <v-flex order-xs1 order-sm2 xs12 sm6>
                             <appEquipmentData
                                 v-if="orderData.GPSData"
-                                :orderGPSData="orderData.GPSData">
+                                :gruppedEquipment="gruppedEquipment">
                             </appEquipmentData>
                         </v-flex>
                     </v-layout>
@@ -556,7 +556,15 @@
                     <div slot="header" class="headline pdf-preview">PDF превью</div>
                     <v-card>
                         <v-card-text :class="{ 'pdf-preview-overflow': $vuetify.breakpoint.lgAndDown }">
-                            <appPDF v-scroll="onScroll" :optionalServices="orderData.optional_services" :services="orderData.services" :gpsData="orderData.GPSData"></appPDF>
+                            <appPDF
+                                v-scroll="onScroll"
+                                :optionalServices="orderData.optional_services"
+                                :services="orderData.services"
+                                :gpsData="orderData.GPSData"
+                                :gruppedEquipment="gruppedEquipment"
+                                :installationPrice="allInstallationPrice"
+                                :transportPrice="transportationPrice"
+                                :finalPrice="finalPrice"></appPDF>
                         </v-card-text>
                     </v-card>
                 </v-expansion-panel-content>
@@ -839,17 +847,47 @@ export default {
                 return groupedCache;
             }, {});
         },
-        // allCacheData() {
-        //     const cache = {};
-        //     [...this.cachedData, ...this.newCachedData].forEach((cacheData) => {
-        //         if (cache[cacheData.column_name]) {
-        //             cache[cacheData.column_name].push(cacheData.value);
-        //         } else {
-        //             cache[cacheData.column_name] = [cacheData.value]
-        //         }
-        //     });
-        //     return cache;
-        // },
+        gruppedEquipment() {
+            const countEquipment = this.orderData.GPSData.reduce((grupped, row) => {
+                Object.keys(row).forEach((key) => {
+                    const value = row[key];
+                    if (this.isObject(value)) {
+                        if (!grupped[row[key].id]) {
+                            grupped[row[key].id] = {
+                                type: row[key].name,
+                                price: parseFloat(row[key].price),
+                                count: 1
+                            };
+                        } else {
+                            ++grupped[row[key].id].count;
+                            grupped[row[key].id].price = this.addTwoFloats(grupped[row[key].id].price, row[key].price);
+                        }
+                    } else if (Array.isArray(value)) {
+                        value
+                            .forEach((el, index) => {
+                                if (this.isUndefined(el) || this.isNull(el) ) return;
+                                if (!grupped[el.id]) {
+                                    grupped[el.id] = {
+                                        type: el.name,
+                                        price: parseFloat(el.price),
+                                        count: 1
+                                    };
+                                } else {
+                                    ++grupped[el.id].count;
+                                    grupped[el.id].price = this.addTwoFloats(grupped[el.id].price, el.price);
+                                }
+                            })
+                    }
+                });
+                return grupped;
+            }, {});
+            const gruppedEquipment = Object.keys(countEquipment).map((key) =>({
+                type: countEquipment[key].type,
+                price: countEquipment[key].price,
+                count: countEquipment[key].count
+            }));
+            return gruppedEquipment;
+        },
         priceForArea() {
             const area = (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);
             const priceForServices = this.orderData.services.reduce((price, service) => {

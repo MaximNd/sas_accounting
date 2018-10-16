@@ -17,7 +17,7 @@ import utils from './../../../mixins/utils.js';
 export default {
     mixins: [utils],
     props: {
-        orderGPSData: {
+        gruppedEquipment: {
             type: Array,
             required: true
         }
@@ -29,41 +29,6 @@ export default {
                 { text: 'Шт.', align: 'center', value: 'count' },
             ]
         };
-    },
-    computed: {
-        gruppedEquipment() {
-            const countEquipment = this.orderGPSData.reduce((grupped, row) => {
-                Object.keys(row).forEach((key) => {
-                    const value = row[key];
-                    if (this.isObject(value)) {
-                        if (!grupped[row[key].id]) {
-                            grupped[row[key].id] = {
-                                type: row[key].name,
-                                count: 1
-                            };
-                        } else {
-                            ++grupped[row[key].id].count;
-                        }
-                    } else if (Array.isArray(value)) {
-                        value
-                            .forEach((el, index) => {
-                                if (this.isUndefined(el) || this.isNull(el) ) return;
-                                if (!grupped[el.id]) {
-                                    grupped[el.id] = {
-                                        type: el.name,
-                                        count: 1
-                                    };
-                                } else {
-                                    ++grupped[el.id].count;
-                                }
-                            })
-                    }
-                });
-                return grupped;
-            }, {});
-            const gruppedEquipment = Object.keys(countEquipment).map((key) =>({ type: countEquipment[key].type, count: countEquipment[key].count }))
-            return gruppedEquipment;
-        }
     }
 }
 </script>
