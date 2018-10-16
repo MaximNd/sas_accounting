@@ -4,6 +4,9 @@
             <v-card>
                 <v-card-text>
                     <v-form>
+                        <template v-if="isCreation">
+                            <v-btn @click="deleteOrderDataFromLocalStorage" color="primary">Обнулить данные</v-btn>
+                        </template>
                         <template v-if="!isCreation">
                             <v-btn @click="recalculatePrices" :disabled="loading" :loading="loading" color="primary">Пересчитать цены</v-btn>
                             <v-select
@@ -623,6 +626,7 @@ export default {
         }
     },
     data() {
+        const todayDate = this.getTodaysDate();
         return {
             initialized: false,
             pdfProgress: 0,
@@ -673,7 +677,7 @@ export default {
                 statuses: { is_sent: false, is_agreed: false, is_paid: false, is_installation_finished: false },
                 area: '',
                 dollar_rate: 0.00,
-                dollar_date: new Date().toISOString().slice(0, 10),
+                dollar_date: todayDate,
                 installation_discount: 0,
                 equipment_discount: 0,
                 days: '',
@@ -970,6 +974,15 @@ export default {
                 this.snack = true;
             }
         },
+        orderData: {
+            deep: true,
+            immediate: false,
+            handler(newData, oldData) {
+                if (this.isCreation) {
+                    this.saveOrderDataToLocalStorage();
+                }
+            }
+        },
         selectedPrices(newVal) {
             console.log(newVal);
             this.orderData.prices = this.orderData.prices.map(prices => ({
@@ -1094,6 +1107,9 @@ export default {
         saveOrderDataToLocalStorage() {
             localStorage.setItem('orderData', JSON.stringify(this.orderData));
         },
+        deleteOrderDataFromLocalStorage() {
+            localStorage.removeItem('orderData');
+        },
         getClients() {
             this.axios.get('/clients/all')
                 .then(({data}) => {
@@ -1123,7 +1139,6 @@ export default {
         switchDollarEditing() {
             this.isDollarRateEditing = !this.isDollarRateEditing;
             if (!this.isDollarRateEditing) {
-                this.saveOrderDataToLocalStorage();
                 this.showSnackbar('success', 'Данные сохранены!');
             } else {
                 this.showSnackbar('info', 'Редактирование курса доллара');
@@ -1132,7 +1147,6 @@ export default {
         switchPriceForDayEditing() {
             this.isPriceForDayEditing = !this.isPriceForDayEditing;
             if (!this.isPriceForDayEditing) {
-                this.saveOrderDataToLocalStorage();
                 this.showSnackbar('success', 'Данные сохранены!');
             } else {
                 this.showSnackbar('info', 'Редактирование цены командировки за 1 день');
@@ -1141,7 +1155,6 @@ export default {
         switchPriceForTransportationPerKmEditing() {
             this.isPriceForTransportationPerKmEditing = !this.isPriceForTransportationPerKmEditing;
             if (!this.isPriceForTransportationPerKmEditing) {
-                this.saveOrderDataToLocalStorage();
                 this.showSnackbar('success', 'Данные сохранены!');
             } else {
                 this.showSnackbar('info', 'Редактирование цены за 1км');
@@ -1191,17 +1204,14 @@ export default {
                     this.addCache(path, val);
                 }
             }
-            this.saveOrderDataToLocalStorage();
             this.showSnackbar('success', 'Данные сохранены!');
         },
         addNestedDataInOrderGPSData(row, column) {
             this.orderData.GPSData[row][column].push(undefined);
-            this.saveOrderDataToLocalStorage();
             this.showSnackbar('success', 'Данные сохранены!');
         },
         deleteNestedDataInOrderGPSData(row, column, index) {
             this.orderData.GPSData[row][column].splice(index, 1);
-            this.saveOrderDataToLocalStorage();
             this.showSnackbar('success', 'Данные сохранены!');
         },
         copySelectedInOrderGPSData(copyList) {
@@ -1216,7 +1226,6 @@ export default {
                     }
                 }
             }
-            this.saveOrderDataToLocalStorage();
             this.showSnackbar('success', 'Данные сохранены!');
         },
         addRowToOrderGPSData(count = 1) {
@@ -1232,14 +1241,12 @@ export default {
                 ++this.initialGPSRowData.order;
             }
             if (count > 0) {
-                this.saveOrderDataToLocalStorage();
                 this.showSnackbar('info', `${this.declOfNum(count, ['Добавлен', 'Добавлено', 'Добавлены'])} ${count} ${this.declOfNum(count, ['ряд', 'ряда', 'рядов'])}`);
             }
         },
         deleteRowsFromOrderGPSData(indices) {
             this.orderData.GPSData = this.orderData.GPSData.filter((_, index) => !indices.includes(index));
             if (indices.length > 0) {
-                this.saveOrderDataToLocalStorage();
                 this.showSnackbar('info', `${this.declOfNum(indices.length, ['Удален', 'Удалено', 'Удалены'])} ${indices.length} ${this.declOfNum(indices.length, ['ряд', 'ряда', 'рядов'])}`);
             }
         },
@@ -1249,7 +1256,6 @@ export default {
             for (let i = 0; i < this.orderData.GPSData.length; ++i) {
                 this.$set(this.orderData.GPSData[i], 'order', i + 1);
             }
-            this.saveOrderDataToLocalStorage();
             this.showSnackbar('info', `Ряд был перемещён`);
         },
         getPricesData(data) {
@@ -1327,6 +1333,7 @@ export default {
 
                     this.axios.post('/orders', orderData)
                         .then(({data}) => {
+                            this.deleteOrderDataFromLocalStorage();
                             this.$router.push(`/orders/${data.id}`);
                         })
                         .catch(err => (console.log(err)))
@@ -1708,11 +1715,22 @@ export default {
     },
     created() {
         if (this.isCreation) {
-            this.getDollarRate(this.formattedDollarDate);
+            this.defaultRowCount = 4;
+            this.orderData.GPSData = [];
+            const savedOrderData = localStorage.getItem('orderData');
+            if (savedOrderData) {
+                const parsedSavedOrderData = JSON.parse(savedOrderData);
+                const { dollar_rate, dollar_date, ...data } = parsedSavedOrderData;
+                const todayDate = this.getTodaysDate();
+                this.orderData = {
+                    ...data,
+                    dollar_rate: 0.00,
+                    dollar_date: todayDate
+                };
+            }
             this.getClients();
             this.$store.dispatch('getPriseList');
-            this.orderData.GPSData = [];
-            this.defaultRowCount = 4;
+            this.getDollarRate(this.formattedDollarDate);
         } else {
             this.$store.dispatch('getPriseList')
                 .then(() => {
