@@ -28,6 +28,10 @@ export default {
         servicePrices: {
             type: Array,
             required: true
+        },
+        dollarRate: {
+            type: Number,
+            required: true
         }
     },
     data() {
@@ -47,7 +51,8 @@ export default {
         },
         finalPrice() {
             const finalPrice =  this.servicePrices.reduce((price, serviceData) => this.addTwoFloats(price, serviceData.price), 0.0);
-            return formatter.formatMoney(finalPrice, {
+            const finalPriceUAH = this.multiplyTwoFloats(this.dollarRate, finalPrice);
+            return formatter.formatMoney(finalPriceUAH, {
                 symbol: '',
                 precision: 2,
                 thousand: ' ',

@@ -124,6 +124,7 @@
         </template>
         <template v-if="servicePrices.length > 0">
             <appServicePrices
+                :dollarRate="dollarRate"
                 :servicePrices="servicePrices"/>
         </template>
         <template v-if="optionalServices.length > 0">
@@ -186,6 +187,11 @@ import Contacts from './contacts/Contacts';
 export default {
     mixins: [utils],
     props: {
+        dollarRate: {
+            type: Number,
+            required: false,
+            default: 0
+        },
         oneServicePreview: {
             type: Boolean,
             required: false,

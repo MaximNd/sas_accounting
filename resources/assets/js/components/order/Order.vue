@@ -558,6 +558,7 @@
                         <v-card-text :class="{ 'pdf-preview-overflow': $vuetify.breakpoint.lgAndDown }">
                             <appPDF
                                 v-scroll="onScroll"
+                                :dollarRate="orderData.dollar_rate"
                                 :optionalServices="orderData.optional_services"
                                 :services="orderData.services"
                                 :gpsData="orderData.GPSData"
