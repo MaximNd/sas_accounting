@@ -5,7 +5,7 @@
                 :headers="headers"
                 :data="tableData">
             </appPricesTable>
-            <div column align-center class="service-prices" :style="{'margin-top': servicePrices.length <= 10 ? '50px': '20px' }">
+            <div column align-center class="service-prices">
                 <div class="final-price">
                     <p>Всього: {{ finalPrice }} <span class="currency">₴</span></p>
                 </div>
@@ -70,6 +70,7 @@ export default {
     }
 
     .bg-services .service-prices {
+        margin-top: 50px;
         text-align: center;
     }
 
