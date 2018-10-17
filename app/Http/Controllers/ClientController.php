@@ -28,7 +28,9 @@ class ClientController extends Controller
             $query
                 ->where('person_full_name', 'like', $value)
                 ->orWhere('company_name', 'like', $value)
-                ->orWhere('telephone', 'like', $value);
+                ->orWhere('email', 'like', $value)
+                ->orWhere('telephone', 'like', $value)
+                ->orWhere('address', 'like', $value);
         }
 
         if (isset($params['sortBy']) && isset($params['direction'])) {
