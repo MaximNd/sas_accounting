@@ -280,7 +280,7 @@
                     </v-card-text>
                 </template>
                 <v-card-text>
-                    <v-layout wrap>
+                    <v-layout wrap v-if="isGPSServiceSelected">
                         <v-flex order-xs2 order-sm1 xs12 sm6>
                             <v-container fluid grid-list-xs>
                                 <v-layout wrap>

@@ -30,16 +30,16 @@ class CreateOrdersTable extends Migration
             $table->string('name');
             $table->double('area');
 
-            $table->integer('days');
-            $table->double('price_for_day');
+            $table->integer('days')->nullable();
+            $table->double('price_for_day')->nullable();
 
             $table->double('installation_discount')->nullable();
             $table->double('equipment_discount')->nullable();
 
-            $table->double('price_for_transportation_per_km');
-            $table->integer('number_of_trips');
-            $table->double('transportation_kms');
-            $table->string('route');
+            $table->double('price_for_transportation_per_km')->nullable();
+            $table->integer('number_of_trips')->nullable();
+            $table->double('transportation_kms')->nullable();
+            $table->string('route')->nullable();
 
             $table->json('services');
 
