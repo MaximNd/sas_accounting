@@ -5,7 +5,7 @@
                 :headers="headers"
                 :data="tableData">
             </appPricesTable>
-            <div column align-center class="service-prices" :style="{'margin-top': servicePrices.length <= 10 ? '50px': '10px' }">
+            <div column align-center class="service-prices" :style="{'margin-top': servicePrices.length <= 10 ? '50px': '20px' }">
                 <div class="final-price">
                     <p>Всього: {{ finalPrice }} <span class="currency">₴</span></p>
                 </div>
@@ -20,6 +20,7 @@
 <script>
 import PricesTable from './../pricesTable/PricesTable';
 import utils from './../../../../mixins/utils.js';
+import formatter from 'accounting';
 
 export default {
     mixins: [utils],
@@ -45,7 +46,16 @@ export default {
             ]);
         },
         finalPrice() {
-            return this.servicePrices.reduce((price, serviceData) => this.addTwoFloats(price, serviceData.price), 0.0);
+            const finalPrice =  this.servicePrices.reduce((price, serviceData) => this.addTwoFloats(price, serviceData.price), 0.0);
+            return formatter.formatMoney(finalPrice, {
+                symbol: '',
+                precision: 2,
+                thousand: ' ',
+                format: {
+                    pos : '%v%s',
+                    zero: '%v%s'
+                }
+            });
         }
     },
     components: {

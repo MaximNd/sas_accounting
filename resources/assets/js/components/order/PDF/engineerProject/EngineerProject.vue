@@ -10,22 +10,23 @@
                 :headers="headers"
                 :data="tableData">
             </appPricesTable>
+            <div class="eng-project-prices" :style="{'margin-top': gruppedEquipment.length <= 10 ? '50px': '20px' }">
+                <div class="equipment-price">
+                    <p>Обладнання: {{ formattedEquipmentPrice }} <span class="currency">₴</span></p>
+                </div>
+                <div class="installation-price">
+                    <p>Монтаж обладнання: {{ formattedInstallationPrice }} <span class="currency">₴</span></p>
+                </div>
+                <div class="transport-price">
+                    <p>Транспортні витрати: {{ formattedTransportPrice }} <span class="currency">₴</span></p>
+                </div>
+                <div class="final-price">
+                    <p>Всього: {{ formattedFinalPrice }} <span class="currency">₴</span></p>
+                </div>
+            </div>
         </v-flex>
         <v-flex>
-            <v-layout column align-center class="eng-project-prices">
-                <v-flex class="equipment-price">
-                    <p>Обладнання: {{ equipmentPrice }} <span class="currency">₴</span></p>
-                </v-flex>
-                <v-flex class="installation-price">
-                    <p>Монтаж обладнання: {{ installationPrice }} <span class="currency">₴</span></p>
-                </v-flex>
-                <v-flex class="transport-price">
-                    <p>Транспортні витрати: {{ transportPrice }} <span class="currency">₴</span></p>
-                </v-flex>
-                <v-flex class="final-price">
-                    <p>Всього: {{ finalPrice }} <span class="currency">₴</span></p>
-                </v-flex>
-            </v-layout>
+
         </v-flex>
         <div class="bottom-logo-eng-project">
             <img src="/storage/image4.png" alt="logo">
@@ -36,6 +37,7 @@
 <script>
 import PricesTable from './../pricesTable/PricesTable';
 import utils from './../../../../mixins/utils.js';
+import formatter from 'accounting';
 
 export default {
     mixins: [utils],
@@ -59,6 +61,15 @@ export default {
     },
     data() {
         return {
+            formatterSettings: {
+                symbol: '',
+                precision: 2,
+                thousand: ' ',
+                format: {
+                    pos : '%v%s',
+                    zero: '%v%s'
+                }
+            },
             headers: [
                 'Тип',
                 'шт.',
@@ -69,13 +80,23 @@ export default {
     computed: {
         tableData() {
             return this.gruppedEquipment.map(row => [
-                { text: row.type, classes: 'text-xs-left' },
-                { text: row.count },
-                { text: row.price }
+                { text: row.type, classes: 'text-xs-left small-text bold-text' },
+                { text: row.count, classes: 'small-text bold-text' },
+                { text: row.price, classes: 'small-text bold-text' }
             ]);
         },
-        finalPrice() {
-            return this.addTwoFloats(this.equipmentPrice, this.addTwoFloats(this.installationPrice, this.transportPrice));
+        formattedEquipmentPrice() {
+            return formatter.formatMoney(this.equipmentPrice, this.formatterSettings);
+        },
+        formattedInstallationPrice() {
+            return formatter.formatMoney(this.installationPrice, this.formatterSettings);
+        },
+        formattedTransportPrice() {
+            return formatter.formatMoney(this.transportPrice, this.formatterSettings);
+        },
+        formattedFinalPrice() {
+            const finalPrice = this.addTwoFloats(this.equipmentPrice, this.addTwoFloats(this.installationPrice, this.transportPrice));
+            return formatter.formatMoney(finalPrice, this.formatterSettings);
         }
     },
     components: {
@@ -95,6 +116,10 @@ export default {
         text-align: center;
         color: #4D4D4D;
         margin-top: 25px;
+    }
+
+    .bg-eng-project .eng-project-prices {
+        text-align: center;
     }
 
     .bg-eng-project .eng-project-prices p {
