@@ -85,7 +85,7 @@
                     </v-flex>
                     <v-flex xs12>
                         <v-textarea
-                            v-validate="'required'"
+                            v-validate
                             data-vv-name="comment"
                             :error-messages="errors.collect('comment')"
                             v-model="clientData.comment"
