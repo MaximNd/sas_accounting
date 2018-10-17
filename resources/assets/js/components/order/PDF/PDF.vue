@@ -111,12 +111,16 @@
             <div class="html2pdf__page-break"></div>
         </template>
         <template v-if="servicesPreviewNames[pdfLayoutNames.ENGINEER_PROJECT]">
-            <appEngineerProject
-                :gruppedEquipment="gruppedEquipment"
-                :equipmentPrice="equipmentPrice"
-                :installationPrice="installationPrice"
-                :transportPrice="transportPrice"/>
-            <div class="html2pdf__page-break"></div>
+            <template v-for="(slice, index) in slicedGruppedEquipment">
+                <appEngineerProject
+                    :key="`eng-project-${index}`"
+                    :gruppedEquipment="slice"
+                    :equipmentPrice="equipmentPrice"
+                    :installationPrice="installationPrice"
+                    :transportPrice="transportPrice"
+                    :showPrices="index + 1 === slicedGruppedEquipment.length"/>
+                <div class="html2pdf__page-break" :key="`eng-project-page-break-${index}`"></div>
+            </template>
         </template>
         <template v-if="servicePrices.length > 0">
             <appServicePrices
@@ -298,6 +302,14 @@ export default {
                     transportImage: gpsRow.image
                 };
             });
+        },
+        slicedGruppedEquipment() {
+            const sliced = [];
+            const maxSize = 8;
+            for (let i = 0; i < this.gruppedEquipment.length; i += maxSize) {
+                sliced.push(this.gruppedEquipment.slice(i, i + maxSize));
+            }
+            return sliced;
         },
         servicesPreviewNames() {
             return this.services.reduce((selectedServices, service) => {

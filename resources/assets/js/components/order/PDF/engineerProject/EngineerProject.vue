@@ -5,12 +5,12 @@
                 Інженерний проект
             </div>
         </v-flex>
-        <v-flex>
+        <v-flex :d-flex="!showPrices" :align-center="!showPrices" :style="{ 'flex-grow': showPrices ? false : 1 }">
             <appPricesTable
                 :headers="headers"
                 :data="tableData">
             </appPricesTable>
-            <div class="eng-project-prices" :style="{'margin-top': gruppedEquipment.length <= 10 ? '50px': '20px' }">
+            <div v-if="showPrices" class="eng-project-prices" :style="{'margin-top': gruppedEquipment.length <= 10 ? '50px': '20px' }">
                 <div class="equipment-price">
                     <p>Обладнання: {{ formattedEquipmentPrice }} <span class="currency">₴</span></p>
                 </div>
@@ -42,6 +42,11 @@ import formatter from 'accounting';
 export default {
     mixins: [utils],
     props: {
+        showPrices: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         gruppedEquipment: {
             type: Array,
             required: true
