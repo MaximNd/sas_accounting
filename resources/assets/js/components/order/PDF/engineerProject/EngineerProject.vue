@@ -13,6 +13,9 @@
         </v-flex>
         <v-flex>
             <v-layout column align-center class="eng-project-prices">
+                <v-flex class="equipment-price">
+                    <p>Обладнання: {{ equipmentPrice }} <span class="currency">₴</span></p>
+                </v-flex>
                 <v-flex class="installation-price">
                     <p>Монтаж обладнання: {{ installationPrice }} <span class="currency">₴</span></p>
                 </v-flex>
@@ -32,11 +35,17 @@
 
 <script>
 import PricesTable from './../pricesTable/PricesTable';
+import utils from './../../../../mixins/utils.js';
 
 export default {
+    mixins: [utils],
     props: {
         gruppedEquipment: {
             type: Array,
+            required: true
+        },
+        equipmentPrice: {
+            type: Number,
             required: true
         },
         installationPrice: {
@@ -44,10 +53,6 @@ export default {
             required: true
         },
         transportPrice: {
-            type: Number,
-            required: true
-        },
-        finalPrice: {
             type: Number,
             required: true
         }
@@ -68,6 +73,9 @@ export default {
                 { text: row.count },
                 { text: row.price }
             ]);
+        },
+        finalPrice() {
+            return this.addTwoFloats(this.equipmentPrice, this.addTwoFloats(this.installationPrice, this.transportPrice));
         }
     },
     components: {
@@ -106,6 +114,7 @@ export default {
         font-weight: bold;
     }
 
+    .bg-eng-project .eng-project-prices .equipment-price,
     .bg-eng-project .eng-project-prices .installation-price,
     .bg-eng-project .eng-project-prices .transport-price {
         font-family: ProximaNova;

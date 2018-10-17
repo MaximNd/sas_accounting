@@ -113,9 +113,9 @@
         <template v-if="servicesPreviewNames[pdfLayoutNames.ENGINEER_PROJECT]">
             <appEngIneerProject
                 :gruppedEquipment="gruppedEquipment"
+                :equipmentPrice="equipmentPrice"
                 :installationPrice="installationPrice"
-                :transportPrice="transportPrice"
-                :finalPrice="finalPrice"/>
+                :transportPrice="transportPrice"/>
             <div class="html2pdf__page-break"></div>
         </template>
         <template v-if="optionalServices.length > 0">
@@ -200,15 +200,15 @@ export default {
             type: Array,
             required: true
         },
+        equipmentPrice: {
+            type: Number,
+            required: true
+        },
         installationPrice: {
             type: Number,
             required: true
         },
         transportPrice: {
-            type: Number,
-            required: true
-        },
-        finalPrice: {
             type: Number,
             required: true
         }

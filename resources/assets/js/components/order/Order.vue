@@ -562,6 +562,7 @@
                                 :services="orderData.services"
                                 :gpsData="orderData.GPSData"
                                 :gruppedEquipment="gruppedEquipment"
+                                :equipmentPrice="allEquipmentPrice"
                                 :installationPrice="allInstallationPrice"
                                 :transportPrice="transportationPrice"
                                 :finalPrice="finalPrice"></appPDF>
