@@ -42,7 +42,9 @@ class ClientController extends Controller
         $this->validate($request, [
             'person_full_name' => 'required',
             'company_name' => 'required',
+            'email' => 'required|email',
             'area' => 'required',
+            'address' => 'required',
             'telephone' => 'required|max:20'
         ]);
 
@@ -57,6 +59,10 @@ class ClientController extends Controller
                 'message' => 'You are not allowed to update client'
             ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
         }
+        $this->validate($request, [
+            'email' => 'email',
+            'telephone' => 'max:20'
+        ]);
 
         Client::where('id', '=', $id)->update($request->all());
     }

@@ -17,8 +17,10 @@ $factory->define(App\Client::class, function (Faker $faker) {
     return [
         'person_full_name' => $faker->lastName.' '.$faker->firstName.' '.$faker->lastName,
         'company_name' => 'company:'.$faker->company,
+        'email' => $faker->safeEmail,
         'area' => $faker->numberBetween(50, 500),
         'telephone' => $faker->phoneNumber,
+        'address' => $faker->address,
         'comment' => $faker->text(50)
     ];
 });

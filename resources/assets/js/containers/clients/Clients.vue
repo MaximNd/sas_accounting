@@ -51,8 +51,10 @@
                                 <router-link :to="`/clients/${props.item.id}`">{{ props.item.person_full_name }}</router-link>
                             </td>
                             <td>{{ props.item.company_name }}</td>
+                            <td>{{ props.item.email }}</td>
                             <td>{{ props.item.area }}</td>
                             <td>{{ props.item.telephone }}</td>
+                            <td>{{ props.item.address }}</td>
                             <td>{{ props.item.comment }}</td>
                             <td v-if="$auth.check('admin')" class="justify-end layout px-0">
                                 <v-btn
@@ -115,8 +117,10 @@ export default {
                     value: 'person_full_name'
                 },
                 { text: 'Компания', value: 'company_name' },
+                { text: 'E-mail', value: 'email' },
                 { text: 'Площадь', value: 'area', width: '15px' },
                 { text: 'Телефон', value: 'telephone' },
+                { text: 'Физ. адрес', value: 'address' },
                 { text: 'Коментарий', value: 'comment' },
 
             ];

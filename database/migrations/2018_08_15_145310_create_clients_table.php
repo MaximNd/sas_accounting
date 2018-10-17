@@ -17,8 +17,10 @@ class CreateClientsTable extends Migration
             $table->increments('id');
             $table->string('person_full_name');
             $table->string('company_name');
+            $table->string('email');
             $table->double('area');
             $table->string('telephone');
+            $table->string('address');
             $table->text('comment')->nullable();
 
             $table->softDeletes();

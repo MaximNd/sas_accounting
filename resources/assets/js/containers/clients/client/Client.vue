@@ -25,10 +25,16 @@
                                 <v-text-field v-model="client.company_name" label="Компания" readonly></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
+                                <v-text-field v-model="client.email" label="E-mail" readonly></v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
                                 <v-text-field v-model="client.area" label="Площадь" readonly></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
                                 <v-text-field v-model="client.telephone" label="Телефон" readonly></v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
+                                <v-text-field v-model="client.address" label="Физ. адрес" readonly></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
                                 <v-textarea v-model="client.comment" label="Коментарий" readonly></v-textarea>
@@ -88,8 +94,10 @@ export default {
                 id: '',
                 person_full_name: '',
                 company_name: '',
+                client: '',
                 area: '',
                 telephone: '',
+                address: '',
                 comment: '',
                 orders: []
             },

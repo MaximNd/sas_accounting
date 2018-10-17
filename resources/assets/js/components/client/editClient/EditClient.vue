@@ -15,6 +15,15 @@
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field
+                                v-validate="'required|email'"
+                                data-vv-name="email"
+                                :error-messages="errors.collect('email')"
+                                v-model="editedClient.email"
+                                label="E-mail"
+                                required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-text-field
                                 v-validate="'decimal:2'"
                                 data-vv-name="area"
                                 :error-messages="errors.collect('area')"
@@ -29,6 +38,15 @@
                                 :error-messages="errors.collect('telephone')"
                                 v-model="editedClient.telephone"
                                 label="Телефон"></v-text-field>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-text-field
+                                v-validate="'required'"
+                                data-vv-name="address"
+                                :error-messages="errors.collect('address')"
+                                v-model="editedClient.address"
+                                label="Физ. адрес"
+                                required></v-text-field>
                         </v-flex>
                         <v-flex xs12>
                             <v-textarea v-model="editedClient.comment" label="Коментарий"></v-textarea>
@@ -66,8 +84,10 @@ export default {
             editedClient: {
                 person_full_name: '',
                 company_name: '',
+                email: '',
                 area: '',
                 telephone: '',
+                address: '',
                 comment: ''
             }
         };

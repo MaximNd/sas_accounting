@@ -48,6 +48,15 @@
                     </v-flex>
                     <v-flex xs12>
                         <v-text-field
+                            v-validate="'required|email'"
+                            data-vv-name="email"
+                            :error-messages="errors.collect('email')"
+                            v-model="clientData.email"
+                            label="E-mail"
+                            required></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-text-field
                             v-validate="'required|decimal:2'"
                             data-vv-name="area"
                             :error-messages="errors.collect('area')"
@@ -63,6 +72,15 @@
                             :error-messages="errors.collect('telephone')"
                             v-model="clientData.telephone"
                             label="Телефон"
+                            required></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-text-field
+                            v-validate="'required'"
+                            data-vv-name="address"
+                            :error-messages="errors.collect('address')"
+                            v-model="clientData.address"
+                            label="Физ. адрес"
                             required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
@@ -110,9 +128,11 @@ export default {
             similarClients: [],
             clientData: {
                 person_full_name: '',
+                email: '',
                 company_name: '',
                 area: '',
                 telephone: '',
+                address: '',
                 comment: ''
             }
         };
@@ -133,7 +153,8 @@ export default {
                     if (!this.isShowCancelButton && !ignoreSimilarity) {
                         this.clients.forEach(client => {
                             if (stringSimilarity.compareTwoStrings(client.person_full_name, this.clientData.person_full_name) >= 0.7 ||
-                                stringSimilarity.compareTwoStrings(client.company_name, this.clientData.company_name) >= 0.7
+                                stringSimilarity.compareTwoStrings(client.company_name, this.clientData.company_name) >= 0.7 ||
+                                stringSimilarity.compareTwoStrings(client.email, this.clientData.email) >= 0.7
                             ) {
                                 this.similarClients.push(client);
                             }
