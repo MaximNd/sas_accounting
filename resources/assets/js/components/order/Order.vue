@@ -565,7 +565,8 @@
                                 :equipmentPrice="allEquipmentPrice"
                                 :installationPrice="allInstallationPrice"
                                 :transportPrice="transportationPrice"
-                                :finalPrice="finalPrice"></appPDF>
+                                :finalPrice="finalPrice"
+                                :servicePrices="servicePrices"></appPDF>
                         </v-card-text>
                     </v-card>
                 </v-expansion-panel-content>
@@ -889,24 +890,40 @@ export default {
             }));
             return gruppedEquipment;
         },
-        priceForArea() {
-            const area = (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);
-            const priceForServices = this.orderData.services.reduce((price, service) => {
+        area() {
+            return (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);;
+        },
+        servicePrices() {
+            return this.orderData.services.reduce((servicePrices, service) => {
                 if (service.pdf_layout === pdfLayoutNames.INTEGRATION_1C) {
+                    let price = 0.0;
                     for (let i = 0; i < service.prices_for_ranges.length; ++i) {
                         if (i + 1 === service.prices_for_ranges.length) {
-                            if (area >= parseFloat(service.prices_for_ranges[i].from)) {
-                                return this.addTwoFloats(price, this.multiplyTwoFloats(parseFloat(service.prices_for_ranges[i].price), area));
+                            if (this.area >= parseFloat(service.prices_for_ranges[i].from)) {
+                                price = this.multiplyTwoFloats(parseFloat(service.prices_for_ranges[i].price), this.area);
+                                break;
                             }
-                        } else if (area >= parseFloat(service.prices_for_ranges[i].from) && area < parseFloat(service.prices_for_ranges[i].to)) {
-                            return this.addTwoFloats(price, this.multiplyTwoFloats(parseFloat(service.prices_for_ranges[i].price), area));
+                        } else if (this.area >= parseFloat(service.prices_for_ranges[i].from) && this.area < parseFloat(service.prices_for_ranges[i].to)) {
+                            price = this.multiplyTwoFloats(parseFloat(service.prices_for_ranges[i].price), this.area);
+                            break;
                         }
                     }
-                } else {
-                    return this.addTwoFloats(price, this.multiplyTwoFloats(service.price, area))
+                    servicePrices.push({
+                        service,
+                        price
+                    });
+                } else if (service.pdf_layout !== pdfLayoutNames.ENGINEER_PROJECT) {
+                    servicePrices.push({
+                        service,
+                        price: this.multiplyTwoFloats(service.price, this.area)
+                    });
                 }
-            }, 0);
-            const finalPriceForArea = this.orderData.optional_services ? this.orderData.optional_services.reduce((price, service) => this.addTwoFloats(price, this.multiplyTwoFloats(service.price, area)), priceForServices) : priceForServices;
+                return servicePrices;
+            }, []);
+        },
+        priceForArea() {
+            const priceForServices = this.servicePrices.reduce((price, serviceData) => this.addTwoFloats(price, serviceData.price), 0.0);
+            const finalPriceForArea = this.orderData.optional_services ? this.orderData.optional_services.reduce((price, service) => this.addTwoFloats(price, this.multiplyTwoFloats(service.price, this.area)), priceForServices) : priceForServices;
             return finalPriceForArea;
         },
         priceForDays() {

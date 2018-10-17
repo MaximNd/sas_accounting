@@ -111,12 +111,16 @@
             <div class="html2pdf__page-break"></div>
         </template>
         <template v-if="servicesPreviewNames[pdfLayoutNames.ENGINEER_PROJECT]">
-            <appEngIneerProject
+            <appEngineerProject
                 :gruppedEquipment="gruppedEquipment"
                 :equipmentPrice="equipmentPrice"
                 :installationPrice="installationPrice"
                 :transportPrice="transportPrice"/>
             <div class="html2pdf__page-break"></div>
+        </template>
+        <template v-if="servicePrices.length > 0">
+            <appServicePrices
+                :servicePrices="servicePrices"/>
         </template>
         <template v-if="optionalServices.length > 0">
             <template v-for="(optionalService, index) in optionalServices">
@@ -167,7 +171,9 @@ import SoilHardnessMeasuring from './soilHardnessMeasuring/SoilHardnessMeasuring
 import Integration1C from './1CIntegration/1CIntegration';
 import Prices1C from './1CIntegration/1CPrices';
 
-import EngIneerProject from './engineerProject/EngineerProject';
+import EngineerProject from './engineerProject/EngineerProject';
+
+import ServicePrices from './servicePrices/ServicePrices';
 
 import OptionalServices from './optionalServices/OptionalServices';
 
@@ -187,6 +193,11 @@ export default {
             default: () => []
         },
         services: {
+            type: Array,
+            required: false,
+            default: () => []
+        },
+        servicePrices: {
             type: Array,
             required: false,
             default: () => []
@@ -319,7 +330,8 @@ export default {
         appSoilHardnessMeasuring: SoilHardnessMeasuring,
         appIntegration1C: Integration1C,
         appPrices1C: Prices1C,
-        appEngIneerProject: EngIneerProject,
+        appEngineerProject: EngineerProject,
+        appServicePrices: ServicePrices,
         appOptionalServices: OptionalServices,
         appContacts: Contacts
     }

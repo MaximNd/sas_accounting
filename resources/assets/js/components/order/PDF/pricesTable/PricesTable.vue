@@ -88,11 +88,22 @@ export default {
         margin: 0;
     }
 
-    .prices-table table td {
+    .prices-table table tr td {
         font-family: ProximaNovaBold;
         font-size: 28px;
         padding: 5px 10px;
         text-align: center;
+    }
+
+    .prices-table table tr td.small-text {
+        font-family: ProximaNova;
+        font-size: 20px;
+        font-weight: 600;
+        padding: 3px 8px;
+    }
+
+    .prices-table table tr td.bold-text {
+        font-family: ProximaNovaBold;
     }
 
     .prices-table .notation {
