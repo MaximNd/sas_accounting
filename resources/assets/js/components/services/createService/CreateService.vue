@@ -80,7 +80,7 @@
                                 </v-container>
                             </v-flex>
                         </template>
-                        <v-flex xs12 offset-sm1 sm10 v-else-if="isSeriveSelected">
+                        <v-flex xs12 offset-sm1 sm10 v-else-if="isSeriveSelected && !isEngProjectSelected">
                             <v-text-field
                                 v-validate="'required|decimal:2'"
                                 data-vv-name="price"
@@ -103,7 +103,14 @@
                     <span class="headline">Превью макета {{ newService.pdf_layout }}</span>
                 </v-card-title>
                 <v-card-text :class="{ 'service-preview': $vuetify.breakpoint.mdAndDown }">
-                    <appPDF :gpsData="fakeGPSData" :services="[newService]" oneServicePreview></appPDF>
+                    <appPDF
+                        :gpsData="fakeGPSData"
+                        :services="[newService]"
+                        :transportPrice="fakeTransportPrice"
+                        :installationPrice="fakeInstallationPrice"
+                        :equipmentPrice="fakeEquipmentPrice"
+                        :gruppedEquipment="fakeGruppedEquipment"
+                        oneServicePreview></appPDF>
                 </v-card-text>
             </template>
             <template v-else>
@@ -138,6 +145,10 @@ export default {
             fakeGPSData: [
                 {id:1,order_id:1,order:1,image:'/storage/transport_fake.png',mark:'Ms. Golda Mosciski',model:'',year_of_issue:'',fuel_type:'',power:'',number:'',gps_tracker:{id:13,image:'equipment_FAKE.png',name:'Model:493',incoming_price:402.82,price:289.78,installation_price_for_one:742.6,installation_price_for_two:592.6,installation_price_for_three:542.6,type:'Датчики уровня топлива','pdf_layout':null,description:'Ut esse architecto vero nostrum sunt.',deleted_at:null,created_at:'2018-09-28 15:05:33',updated_at:'2018-09-28 15:05:33'},fuel_gauge:[{id:13,image:'equipment_FAKE.png',name:'Model:500',incoming_price:402.82,price:289.78,installation_price_for_one:742.6,installation_price_for_two:592.6,installation_price_for_three:542.6,type:'GPS-трекеры','pdf_layout':null,description:'Ut esse architecto vero nostrum sunt.',deleted_at:null,created_at:'2018-09-28 15:05:33',updated_at:'2018-09-28 15:05:33'},{id:13,image:'/storage/equipment_FAKE.png',name:'Model:500',incoming_price:402.82,price:289.78,installation_price_for_one:742.6,installation_price_for_two:592.6,installation_price_for_three:542.6,type:'Датчики уровня топлива','pdf_layout':null,description:'Ut esse architecto vero nostrum sunt.',deleted_at:null,created_at:'2018-09-28 15:05:33',updated_at:'2018-09-28 15:05:33'}],counter:'',rf_id:'',reader_of_trailed_equipment:'',can_reader:'',deaerator:'',additional_equipment:[],cn03:[],rs01:[],created_at:'2018-09-28 15:29:18',updated_at:'2018-09-28 15:29:18'}
             ],
+            fakeTransportPrice: 19435,
+            fakeInstallationPrice: 200123,
+            fakeEquipmentPrice: 10000,
+            fakeGruppedEquipment: [{type:'Gps-1',price:6000,count:3},{type:'GPS-2',price:300,count:1}],
             pending: false,
             pdfLayoutNames: [
                 pdfLayoutNames.CONNEC_TO_PLATFORM,
@@ -179,6 +190,9 @@ export default {
         },
         is1CSelected() {
             return this.newService.pdf_layout === pdfLayoutNames.INTEGRATION_1C;
+        },
+        isEngProjectSelected() {
+            return this.newService.pdf_layout === pdfLayoutNames.ENGINEER_PROJECT;
         }
     },
     methods: {
