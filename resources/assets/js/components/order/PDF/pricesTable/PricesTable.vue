@@ -21,6 +21,11 @@
                 Усі розрахунки проводимо в гривні, ціна вказана з урахуванням ПДВ.
             </p>
         </div>
+        <div class="dollar-date" v-if="dollarDate">
+            <p>
+                * курс вказаний на дату {{ dollarDateReversed }}
+            </p>
+        </div>
     </div>
 </template>
 
@@ -34,6 +39,16 @@ export default {
         data: {
             type: Array,
             required: true
+        },
+        dollarDate: {
+            type: String,
+            required: false,
+            default: ''
+        }
+    },
+    computed: {
+        dollarDateReversed() {
+            return this.dollarDate.split('-').reverse().join('-');
         }
     }
 }
@@ -117,6 +132,19 @@ export default {
     .prices-table .notation p {
         margin-top: 10px;
         margin-left: 7px;
+        margin-bottom: 0;
+    }
+
+    .prices-table .dollar-date {
+        font-family: ProximaNova;
+        margin: 0 auto;
+        width: 75%;
+        color: rgb(218, 0, 0);
+    }
+
+    .prices-table .dollar-date p {
+        margin-top: 6px;
+        margin-left: 23px;
         margin-bottom: 0;
     }
 </style>

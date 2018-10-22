@@ -559,6 +559,7 @@
                             <appPDF
                                 v-scroll="onScroll"
                                 :dollarRate="orderData.dollar_rate"
+                                :dollarDate="orderData.dollar_date"
                                 :optionalServices="orderData.optional_services"
                                 :services="orderData.services"
                                 :gpsData="orderData.GPSData"

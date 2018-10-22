@@ -117,6 +117,7 @@
                     :equipmentPrice="equipmentPrice"
                     :installationPrice="installationPrice"
                     :transportPrice="transportPrice"
+                    :dollarDate="dollarDate"
                     :showPrices="index + 1 === slicedGruppedEquipment.length"/>
                 <div class="html2pdf__page-break" :key="`eng-project-page-break-${index}`"></div>
             </template>
@@ -124,6 +125,7 @@
         <template v-if="servicePrices.length > 0">
             <appServicePrices
                 :dollarRate="dollarRate"
+                :dollarDate="dollarDate"
                 :servicePrices="servicePrices"/>
         </template>
         <template v-if="optionalServices.length > 0">

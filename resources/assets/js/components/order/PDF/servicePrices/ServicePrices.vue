@@ -3,7 +3,8 @@
         <v-flex class="service-prices-table">
             <appPricesTable
                 :headers="headers"
-                :data="tableData">
+                :data="tableData"
+                :dollarDate="dollarDate">
             </appPricesTable>
             <div column align-center class="service-prices">
                 <div class="final-price">
@@ -32,6 +33,11 @@ export default {
         dollarRate: {
             type: Number,
             required: true
+        },
+        dollarDate: {
+            type: String,
+            required: false,
+            default: ''
         }
     },
     data() {

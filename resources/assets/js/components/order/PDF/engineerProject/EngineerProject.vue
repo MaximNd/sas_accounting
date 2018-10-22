@@ -8,7 +8,8 @@
         <v-flex :d-flex="!showPrices" :align-center="!showPrices" :style="{ 'flex-grow': showPrices ? false : 1 }">
             <appPricesTable
                 :headers="headers"
-                :data="tableData">
+                :data="tableData"
+                :dollarDate="dollarDate">
             </appPricesTable>
             <div v-if="showPrices" class="eng-project-prices" :style="{'margin-top': gruppedEquipment.length <= 10 ? '50px': '20px' }">
                 <div class="equipment-price">
@@ -62,6 +63,11 @@ export default {
         transportPrice: {
             type: Number,
             required: true
+        },
+        dollarDate: {
+            type: String,
+            required: false,
+            default: ''
         }
     },
     data() {
