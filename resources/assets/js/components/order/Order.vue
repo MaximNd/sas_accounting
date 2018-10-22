@@ -1657,8 +1657,8 @@ export default {
             const opt = {
                 margin:       0,
                 filename:     'myfile.pdf',
-                image:        { type: 'jpeg', quality: 0.95 },
-                html2canvas:  { scale: 1, imageTimeout: 0 },
+                image:        { type: 'jpeg', quality: 0.96 },
+                html2canvas:  { scale: 2, imageTimeout: 0 },
                 jsPDF:        { unit: 'pt', format, orientation: 'l' }
             };
             const childreninWrapperCount = 20;
