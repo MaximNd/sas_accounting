@@ -68,7 +68,7 @@ class PriceListController extends Controller
             } else {
                 $this->validate($request, [
                     'name' => 'required',
-                    'price' => 'required|numeric',
+                    'price' => 'nullable|numeric',
                     'pdf_layout' => ['required', Rule::in($this->pdf_layout_names)]
                 ]);
             }
