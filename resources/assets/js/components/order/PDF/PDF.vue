@@ -20,7 +20,6 @@
                         <v-flex xs2>
                             <div class="last-bottom-img-wrapper">
                                 <img class="dnipro-img bottom-imgs" src="/storage/image9.png" alt="">
-                                <span class="text-dnipro font-weight-medium">Dnipro</span>
                             </div>
                         </v-flex>
                     </v-layout>
@@ -191,6 +190,11 @@ export default {
             type: Number,
             required: false,
             default: 0
+        },
+        dollarDate: {
+            type: String,
+            required: false,
+            default: ''
         },
         oneServicePreview: {
             type: Boolean,
@@ -444,6 +448,7 @@ export default {
         font-size: 76px !important;
         text-align: center;
         color: #fff;
+        margin-top: 45px;
         margin-bottom: 0;
         line-height: 1.5;
     }
@@ -464,17 +469,7 @@ export default {
     }
 
     #page-1 .dnipro-img {
-        margin-top: -32px;
-    }
-
-    #page-1 .text-dnipro {
-        display: inline-block;
-        font-family: ProximaNova;
-        font-size: 30px;
-        color: #fff;
-        text-align: center;
-        margin-left: 36px;
-        margin-top: -30px;
+        margin-top: 0px;
     }
 
 </style>

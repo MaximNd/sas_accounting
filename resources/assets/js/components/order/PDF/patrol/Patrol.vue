@@ -1,6 +1,6 @@
 <template>
     <v-layout class="page" id="page-11">
-        <appLeftImage image="/storage/image46.jpg" size="350% 101%" positionX="55%" />
+        <appLeftImage image="/storage/image46.png" size="101%" positionX="55%" />
         <appServiceData :data="data" />
     </v-layout>
 </template>

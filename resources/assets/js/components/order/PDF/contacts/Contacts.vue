@@ -60,7 +60,8 @@ export default {
 <style scoped>
     #page-23 {
         background-image: url('/storage/image5__.jpg');
-        background-size: cover;
+        background-size: 101%;
+        background-position-x: 55%;
         background-position-y: 71%;
     }
 
