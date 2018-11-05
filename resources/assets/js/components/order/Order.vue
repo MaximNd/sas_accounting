@@ -567,6 +567,7 @@
                                 :equipmentPrice="allEquipmentPrice"
                                 :installationPrice="allInstallationPrice"
                                 :transportPrice="transportationPrice"
+                                :priceForDays="priceForDays"
                                 :finalPrice="finalPrice"
                                 :servicePrices="servicePrices"></appPDF>
                         </v-card-text>

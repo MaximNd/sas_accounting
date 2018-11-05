@@ -117,6 +117,7 @@
                     :equipmentPrice="equipmentPrice"
                     :installationPrice="installationPrice"
                     :transportPrice="transportPrice"
+                    :priceForDays="priceForDays"
                     :dollarDate="dollarDate"
                     :showPrices="index + 1 === slicedGruppedEquipment.length"/>
                 <div class="html2pdf__page-break" :key="`eng-project-page-break-${index}`"></div>
@@ -236,6 +237,10 @@ export default {
             required: true
         },
         transportPrice: {
+            type: Number,
+            required: true
+        },
+        priceForDays: {
             type: Number,
             required: true
         }

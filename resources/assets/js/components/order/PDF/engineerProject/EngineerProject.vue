@@ -11,7 +11,10 @@
                 :data="tableData"
                 :dollarDate="dollarDate">
             </appPricesTable>
-            <div v-if="showPrices" class="eng-project-prices" :style="{'margin-top': gruppedEquipment.length <= 10 ? '50px': '20px' }">
+            <div v-if="showPrices" class="eng-project-prices" :style="{'margin-top': gruppedEquipment.length <= 10 ? '40px': '15px' }">
+                <div class="days-price">
+                    <p>Відрядні: {{ formattedPriceForDays }} <span class="currency">₴</span></p>
+                </div>
                 <div class="equipment-price">
                     <p>Обладнання: {{ formattedEquipmentPrice }} <span class="currency">₴</span></p>
                 </div>
@@ -64,6 +67,10 @@ export default {
             type: Number,
             required: true
         },
+        priceForDays: {
+            type: Number,
+            required: true
+        },
         dollarDate: {
             type: String,
             required: false,
@@ -105,10 +112,14 @@ export default {
         formattedTransportPrice() {
             return formatter.formatMoney(this.transportPrice, this.formatterSettings);
         },
+        formattedPriceForDays() {
+            return formatter.formatMoney(this.priceForDays, this.formatterSettings);
+        },
         formattedFinalPrice() {
-            const finalPrice = this.addTwoFloats(this.equipmentPrice, this.addTwoFloats(this.installationPrice, this.transportPrice));
+            const finalPrice = this.addTwoFloats(this.addTwoFloats(this.equipmentPrice, this.priceForDays), this.addTwoFloats(this.installationPrice, this.transportPrice));
             return formatter.formatMoney(finalPrice, this.formatterSettings);
-        }
+        },
+
     },
     components: {
         appPricesTable: PricesTable
@@ -152,7 +163,8 @@ export default {
 
     .bg-eng-project .eng-project-prices .equipment-price,
     .bg-eng-project .eng-project-prices .installation-price,
-    .bg-eng-project .eng-project-prices .transport-price {
+    .bg-eng-project .eng-project-prices .transport-price,
+    .bg-eng-project .eng-project-prices .days-price {
         font-family: ProximaNova;
         font-size: 28px;
         color: rgb(77, 77, 77);
