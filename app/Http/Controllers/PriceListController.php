@@ -134,7 +134,9 @@ class PriceListController extends Controller
         DB::transaction(function () use ($request, $id) {
             if ($request->input('isService')) {
                 $serviceDataToUpdate = $request->input('service');
-                $serviceDataToUpdate['prices_for_ranges'] = json_encode($serviceDataToUpdate['prices_for_ranges']);
+                if (array_key_exists('prices_for_ranges', $serviceDataToUpdate)) {
+                    $serviceDataToUpdate['prices_for_ranges'] = json_encode($serviceDataToUpdate['prices_for_ranges']);
+                }
                 PriceList::where('id', $id)->update($serviceDataToUpdate);
             } else {
                 PriceList::where('id', $id)->update($request->input('equipment'));
