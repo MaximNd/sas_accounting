@@ -18,9 +18,16 @@
                 <v-flex xs7>
                     <v-layout column>
                         <v-flex>
-                            <div class="transport-image">
-                                <img :src="transportImage" alt="transport">
-                            </div>
+                            <v-layout column class="transport-container">
+                                <v-flex style="flex-grow: 1;">
+                                    <div class="transport-image">
+                                        <img :src="transportImage" alt="transport">
+                                    </div>
+                                </v-flex>
+                                <v-flex style="flex-grow: 2;" d-flex justify-center align-center>
+                                    <p class="transport-name">{{ transportName }}</p>
+                                </v-flex>
+                            </v-layout>
                         </v-flex>
                         <v-flex>
                             <ul class="secondary-data-list">
@@ -62,6 +69,10 @@ export default {
             required: true
         },
         transportImage: {
+            type: String,
+            required: true
+        },
+        transportName: {
             type: String,
             required: true
         }
@@ -116,15 +127,27 @@ export default {
         justify-content: flex-start;
     }
 
-    .transport-image {
+    .transport-container {
         height: 500px;
     }
 
-    .transport-image img {
-        /* max-width: 100%; */
-        max-height: 80%;
+    .transport-image {
+        height: 80%;
+        width: 80%;
         margin: 0 auto;
+    }
+
+    .transport-image img {
+        max-width: 100%;
+        max-height: 80%;
         display: block;
+    }
+
+    .transport-name {
+        font-family: ProximaNovaBlack;
+        text-align: center;
+        font-size: 32px;
+        margin-bottom: 0px;
     }
 
     .gps-data-bottom-logo {

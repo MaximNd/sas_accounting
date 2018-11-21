@@ -67,7 +67,8 @@
                 <appGPSTrackingData
                 :key="`gps-data-${index}`"
                 :equipment="gpsData.equipment"
-                :transportImage="gpsData.transportImage" />
+                :transportImage="gpsData.transportImage"
+                :transportName="gpsData.transportName" />
                 <div class="html2pdf__page-break" :key="`gps-data-page-break-${index}`"></div>
             </template>
         </template>
@@ -323,7 +324,8 @@ export default {
                         }
                         return equipment;
                     }, []),
-                    transportImage: gpsRow.image
+                    transportImage: gpsRow.image,
+                    transportName: `${(this.isNull(gpsRow.mark) || this.isUndefined(gpsRow.mark)) ? '' : gpsRow.mark}${(this.isNull(gpsRow.model) || this.isUndefined(gpsRow.model)) ? '' : ` ${gpsRow.model}`}`
                 };
             });
         },
