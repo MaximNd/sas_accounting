@@ -150,8 +150,9 @@ export default {
             fakeGruppedEquipment: [{type:'Gps-1',price:6000,count:3},{type:'GPS-2',price:300,count:1}],
             pending: false,
             editedService: {},
-                pdfLayoutNames: [
+            pdfLayoutNames: [
                 pdfLayoutNames.CONNEC_TO_PLATFORM,
+                pdfLayoutNames.MONITORING,
                 pdfLayoutNames.FIELD_MAPPING_BY_DRONES,
                 pdfLayoutNames.FIELD_MAPPING_BY_PHYSICAL_MEASUREMENT,
                 pdfLayoutNames.LAND_BANK_ACCOUNTING,
