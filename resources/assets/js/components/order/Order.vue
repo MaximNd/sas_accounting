@@ -642,6 +642,7 @@ export default {
         const todayDate = this.getTodaysDate();
         return {
             initialized: false,
+            creationInitialized: false,
             pdfProgress: 0,
             pdfLoading: false,
             orderUpdating: false,
@@ -832,7 +833,7 @@ export default {
         },
         isShowOrderContent() {
             if (this.isCreation) {
-                return true;
+                return this.creationInitialized;
             }
             return this.initialized;
         },
@@ -1170,12 +1171,18 @@ export default {
             localStorage.removeItem('orderData');
         },
         getClients() {
-            this.axios.get('/clients/all')
-                .then(({data}) => {
-                    const clients = data.map(client => this.getClientWithTextValue(client));
-                    this.clients = clients;
-                })
-                .catch(err => (console.log(err)));
+            return new Promise((resolve, reject) => {
+                this.axios.get('/clients/all')
+                    .then(({data}) => {
+                        const clients = data.map(client => this.getClientWithTextValue(client));
+                        this.clients = clients;
+                        resolve()
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        reject(err);
+                    });
+            });
         },
         getCachedData() {
             this.axios.get('/cache')
@@ -1186,14 +1193,14 @@ export default {
         },
         getDollarRate(date) {
             this.axios.get(`/order/dollar-rate/${date}`)
-            .then(({data}) => {
-                this.orderData.dollar_rate = data[0].rate;
-                this.showSnackbar('success', 'Курс доллара установлен');
-            })
-            .catch(err => {
-                console.log(err);
-                this.showSnackbar('error', 'Ошибка!');
-            })
+                .then(({data}) => {
+                    this.orderData.dollar_rate = data[0].rate;
+                    this.showSnackbar('success', 'Курс доллара установлен');
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.showSnackbar('error', 'Ошибка!');
+                });
         },
         switchDollarEditing() {
             this.isDollarRateEditing = !this.isDollarRateEditing;
@@ -1777,18 +1784,20 @@ export default {
             this.defaultRowCount = 4;
             this.orderData.GPSData = [];
             const savedOrderData = localStorage.getItem('orderData');
-            if (savedOrderData) {
-                const parsedSavedOrderData = JSON.parse(savedOrderData);
-                const { dollar_rate, dollar_date, ...data } = parsedSavedOrderData;
-                const todayDate = this.getTodaysDate();
-                this.orderData = {
-                    ...data,
-                    dollar_rate: 0.00,
-                    dollar_date: todayDate
-                };
-            }
-            this.getClients();
-            this.$store.dispatch('getPriseList');
+            Promise.all([this.$store.dispatch('getPriseList'), this.getClients()])
+                .then(() => {
+                    if (savedOrderData) {
+                        const parsedSavedOrderData = JSON.parse(savedOrderData);
+                        const { dollar_rate, dollar_date, ...data } = parsedSavedOrderData;
+                        const todayDate = this.getTodaysDate();
+                        this.orderData = {
+                            ...data,
+                            dollar_rate: 0.00,
+                            dollar_date: todayDate
+                        };
+                    }
+                    this.creationInitialized = true;
+                });
             this.getDollarRate(this.formattedDollarDate);
         } else {
             this.$store.dispatch('getPriseList')
