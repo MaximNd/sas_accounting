@@ -154,6 +154,7 @@ export default {
             pending: false,
             pdfLayoutNames: [
                 pdfLayoutNames.CONNEC_TO_PLATFORM,
+                pdfLayoutNames.MONITORING,
                 pdfLayoutNames.FIELD_MAPPING_BY_DRONES,
                 pdfLayoutNames.FIELD_MAPPING_BY_PHYSICAL_MEASUREMENT,
                 pdfLayoutNames.LAND_BANK_ACCOUNTING,
