@@ -1,5 +1,6 @@
 export default {
     CONNEC_TO_PLATFORM: 'Підключення до платформи SASAGRO.COM',
+    MONITORING: 'Цілодобовий моніторинг',
     FIELD_MAPPING_BY_DRONES: 'Картування полів Дронами',
     FIELD_MAPPING_BY_PHYSICAL_MEASUREMENT: 'Картування полів Фізичний обмір',
     LAND_BANK_ACCOUNTING: 'Облік земельного банку',

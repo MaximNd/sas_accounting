@@ -42,6 +42,10 @@
             <appConnectionToPlatformProgramPart />
             <div class="html2pdf__page-break"></div>
         </template>
+        <template v-if="servicesPreviewNames[pdfLayoutNames.MONITORING]">
+            <appMonitoring />
+            <div class="html2pdf__page-break"></div>
+        </template>
         <template v-if="servicesPreviewNames[pdfLayoutNames.FIELD_MAPPING_BY_DRONES]">
             <appFieldsMapping :price="servicesPreviewNames[pdfLayoutNames.FIELD_MAPPING_BY_DRONES].price" byDrones />
             <div class="html2pdf__page-break"></div>
@@ -147,8 +151,11 @@
 <script>
 import pdfLayoutNames from './../../../constants/ServicesPreviewNames.js';
 import utils from './../../../mixins/utils.js';
+
 import ConnectionToPlatformTitle from './connectionToPlatform/ConnectionToPlatformTitle';
 import ConnectionToPlatformProgramPart from './connectionToPlatform/ConnectionToPlatformProgramPart';
+
+import Monitoring from './monitoring/Monitoring';
 
 import FieldsMapping from './fieldsMapping/FeildsMapping';
 
@@ -343,6 +350,7 @@ export default {
     components: {
         appConnectionToPlatformTitle: ConnectionToPlatformTitle,
         appConnectionToPlatformProgramPart: ConnectionToPlatformProgramPart,
+        appMonitoring: Monitoring,
         appFieldsMapping: FieldsMapping,
         appLandBankRegistrationTitle: LandBankRegistrationTitle,
         appLandBankRegistrationList: LandBankRegistrationList,
