@@ -13,6 +13,7 @@ class PriceListController extends Controller
 {
     private $pdf_layout_names = [
         'Підключення до платформи SASAGRO.COM',
+        'Цілодобовий моніторинг',
         'Картування полів Дронами',
         'Картування полів Фізичний обмір',
         'Облік земельного банку',
@@ -29,6 +30,7 @@ class PriceListController extends Controller
 
     private $pdf_layout_names_with_1C = [
         'Підключення до платформи SASAGRO.COM',
+        'Цілодобовий моніторинг',
         'Картування полів Дронами',
         'Картування полів Фізичний обмір',
         'Облік земельного банку',
