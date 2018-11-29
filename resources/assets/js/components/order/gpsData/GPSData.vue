@@ -395,6 +395,9 @@
                                 single-line
                                 return-object>
                             </v-autocomplete>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 8, false, `gps_tracker-${props.index}-${8}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
@@ -497,6 +500,9 @@
                                 single-line
                                 return-object>
                             </v-autocomplete>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 12, false, `counter-${props.index}-${12}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
@@ -527,6 +533,9 @@
                                 single-line
                                 return-object>
                             </v-autocomplete>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 14, false, `rf_id-${props.index}-${14}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
@@ -557,6 +566,9 @@
                                 single-line
                                 return-object>
                             </v-autocomplete>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 16, false, `reader_of_trailed_equipment-${props.index}-${16}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
@@ -617,6 +629,9 @@
                                 single-line
                                 return-object>
                             </v-autocomplete>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 18, false, `can_reader-${props.index}-${18}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
@@ -647,6 +662,9 @@
                                 single-line
                                 return-object>
                             </v-autocomplete>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 20, false, `deaerator_small-${props.index}-${20}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
@@ -677,6 +695,9 @@
                                 single-line
                                 return-object>
                             </v-autocomplete>
+                            <v-btn color="info" small @click="switchCellMode(props.index, 22, false, `deaerator_large-${props.index}-${22}`, $event, false)">
+                                Закрыть редактирование
+                            </v-btn>
                         </template>
                     </td>
                     <td
