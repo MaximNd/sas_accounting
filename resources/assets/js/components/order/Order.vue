@@ -838,7 +838,7 @@ export default {
             return this.initialized;
         },
         isGPSServiceSelected() {
-            return this.orderData.services.find(service => service.pdf_layout === pdfLayoutNames.ENGINEER_PROJECT);
+            return this.orderData.services.some(service => service.pdf_layout === pdfLayoutNames.ENGINEER_PROJECT);
         },
         formattedDollarDate() {
             return this.orderData.dollar_date.split('-').join('');
