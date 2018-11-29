@@ -10,6 +10,7 @@ class GPSData extends Model
         'order_id',
         'order',
         'image',
+        'type',
         'mark',
         'model',
         'year_of_issue',

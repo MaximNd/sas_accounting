@@ -22,6 +22,7 @@ class CreateGPSDatasTable extends Migration
             $table->integer('order');
 
             $table->string('image')->nullable();
+            $table->string('type')->nullable();
             $table->string('mark')->nullable();
             $table->string('model')->nullable();
             $table->string('year_of_issue')->nullable();

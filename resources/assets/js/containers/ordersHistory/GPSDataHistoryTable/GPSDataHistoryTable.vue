@@ -11,6 +11,11 @@
             </td>
             <td
                 class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('type') }">
+                {{ props.item.type }}
+            </td>
+            <td
+                class="text-xs-center"
                 :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('mark') }">
                 {{ props.item.mark }}
             </td>
@@ -237,6 +242,7 @@ export default {
         return {
             gpsDataHeaders: [
                 { text: 'Изображение', align: 'left', sortable: false, value: 'image' },
+                { text: 'Тип', align: 'center', value: 'type', sortable: false },
                 { text: 'Марка', align: 'center', value: 'mark', sortable: false },
                 { text: 'Модель', align: 'center', value: 'model', sortable: false },
                 { text: 'Год выпуска', align: 'center', value: 'year_of_issue', sortable: false },
