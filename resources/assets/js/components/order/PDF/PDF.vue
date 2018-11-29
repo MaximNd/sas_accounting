@@ -89,7 +89,7 @@
             <div class="html2pdf__page-break"></div>
         </template>
         <template v-if="servicesPreviewNames[pdfLayoutNames.PHOTO_VIDEO]">
-            <appAeroVisualReviewTitle />
+            <appAeroVisualReviewTitle :price="servicesPreviewNames[pdfLayoutNames.PHOTO_VIDEO].price" />
             <div class="html2pdf__page-break"></div>
             <appAeroVisualReviewData page="first" />
             <div class="html2pdf__page-break"></div>
