@@ -1044,7 +1044,6 @@ export default {
             }
         },
         selectedPrices(newVal) {
-            console.log(newVal);
             this.orderData.prices = this.orderData.prices.map(prices => ({
                 ...prices,
                 is_current: prices.id === newVal.id
@@ -1132,7 +1131,6 @@ export default {
             this.orderData.GPSData = newOrderData.gps_data;
             this.orderData.prices = newOrderData.prices;
 
-            this.selectedPrices = this.orderData.prices.find(pricesRow => pricesRow.is_current);
             this.initialized = true;
         },
         addCache(column, value) {
@@ -1802,6 +1800,7 @@ export default {
         } else {
             this.$store.dispatch('getPriseList')
                 .then(() => {
+                    this.selectedPrices = this.order.prices.find(pricesRow => pricesRow.is_current);
                     this.initOrder();
                 });
         }
