@@ -998,17 +998,14 @@ export default {
             return this.subtractTwoFloats(price, discount);
         },
         finalPrice() {
-            return this.addTwoFloats(
-                this.multiplyTwoFloats(
-                    this.priceForArea, this.orderData.dollar_rate
-                ), this.addTwoFloats(
-                    this.priceForDays, this.addTwoFloats(
-                        this.transportationPrice, this.addTwoFloats(
-                            this.allEquipmentPrice, this.allInstallationPrice
-                        )
+            const areaPrice = this.multiplyTwoFloats(this.priceForArea, this.orderData.dollar_rate);
+            return this.isGPSServiceSelected ? this.addTwoFloats(areaPrice, this.addTwoFloats(
+                this.priceForDays, this.addTwoFloats(
+                    this.transportationPrice, this.addTwoFloats(
+                        this.allEquipmentPrice, this.allInstallationPrice
                     )
                 )
-            );
+            )) : areaPrice;
         },
         formattedFinalPrice() {
             return formatter.formatMoney(this.finalPrice, {
