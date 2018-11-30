@@ -1790,6 +1790,10 @@ export default {
                             dollar_rate: 0.00,
                             dollar_date: todayDate
                         };
+                        if (parsedSavedOrderData && data.GPSData.length > 0) {
+                            this.initialGPSRowData.id = data.GPSData[data.GPSData.length - 1].id + 1;
+                            this.initialGPSRowData.order = data.GPSData[data.GPSData.length - 1].order + 1;
+                        }
                     }
                     this.creationInitialized = true;
                 });
