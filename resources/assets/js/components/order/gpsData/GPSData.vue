@@ -964,6 +964,7 @@ import Sortable from 'sortablejs';
 import setStyles from './../../../mixins/stylesMixins.js';
 import utils from './../../../mixins/utils.js';
 import * as transport from './../../../constants/transport.js';
+import { uploadImage } from './../../../constants/images.js';
 
 export default {
     mixins: [setStyles, utils],
@@ -1133,7 +1134,7 @@ export default {
                 { text: 'Цена $            ', value: 'additional_equipment_price', sortable: false },
                 { text: 'Монтаж оборудования ₴', value: 'manual_installation_price', sortable: false },
             ],
-            uploadImage: '/storage/upload-foto.png',
+            uploadImage,
             cellsPosition: []
         };
     },

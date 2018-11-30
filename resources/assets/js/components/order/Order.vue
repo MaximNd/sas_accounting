@@ -624,6 +624,7 @@ import diff from 'deep-diff';
 import html2pdf from 'html2pdf.js';
 import jsPDF from 'jspdf';
 import pdfLayoutNames from './../../constants/ServicesPreviewNames.js';
+import { uploadImage } from './../../constants/images';
 
 export default {
     mixins: [utils, setStyles, forms],
@@ -1356,11 +1357,18 @@ export default {
                 return newRow;
             });
         },
+        validateImages() {
+            return this.orderData.GPSData.every(row => (row.image !== '' && row.image !== uploadImage && !this.isUndefined(row.image) && !this.isNull(row.image)));
+        },
         createOrder() {
             this.$validator.validateAll()
                 .then(isValid => {
                     if (!isValid) {
                         this.showSnackbar('error', this.errors.items[0].msg);
+                        return;
+                    }
+                    if (!this.validateImages()) {
+                        this.showSnackbar('error', 'Не установлено изображение!');
                         return;
                     }
                     this.orderInCreation = true;
@@ -1406,6 +1414,10 @@ export default {
                 .then(isValid => {
                     if (!isValid) {
                         this.showSnackbar('error', this.errors.items[0].msg);
+                        return;
+                    }
+                    if (!this.validateImages()) {
+                        this.showSnackbar('error', 'Не установлено изображение!');
                         return;
                     }
                     const {
