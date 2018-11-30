@@ -19,6 +19,8 @@ class CreateGPSDatasTable extends Migration
             $table->integer('order_id')->unsigned();
             $table->foreign('order_id')->references('id')->on('orders');
 
+            $table->integer('multiplier')->default(1);
+
             $table->integer('order');
 
             $table->string('image')->nullable();

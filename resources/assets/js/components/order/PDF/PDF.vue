@@ -64,12 +64,14 @@
             <appGPSTrackingTitle />
             <div class="html2pdf__page-break"></div>
             <template v-for="(gpsData, index) in gpsTrackingData">
-                <appGPSTrackingData
-                :key="`gps-data-${index}`"
-                :equipment="gpsData.equipment"
-                :transportImage="gpsData.transportImage"
-                :transportName="gpsData.transportName" />
-                <div class="html2pdf__page-break" :key="`gps-data-page-break-${index}`"></div>
+                <template v-for="n in gpsData.multiplier">
+                    <appGPSTrackingData
+                        :key="`gps-data-${index}-${n}`"
+                        :equipment="gpsData.equipment"
+                        :transportImage="gpsData.transportImage"
+                        :transportName="gpsData.transportName" />
+                    <div class="html2pdf__page-break" :key="`gps-data-page-break-${index}-${n}`"></div>
+                </template>
             </template>
         </template>
         <template v-if="servicesPreviewNames[pdfLayoutNames.PARTOL]">
@@ -324,6 +326,7 @@ export default {
                         }
                         return equipment;
                     }, []),
+                    multiplier: gpsRow.multiplier,
                     transportImage: gpsRow.image,
                     transportName: `${(this.isNull(gpsRow.mark) || this.isUndefined(gpsRow.mark)) ? '' : gpsRow.mark}${(this.isNull(gpsRow.model) || this.isUndefined(gpsRow.model)) ? '' : ` ${gpsRow.model}`}`
                 };

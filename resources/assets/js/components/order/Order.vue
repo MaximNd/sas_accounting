@@ -660,6 +660,7 @@ export default {
             initialGPSRowData: {
                 id: 1,
                 order: 1,
+                multiplier: 1,
                 image: '',
                 mark: '',
                 model: '',
@@ -1090,7 +1091,7 @@ export default {
                     id = gpsDataRow.id;
                 }
                 return Object.keys(gpsDataRow).reduce((newRow, key) => {
-                    if (key !== 'id' && key !== 'order' && key !== 'order_id' && typeof gpsDataRow[key] === 'number') {
+                    if (key !== 'id' && key !== 'order' && key !== 'order_id' && key !== 'multiplier' && typeof gpsDataRow[key] === 'number') {
                         newRow[key] = this.priceList.find(data => data.id === gpsDataRow[key]);
                     } else if (Array.isArray(gpsDataRow[key])) {
                         newRow[key] = gpsDataRow[key].map(id => this.priceList.find(data => data.id === id));
@@ -1098,7 +1099,7 @@ export default {
                         newRow[key] = gpsDataRow[key];
                     } else if (this.isNull(gpsDataRow[key]) || this.isUndefined(gpsDataRow[key])) {
                         newRow[key] = '';
-                    } else if (key === 'id' || key === 'order' || key === 'order_id') {
+                    } else if (key === 'id' || key === 'order' || key === 'order_id' || key === 'multiplier') {
                         newRow[key] = gpsDataRow[key];
                     }
                     return newRow;
