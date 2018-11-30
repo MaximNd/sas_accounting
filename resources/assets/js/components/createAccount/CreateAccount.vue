@@ -105,11 +105,13 @@
 
 <script>
 
+import { uploadImage } from './../../constants/images';
+
 function initialData() {
     return {
         createAccountDialog: false,
         avatarPreview: '',
-        uploadAvatarImage: '/storage/upload-foto.png',
+        uploadAvatarImage: uploadImage,
         isNewAvatarSelected: false,
         pending: false,
         user: {

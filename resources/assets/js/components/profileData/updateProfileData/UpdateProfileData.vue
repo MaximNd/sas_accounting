@@ -64,6 +64,7 @@
 
 <script>
 import utils from './../../../mixins/utils.js';
+import { uploadImage } from './../../../constants/images.js';
 
 export default {
     mixins: [utils],
@@ -96,7 +97,7 @@ export default {
                 password_confirmation: ''
             },
             avatarPreview: '',
-            uploadAvatarImage: '/storage/upload-foto.png'
+            uploadAvatarImage: uploadImage
         };
     },
     computed: {

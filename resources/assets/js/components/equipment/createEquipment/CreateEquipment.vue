@@ -100,6 +100,7 @@
 
 <script>
 import forms from './../../../mixins/forms.js';
+import { uploadImage } from './../../../constants/images.js';
 
 export default {
     mixins: [forms],
@@ -116,7 +117,7 @@ export default {
     data() {
         return {
             pending: false,
-            uploadImage: '/storage/upload-foto.png',
+            uploadImage: uploadImage,
             imgPreview: '',
             newEquipment: {
                 image: '',
