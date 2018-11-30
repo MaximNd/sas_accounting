@@ -33,7 +33,11 @@
                         :ref="`td-${props.index}-${0}`"
                         @click="selectCell($event, { index: props.index, column: 'image', columnIndex: 0, value: props.item.image })"
                         @mouseenter="selectCellToCopyList($event, { index: props.index, column: 'image', columnIndex: 0, value: props.item.image })">
-                        <img @dblclick="onPickFile(`image-${props.index}`)" :style="{cursor: 'pointer', 'margin-top': props.item.image === '' ? '6px' : false, 'max-width': props.item.image === '' ? '40%' : '80%'}" :src="props.item.image === '' ? uploadImage : props.item.image" alt="image">
+                        <img
+                            @dblclick="onPickFile(`image-${props.index}`)"
+                            :style="{cursor: 'pointer', 'margin-top': props.item.image === '' ? '6px' : false, 'max-width': props.item.image === '' ? '40%' : '80%'}"
+                            :src="props.item.image === '' ? uploadImage : props.item.image"
+                            alt="image">
                         <input @change="onFilePicked($event, props.index)" style="display:none;" type="file" :ref="`image-${props.index}`">
                     </td>
                     <td
@@ -43,15 +47,15 @@
                         @dblclick="switchCellMode(props.index, 1, true, `type-${props.index}-${1}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'type', columnIndex: 1, value: props.item.type })">
                         <template v-if="!editModCells[props.index][1]">
-                            {{ props.item.type }}
+                            {{ getTypeText(props.item.type) }}
                         </template>
                         <template v-else>
                             <v-combobox
                                 :ref="`type-${props.index}-${1}`"
                                 :value="props.item.type"
                                 @change="setCellValue($event, props.index, 1, 'type', `td-${props.index}-${1}`)"
-                                :items="cachedData.type"
-                                item-text="value"
+                                :items="transportTypesWithCache"
+                                item-text="name"
                                 item-value="value"
                                 :return-object="false"
                                 label="Вибирете тип"
@@ -70,11 +74,11 @@
                                     slot-scope="{ index, item, parent }">
                                     <v-list-tile-content>
                                         <v-list-tile-title>
-                                            {{ item.value }}
+                                            {{ item.name }}
                                         </v-list-tile-title>
                                     </v-list-tile-content>
                                     <v-spacer></v-spacer>
-                                    <v-list-tile-action @click.stop>
+                                    <v-list-tile-action @click.stop v-if="item.isCache">
                                         <v-btn
                                             icon
                                             @click.stop.prevent="$emit('delete:cache', item.id)">
@@ -102,9 +106,9 @@
                                 :ref="`mark-${props.index}-${2}`"
                                 :value="props.item.mark"
                                 @change="setCellValue($event, props.index, 2, 'mark', `td-${props.index}-${2}`)"
-                                :items="cachedData.mark"
-                                item-text="value"
-                                item-value="value"
+                                :items="[...(isUndefined(transport[props.item.type]) ? Object.keys(transport).reduce((marks, type) => [...marks, ...transport[type]], []) : transport[props.item.type]), ...markCache]"
+                                item-text="name"
+                                item-value="name"
                                 :return-object="false"
                                 label="Вибирете марку"
                                 single-line>
@@ -122,11 +126,11 @@
                                     slot-scope="{ index, item, parent }">
                                     <v-list-tile-content>
                                         <v-list-tile-title>
-                                            {{ item.value }}
+                                            {{ item.name }}
                                         </v-list-tile-title>
                                     </v-list-tile-content>
                                     <v-spacer></v-spacer>
-                                    <v-list-tile-action @click.stop>
+                                    <v-list-tile-action @click.stop v-if="item.isCache">
                                         <v-btn
                                             icon
                                             @click.stop.prevent="$emit('delete:cache', item.id)">
@@ -959,6 +963,7 @@ import dcopy from 'deep-copy';
 import Sortable from 'sortablejs';
 import setStyles from './../../../mixins/stylesMixins.js';
 import utils from './../../../mixins/utils.js';
+import * as transport from './../../../constants/transport.js';
 
 export default {
     mixins: [setStyles, utils],
@@ -1026,6 +1031,63 @@ export default {
                     styles: { display: 'block', top: '0px', left: '0px' }
                 }
             },
+            transportTypes: [
+                { name: 'Трактор', value: transport.TRACTORS },
+                { name: 'Комбайн', value: transport.COMBINES },
+                { name: 'Опрыскиватель', value: transport.SPRAYERS }
+            ],
+            transport: {
+                [transport.TRACTORS]: [
+                    { name: 'John Deere', image: '/tractors/JohnDeere.png' },
+                    { name: 'New Holland', image: '/tractors/NewHolland.png' },
+                    { name: 'Massey Ferguson', image: '/tractors/MasseyFerguson.png' },
+                    { name: 'Case IH', image: '/tractors/CaseIH.jpg' },
+                    { name: 'Claas', image: '/tractors/Claas.png' },
+                    { name: 'Challenger', image: '/tractors/Challenger.png' },
+                    { name: 'Deutz-Fahr', image: '/tractors/Deutz-Fahr.png' },
+                    { name: 'Fendt', image: '/tractors/Fendt.png' },
+                    { name: 'JCB', image: '/tractors/JCB.png' },
+                    { name: 'Valtra', image: '/tractors/Valtra.png' },
+                    { name: 'МТЗ', image: '/tractors/МТЗ.png' },
+                    { name: 'ХТЗ', image: '/tractors/ХТЗ.png' }
+                ],
+                [transport.COMBINES]: [
+                    { name: 'John Deere', image: '/combines/JohnDeere.png' },
+                    { name: 'New Holland', image: '/combines/NewHolland.png' },
+                    { name: 'Massey Ferguson', image: '/combines/MasseyFerguson.png' },
+                    { name: 'Case IH', image: '/combines/CaseIH.png' },
+                    { name: 'Claas', image: '/combines/Claas.png' },
+                    { name: 'Deutz-Fahr', image: '/combines/Deutz-Fahr.png' },
+                    { name: 'Fendt', image: '/combines/Fendt.png' },
+                    { name: 'Challenger', image: '/combines/Challenger.png' },
+                    { name: 'Gleaner', image: '/combines/Gleaner.png' },
+                    { name: 'Sampo-Rosenlew', image: '/combines/Sampo-Rosenlew.png' },
+                    { name: 'Levarda', image: '/combines/Levarda.png' },
+                    { name: 'Sampo', image: '/combines/Sampo.png' }
+                ],
+                [transport.SPRAYERS]: [
+                    { name: 'Berthoud', image: '/sprayers/Berthoud.png' },
+                    { name: 'Agrifac', image: '/sprayers/Agrifac.png' },
+                    { name: 'Amazone', image: '/sprayers/Amazone.png' },
+                    { name: 'Bargam', image: '/sprayers/Bargam.png' },
+                    { name: 'Caffini', image: '/sprayers/Caffini.png' },
+                    { name: 'Caruelle', image: '/sprayers/Caruelle.png' },
+                    { name: 'Case IH', image: '/sprayers/CaseIH.png' },
+                    { name: 'Chalenger', image: '/sprayers/Chalenger.png' },
+                    { name: 'Dammann', image: '/sprayers/Dammann.png' },
+                    { name: 'Delvano', image: '/sprayers/Delvano.png' },
+                    { name: 'Apache', image: '/sprayers/Apache.png' },
+                    { name: 'Hagie', image: '/sprayers/Hagie.png' },
+                    { name: 'Hardi', image: '/sprayers/Hardi.png' },
+                    { name: 'Horsch', image: '/sprayers/Horsch.png' },
+                    { name: 'Househam', image: '/sprayers/Househam.png' },
+                    { name: 'Jacto', image: '/sprayers/Jacto.png' },
+                    { name: 'John Deere', image: '/sprayers/JohnDeere.png' },
+                    { name: 'Kuhn', image: '/sprayers/Kuhn.png' },
+                    { name: 'Kverneland', image: '/sprayers/Kverneland.png' },
+                    { name: 'Matrot', image: '/sprayers/Matrot.png' }
+                ]
+            },
             cachedDataTest: ['number1', 'number2', 'number3', 'number4'],
             isCornerFocused: false,
             copyList: [],
@@ -1076,6 +1138,20 @@ export default {
         };
     },
     computed: {
+        transportTypesWithCache() {
+            let cachedTypes = [];
+            if (this.cachedData.type) {
+                cachedTypes = this.cachedData.type.map((cache) => ({ name: cache.value, value: cache.value, isCache: true }));
+            }
+            return [...this.transportTypes, ...cachedTypes];
+        },
+        markCache() {
+            let cachedMarks = [];
+            if (this.cachedData.mark) {
+                cachedMarks = this.cachedData.mark.map((cache) => ({ name: cache.value, image: '', isCache: true }));
+            }
+            return cachedMarks;
+        },
         isReadyToCopy() {
             if (this.copyList.length === 0) return false;
             return this.copyList.reduce((isReady, list) => list.length !== 1 && isReady, true);
@@ -1100,6 +1176,12 @@ export default {
         }
     },
     methods: {
+        getTypeText(type) {
+            if (this.isNull(type) || this.isUndefined(type) || type === '') return '';
+            const transport = this.transportTypesWithCache.find(t => t.value === type);
+            if (!transport) return '';
+            return transport.name;
+        },
         addRow(count = 1) {
             this.addEditModCells(count);
             this.$emit('rowAdded', count);
@@ -1147,6 +1229,12 @@ export default {
             this.isCornerFocused = false;
             if (this.isReadyToCopy) {
                 this.$emit('copy-values:orderGPSData', this.copyList);
+                for (let i = 0; i < this.copyList.length; ++i) {
+                    const newData = this.copyList[i][0].value;
+                    for (let j = 1; j < this.copyList[i].length; ++j) {
+                        this.checkImageReplacement(this.copyList[i][j].index, this.copyList[i][j].column, newData);
+                    }
+                }
                 this.clickOnTD(this.findTDEl(event));
             }
             console.log('Blurred');
@@ -1406,7 +1494,24 @@ export default {
                 this.clickOnTD(this.findTDEl(event));
             }
         },
+        checkImageReplacement(row, columnName, data) {
+            if (columnName === 'type') {
+                if (this.transport[data] && this.transport[data].some(t => t.name === this.orderGPSData[row].mark) && !this.isNull(this.orderGPSData[row].mark) && !this.isUndefined(this.orderGPSData[row].mark) && this.orderGPSData[row].mark !== '') {
+                    const transport = this.transport[data].find(t => t.name === this.orderGPSData[row].mark);
+                    const transportImg = transport ? transport.image : '';
+                    this.$emit('update:orderGPSData', `/storage/transport${transportImg}`, row, 'image', false);
+                }
+            }
+            if (columnName === 'mark') {
+                if (this.transport[this.orderGPSData[row].type] && this.transport[this.orderGPSData[row].type].some(t => t.name === data) && !this.isNull(this.orderGPSData[row].type) && !this.isUndefined(this.orderGPSData[row].type) && this.orderGPSData[row].type !== '') {
+                    const transport = this.transport[this.orderGPSData[row].type].find(t => t.name === data);
+                    const transportImg = transport ? transport.image : '';
+                    this.$emit('update:orderGPSData', `/storage/transport${transportImg}`, row, 'image', false);
+                }
+            }
+        },
         setCellValue(data, row, cell, name, td, nestedPath = false, forceSwitchMode = true) {
+            this.checkImageReplacement(row, name, data);
             this.$emit('update:orderGPSData', data, row, name, nestedPath);
             if (forceSwitchMode) this.switchCellMode(row, cell, false);
             if (td) {
