@@ -12,6 +12,7 @@ import VueAuth from '@websanova/vue-auth';
 import Vuetify from 'vuetify';
 import VueAxios from 'vue-axios';
 import VeeValidate from 'vee-validate';
+import { VueHammer } from 'vue2-hammer';
 import axios from 'axios';
 import 'vuetify/dist/vuetify.min.css'
 
@@ -22,6 +23,7 @@ Vue.router = router;
 Vue.use(VueAxios, axios)
 Vue.use(Vuetify);
 Vue.use(VeeValidate);
+Vue.use(VueHammer);
 
 Vue.use(VueAuth, {
     rolesVar: 'role',

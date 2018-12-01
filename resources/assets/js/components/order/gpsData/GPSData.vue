@@ -30,6 +30,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${0}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'multiplier', columnIndex: 0, value: props.item.multiplier })"
                         @click="selectCell($event, { index: props.index, column: 'multiplier', columnIndex: 0, value: props.item.multiplier })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'multiplier', columnIndex: 0, value: props.item.multiplier })">
                         <v-text-field
@@ -47,10 +48,12 @@
                         class="text-xs-center"
                         :class="{ 'error-cell': errors.has(`transport-image-${props.index}`) }"
                         :ref="`td-${props.index}-${1}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'image', columnIndex: 1, value: props.item.image })"
                         @click="selectCell($event, { index: props.index, column: 'image', columnIndex: 1, value: props.item.image })"
                         @mouseenter="selectCellToCopyList($event, { index: props.index, column: 'image', columnIndex: 1, value: props.item.image })">
                         <img
                             @dblclick="onPickFile(`image-${props.index}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && onPickFile(`image-${props.index}`)"
                             :style="{cursor: 'pointer', 'margin-top': props.item.image === '' ? '6px' : false, 'max-width': props.item.image === '' ? '40%' : '80%'}"
                             :src="props.item.image === '' ? uploadImage : props.item.image"
                             alt="image">
@@ -59,8 +62,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${2}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'type', columnIndex: 2, value: props.item.type })"
                         @click="selectCell($event, { index: props.index, column: 'type', columnIndex: 2, value: props.item.type })"
                         @dblclick="switchCellMode(props.index, 2, true, `type-${props.index}-${2}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 2, true, `type-${props.index}-${2}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'type', columnIndex: 2, value: props.item.type })">
                         <template v-if="!editModCells[props.index][2]">
                             {{ getTypeText(props.item.type) }}
@@ -111,8 +116,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${3}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'mark', columnIndex: 3, value: props.item.mark })"
                         @click="selectCell($event, { index: props.index, column: 'mark', columnIndex: 3, value: props.item.mark })"
                         @dblclick="switchCellMode(props.index, 3, true, `mark-${props.index}-${3}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 3, true, `mark-${props.index}-${3}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'mark', columnIndex: 3, value: props.item.mark })">
                         <template v-if="!editModCells[props.index][3]">
                             {{ props.item.mark }}
@@ -163,8 +170,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${4}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'model', columnIndex: 4, value: props.item.model })"
                         @click="selectCell($event, { index: props.index, column: 'model', columnIndex: 4, value: props.item.model })"
                         @dblclick="switchCellMode(props.index, 4, true, `model-${props.index}-${4}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 4, true, `model-${props.index}-${4}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'model', columnIndex: 4, value: props.item.model })">
                         <template v-if="!editModCells[props.index][4]">
                             {{ props.item.model }}
@@ -215,8 +224,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${5}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'year_of_issue', columnIndex: 5, value: props.item.year_of_issue })"
                         @click="selectCell($event, { index: props.index, column: 'year_of_issue', columnIndex: 5, value: props.item.year_of_issue })"
                         @dblclick="switchCellMode(props.index, 5, true, `year_of_issue-${props.index}-${5}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 5, true, `year_of_issue-${props.index}-${5}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'year_of_issue', columnIndex: 5, value: props.item.year_of_issue })">
                         <template v-if="!editModCells[props.index][5]">
                             {{ props.item.year_of_issue }}
@@ -239,8 +250,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${6}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'fuel_type', columnIndex: 6, value: props.item.fuel_type })"
                         @click="selectCell($event, { index: props.index, column: 'fuel_type', columnIndex: 6, value: props.item.fuel_type })"
                         @dblclick="switchCellMode(props.index, 6, true, `fuel_type-${props.index}-${6}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 6, true, `fuel_type-${props.index}-${6}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_type', columnIndex: 6, value: props.item.fuel_type })">
                         <template v-if="!editModCells[props.index][6]">
                             {{ props.item.fuel_type }}
@@ -291,8 +304,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${7}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'power', columnIndex: 7, value: props.item.power })"
                         @click="selectCell($event, { index: props.index, column: 'power', columnIndex: 7, value: props.item.power })"
                         @dblclick="switchCellMode(props.index, 7, true, `power-${props.index}-${7}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 7, true, `power-${props.index}-${7}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'power', columnIndex: 7, value: props.item.power })">
                         <template v-if="!editModCells[props.index][7]">
                             {{ props.item.power }}
@@ -344,8 +359,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${8}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'number', columnIndex: 8, value: props.item.number })"
                         @click="selectCell($event, { index: props.index, column: 'number', columnIndex: 8, value: props.item.number })"
                         @dblclick="switchCellMode(props.index, 8, true, `number-${props.index}-${8}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 8, true, `number-${props.index}-${8}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'number', columnIndex: 8, value: props.item.number })">
                         <template v-if="!editModCells[props.index][8]">
                             {{ props.item.number }}
@@ -397,8 +414,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${9}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'gps_tracker', columnIndex: 9, value: props.item.gps_tracker })"
                         @click="selectCell($event, { index: props.index, column: 'gps_tracker', columnIndex: 9, value: props.item.gps_tracker })"
                         @dblclick="switchCellMode(props.index, 9, true, `gps_tracker-${props.index}-${9}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 9, true, `gps_tracker-${props.index}-${9}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker', columnIndex: 9, value: props.item.gps_tracker })">
                         <template v-if="!editModCells[props.index][9]">
                             {{ props.item.gps_tracker.name }}
@@ -423,6 +442,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${10}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'gps_tracker_price', columnIndex: 10, value: false })"
                         @click="selectCell($event, { index: props.index, column: 'gps_tracker_price', columnIndex: 10, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker_price', columnIndex: 10, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['gps_tracker_price'] || 0 : 0 }}$
@@ -430,9 +450,11 @@
                     <td
                         :class="{ 'text-xs-center': !editModCells[props.index][11] }"
                         :ref="`td-${props.index}-${11}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'fuel_gauge', columnIndex: 11, value: props.item.fuel_gauge })"
                         :style="{ 'min-width': editModCells[props.index][11] ? '300px' : '11px' }"
                         @click="selectCell($event, { index: props.index, column: 'fuel_gauge', columnIndex: 11, value: props.item.fuel_gauge })"
                         @dblclick="switchCellMode(props.index, 11, true, `fuel_gauge-${props.index}-${11}`, $event, false)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 11, true, `fuel_gauge-${props.index}-${11}`, event.srcEvent, false)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_gauge', columnIndex: 11, value: props.item.fuel_gauge })">
                         <template v-if="!editModCells[props.index][11]">
                             <v-list v-if="props.item.fuel_gauge.some(el => !isUndefined(el) && !isNull(el))">
@@ -495,6 +517,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${12}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'fuel_gauge_price', columnIndex: 12, value: false })"
                         @click="selectCell($event, { index: props.index, column: 'fuel_gauge_price', columnIndex: 12, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_gauge_price', columnIndex: 12, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['fuel_gauge_price'] || 0 : 0 }}$
@@ -502,8 +525,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${13}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'counter', columnIndex: 13, value: props.item.counter })"
                         @click="selectCell($event, { index: props.index, column: 'counter', columnIndex: 13, value: props.item.counter })"
                         @dblclick="switchCellMode(props.index, 13, true, `counter-${props.index}-${13}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 13, true, `counter-${props.index}-${13}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'counter', columnIndex: 13, value: props.item.counter })">
                         <template v-if="!editModCells[props.index][13]">
                             {{ props.item.counter.name }}
@@ -528,6 +553,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${14}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'counter_price', columnIndex: 14, value: false })"
                         @click="selectCell($event, { index: props.index, column: 'counter_price', columnIndex: 14, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'counter_price', columnIndex: 14, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['counter_price'] || 0 : 0 }}$
@@ -535,8 +561,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${15}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rf_id', columnIndex: 15, value: props.item.rf_id })"
                         @click="selectCell($event, { index: props.index, column: 'rf_id', columnIndex: 15, value: props.item.rf_id })"
                         @dblclick="switchCellMode(props.index, 15, true, `rf_id-${props.index}-${15}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 15, true, `rf_id-${props.index}-${15}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rf_id', columnIndex: 15, value: props.item.rf_id })">
                         <template v-if="!editModCells[props.index][15]">
                             {{ props.item.rf_id.name }}
@@ -561,6 +589,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${16}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rf_id_price', columnIndex: 16, value: false })"
                         @click="selectCell($event, { index: props.index, column: 'rf_id_price', columnIndex: 16, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rf_id_price', columnIndex: 16, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['rf_id_price'] || 0 : 0 }}$
@@ -568,8 +597,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${17}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 17, value: props.item.reader_of_trailed_equipment })"
                         @click="selectCell($event, { index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 17, value: props.item.reader_of_trailed_equipment })"
                         @dblclick="switchCellMode(props.index, 17, true, `reader_of_trailed_equipment-${props.index}-${17}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 17, true, `reader_of_trailed_equipment-${props.index}-${17}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 17, value: props.item.reader_of_trailed_equipment })">
                         <template v-if="!editModCells[props.index][17]">
                             {{ props.item.reader_of_trailed_equipment.name }}
@@ -594,6 +625,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${18}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 18, value: false })"
                         @click="selectCell($event, { index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 18, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 18, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['reader_of_trailed_equipment_price'] || 0 : 0 }}$
@@ -631,8 +663,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${19}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })"
                         @click="selectCell($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })"
                         @dblclick="switchCellMode(props.index, 19, true, `can_reader-${props.index}-${19}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 19, true, `can_reader-${props.index}-${19}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })">
                         <template v-if="!editModCells[props.index][19]">
                             {{ props.item.can_reader.name }}
@@ -657,6 +691,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${20}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })"
                         @click="selectCell($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['can_reader_price'] || 0 : 0 }}$
@@ -664,8 +699,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${21}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_small', columnIndex: 21, value: props.item.deaerator_small })"
                         @click="selectCell($event, { index: props.index, column: 'deaerator_small', columnIndex: 21, value: props.item.deaerator_small })"
                         @dblclick="switchCellMode(props.index, 21, true, `deaerator_small-${props.index}-${21}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 21, true, `deaerator_small-${props.index}-${21}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_small', columnIndex: 21, value: props.item.deaerator_small })">
                         <template v-if="!editModCells[props.index][21]">
                             {{ props.item.deaerator_small.name }}
@@ -690,6 +727,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${22}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_small_price', columnIndex: 22, value: false })"
                         @click="selectCell($event, { index: props.index, column: 'deaerator_small_price', columnIndex: 22, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_small_price', columnIndex: 22, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['deaerator_small_price'] || 0 : 0 }}$
@@ -697,8 +735,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${23}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_large', columnIndex: 23, value: props.item.deaerator_large })"
                         @click="selectCell($event, { index: props.index, column: 'deaerator_large', columnIndex: 23, value: props.item.deaerator_large })"
                         @dblclick="switchCellMode(props.index, 23, true, `deaerator_large-${props.index}-${23}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 23, true, `deaerator_large-${props.index}-${23}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_large', columnIndex: 23, value: props.item.deaerator_large })">
                         <template v-if="!editModCells[props.index][23]">
                             {{ props.item.deaerator_large.name }}
@@ -723,6 +763,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${24}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_large_price', columnIndex: 24, value: false })"
                         @click="selectCell($event, { index: props.index, column: 'deaerator_large_price', columnIndex: 24, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_large_price', columnIndex: 24, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['deaerator_large_price'] || 0 : 0 }}$
@@ -730,9 +771,11 @@
                     <td
                         :class="{ 'text-xs-center': !editModCells[props.index][25] }"
                         :ref="`td-${props.index}-${25}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'cn03', columnIndex: 25, value: props.item.cn03 })"
                         :style="{ 'min-width': editModCells[props.index][25] ? '300px' : '10px' }"
                         @click="selectCell($event, { index: props.index, column: 'cn03', columnIndex: 25, value: props.item.cn03 })"
                         @dblclick="switchCellMode(props.index, 25, true, `cn03-${props.index}-${25}`, $event, false)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 25, true, `cn03-${props.index}-${25}`, event.srcEvent, false)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03', columnIndex: 25, value: props.item.cn03 })">
                         <template v-if="!editModCells[props.index][25]">
                             <v-list v-if="props.item.cn03.some(el => !isUndefined(el) && !isNull(el))">
@@ -795,6 +838,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${26}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'cn03_price', columnIndex: 26, value: false })"
                         @click="selectCell($event, { index: props.index, column: 'cn03_price', columnIndex: 26, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03_price', columnIndex: 26, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['cn03_price'] || 0 : 0 }}$
@@ -802,9 +846,11 @@
                     <td
                         :class="{ 'text-xs-center': !editModCells[props.index][27] }"
                         :ref="`td-${props.index}-${27}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rs01', columnIndex: 27, value: props.item.rs01 })"
                         :style="{ 'min-width': editModCells[props.index][27] ? '300px' : '10px' }"
                         @click="selectCell($event, { index: props.index, column: 'rs01', columnIndex: 27, value: props.item.rs01 })"
                         @dblclick="switchCellMode(props.index, 27, true, `rs01-${props.index}-${27}`, $event, false)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 27, true, `rs01-${props.index}-${27}`, event.srcEvent, false)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01', columnIndex: 27, value: props.item.rs01 })">
                         <template v-if="!editModCells[props.index][27]">
                             <v-list v-if="props.item.rs01.some(el => !isUndefined(el) && !isNull(el))">
@@ -867,6 +913,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${28}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rs01_price', columnIndex: 28, value: false })"
                         @click="selectCell($event, { index: props.index, column: 'rs01_price', columnIndex: 28, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01_price', columnIndex: 28, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['rs01_price'] || 0 : 0 }}$
@@ -874,9 +921,11 @@
                     <td
                         :class="{ 'text-xs-center': !editModCells[props.index][29] }"
                         :ref="`td-${props.index}-${29}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'additional_equipment', columnIndex: 29, value: props.item.additional_equipment })"
                         :style="{ 'min-width': editModCells[props.index][29] ? '300px' : '10px' }"
                         @click="selectCell($event, { index: props.index, column: 'additional_equipment', columnIndex: 29, value: props.item.additional_equipment })"
                         @dblclick="switchCellMode(props.index, 29, true, `additional_equipment-${props.index}-${29}`, $event, false)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 29, true, `additional_equipment-${props.index}-${29}`, event.srcEvent, false)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment', columnIndex: 29, value: props.item.additional_equipment })">
                         <template v-if="!editModCells[props.index][29]">
                             <v-list v-if="props.item.additional_equipment.some(el => !isUndefined(el) && !isNull(el))">
@@ -939,6 +988,7 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${30}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'additional_equipment_price', columnIndex: 30, value: false })"
                         @click="selectCell($event, { index: props.index, column: 'additional_equipment_price', columnIndex: 30, value: false })"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment_price', columnIndex: 30, value: false })">
                         {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['additional_equipment_price'] || 0 : 0 }}$
@@ -946,8 +996,10 @@
                     <td
                         class="text-xs-center"
                         :ref="`td-${props.index}-${31}`"
+                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'manual_installation_price', columnIndex: 31, value: props.item.manual_installation_price })"
                         @click="selectCell($event, { index: props.index, column: 'manual_installation_price', columnIndex: 31, value: props.item.manual_installation_price })"
                         @dblclick="switchCellMode(props.index, 31, true, `manual_installation_price-${props.index}-${31}`)"
+                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 31, true, `manual_installation_price-${props.index}-${31}`)"
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'manual_installation_price', columnIndex: 31, value: props.item.manual_installation_price })">
                         <template v-if="!editModCells[props.index][31]">
                             {{ pricesForEquipment.installationPrices[props.index] }}₴
@@ -977,6 +1029,7 @@
 <script>
 import dcopy from 'deep-copy';
 import Sortable from 'sortablejs';
+import MobileDetect from 'mobile-detect';
 import setStyles from './../../../mixins/stylesMixins.js';
 import utils from './../../../mixins/utils.js';
 import * as transport from './../../../constants/transport.js';
@@ -1045,7 +1098,7 @@ export default {
                 },
                 corner: {
                     el: null,
-                    styles: { display: 'block', top: '0px', left: '0px' }
+                    styles: { height: '0px', width: '0px', display: 'block', top: '0px', left: '0px' }
                 }
             },
             transportTypes: [
@@ -1105,6 +1158,7 @@ export default {
                     { name: 'Matrot', image: '/sprayers/Matrot.png' }
                 ]
             },
+            isMobileDevice: false,
             cachedDataTest: ['number1', 'number2', 'number3', 'number4'],
             isCornerFocused: false,
             copyList: [],
@@ -1239,12 +1293,30 @@ export default {
             this.$emit('update:orderGPSData', imageName, index, 'image');
         },
         cornerFocused(event) {
-            this.tableBody.addEventListener('mouseup', this.cornerBlurred, false);
+            if (this.isMobileDevice) {
+                this.tableBody.addEventListener('touchend', this.cornerBlurred, false);
+            } else {
+                this.tableBody.addEventListener('mouseup', this.cornerBlurred, false);
+            }
+            if (this.bordersSelectData.corner.el) {
+                if (this.isMobileDevice) {
+                    this.bordersSelectData.corner.el.addEventListener('touchend', this.cornerBlurred, false);
+                } else {
+                    this.bordersSelectData.corner.el.addEventListener('mouseup', this.cornerBlurred, false);
+                }
+            }
             this.isCornerFocused = true;
             console.log('Focused');
         },
         cornerBlurred(event) {
             this.isCornerFocused = false;
+            if (this.isMobileDevice) {
+                this.tableBody.removeEventListener('touchend', this.cornerBlurred);
+                this.bordersSelectData.corner.el.removeEventListener('touchend', this.cornerBlurred);
+            } else {
+                this.tableBody.removeEventListener('mouseup', this.cornerBlurred);
+                this.bordersSelectData.corner.el.removeEventListener('mouseup', this.cornerBlurred);
+            }
             if (this.isReadyToCopy) {
                 this.$emit('copy-values:orderGPSData', this.copyList);
                 for (let i = 0; i < this.copyList.length; ++i) {
@@ -1277,7 +1349,19 @@ export default {
             this.bordersSelectData[position].el.classList.add('current');
             if (isCorner) {
                 this.bordersSelectData[position].el.classList.add('corner');
-                this.bordersSelectData[position].el.addEventListener('mousedown', this.cornerFocused, false);
+                if (this.isMobileDevice) {
+                    this.bordersSelectData[position].el.addEventListener('touchstart', this.cornerFocused, false);
+                    this.bordersSelectData[position].el.addEventListener('touchmove', (event) => {
+                        event.preventDefault();
+                        const realTarget = this.findTDEl(event);
+                        if (realTarget !== null) {
+                            const data = JSON.parse(realTarget.dataset.formobile);
+                            this.selectCellToCopyList(null, data, realTarget);
+                        }
+                    }, false);
+                } else {
+                    this.bordersSelectData[position].el.addEventListener('mousedown', this.cornerFocused, false);
+                }
             }
             this.bordersWrapper.appendChild(this.bordersSelectData[position].el);
             this.setStyles(this.bordersSelectData[position].el, this.bordersSelectData[position].styles);
@@ -1294,8 +1378,10 @@ export default {
             };
         },
         normalizeCorner(anchorCoords, anchor) {
-            this.bordersSelectData.corner.styles.top = `${anchorCoords.top + anchor.offsetHeight - 6}px`;
-            this.bordersSelectData.corner.styles.left = `${anchorCoords.left + anchor.offsetWidth - 7}px`;
+            this.bordersSelectData.corner.styles.top = `${anchorCoords.top + anchor.offsetHeight - (this.isMobileDevice ? 12 : 6)}px`;
+            this.bordersSelectData.corner.styles.left = `${anchorCoords.left + anchor.offsetWidth - (this.isMobileDevice ? 14 : 7)}px`;
+            this.bordersSelectData.corner.styles.width = `${this.isMobileDevice ? 24 : 12}px`;
+            this.bordersSelectData.corner.styles.height = `${this.isMobileDevice ? 24 : 12}px`;
             this.bordersSelectData.corner.styles.display = 'block';
         },
         normalizeSelectBorders(anchorCoords, anchor) {
@@ -1351,6 +1437,24 @@ export default {
 
         },
         findTDEl(event) {
+            if (event instanceof TouchEvent) {
+                let clientX;
+                let clientY;
+                if (event.type === 'touchmove') {
+                    clientX = event.touches[0].clientX;
+                    clientY = event.touches[0].clientY;
+                } else if (event.type === 'touchend') {
+                    clientX = event.changedTouches[0].clientX;
+                    clientY = event.changedTouches[0].clientY;
+                }
+                const realTarget = document.elementFromPoint(clientX, clientY);
+
+                if (realTarget.tagName !== 'TD') {
+                    return realTarget.closest('td');
+                }
+
+                return realTarget;
+            }
             let index = 0;
             const path = event.composedPath();
             for (let i = 0; path[i].tagName != 'TD'; ++i) {
@@ -1359,9 +1463,11 @@ export default {
             return index === 0 ? event.target : path[index];
         },
         clickOnTD(td) {
-            this.$nextTick(() => {
-                td.click();
-            });
+            if (td) {
+                this.$nextTick(() => {
+                    td.click();
+                });
+            }
         },
         resetCopyList(newCell) {
             this.copyList = [ [newCell] ];
@@ -1371,7 +1477,7 @@ export default {
             this.positionBorders(cell);
             this.resetCopyList({ ...data, value: (this.isUndefined(data.value) || this.isNull(data.value)) ? '' : data.value });
         },
-        selectCellToCopyList(event, newCell) {
+        selectCellToCopyList(event, newCell, td = null) {
             if (!this.isCornerFocused) return;
             if (newCell.index < this.copyList[0][0].index || newCell.columnIndex < this.copyList[0][0].columnIndex) return;
             const isAddition = ((newCell.index > this.copyList[0][this.copyList[0].length - 1].index) || (newCell.columnIndex > this.copyList[this.copyList.length - 1][0].columnIndex));
@@ -1386,7 +1492,7 @@ export default {
                     isColumnExist = this.copyList[i][0].column === newCell.column;
                 }
             }
-            const currentCell = this.findTDEl(event);
+            const currentCell = td || this.findTDEl(event);
             const currentCellCoords = this.getCoords(currentCell);
             if (isAddition) {
                 if (isEqualToAllIndicesOfStartData && !isColumnExist) {
@@ -1556,6 +1662,9 @@ export default {
         }
     },
     created() {
+        const md = new MobileDetect(window.navigator.userAgent);
+        this.isMobileDevice = !!md.mobile();
+
         if (this.editModCells.length === 0) {
             this.addEditModCells(this.orderGPSData.length);
         }
@@ -1638,8 +1747,6 @@ export default {
         font-size: 0;
         cursor: crosshair;
         user-select: contain;
-        width: 12px;
-        height: 12px;
         border: 1px solid rgb(255, 255, 255);
     }
     .handle {
