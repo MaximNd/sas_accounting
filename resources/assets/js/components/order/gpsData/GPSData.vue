@@ -1118,8 +1118,8 @@ export default {
                     { name: 'Fendt', image: '/tractors/Fendt.png' },
                     { name: 'JCB', image: '/tractors/JCB.png' },
                     { name: 'Valtra', image: '/tractors/Valtra.png' },
-                    { name: 'МТЗ', image: '/tractors/МТЗ.png' },
-                    { name: 'ХТЗ', image: '/tractors/ХТЗ.png' }
+                    { name: 'МТЗ', image: '/tractors/MTZ.png' },
+                    { name: 'ХТЗ', image: '/tractors/XTZ.png' }
                 ],
                 [transport.COMBINES]: [
                     { name: 'John Deere', image: '/combines/JohnDeere.png' },
