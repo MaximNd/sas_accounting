@@ -427,7 +427,7 @@
                                 :ref="`gps_tracker-${props.index}-${9}`"
                                 :value="props.item.gps_tracker"
                                 @change="setCellValue($event, props.index, 9, 'gps_tracker', `td-${props.index}-${9}`)"
-                                :items="gpsTrackers"
+                                :items="gpsTrackersWithHeader"
                                 item-text="name"
                                 hide-selected
                                 label="Вибирете GPS-трекер"
@@ -478,12 +478,12 @@
                         <template v-else>
                             <v-layout wrap>
                                 <template v-for="(_, inputIndex) in props.item.fuel_gauge.length">
-                                    <v-flex xs11 :key="`fuel_gauge_input-${inputIndex}`">
+                                    <v-flex xs10 :key="`fuel_gauge_input-${inputIndex}`">
                                         <v-autocomplete
                                             :ref="`fuel_gauge-${props.index}-${11}`"
                                             :value="props.item.fuel_gauge[inputIndex]"
                                             @change="setCellValue($event, props.index, 11, 'fuel_gauge', `td-${props.index}-${11}`, inputIndex, false)"
-                                            :items="fuelLevelSensors"
+                                            :items="fuelLevelSensorsWithHeader"
                                             item-text="name"
                                             clearable
                                             hide-selected
@@ -538,7 +538,7 @@
                                 :ref="`counter-${props.index}-${13}`"
                                 :value="props.item.counter"
                                 @change="setCellValue($event, props.index, 13, 'counter', `td-${props.index}-${13}`)"
-                                :items="allEquipment"
+                                :items="fuelFlowmetersWithHeader"
                                 item-text="name"
                                 hide-selected
                                 label="Вибирете счетчик"
@@ -574,7 +574,7 @@
                                 :ref="`rf_id-${props.index}-${15}`"
                                 :value="props.item.counter"
                                 @change="setCellValue($event, props.index, 15, 'rf_id', `td-${props.index}-${15}`)"
-                                :items="allEquipment"
+                                :items="identificationWithHeader"
                                 item-text="name"
                                 hide-selected
                                 label="Вибирете RFID"
@@ -610,7 +610,7 @@
                                 :ref="`reader_of_trailed_equipment-${props.index}-${17}`"
                                 :value="props.item.reader_of_trailed_equipment"
                                 @change="setCellValue($event, props.index, 17, 'reader_of_trailed_equipment', `td-${props.index}-${17}`)"
-                                :items="allEquipment"
+                                :items="identificationWithHeader"
                                 item-text="name"
                                 hide-selected
                                 label="Вибирете считыватель прицепного оборудования"
@@ -712,7 +712,7 @@
                                 :ref="`deaerator_small-${props.index}-${21}`"
                                 :value="props.item.deaerator_small"
                                 @change="setCellValue($event, props.index, 21, 'deaerator_small', `td-${props.index}-${21}`)"
-                                :items="allEquipment"
+                                :items="fuelFlowmetersWithHeader"
                                 item-text="name"
                                 hide-selected
                                 label="Вибирете деаэратор"
@@ -748,7 +748,7 @@
                                 :ref="`deaerator_large-${props.index}-${23}`"
                                 :value="props.item.deaerator_large"
                                 @change="setCellValue($event, props.index, 23, 'deaerator_large', `td-${props.index}-${23}`)"
-                                :items="allEquipment"
+                                :items="fuelFlowmetersWithHeader"
                                 item-text="name"
                                 hide-selected
                                 label="Вибирете деаэратор"
@@ -804,7 +804,7 @@
                                             :ref="`cn03-${props.index}-${25}`"
                                             :value="props.item.cn03[inputIndex]"
                                             @change="setCellValue($event, props.index, 25, 'cn03', `td-${props.index}-${25}`, inputIndex, false)"
-                                            :items="allEquipment"
+                                            :items="optionalEquipmentWithHeader"
                                             item-text="name"
                                             clearable
                                             hide-selected
@@ -879,7 +879,7 @@
                                             :ref="`rs01-${props.index}-${27}`"
                                             :value="props.item.rs01[inputIndex]"
                                             @change="setCellValue($event, props.index, 27, 'rs01', `td-${props.index}-${27}`, inputIndex, false)"
-                                            :items="allEquipment"
+                                            :items="identificationWithHeader"
                                             item-text="name"
                                             clearable
                                             hide-selected
@@ -1242,6 +1242,36 @@ export default {
                 { header: 'Идентификация' },
                 ...this.identification,
                 { divider: true },
+                { header: 'Дополнительное оборудование' },
+                ...this.optionalEquipment
+            ];
+        },
+        gpsTrackersWithHeader() {
+            return [
+                { header: 'GPS-трекеры' },
+                ...this.gpsTrackers
+            ];
+        },
+        fuelLevelSensorsWithHeader() {
+            return [
+                { header: 'Датчики уровня топлива' },
+                ...this.fuelLevelSensors
+            ];
+        },
+        fuelFlowmetersWithHeader() {
+            return [
+                { header: 'Расходомеры топлива' },
+                ...this.fuelFlowmeters
+            ];
+        },
+        identificationWithHeader() {
+            return [
+                { header: 'Идентификация' },
+                ...this.identification
+            ];
+        },
+        optionalEquipmentWithHeader() {
+            return [
                 { header: 'Дополнительное оборудование' },
                 ...this.optionalEquipment
             ];
