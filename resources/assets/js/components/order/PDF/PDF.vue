@@ -57,7 +57,7 @@
         <template v-if="servicesPreviewNames[pdfLayoutNames.LAND_BANK_ACCOUNTING]">
             <appLandBankRegistrationTitle />
             <div class="html2pdf__page-break"></div>
-            <appLandBankRegistrationList  :price="servicesPreviewNames[pdfLayoutNames.LAND_BANK_ACCOUNTING].price" />
+            <appLandBankRegistrationList :price="servicesPreviewNames[pdfLayoutNames.LAND_BANK_ACCOUNTING].price" />
             <div class="html2pdf__page-break"></div>
         </template>
         <template v-if="servicesPreviewNames[pdfLayoutNames.ENGINEER_PROJECT]">

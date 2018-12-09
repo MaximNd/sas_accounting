@@ -78,6 +78,8 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::post('/orders', 'OrderController@createOrder');
 
+    Route::post('/orders/pdf', 'OrderController@createPDF');
+
     Route::put('/orders/{id}', 'OrderController@updateOrder');
 
     Route::put('/orders/{id}/restore', 'OrderController@restoreOrder');

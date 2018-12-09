@@ -7,12 +7,42 @@ use App\OptionalService;
 use App\GPSData;
 use App\OrderPrices;
 use App\OrderLog;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    private $pdfNames = [
+        'CONNECT_TO_PLATFORM' => 'Підключення до платформи SASAGRO.COM',
+        'MONITORING' => 'Цілодобовий моніторинг',
+        'FIELD_MAPPING_BY_DRONES' => 'Картування полів Дронами',
+        'FIELD_MAPPING_BY_PHYSICAL_MEASUREMENT' => 'Картування полів Фізичний обмір',
+        'LAND_BANK_ACCOUNTING' => 'Облік земельного банку',
+        'ENGINEER_PROJECT' => 'Інженерний проект',
+        'ENGINEER_SUPPORT' => 'Інженерна підтримка',
+        'PARTOL' => 'Патрулювання',
+        'NDVI' => 'NDVI',
+        'COUNTING_SEEDLINGS' => 'Підрахунок всходів',
+        'PHOTO_VIDEO' => 'Фото/відео',
+        'SAS_MAPPER' => 'SAS Mapper',
+        'CHEMICAL_SOIL_ANALYSIS' => 'Хімічний аналіз грунтів',
+        'MEASURING_THE_HARDNESS_OF_THE_SOIL' => 'Вимірювання твердості грунту',
+        'INTEGRATION_1C' => 'Інтеграція 1С і Cropio з супроводом'
+    ];
+
+    public function createPDF(Request $request) {
+        $data = [
+            'pdf_names' => $this->pdfNames,
+            'data' => $request->all()
+        ];
+        return PDF::loadView('pdf.pdf', $data)
+            ->setPaper([50, 100, 606.5, 852.5], 'landscape')
+            ->setWarnings(false)
+            ->download('pdf.pdf');
+    }
+
     public function dollarRate($date) {
         $session = curl_init('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?valcode=USD&date='.$date.'&json');
         curl_setopt($session, CURLOPT_RETURNTRANSFER,true);

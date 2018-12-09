@@ -523,9 +523,9 @@
                                                 color="primary"
                                                 dark>
                                                 <v-card-text>
-                                                    Создание документа ({{ pdfProgress }}%)
+                                                    {{ pdfLoadStatus }} <template v-if="pdfLoaded !== 0">({{ pdfLoaded }}МБ)</template>
                                                     <v-progress-linear
-                                                        v-model="pdfProgress"
+                                                        indeterminate
                                                         color="white"
                                                         class="mb-0">
                                                     </v-progress-linear>
@@ -534,9 +534,9 @@
                                         </v-dialog>
                                         <v-btn
                                             @click="createPDF"
+                                            color="primary"
                                             large
                                             block
-                                            color="primary"
                                             :disabled="loading"
                                             :loading="loading">
                                                 Скачать PDF <v-icon right>get_app</v-icon>
@@ -644,7 +644,8 @@ export default {
         return {
             initialized: false,
             creationInitialized: false,
-            pdfProgress: 0,
+            pdfLoaded: 0,
+            pdfLoadStatus: 'Создание Документа',
             pdfLoading: false,
             orderUpdating: false,
             loading: false,
@@ -682,6 +683,19 @@ export default {
                 cn03: [],
                 rs01: [],
                 manual_installation_price: 0
+            },
+            mappedColumnNames: {
+                gps_tracker: 'GPS трекер',
+                fuel_gauge: 'ДУТ',
+                counter: 'Лічильник',
+                rf_id: 'RFID водія',
+                reader_of_trailed_equipment: 'Зчитувач причіпного',
+                can_reader: 'CAN reader',
+                deaerator_small: 'Деаэратор малий',
+                deaerator_large: 'Деаэратор великий',
+                cn03: 'Модуль CN03',
+                rs01: 'Модуль RS01',
+                additional_equipment: ''
             },
             cachedData: [],
             orderInCreation: false,
@@ -854,6 +868,49 @@ export default {
                 }
                 return groupedCache;
             }, {});
+        },
+        gpsTrackingData() {
+            return this.orderData.GPSData.map(gpsRow => {
+                return {
+                    equipment: Object.keys(gpsRow).reduce((equipment, key) => {
+                        if (Object.keys(this.mappedColumnNames).indexOf(key) !== -1) {
+                            if (Array.isArray(gpsRow[key])) {
+                                let count = 0;
+                                let gpsRowArray = gpsRow[key].slice().filter(row => this.isObject(row));
+                                if (gpsRowArray.length === 0) return equipment;
+                                const equipmentData = {
+                                    image: ``,
+                                    name: ``,
+                                    price: 0
+                                };
+                                for (let i = 0; i < gpsRowArray.length; ++i) {
+                                    for (let j = 0; j < gpsRowArray.length; ++j) {
+                                        if (gpsRowArray[i].id === gpsRowArray[j].id) {
+                                            ++count;
+                                        }
+                                    }
+                                    equipmentData.image = `storage/${gpsRowArray[i].image}`;
+                                    equipmentData.name = `${this.mappedColumnNames[key]} ${count}шт ${gpsRowArray[i].name}`;
+                                    equipmentData.price = this.multiplyTwoFloats(gpsRowArray[i].price, count);
+                                    gpsRowArray = gpsRowArray.filter(row => row.id !== gpsRowArray[i].id);
+                                }
+
+                                equipment.push(equipmentData);
+                            } else if (this.isObject(gpsRow[key])) {
+                                equipment.push({
+                                    image: `storage/${gpsRow[key].image}`,
+                                    name: `${this.mappedColumnNames[key]} ${gpsRow[key].name}`,
+                                    price: gpsRow[key].price
+                                });
+                            }
+                        }
+                        return equipment;
+                    }, []),
+                    multiplier: gpsRow.multiplier,
+                    transportImage: gpsRow.image.slice(1),
+                    transportName: `${(this.isNull(gpsRow.mark) || this.isUndefined(gpsRow.mark)) ? '' : gpsRow.mark}${(this.isNull(gpsRow.model) || this.isUndefined(gpsRow.model)) ? '' : ` ${gpsRow.model}`}`
+                };
+            });
         },
         gruppedEquipment() {
             const countEquipment = this.orderData.GPSData.reduce((grupped, row) => {
@@ -1667,91 +1724,71 @@ export default {
         createPDF() {
             this.loading = true;
             this.pdfLoading = true;
-            this.pdfProgress = 0;
-
-            const element = document.getElementById('pdf');
-            const format = [852.5, 606.5];
-            const opt = {
-                margin:       0,
-                filename:     'myfile.pdf',
-                image:        { type: 'jpeg', quality: 0.96 },
-                html2canvas:  { scale: 2, imageTimeout: 0 },
-                jsPDF:        { unit: 'pt', format, orientation: 'l' }
-            };
-            const childreninWrapperCount = 20;
-            const pages = 10;
-            const pageWidth = 1137.5;
-            const pageHeight = 808;
-            const children = element.children;
-            const pdfPages = children.length / 2;
-            const wrappers = [];
-            const countWrappers = Math.ceil(children.length / childreninWrapperCount);
-            const doc = new jsPDF(opt.jsPDF);
-            const pageSize = jsPDF.getPageSize(opt.jsPDF);
-            const imgPromises = [];
-
-            const getImages = () => new Promise((resolve, reject) => {
-                for (let i = 0; i < countWrappers; ++i) {
-                    wrappers.push(document.createElement('div'));
-                    wrappers[i].classList.add('container');
-                    wrappers[i].classList.add('fluid');
-                    const wrapperHeight = this.multiplyTwoFloats(pageHeight, pages);
-                    this.setStyles(wrappers[i], {
-                        'font-family': 'ProximaNova',
-                        padding: 0,
-                        width: '1137.5px',
-                        height: `${wrapperHeight}px`
-                    });
-                    for (let j = i * childreninWrapperCount; j < childreninWrapperCount + (i * childreninWrapperCount); ++j) {
-                        if (!children[j]) break;
-                        const clone = children[j].cloneNode(true);
-                        wrappers[i].appendChild(clone);
-
-                    }
-                    imgPromises.push(html2pdf().from(wrappers[i]).set(opt).outputImg());
+            const formatterSettings = {
+                symbol: '',
+                precision: 2,
+                thousand: ' ',
+                format: {
+                    pos : '%v%s',
+                    zero: '%v%s'
                 }
-                resolve()
-            });
+            };
+            const dollarDate = this.orderData.dollar_date.split('-').reverse().join('-');
+            const pdfData = this.orderData.services.reduce((data, service) => {
+                data[service.pdf_layout] = {};
+                if (service.pdf_layout === pdfLayoutNames.INTEGRATION_1C) {
+                    data[service.pdf_layout].prices = service.prices_for_ranges.map((pricesRow, index) => [
+                        { text: (index + 1 === service.prices_for_ranges.length) ? `${pricesRow.from}>` : `${pricesRow.from} - ${pricesRow.to}` },
+                        { text: pricesRow.price }
+                    ]);
+                } else if (service.pdf_layout === pdfLayoutNames.ENGINEER_PROJECT) {
+                    data[service.pdf_layout].gpsTrackingData = this.gpsTrackingData;
+                    data[service.pdf_layout].gruppedEquipment = this.gruppedEquipment.map(row => [
+                        { text: row.type, classes: 'prices-text-left small-text bold-text' },
+                        { text: row.count, classes: 'small-text bold-text' },
+                        { text: row.price, classes: 'small-text bold-text' }
+                    ]);
+                    data[service.pdf_layout].dollarDate = dollarDate;
+                    data[service.pdf_layout].formattedEquipmentPrice = formatter.formatMoney(this.allEquipmentPrice, formatterSettings);
+                    data[service.pdf_layout].formattedInstallationPrice = formatter.formatMoney(this.allInstallationPrice, formatterSettings);
+                    data[service.pdf_layout].formattedTransportPrice = formatter.formatMoney(this.transportationPrice, formatterSettings);
+                    data[service.pdf_layout].formattedPriceForDays = formatter.formatMoney(this.priceForDays, formatterSettings);
+                    const finalPrice = this.addTwoFloats(this.addTwoFloats(this.allEquipmentPrice, this.priceForDays), this.addTwoFloats(this.allInstallationPrice, this.transportationPrice));
+                    data[service.pdf_layout].formattedFinalPrice = formatter.formatMoney(finalPrice, formatterSettings);
+                } else {
+                    data[service.pdf_layout].price = service.price;
+                }
+                return data;
+            }, {});
 
-            const setImages = () => new Promise((resolve, reject) => {
-                return Promise.all(imgPromises)
-                    .then(data => {
-                        setTimeout(() => {
-                            this.pdfProgress = 80;
-                        }, 100);
-                        setTimeout(() => {
-                            let counter = 1;
-                            for (let i = 0; i < data.length; ++i) {
-                                let position = 0;
-                                for (let j = 0; j < pages; ++j) {
-                                    if(j != 0) {
-                                        doc.addPage();
-                                    }
-                                    doc.addImage(data[i].src, 'jpeg', opt.margin, position, pageSize.width, this.multiplyTwoFloats(format[1], pages));
-                                    if (counter >= pdfPages) {
-                                        return resolve();
-                                    }
-                                    position = this.subtractTwoFloats(position, format[1]);
-                                    ++counter;
-                                }
-                                doc.addPage();
-                            }
-                            resolve();
-                        }, 300);
-                    })
-                    .catch(err => console.log(err))
-            });
+            const finalServicesPrice = this.servicePrices.reduce((price, serviceData) => this.addTwoFloats(price, serviceData.price), 0.0);
+            const finalServicesPriceUAH = this.multiplyTwoFloats(this.orderData.dollar_rate, finalServicesPrice);
+            pdfData.servicePrices = {
+                dollarDate,
+                servicePrices: this.servicePrices.map(serviceData => [
+                    { text: serviceData.service.name, classes: 'prices-text-left small-text' },
+                    { text: serviceData.price, classes: 'small-text bold-text' }
+                ]),
+                finalPrice: formatter.formatMoney(finalServicesPriceUAH, formatterSettings)
+            };
 
-            const downloadPDF = () => new Promise((resolve, reject) => {
-                this.pdfProgress = 90;
-                const progressInterval = setInterval(() => {
-                    this.pdfProgress = this.addTwoFloats(this.pdfProgress, 5);
-                    if (this.pdfProgress >= 100) {
-                        clearInterval(progressInterval);
+            if (this.orderData.optional_services && this.orderData.optional_services.length > 0) {
+                pdfData.optionalServices = this.orderData.optional_services;
+            }
+
+            this.axios.post('/orders/pdf', pdfData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/pdf'
+                    },
+                    responseType: 'blob',
+                    onDownloadProgress: (progressEvent) => {
+                        this.pdfLoadStatus = 'Загрузка документа';
+                        this.pdfLoaded = ((progressEvent.loaded / 1024) / 1024).toFixed(2);
                     }
-                }, 200);
-                setTimeout(() => {
-                    const pdf = doc.output('blob');
+                })
+                .then(({ data }) => {
+                    const pdf = new Blob([data], { type: 'application/pdf' });
                     const link = document.createElement('a');
                     link.setAttribute('href', window.URL.createObjectURL(pdf));
                     link.setAttribute('download', `${this.orderData.name}.pdf`);
@@ -1759,32 +1796,18 @@ export default {
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                    resolve();
-                }, 500);
-            });
-
-            setTimeout(() => {
-                const progressInterval = setInterval(() => {
-                    this.pdfProgress = this.addTwoFloats(this.pdfProgress, 0.7);
-                    if (this.pdfProgress >= 90) {
-                        clearInterval(progressInterval);
-                    }
-                }, 1500);
-                getImages()
-                    .then(() => setImages())
-                    .then(() => downloadPDF())
-                    .then(() => {
-                        this.loading = false;
-                        this.pdfLoading = false;
-                        this.pdfProgress = 0;
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        this.loading = false;
-                        this.pdfLoading = false;
-                        this.pdfProgress = 0;
-                    });
-            }, 500);
+                    this.loading = false;
+                    this.pdfLoading = false;
+                    this.pdfLoadStatus = 'Создание Документа';
+                    this.pdfLoaded = 0;
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.loading = false;
+                    this.pdfLoading = false;
+                    this.pdfLoadStatus = 'Создание Документа';
+                    this.pdfLoaded = 0;
+                });
         }
     },
     created() {
