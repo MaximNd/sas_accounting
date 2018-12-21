@@ -62,6 +62,9 @@
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'multiplier', columnIndex: 0, value: props.item.multiplier })">
                         <v-text-field
                             :ref="`multiplier-${props.index}-${0}`"
+                            v-validate="'required|min_value:1|numeric'"
+                            :data-vv-name="`multiplier-${props.index}`"
+                            :error-messages="errors.collect(`multiplier-${props.index}`)"
                             :value="props.item.multiplier"
                             @change="setCellValue($event, props.index, 0, 'multiplier', `td-${props.index}-${0}`)"
                             label="Умножитель"
@@ -70,6 +73,13 @@
                             type="number"
                             min="1"
                         ></v-text-field>
+                        <v-btn
+                            class="spread-row-btn"
+                            color="info"
+                            small
+                            @click.stop="spreadRow(props.index)">
+                            Разложить
+                        </v-btn>
                     </td>
                     <td
                         class="text-xs-center"
@@ -1065,6 +1075,10 @@ import { uploadImage } from './../../../constants/images.js';
 export default {
     mixins: [setStyles, utils],
     props: {
+        validator: {
+            type: Object,
+            required: true
+        },
         defaultRowCount: {
             type: Number,
             required: true
@@ -1321,6 +1335,12 @@ export default {
             }
             this.addEditModCells(count);
             this.$emit('rowAdded', count);
+        },
+        spreadRow(index) {
+            const rowToSpread = this.orderGPSData[index];
+            if (rowToSpread.multiplier <= 1) return;
+            this.addEditModCells(rowToSpread.multiplier - 1, index + 1);
+            this.$emit('row:spread', index, rowToSpread);
         },
         deleteSelected() {
             const indices = this.selected.map(selectedRow => this.orderGPSData.findIndex(row => row.id === selectedRow.id));
@@ -1726,6 +1746,7 @@ export default {
         }
     },
     created() {
+        this.$validator = this.validator;
         const md = new MobileDetect(window.navigator.userAgent);
         this.isMobileDevice = !!md.mobile();
 
@@ -1794,6 +1815,12 @@ export default {
     #gps-data-table table td:first-child {
         border-left: 1px solid rgba(202, 202, 202, 0.5);
         border-right: 1px solid rgba(202, 202, 202, 0.5);
+    }
+    #gps-data-table .spread-row-btn {
+        font-size: 10px;
+        margin: 6px 0px;
+        height: 20px;
+        padding: 0;
     }
     .border {
         position: absolute;

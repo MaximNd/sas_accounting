@@ -250,6 +250,7 @@
                         <appGPSData
                             v-if="orderData.GPSData"
                             ref="GPSData"
+                            :validator="$validator"
                             :orderGPSData="orderData.GPSData"
                             :gpsTrackers="gpsTrackers"
                             :fuelLevelSensors="fuelLevelSensors"
@@ -267,6 +268,7 @@
                             @copy-values:orderGPSData="copySelectedInOrderGPSData"
                             @drag-n-drop-gps-data="dragNDropGPSData"
                             @rowAdded="addRowToOrderGPSData"
+                            @row:spread="spreadRow"
                             @delete:rows="deleteRowsFromOrderGPSData"
                             @delete:cache="deleteCache">
                         </appGPSData>
@@ -1364,6 +1366,21 @@ export default {
                 this.showSnackbar('info', `${this.declOfNum(count, ['Добавлен', 'Добавлено', 'Добавлены'])} ${count} ${this.declOfNum(count, ['ряд', 'ряда', 'рядов'])}`);
             }
         },
+        spreadRow(index, rowToSpread) {
+            console.log('SPREAD ROW: ', dcopy(rowToSpread));
+            const count = rowToSpread.multiplier - 1;
+            let nextIndex = index + 1;
+            this.$set(rowToSpread, 'multiplier', 1);
+            for (let i = 0; i < count; ++i, ++nextIndex) {
+                const rowToInsert = dcopy(rowToSpread);
+                rowToInsert.id = this.initialGPSRowData.id;
+                this.orderData.GPSData.splice(nextIndex, 0, rowToInsert);
+                ++this.initialGPSRowData.id;
+                ++this.initialGPSRowData.order;
+            }
+            this.resetRowsOrderValues();
+            this.showSnackbar('info', `Ряд был разложен на ${count + 1}`);
+        },
         deleteRowsFromOrderGPSData(indices) {
             this.orderData.GPSData = this.orderData.GPSData.filter((_, index) => !indices.includes(index));
             if (indices.length > 0) {
@@ -1373,10 +1390,13 @@ export default {
         dragNDropGPSData(newIndex, oldIndex) {
             const rowSelected = this.orderData.GPSData.splice(oldIndex, 1)[0];
             this.orderData.GPSData.splice(newIndex, 0, rowSelected);
+            this.resetRowsOrderValues();
+            this.showSnackbar('info', `Ряд был перемещён`);
+        },
+        resetRowsOrderValues() {
             for (let i = 0; i < this.orderData.GPSData.length; ++i) {
                 this.$set(this.orderData.GPSData[i], 'order', i + 1);
             }
-            this.showSnackbar('info', `Ряд был перемещён`);
         },
         getPricesData(data) {
             const priceList = data || this.priceList;
