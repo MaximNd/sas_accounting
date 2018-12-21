@@ -64,13 +64,15 @@
             <appGPSTrackingTitle />
             <div class="html2pdf__page-break"></div>
             <template v-for="(gpsData, index) in gpsTrackingData">
-                <template v-for="n in gpsData.multiplier">
-                    <appGPSTrackingData
-                        :key="`gps-data-${index}-${n}`"
-                        :equipment="gpsData.equipment"
-                        :transportImage="gpsData.transportImage"
-                        :transportName="gpsData.transportName" />
-                    <div class="html2pdf__page-break" :key="`gps-data-page-break-${index}-${n}`"></div>
+                <template v-if="gpsData.multiplier > 0">
+                    <template v-for="n in gpsData.multiplier">
+                        <appGPSTrackingData
+                            :key="`gps-data-${index}-${n}`"
+                            :equipment="gpsData.equipment"
+                            :transportImage="gpsData.transportImage"
+                            :transportName="gpsData.transportName" />
+                        <div class="html2pdf__page-break" :key="`gps-data-page-break-${index}-${n}`"></div>
+                    </template>
                 </template>
             </template>
         </template>

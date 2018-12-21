@@ -1008,14 +1008,16 @@
             @include('pdf.GPSTracking.GPSTrackingTitle')
 
             @for($i = 0; $i < count($data[$pdf_names['ENGINEER_PROJECT']]['gpsTrackingData']); ++$i)
-                @for($n = 0; $n < $data[$pdf_names['ENGINEER_PROJECT']]['gpsTrackingData'][$i]['multiplier']; ++$n)
-                    @include('pdf.GPSTracking.GPSTrackingData', [
-                        'index' => $i,
-                        'equipment' => $data[$pdf_names['ENGINEER_PROJECT']]['gpsTrackingData'][$i]['equipment'],
-                        'transportImage' => $data[$pdf_names['ENGINEER_PROJECT']]['gpsTrackingData'][$i]['transportImage'],
-                        'transportName' => $data[$pdf_names['ENGINEER_PROJECT']]['gpsTrackingData'][$i]['transportName']
-                    ])
-                @endfor
+                @if($data[$pdf_names['ENGINEER_PROJECT']]['gpsTrackingData'][$i]['multiplier'] > 0)
+                    @for($n = 0; $n < $data[$pdf_names['ENGINEER_PROJECT']]['gpsTrackingData'][$i]['multiplier']; ++$n)
+                        @include('pdf.GPSTracking.GPSTrackingData', [
+                            'index' => $i,
+                            'equipment' => $data[$pdf_names['ENGINEER_PROJECT']]['gpsTrackingData'][$i]['equipment'],
+                            'transportImage' => $data[$pdf_names['ENGINEER_PROJECT']]['gpsTrackingData'][$i]['transportImage'],
+                            'transportName' => $data[$pdf_names['ENGINEER_PROJECT']]['gpsTrackingData'][$i]['transportName']
+                        ])
+                    @endfor
+                @endif
             @endfor
         @endif
 
