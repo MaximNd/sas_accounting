@@ -676,7 +676,7 @@
                                 :ref="`can_reader-${props.index}-${19}`"
                                 :value="props.item.can_reader"
                                 @change="setCellValue($event, props.index, 19, 'can_reader', `td-${props.index}-${19}`)"
-                                :items="allEquipment"
+                                :items="optionalEquipment"
                                 item-text="name"
                                 hide-selected
                                 label="Вибирете CAN"
