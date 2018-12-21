@@ -1,8 +1,35 @@
 <template>
     <v-card class="elevation-0">
          <v-card-title>
-            <v-btn @click="addRow(1)" color="info">Добавить</v-btn>
-            <v-btn @click="deleteSelected" color="error">Удалить выбранные</v-btn>
+            <v-card flat>
+                <v-layout wrap align-start>
+                    <v-flex xs12 sm3>
+                        <v-text-field
+                            v-model="count"
+                            :error-messages="countErrors"
+                            label="Количество"
+                            type="number"
+                            min="1">
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm3>
+                        <v-btn
+                            @click="addRow(count)"
+                            color="info"
+                            :block="$vuetify.breakpoint.xsOnly">
+                            Добавить
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs12 sm5>
+                        <v-btn
+                            @click="deleteSelected"
+                            color="error"
+                            :block="$vuetify.breakpoint.xsOnly">
+                            Удалить выбранные
+                        </v-btn>
+                    </v-flex>
+                </v-layout>
+            </v-card>
             <v-spacer></v-spacer>
         </v-card-title>
         <v-card-text id="text-test" class="ma-0 pa-0">
@@ -1077,6 +1104,7 @@ export default {
     },
     data() {
         return {
+            count: 1,
             tableBody: null,
             bordersWrapper: null,
             bordersSelectData: {
@@ -1275,6 +1303,9 @@ export default {
                 { header: 'Дополнительное оборудование' },
                 ...this.optionalEquipment
             ];
+        },
+        countErrors() {
+            return this.count > 0 ? [] : ['Должно быть больше нуля'];
         }
     },
     methods: {
@@ -1285,6 +1316,9 @@ export default {
             return transport.name;
         },
         addRow(count = 1) {
+            if (!count || count < 1) {
+                return;
+            }
             this.addEditModCells(count);
             this.$emit('rowAdded', count);
         },
