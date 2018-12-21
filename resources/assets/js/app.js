@@ -8,6 +8,7 @@
 require('./bootstrap');
 import Vue from 'vue';
 import { store } from './store/store';
+import messagesRu from './locale/ru';
 import VueAuth from '@websanova/vue-auth';
 import Vuetify from 'vuetify';
 import VueAxios from 'vue-axios';
@@ -22,7 +23,14 @@ import router from './router';
 Vue.router = router;
 Vue.use(VueAxios, axios)
 Vue.use(Vuetify);
-Vue.use(VeeValidate);
+Vue.use(VeeValidate, {
+    locale: 'ru',
+    dictionary: {
+        ru: {
+            messages: messagesRu
+        }
+    }
+});
 Vue.use(VueHammer);
 
 Vue.use(VueAuth, {
