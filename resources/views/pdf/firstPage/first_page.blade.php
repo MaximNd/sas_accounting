@@ -10,7 +10,7 @@
         <div class="images">
             <div class="row">
                 <div class="col-xs-3">
-                    <img class="bottom-imgs sas-img" src="storage/image8.png" alt="">
+                    <img class="bottom-imgs sas-img" src="storage/image8_s.png" alt="">
                 </div>
                 <div class="col-xs-5">
                     <img class="bottom-imgs agrosphera-img" src="storage/image7.png" alt="">

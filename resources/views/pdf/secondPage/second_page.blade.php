@@ -1,6 +1,6 @@
 <div id="page-2" class="page">
     <div class="logo">
-        <img src="storage/image8.png" alt="logo">
+        <img src="storage/image8_s.png" alt="logo">
     </div>
     <div class="text text-top">
         Рішення для
@@ -14,7 +14,7 @@
 
 <style>
     #page-2 {
-        background-image: url("/storage/image11_s.png");
+        background-image: url("/storage/image11_s.jpg");
         background-repeat: no-repeat;
         background-position: 100% 50%;
         background-size: 124%;
