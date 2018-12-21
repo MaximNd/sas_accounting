@@ -1,76 +1,91 @@
 <template>
     <v-container fluid>
-        <appEditClient
-            :editDialog="dialogs.editDialog"
-            :client="editedClient"
-            @editDialogClosed="closeDialog"
-            @clientEdited="editClient"
-            @client:error="setSnackBar('error', 'Ошибка!');"
-            @validation:error="setSnackBar('error', 'Неверно введенные данные!')" />
-        <appDeleteClient
-            :deleteDialog="dialogs.deleteDialog"
-            :client="deletedClient"
-            @deleteDialogClosed="closeDialog"
-            @client:error="setSnackBar('error', 'Ошибка!');"
-            @clientDeleted="deleteClient" />
-        <v-layout v-if="!isDeleted">
-            <v-flex xs12>
-                <v-card>
-                    <v-card-text>
-                        <v-layout justify-start wrap>
-                            <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
-                                <v-text-field v-model="client.person_full_name" label="Контактное лицо" readonly></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
-                                <v-text-field v-model="client.company_name" label="Компания" readonly></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
-                                <v-text-field v-model="client.email" label="E-mail" readonly></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
-                                <v-text-field v-model="client.area" label="Площадь" readonly></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
-                                <v-text-field v-model="client.telephone" label="Телефон" readonly></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
-                                <v-text-field v-model="client.address" label="Физ. адрес" readonly></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
-                                <v-textarea v-model="client.comment" label="Коментарий" readonly></v-textarea>
-                            </v-flex>
-                        </v-layout>
-                    </v-card-text>
-                    <v-card-text>
-                        <v-container fluid>
-                            <v-layout>
-                                <v-btn color="info" @click="setEditData">
-                                    Изменить
-                                </v-btn>
-                                <v-btn color="error" @click="setDeleteData">
-                                    Удалить
-                                </v-btn>
+        <template v-if="clientLoading">
+            <v-layout wrap>
+                <v-flex xs12 d-flex justify-center>
+                    <v-progress-circular
+                        :width="10"
+                        :size="150"
+                        color="primary"
+                        indeterminate>
+                        Загрузка...
+                    </v-progress-circular>
+                </v-flex>
+            </v-layout>
+        </template>
+        <template v-else>
+            <appEditClient
+                :editDialog="dialogs.editDialog"
+                :client="editedClient"
+                @editDialogClosed="closeDialog"
+                @clientEdited="editClient"
+                @client:error="setSnackBar('error', 'Ошибка!');"
+                @validation:error="setSnackBar('error', 'Неверно введенные данные!')" />
+            <appDeleteClient
+                :deleteDialog="dialogs.deleteDialog"
+                :client="deletedClient"
+                @deleteDialogClosed="closeDialog"
+                @client:error="setSnackBar('error', 'Ошибка!');"
+                @clientDeleted="deleteClient" />
+            <v-layout v-if="!isDeleted">
+                <v-flex xs12>
+                    <v-card>
+                        <v-card-text>
+                            <v-layout justify-start wrap>
+                                <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
+                                    <v-text-field v-model="client.person_full_name" label="Контактное лицо" readonly></v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
+                                    <v-text-field v-model="client.company_name" label="Компания" readonly></v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
+                                    <v-text-field v-model="client.email" label="E-mail" readonly></v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
+                                    <v-text-field v-model="client.area" label="Площадь" readonly></v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
+                                    <v-text-field v-model="client.telephone" label="Телефон" readonly></v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
+                                    <v-text-field v-model="client.address" label="Физ. адрес" readonly></v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm7 offset-sm3 lg4 offset-lg4>
+                                    <v-textarea v-model="client.comment" label="Коментарий" readonly></v-textarea>
+                                </v-flex>
                             </v-layout>
-                        </v-container>
-                    </v-card-text>
-                    <v-card-text>
-                        <appOrders
-                            :clientOrders="client.orders">
-                        </appOrders>
-                    </v-card-text>
-                </v-card>
-            </v-flex>
-        </v-layout>
-        <v-progress-linear
-            v-else
-            :width="10"
-            :size="100"
-            color="primary"
-            indeterminate>
-        </v-progress-linear>
-        <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor" bottom right>
-            {{ snackText }}
-        </v-snackbar>
+                        </v-card-text>
+                        <v-card-text>
+                            <v-container fluid>
+                                <v-layout>
+                                    <v-btn color="info" @click="setEditData">
+                                        Изменить
+                                    </v-btn>
+                                    <v-btn color="error" @click="setDeleteData">
+                                        Удалить
+                                    </v-btn>
+                                </v-layout>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-text>
+                            <appOrders
+                                :clientOrders="client.orders">
+                            </appOrders>
+                        </v-card-text>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+            <v-progress-linear
+                v-else
+                :width="10"
+                :size="100"
+                color="primary"
+                indeterminate>
+            </v-progress-linear>
+            <v-snackbar v-model="snack" :timeout="snackTimeout" :color="snackColor" bottom right>
+                {{ snackText }}
+            </v-snackbar>
+        </template>
     </v-container>
 </template>
 
@@ -90,6 +105,7 @@ export default {
                 editDialog: false,
                 deleteDialog: false
             },
+            clientLoading: false,
             client: {
                 id: '',
                 person_full_name: '',
@@ -141,12 +157,15 @@ export default {
         }
     },
     created() {
+        this.clientLoading = true;
         this.axios.get(`/clients/${this.$route.params.id}`)
             .then(({data}) => {
                 this.client = data;
+                this.clientLoading = false;
             })
             .catch(err => {
                 console.log(err);
+                this.clientLoading = false;
             });
     },
     components: {
