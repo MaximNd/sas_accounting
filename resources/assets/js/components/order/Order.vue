@@ -35,6 +35,7 @@
                                             slot="activator"
                                             v-validate="'required|date_format:YYYY-MM-DD'"
                                             data-vv-name="dollar_date"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('dollar_date')"
                                             v-model="orderData.dollar_date"
                                             label="Дата курса доллара"
@@ -54,8 +55,9 @@
                                 </v-flex>
                                 <v-flex xs12 md3>
                                     <v-text-field
-                                        v-validate="'required|decimal'"
+                                        v-validate="'required|decimal|min_value:0'"
                                         data-vv-name="dollar_rate"
+                                        data-vv-as=" "
                                         :error-messages="errors.collect('dollar_rate')"
                                         @input="replaceComma($event, orderData, 'dollar_rate')"
                                         :value="orderData.dollar_rate"
@@ -125,6 +127,7 @@
                                             <v-switch
                                                 v-validate="{ required: true, included: [true, false] }"
                                                 data-vv-name="is_sent"
+                                                data-vv-as=" "
                                                 :error-messages="errors.collect('is_sent')"
                                                 v-model="orderData.statuses.is_sent"
                                                 color="success"
@@ -135,6 +138,7 @@
                                             <v-switch
                                                 v-validate="{ required: true, included: [true, false] }"
                                                 data-vv-name="is_agreed"
+                                                data-vv-as=" "
                                                 :error-messages="errors.collect('is_agreed')"
                                                 v-model="orderData.statuses.is_agreed"
                                                 color="success"
@@ -145,6 +149,7 @@
                                             <v-switch
                                                 v-validate="{ required: true, included: [true, false] }"
                                                 data-vv-name="is_paid"
+                                                data-vv-as=" "
                                                 :error-messages="errors.collect('is_paid')"
                                                 v-model="orderData.statuses.is_paid"
                                                 color="success"
@@ -155,6 +160,7 @@
                                             <v-switch
                                                 v-validate="{ required: true, included: [true, false] }"
                                                 data-vv-name="is_installation_finished"
+                                                data-vv-as=" "
                                                 :error-messages="errors.collect('is_installation_finished')"
                                                 v-model="orderData.statuses.is_installation_finished"
                                                 color="success"
@@ -167,14 +173,16 @@
                                     <v-text-field
                                         v-validate="'required|max:100'"
                                         data-vv-name="name"
+                                        data-vv-as=" "
                                         :error-messages="errors.collect('name')"
                                         v-model="orderData.name"
                                         label="Название заказа"></v-text-field>
                                 </v-flex>
                                 <v-flex xs12 offset-md2 md6>
                                     <v-text-field
-                                        v-validate="'required|decimal:2'"
+                                        v-validate="'required|decimal:2|min_value:0'"
                                         data-vv-name="area"
+                                        data-vv-as=" "
                                         :error-messages="errors.collect('area')"
                                         @input="replaceComma($event, orderData, 'area')"
                                         :value="orderData.area"
@@ -210,13 +218,15 @@
                                             <v-text-field
                                                 v-validate="'required|max:30'"
                                                 :data-vv-name="`optional_service_name-${index}`"
+                                                data-vv-as=" "
                                                 :error-messages="errors.collect(`optional_service_name-${index}`)"
                                                 label="Название"
                                                 v-model="orderData.optional_services[index].name">
                                             </v-text-field>
                                             <v-text-field
-                                                v-validate="'required|decimal:2'"
+                                                v-validate="'required|decimal:2|min_value:0'"
                                                 :data-vv-name="`optional_service_price-${index}`"
+                                                data-vv-as=" "
                                                 :error-messages="errors.collect(`optional_service_price-${index}`)"
                                                 @input="replaceComma($event, orderData.optional_services[index], 'price', `optional_service_price-${index}`)"
                                                 :value="orderData.optional_services[index].price"
@@ -225,6 +235,7 @@
                                             <v-textarea
                                                 v-validate="'required'"
                                                 :data-vv-name="`optional_service_comment-${index}`"
+                                                data-vv-as=" "
                                                 :error-messages="errors.collect(`optional_service_comment-${index}`)"
                                                 label="Комментарий"
                                                 v-model="orderData.optional_services[index].comment">
@@ -290,6 +301,7 @@
                                         <v-text-field
                                             v-validate="'required|decimal:2|min_value:0|max_value:100'"
                                             data-vv-name="installation_discount"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('installation_discount')"
                                             @input="replaceComma($event, orderData, 'installation_discount')"
                                             :value="orderData.installation_discount"
@@ -300,8 +312,9 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
-                                            v-validate="'required|decimal:2'"
+                                            v-validate="'required|decimal:2|min_value:0'"
                                             data-vv-name="allInstallationPrice"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('allInstallationPrice')"
                                             :value="allInstallationPrice"
                                             label="Монтаж оборудования"
@@ -314,6 +327,7 @@
                                         <v-text-field
                                             v-validate="'required|decimal:2|min_value:0|max_value:100'"
                                             data-vv-name="equipment_discount"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('equipment_discount')"
                                             @input="replaceComma($event, orderData, 'equipment_discount')"
                                             :value="orderData.equipment_discount"
@@ -324,8 +338,9 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
-                                            v-validate="'required|decimal:2'"
+                                            v-validate="'required|decimal:2|min_value:0'"
                                             data-vv-name="allEquipmentPrice"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('allEquipmentPrice')"
                                             :value="allEquipmentPrice"
                                             label="Оборудование"
@@ -336,8 +351,9 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
-                                            v-validate="'required|decimal:2'"
+                                            v-validate="'required|decimal:2|min_value:0'"
                                             data-vv-name="price_for_day"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('price_for_day')"
                                             @input="replaceComma($event, orderData, 'price_for_day')"
                                             :value="orderData.price_for_day"
@@ -359,8 +375,9 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
-                                            v-validate="'required|decimal:0'"
+                                            v-validate="'required|decimal:0|min_value:1'"
                                             data-vv-name="days"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('days')"
                                             v-model="orderData.days"
                                             label="Дней командировки"
@@ -371,8 +388,9 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
-                                            v-validate="'required|decimal:2'"
+                                            v-validate="'required|decimal:2|min_value:0'"
                                             data-vv-name="priceForDays"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('priceForDays')"
                                             :value="priceForDays"
                                             label="Командировки / проживание"
@@ -383,8 +401,9 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
-                                            v-validate="'required|decimal:2'"
+                                            v-validate="'required|decimal:2|min_value:0'"
                                             data-vv-name="price_for_transportation_per_km"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('price_for_transportation_per_km')"
                                             @input="replaceComma($event, orderData, 'price_for_transportation_per_km')"
                                             :value="orderData.price_for_transportation_per_km"
@@ -406,8 +425,9 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
-                                            v-validate="'required|decimal:2'"
+                                            v-validate="'required|decimal:2|min_value:0'"
                                             data-vv-name="transportation_kms"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('transportation_kms')"
                                             @input="replaceComma($event, orderData, 'transportation_kms')"
                                             :value="orderData.transportation_kms"
@@ -421,6 +441,7 @@
                                         <v-text-field
                                             v-validate="'required|decimal:0|min_value:1'"
                                             data-vv-name="number_of_trips"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('number_of_trips')"
                                             v-model="orderData.number_of_trips"
                                             label="Количество поездок"
@@ -433,6 +454,7 @@
                                         <v-text-field
                                             v-validate="'required|max:30'"
                                             data-vv-name="route"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('route')"
                                             v-model="orderData.route"
                                             label="Маршрут">
@@ -441,8 +463,9 @@
                                     <v-flex xs8></v-flex>
                                     <v-flex xs12 md8 lg6 xl4>
                                         <v-text-field
-                                            v-validate="'required|decimal:2'"
+                                            v-validate="'required|decimal:2|min_value:0'"
                                             data-vv-name="transportationPrice"
+                                            data-vv-as=" "
                                             :error-messages="errors.collect('transportationPrice')"
                                             :value="transportationPrice"
                                             label="Транспортные расходы"
@@ -956,7 +979,7 @@ export default {
             return gruppedEquipment;
         },
         area() {
-            return (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);;
+            return (this.orderData.area === '' || this.orderData.area === null) ? 0 : parseFloat(this.orderData.area);
         },
         servicePrices() {
             return this.orderData.services.reduce((servicePrices, service) => {
@@ -1555,11 +1578,18 @@ export default {
         validateImages() {
             return this.orderData.GPSData.every(row => (row.image !== '' && row.image !== uploadImage && !this.isUndefined(row.image) && !this.isNull(row.image)));
         },
+        validateServices() {
+            return this.orderData.services.length > 0;
+        },
         createOrder() {
             this.$validator.validateAll()
                 .then(isValid => {
                     if (!isValid) {
                         this.showSnackbar('error', this.errors.items[0].msg);
+                        return;
+                    }
+                    if (!this.validateServices()) {
+                        this.showSnackbar('error', 'Не была выбрана ни одна услуга!');
                         return;
                     }
                     if (!this.validateImages()) {

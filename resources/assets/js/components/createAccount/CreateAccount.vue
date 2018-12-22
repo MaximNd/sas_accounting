@@ -14,7 +14,7 @@
                                         size="250">
                                         <img :src="avatarPreview === '' ? uploadAvatarImage : avatarPreview" alt="avatar">
                                     </v-avatar>
-                                    <input v-validate="'image'" data-vv-as="image" data-vv-name="image" @change="onFilePicked($event)" style="display:none;" type="file" ref="avatar">
+                                    <input v-validate="'image'" data-vv-as=" " data-vv-name="image" @change="onFilePicked($event)" style="display:none;" type="file" ref="avatar">
                                 </v-flex>
                                 <v-flex xs12>
                                     <div class="img-err error--text" v-if="errors.has('image')">
@@ -30,6 +30,7 @@
                             <v-text-field
                                 v-validate="'required|max:30'"
                                 data-vv-name="last_name"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('last_name')"
                                 v-model="user.last_name"
                                 label="Фамилия"
@@ -39,6 +40,7 @@
                             <v-text-field
                                 v-validate="'required|max:30'"
                                 data-vv-name="first_name"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('first_name')"
                                 v-model="user.first_name"
                                 label="Имя"
@@ -48,6 +50,7 @@
                             <v-text-field
                                 v-validate="'required|max:30'"
                                 data-vv-name="mid_name"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('mid_name')"
                                 v-model="user.mid_name"
                                 label="Отчество"
@@ -57,6 +60,7 @@
                             <v-text-field
                                 v-validate="'required|email|unique'"
                                 data-vv-name="email"
+                                data-vv-as="email"
                                 data-vv-delay="500"
                                 :error-messages="errors.collect('email')"
                                 v-model="user.email"
@@ -67,6 +71,7 @@
                             <v-text-field
                                 v-validate="'required|max:30'"
                                 data-vv-name="position"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('position')"
                                 v-model="user.position"
                                 label="Должность"
@@ -76,6 +81,7 @@
                             <v-select
                                 v-validate="'required|included:admin,user'"
                                 data-vv-name="role"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('role')"
                                 v-model="user.role"
                                 :items="['admin', 'user']"
@@ -86,6 +92,7 @@
                             <v-text-field
                                 v-validate="'required|max:20'"
                                 data-vv-name="telephone"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('telephone')"
                                 v-model="user.telephone"
                                 label="Телефон"

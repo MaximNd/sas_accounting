@@ -8,15 +8,30 @@
                 <v-container grid-list-md>
                     <v-layout wrap>
                         <v-flex xs12>
-                            <v-text-field autofocus v-model="editedClient.person_full_name" label="Контактное лицо"></v-text-field>
+                            <v-text-field
+                                v-validate="'required'"
+                                data-vv-name="person_full_name"
+                                data-vv-as=" "
+                                :error-messages="errors.collect('person_full_name')"
+                                v-model="editedClient.person_full_name"
+                                label="Контактное лицо">
+                            </v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                            <v-text-field v-model="editedClient.company_name" label="Компания"></v-text-field>
+                            <v-text-field
+                                v-validate="'required'"
+                                data-vv-name="company_name"
+                                data-vv-as=" "
+                                :error-messages="errors.collect('company_name')"
+                                v-model="editedClient.company_name"
+                                label="Компания">
+                            </v-text-field>
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field
                                 v-validate="'required|email'"
                                 data-vv-name="email"
+                                data-vv-as="email"
                                 :error-messages="errors.collect('email')"
                                 v-model="editedClient.email"
                                 label="E-mail"
@@ -24,8 +39,9 @@
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field
-                                v-validate="'decimal:2'"
+                                v-validate="'required|decimal:2|min_value:0'"
                                 data-vv-name="area"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('area')"
                                 @input="replaceComma($event, editedClient, 'area')"
                                 :value="editedClient.area"
@@ -33,8 +49,9 @@
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field
-                                v-validate="'max:20'"
+                                v-validate="'required|max:20'"
                                 data-vv-name="telephone"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('telephone')"
                                 v-model="editedClient.telephone"
                                 label="Телефон"></v-text-field>
@@ -43,6 +60,7 @@
                             <v-text-field
                                 v-validate="'required'"
                                 data-vv-name="address"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('address')"
                                 v-model="editedClient.address"
                                 label="Физ. адрес"

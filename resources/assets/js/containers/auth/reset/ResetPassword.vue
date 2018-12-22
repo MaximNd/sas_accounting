@@ -16,6 +16,7 @@
                                 <v-text-field
                                     v-validate="'required'"
                                     data-vv-name="password"
+                                    data-vv-as="Пароль"
                                     name="password"
                                     :error-messages="errors.collect('password')"
                                     ref="password"
@@ -29,6 +30,7 @@
                                     target="password"
                                     v-validate="'required|confirmed:password'"
                                     data-vv-name="password_confirmation"
+                                    data-vv-as="Подтверждение пароля"
                                     :error-messages="errors.collect('password_confirmation')"
                                     ref="password_confirmation"
                                     type="password"

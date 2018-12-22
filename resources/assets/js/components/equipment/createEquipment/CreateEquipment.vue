@@ -15,7 +15,7 @@
                                         size="200">
                                         <img :src="imgPreview === '' ? uploadImage : imgPreview" alt="imgPreview">
                                     </v-avatar>
-                                    <input v-validate="'required|image'" data-vv-as="image" data-vv-name="image" @change="onFilePicked($event)" style="display:none;" type="file" ref="imgPreview">
+                                    <input v-validate="'required|image'" data-vv-as=" " data-vv-name="image" @change="onFilePicked($event)" style="display:none;" type="file" ref="imgPreview">
                                 </v-flex>
                                 <v-flex xs12>
                                     <div class="img-err error--text" v-if="errors.has('image')">
@@ -28,6 +28,7 @@
                             <v-text-field
                                 v-validate="'required'"
                                 data-vv-name="name"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('name')"
                                 v-model="newEquipment.name"
                                 label="Модель">
@@ -35,8 +36,9 @@
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field
-                                v-validate="'required|decimal:2'"
+                                v-validate="'required|decimal:2|min_value:0'"
                                 data-vv-name="incoming_price"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('incoming_price')"
                                 @input="replaceComma($event, newEquipment, 'incoming_price')"
                                 :value="newEquipment.incoming_price"
@@ -45,8 +47,9 @@
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field
-                                v-validate="'required|decimal:2'"
+                                v-validate="'required|decimal:2|min_value:0'"
                                 data-vv-name="price"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('price')"
                                 @input="replaceComma($event, newEquipment, 'price')"
                                 :value="newEquipment.price"
@@ -55,8 +58,9 @@
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field
-                                v-validate="'required|decimal:2'"
+                                v-validate="'required|decimal:2|min_value:0'"
                                 data-vv-name="installation_price_for_one"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('installation_price_for_one')"
                                 @input="replaceComma($event, newEquipment, 'installation_price_for_one')"
                                 :value="newEquipment.installation_price_for_one"
@@ -65,8 +69,9 @@
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field
-                                v-validate="'decimal:2'"
+                                v-validate="'decimal:2|min_value:0'"
                                 data-vv-name="installation_price_for_two"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('installation_price_for_two')"
                                 @input="replaceComma($event, newEquipment, 'installation_price_for_two')"
                                 :value="newEquipment.installation_price_for_two"
@@ -75,8 +80,9 @@
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field
-                                v-validate="'decimal:2'"
+                                v-validate="'decimal:2|min_value:0'"
                                 data-vv-name="installation_price_for_three"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('installation_price_for_three')"
                                 @input="replaceComma($event, newEquipment, 'installation_price_for_three')"
                                 :value="newEquipment.installation_price_for_three"

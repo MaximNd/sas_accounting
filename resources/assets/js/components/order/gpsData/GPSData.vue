@@ -64,9 +64,10 @@
                             :ref="`multiplier-${props.index}-${0}`"
                             v-validate="'required|min_value:1|numeric'"
                             :data-vv-name="`multiplier-${props.index}`"
+                            data-vv-as=" "
                             :error-messages="errors.collect(`multiplier-${props.index}`)"
                             :value="props.item.multiplier"
-                            @change="setCellValue($event, props.index, 0, 'multiplier', `td-${props.index}-${0}`)"
+                            @input="setCellValue($event, props.index, 0, 'multiplier', `td-${props.index}-${0}`)"
                             label="Умножитель"
                             required
                             single-line
@@ -94,7 +95,14 @@
                             :style="{cursor: 'pointer', 'margin-top': props.item.image === '' ? '6px' : false, 'max-width': props.item.image === '' ? '40%' : '80%'}"
                             :src="props.item.image === '' ? uploadImage : props.item.image"
                             alt="image">
-                        <input @change="onFilePicked($event, props.index)" style="display:none;" type="file" :ref="`image-${props.index}`">
+                        <input
+                            :ref="`image-${props.index}`"
+                            v-validate="'image'"
+                            data-vv-as=" "
+                            :data-vv-name="`image-${props.index}`"
+                            @change="onFilePicked($event, props.index)"
+                            style="display:none;"
+                            type="file">
                     </td>
                     <td
                         class="text-xs-center"

@@ -10,6 +10,7 @@
                         <v-flex xs12 offset-sm1 sm10>
                             <v-select
                                 v-validate="`required|${includedNamesForPDFLayoutField}`"
+                                data-vv-as=" "
                                 data-vv-name="pdf_layout"
                                 :error-messages="errors.collect('pdf_layout')"
                                 v-model="newService.pdf_layout"
@@ -24,8 +25,9 @@
                                         <v-flex xs12 sm4>
                                             <v-text-field
                                                 :readonly="index === 0"
-                                                v-validate="'required|decimal:2'"
+                                                v-validate="'required|decimal:2|min_value:0'"
                                                 :data-vv-name="`ranged_from_${index}`"
+                                                data-vv-as=" "
                                                 :error-messages="errors.collect(`ranged_from_${index}`)"
                                                 @input="replaceComma($event, newService.prices_for_ranges[index], 'from', `ranged_from_${index}`)"
                                                 :value="newService.prices_for_ranges[index].from"
@@ -39,8 +41,9 @@
                                                 label="Гектаров до:"></v-text-field>
                                             <v-text-field
                                                 v-else
-                                                v-validate="'required|decimal:2'"
+                                                v-validate="'required|decimal:2|min_value:0'"
                                                 :data-vv-name="`ranged_to_${index}`"
+                                                data-vv-as=" "
                                                 :error-messages="errors.collect(`ranged_to_${index}`)"
                                                 @input="replaceComma($event, newService.prices_for_ranges[index], 'to', `ranged_to_${index}`)"
                                                 :value="newService.prices_for_ranges[index].to"
@@ -48,8 +51,9 @@
                                         </v-flex>
                                         <v-flex xs12 sm3>
                                             <v-text-field
-                                                v-validate="'required|decimal:2'"
+                                                v-validate="'required|decimal:2|min_value:0'"
                                                 :data-vv-name="`ranged_price_${index}`"
+                                                data-vv-as=" "
                                                 :error-messages="errors.collect(`ranged_price_${index}`)"
                                                 @input="replaceComma($event, newService.prices_for_ranges[index], 'price', `ranged_price_${index}`)"
                                                 :value="newService.prices_for_ranges[index].price"
@@ -82,8 +86,9 @@
                         </template>
                         <v-flex xs12 offset-sm1 sm10 v-else-if="isSeriveSelected && !isEngProjectSelected">
                             <v-text-field
-                                v-validate="'required|decimal:2'"
+                                v-validate="'required|decimal:2|min_value:0'"
                                 data-vv-name="price"
+                                data-vv-as=" "
                                 :error-messages="errors.collect('price')"
                                 @input="replaceComma($event, newService, 'price')"
                                 :value="newService.price"

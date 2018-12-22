@@ -15,7 +15,7 @@
                         size="200">
                         <img :src="avatarPreview === '' ? uploadAvatarImage : avatarPreview" alt="avatar">
                     </v-avatar>
-                    <input v-validate="'image'" data-vv-as="image" data-vv-name="image" @change="onFilePicked($event)" style="display:none;" type="file" ref="newAvatar">
+                    <input v-validate="'image'" data-vv-as=" " data-vv-name="image" @change="onFilePicked($event)" style="display:none;" type="file" ref="newAvatar">
                     <div class="img-err error--text" v-if="errors.has('image')">
                         {{ errors.collect('image')[0] }}
                     </div>
@@ -24,31 +24,102 @@
                     <v-btn raised color="error" @click="deleteSelectedAvatar">Убрать изображение</v-btn>
                 </v-flex>
                 <v-flex xs12>
-                    <v-text-field v-model="newUserData.last_name" label="Фамилия"></v-text-field>
+                    <v-text-field
+                        v-validate="'required|max:30'"
+                        data-vv-name="last_name"
+                        data-vv-as=" "
+                        :error-messages="errors.collect('last_name')"
+                        v-model="newUserData.last_name"
+                        label="Фамилия">
+                    </v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                    <v-text-field v-model="newUserData.first_name" label="Имя"></v-text-field>
+                    <v-text-field
+                        v-validate="'required|max:30'"
+                        data-vv-name="first_name"
+                        data-vv-as=" "
+                        :error-messages="errors.collect('first_name')"
+                        v-model="newUserData.first_name"
+                        label="Имя">
+                    </v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                    <v-text-field v-model="newUserData.mid_name" label="Отчество"></v-text-field>
+                    <v-text-field
+                        v-validate="'required|max:30'"
+                        data-vv-name="mid_name"
+                        data-vv-as=" "
+                        :error-messages="errors.collect('mid_name')"
+                        v-model="newUserData.mid_name"
+                        label="Отчество">
+                    </v-text-field>
                 </v-flex>
                 <v-flex xs12 v-if="isSame">
-                    <v-text-field v-validate="'email'" data-vv-name="email" :error-messages="errors.collect('email')" v-model="newUserData.email" label="Email"></v-text-field>
+                    <v-text-field
+                        v-validate="{ required: true, email: true, unique: isCheckUnique }"
+                        data-vv-delay="1000"
+                        data-vv-name="email"
+                        data-vv-as=" "
+                        :error-messages="errors.collect('email')"
+                        v-model="newUserData.email"
+                        label="Email">
+                    </v-text-field>
                 </v-flex>
                 <v-flex xs12 v-if="authUser.role === 'admin'">
-                    <v-text-field v-model="newUserData.position" label="Должность"></v-text-field>
+                    <v-text-field
+                        v-validate="'required|max:30'"
+                        data-vv-name="position"
+                        data-vv-as=" "
+                        :error-messages="errors.collect('position')"
+                        v-model="newUserData.position"
+                        label="Должность">
+                    </v-text-field>
                 </v-flex>
                 <v-flex xs12 v-if="authUser.role === 'admin'">
-                    <v-select v-validate="'included:admin,user'" data-vv-name="role" :error-messages="errors.collect('role')" v-model="newUserData.role" :items="['admin', 'user']" label="Role"></v-select>
+                    <v-select
+                        v-validate="'included:admin,user'"
+                        data-vv-as="роль"
+                        data-vv-name="role"
+                        :error-messages="errors.collect('role')"
+                        v-model="newUserData.role"
+                        :items="['admin', 'user']"
+                        label="Role">
+                    </v-select>
                 </v-flex>
                 <v-flex xs12>
-                    <v-text-field v-validate="'max:20'" data-vv-name="telephone" :error-messages="errors.collect('telephone')" v-model="newUserData.telephone" label="Телефон"></v-text-field>
+                    <v-text-field
+                        v-validate="'required|max:20'"
+                        data-vv-as=" "
+                        data-vv-name="telephone"
+                        :error-messages="errors.collect('telephone')"
+                        v-model="newUserData.telephone"
+                        label="Телефон">
+                    </v-text-field>
                 </v-flex>
                 <v-flex xs12 v-if="isSame">
-                    <v-text-field v-validate="{ required: isPasswordRequired }" data-vv-name="password" name="password" :error-messages="errors.collect('password')" ref="password" v-model="newUserData.password" label="Новый пароль" type="password"></v-text-field>
+                    <v-text-field
+                        ref="password"
+                        v-validate="{ required: isPasswordRequired }"
+                        data-vv-name="password"
+                        data-vv-as="Пароль"
+                        name="password"
+                        :error-messages="errors.collect('password')"
+                        v-model="newUserData.password"
+                        label="Новый пароль"
+                        type="password">
+                    </v-text-field>
                 </v-flex>
                 <v-flex xs12 v-if="isSame">
-                    <v-text-field target="password" v-validate="{ required: isPasswordConfirmationRequired, confirmed: 'password' }" data-vv-name="password_confirmation" :error-messages="errors.collect('password_confirmation')" ref="password_confirmation" v-model="newUserData.password_confirmation" label="Подтверждение пароля" type="password"></v-text-field>
+                    <v-text-field
+                        ref="password_confirmation"
+                        target="password"
+                        v-validate="{ required: isPasswordConfirmationRequired, confirmed: 'password' }"
+                        data-vv-name="password_confirmation"
+                        data-vv-as="Подтверждение пароля"
+                        :error-messages="errors.collect('password_confirmation')"
+                        v-model="newUserData.password_confirmation"
+                        label="Подтверждение пароля"
+                        type="password">
+                    </v-text-field>
                 </v-flex>
             </v-layout>
           </v-container>
@@ -113,6 +184,9 @@ export default {
             return !this.isNull(this.newUserData.password) &&
                     !this.isUndefined(this.newUserData.password) &&
                     this.newUserData.password !== '';
+        },
+        isCheckUnique() {
+            return this.oldUserData.email !== this.newUserData.email;
         }
     },
     methods: {

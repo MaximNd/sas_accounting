@@ -29,8 +29,9 @@
                 <v-layout wrap>
                     <v-flex xs12>
                         <v-text-field
-                            v-validate="'required'"
+                            v-validate="'required|max:100'"
                             data-vv-name="person_full_name"
+                            data-vv-as=" "
                             :error-messages="errors.collect('person_full_name')"
                             autofocus
                             v-model="clientData.person_full_name"
@@ -41,6 +42,7 @@
                         <v-text-field
                             v-validate="'required'"
                             data-vv-name="company_name"
+                            data-vv-as=" "
                             :error-messages="errors.collect('company_name')"
                             v-model="clientData.company_name"
                             label="Компания"
@@ -57,8 +59,9 @@
                     </v-flex>
                     <v-flex xs12>
                         <v-text-field
-                            v-validate="'required|decimal:2'"
+                            v-validate="'required|decimal:2|min_value:0'"
                             data-vv-name="area"
+                            data-vv-as=" "
                             :error-messages="errors.collect('area')"
                             @input="replaceComma($event, clientData, 'area')"
                             :value="clientData.area"
@@ -69,6 +72,7 @@
                         <v-text-field
                             v-validate="'required|max:20'"
                             data-vv-name="telephone"
+                            data-vv-as=" "
                             :error-messages="errors.collect('telephone')"
                             v-model="clientData.telephone"
                             label="Телефон"
@@ -78,6 +82,7 @@
                         <v-text-field
                             v-validate="'required'"
                             data-vv-name="address"
+                            data-vv-as=" "
                             :error-messages="errors.collect('address')"
                             v-model="clientData.address"
                             label="Физ. адрес"
@@ -87,6 +92,7 @@
                         <v-textarea
                             v-validate
                             data-vv-name="comment"
+                            data-vv-as=" "
                             :error-messages="errors.collect('comment')"
                             v-model="clientData.comment"
                             label="Коментарий"
