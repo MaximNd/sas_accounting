@@ -5,7 +5,7 @@
                 <v-card-text>
                     <v-form>
                         <template v-if="isCreation">
-                            <v-btn @click="deleteOrderDataFromLocalStorage" color="primary">Обнулить данные</v-btn>
+                            <v-btn @click="resetData" color="primary">Обнулить данные</v-btn>
                         </template>
                         <template v-if="!isCreation">
                             <v-btn @click="recalculatePrices" :disabled="loading" :loading="loading" color="primary">Пересчитать цены</v-btn>
@@ -1141,6 +1141,37 @@ export default {
                 offset: -150
             });
         },
+        initOrderCreationMode() {
+            this.defaultRowCount = 4;
+            this.orderData.GPSData = [];
+            const savedOrderData = localStorage.getItem('orderData');
+            Promise.all([this.$store.dispatch('getPriseList'), this.getClients()])
+                .then(() => {
+                    if (savedOrderData) {
+                        const parsedSavedOrderData = JSON.parse(savedOrderData);
+                        const { dollar_rate, dollar_date, ...data } = parsedSavedOrderData;
+                        const todayDate = this.getTodaysDate();
+                        this.orderData = {
+                            ...data,
+                            dollar_rate: 0.00,
+                            dollar_date: todayDate
+                        };
+                        if (parsedSavedOrderData && data.GPSData.length > 0) {
+                            this.initialGPSRowData.id = data.GPSData[data.GPSData.length - 1].id + 1;
+                            this.initialGPSRowData.order = data.GPSData[data.GPSData.length - 1].order + 1;
+                        }
+                    }
+                    this.creationInitialized = true;
+                });
+            this.getDollarRate(this.formattedDollarDate);
+        },
+        initOrderModificationMode() {
+            this.$store.dispatch('getPriseList')
+                .then(() => {
+                    this.selectedPrices = this.order.prices.find(pricesRow => pricesRow.is_current);
+                    this.initOrder();
+                });
+        },
         initOrder() {
             let copyOrder = dcopy(this.order);
             copyOrder.services = copyOrder.services.map(serviceID => this.services.find(service => service.id === serviceID));
@@ -1225,6 +1256,92 @@ export default {
         },
         deleteOrderDataFromLocalStorage() {
             localStorage.removeItem('orderData');
+        },
+        resetData() {
+            this.deleteOrderDataFromLocalStorage();
+            this.initialized = false;
+            this.creationInitialized = false;
+            this.pdfLoaded = 0;
+            this.pdfLoadStatus = 'Создание Документа';
+            this.pdfLoading = false;
+            this.orderUpdating = false;
+            this.loading = false;
+            this.isDollarRateEditing = false;
+            this.isPriceForDayEditing = false;
+            this.isPriceForTransportationPerKmEditing = false;
+            this.snack = false;
+            this.dollarDateCalendar = false;
+            this.snackColor = '';
+            this.snackText = '';
+            this.snackTimeout = 1500;
+            this.defaultRowCount = 0;
+            this.initialGPSRowData = {
+                id: 1,
+                order: 1,
+                multiplier: 1,
+                image: '',
+                mark: '',
+                model: '',
+                year_of_issue: '',
+                fuel_type: '',
+                power: '',
+                number: '',
+                gps_tracker: '',
+                fuel_gauge: [],
+                counter: '',
+                rf_id: '',
+                reader_of_trailed_equipment: '',
+                // connect_module: '',
+                can_reader: '',
+                deaerator_small: '',
+                deaerator_large: '',
+                // deaerator: '',
+                additional_equipment: [],
+                cn03: [],
+                rs01: [],
+                manual_installation_price: 0
+            }
+            this.mappedColumnNames = {
+                gps_tracker: 'GPS трекер',
+                fuel_gauge: 'ДУТ',
+                counter: 'Лічильник',
+                rf_id: 'RFID водія',
+                reader_of_trailed_equipment: 'Зчитувач причіпного',
+                can_reader: 'CAN reader',
+                deaerator_small: 'Деаэратор малий',
+                deaerator_large: 'Деаэратор великий',
+                cn03: 'Модуль CN03',
+                rs01: 'Модуль RS01',
+                additional_equipment: ''
+            };
+            this.cachedData = [];
+            this.orderInCreation = false;
+            this.oldOrder = {};
+            this.selectedPrices = null;
+            this.orderData = {
+                name: '',
+                client: null,
+                statuses: { is_sent: false, is_agreed: false, is_paid: false, is_installation_finished: false },
+                area: '',
+                dollar_rate: 0.00,
+                dollar_date: this.getTodaysDate(),
+                installation_discount: 0,
+                equipment_discount: 0,
+                days: '',
+                price_for_day: 720,
+                price_for_transportation_per_km: 4.2,
+                number_of_trips: 2,
+                transportation_kms: '',
+                route: '',
+                prices: [],
+                services: [],
+                optional_services: [],
+                GPSData: null
+            };
+            this.clients = [];
+            this.isClientCreation = false;
+            this.isShowScrollBtn = false;
+            this.initOrderCreationMode();
         },
         getClients() {
             return new Promise((resolve, reject) => {
@@ -1832,34 +1949,9 @@ export default {
     },
     created() {
         if (this.isCreation) {
-            this.defaultRowCount = 4;
-            this.orderData.GPSData = [];
-            const savedOrderData = localStorage.getItem('orderData');
-            Promise.all([this.$store.dispatch('getPriseList'), this.getClients()])
-                .then(() => {
-                    if (savedOrderData) {
-                        const parsedSavedOrderData = JSON.parse(savedOrderData);
-                        const { dollar_rate, dollar_date, ...data } = parsedSavedOrderData;
-                        const todayDate = this.getTodaysDate();
-                        this.orderData = {
-                            ...data,
-                            dollar_rate: 0.00,
-                            dollar_date: todayDate
-                        };
-                        if (parsedSavedOrderData && data.GPSData.length > 0) {
-                            this.initialGPSRowData.id = data.GPSData[data.GPSData.length - 1].id + 1;
-                            this.initialGPSRowData.order = data.GPSData[data.GPSData.length - 1].order + 1;
-                        }
-                    }
-                    this.creationInitialized = true;
-                });
-            this.getDollarRate(this.formattedDollarDate);
+            this.initOrderCreationMode();
         } else {
-            this.$store.dispatch('getPriseList')
-                .then(() => {
-                    this.selectedPrices = this.order.prices.find(pricesRow => pricesRow.is_current);
-                    this.initOrder();
-                });
+            this.initOrderModificationMode();
         }
         this.getCachedData();
     },
