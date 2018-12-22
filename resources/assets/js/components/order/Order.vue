@@ -12,6 +12,7 @@
                             <v-select
                                 v-model="selectedPrices"
                                 :items="orderData.prices"
+                                @change="saveOrderDataToLocalStorage"
                                 item-text="created_at"
                                 return-object>
                             </v-select>
@@ -60,6 +61,7 @@
                                         data-vv-as=" "
                                         :error-messages="errors.collect('dollar_rate')"
                                         @input="replaceComma($event, orderData, 'dollar_rate')"
+                                        @change="saveOrderDataToLocalStorage"
                                         :value="orderData.dollar_rate"
                                         label="Курс Доллара"
                                         :readonly="!isDollarRateEditing">
@@ -85,6 +87,7 @@
                                         :error-messages="errors.collect('client')"
                                         v-model="orderData.client"
                                         :items="clients"
+                                        @change="saveOrderDataToLocalStorage"
                                         hide-selected
                                         item-text="text"
                                         item-value="id"
@@ -130,6 +133,7 @@
                                                 data-vv-as=" "
                                                 :error-messages="errors.collect('is_sent')"
                                                 v-model="orderData.statuses.is_sent"
+                                                @change="saveOrderDataToLocalStorage"
                                                 color="success"
                                                 :label="isSentStatus">
                                             </v-switch>
@@ -141,6 +145,7 @@
                                                 data-vv-as=" "
                                                 :error-messages="errors.collect('is_agreed')"
                                                 v-model="orderData.statuses.is_agreed"
+                                                @change="saveOrderDataToLocalStorage"
                                                 color="success"
                                                 :label="isAgreedStatus">
                                             </v-switch>
@@ -152,6 +157,7 @@
                                                 data-vv-as=" "
                                                 :error-messages="errors.collect('is_paid')"
                                                 v-model="orderData.statuses.is_paid"
+                                                @change="saveOrderDataToLocalStorage"
                                                 color="success"
                                                 :label="isPaidStatus">
                                             </v-switch>
@@ -163,6 +169,7 @@
                                                 data-vv-as=" "
                                                 :error-messages="errors.collect('is_installation_finished')"
                                                 v-model="orderData.statuses.is_installation_finished"
+                                                @change="saveOrderDataToLocalStorage"
                                                 color="success"
                                                 :label="isInstallationFinishedStatus">
                                             </v-switch>
@@ -176,6 +183,7 @@
                                         data-vv-as=" "
                                         :error-messages="errors.collect('name')"
                                         v-model="orderData.name"
+                                        @change="saveOrderDataToLocalStorage"
                                         label="Название заказа"></v-text-field>
                                 </v-flex>
                                 <v-flex xs12 offset-md2 md6>
@@ -185,6 +193,7 @@
                                         data-vv-as=" "
                                         :error-messages="errors.collect('area')"
                                         @input="replaceComma($event, orderData, 'area')"
+                                        @change="saveOrderDataToLocalStorage"
                                         :value="orderData.area"
                                         label="Площадь"
                                         :suffix="`${priceForArea}$`"></v-text-field>
@@ -202,6 +211,7 @@
                                         :style="{ padding: 0, margin: index !== 0 ? 0 : false }"
                                         :label="service.name"
                                         v-model="orderData.services"
+                                        @change="saveOrderDataToLocalStorage"
                                         :value="service"></v-checkbox>
                                 </v-flex>
                                 <v-flex xs12 offset-md2 class="mt-2">
@@ -221,7 +231,8 @@
                                                 data-vv-as=" "
                                                 :error-messages="errors.collect(`optional_service_name-${index}`)"
                                                 label="Название"
-                                                v-model="orderData.optional_services[index].name">
+                                                v-model="orderData.optional_services[index].name"
+                                                @change="saveOrderDataToLocalStorage">
                                             </v-text-field>
                                             <v-text-field
                                                 v-validate="'required|decimal:2|min_value:0'"
@@ -229,6 +240,7 @@
                                                 data-vv-as=" "
                                                 :error-messages="errors.collect(`optional_service_price-${index}`)"
                                                 @input="replaceComma($event, orderData.optional_services[index], 'price', `optional_service_price-${index}`)"
+                                                @change="saveOrderDataToLocalStorage"
                                                 :value="orderData.optional_services[index].price"
                                                 label="Цена">
                                             </v-text-field>
@@ -238,7 +250,8 @@
                                                 data-vv-as=" "
                                                 :error-messages="errors.collect(`optional_service_comment-${index}`)"
                                                 label="Комментарий"
-                                                v-model="orderData.optional_services[index].comment">
+                                                v-model="orderData.optional_services[index].comment"
+                                                @change="saveOrderDataToLocalStorage">
                                             </v-textarea>
                                         </v-card-text>
                                         <v-card-actions>
@@ -304,6 +317,7 @@
                                             data-vv-as=" "
                                             :error-messages="errors.collect('installation_discount')"
                                             @input="replaceComma($event, orderData, 'installation_discount')"
+                                            @change="saveOrderDataToLocalStorage"
                                             :value="orderData.installation_discount"
                                             label="Скидка на монтаж оборудования"
                                             append-icon="%">
@@ -330,6 +344,7 @@
                                             data-vv-as=" "
                                             :error-messages="errors.collect('equipment_discount')"
                                             @input="replaceComma($event, orderData, 'equipment_discount')"
+                                            @change="saveOrderDataToLocalStorage"
                                             :value="orderData.equipment_discount"
                                             label="Скидка на оборудование"
                                             append-icon="%">
@@ -356,6 +371,7 @@
                                             data-vv-as=" "
                                             :error-messages="errors.collect('price_for_day')"
                                             @input="replaceComma($event, orderData, 'price_for_day')"
+                                            @change="saveOrderDataToLocalStorage"
                                             :value="orderData.price_for_day"
                                             label="Цена за 1 день командировки"
                                             :readonly="!isPriceForDayEditing"
@@ -380,6 +396,7 @@
                                             data-vv-as=" "
                                             :error-messages="errors.collect('days')"
                                             v-model="orderData.days"
+                                            @change="saveOrderDataToLocalStorage"
                                             label="Дней командировки"
                                             :hint="`Фиксированая цена ${orderData.price_for_day} грн/день`"
                                             persistent-hint>
@@ -406,6 +423,7 @@
                                             data-vv-as=" "
                                             :error-messages="errors.collect('price_for_transportation_per_km')"
                                             @input="replaceComma($event, orderData, 'price_for_transportation_per_km')"
+                                            @change="saveOrderDataToLocalStorage"
                                             :value="orderData.price_for_transportation_per_km"
                                             label="Цена за 1км"
                                             :readonly="!isPriceForTransportationPerKmEditing"
@@ -430,6 +448,7 @@
                                             data-vv-as=" "
                                             :error-messages="errors.collect('transportation_kms')"
                                             @input="replaceComma($event, orderData, 'transportation_kms')"
+                                            @change="saveOrderDataToLocalStorage"
                                             :value="orderData.transportation_kms"
                                             label="Растояние км"
                                             :hint="`Фиксированая цена ${orderData.price_for_transportation_per_km} грн/км`"
@@ -444,6 +463,7 @@
                                             data-vv-as=" "
                                             :error-messages="errors.collect('number_of_trips')"
                                             v-model="orderData.number_of_trips"
+                                            @change="saveOrderDataToLocalStorage"
                                             label="Количество поездок"
                                             :type="'number'"
                                             min="1">
@@ -457,6 +477,7 @@
                                             data-vv-as=" "
                                             :error-messages="errors.collect('route')"
                                             v-model="orderData.route"
+                                            @change="saveOrderDataToLocalStorage"
                                             label="Маршрут">
                                         </v-text-field>
                                     </v-flex>
@@ -1104,25 +1125,13 @@ export default {
         }
     },
     watch: {
-        order: {
-            deep: true,
-            handler() {
-                this.initOrder();
-                this.loading = false;
-                this.orderUpdating = false;
-                this.snackColor = 'success';
-                this.snackText = 'Сохранено';
-                this.snack = true;
-            }
-        },
-        orderData: {
-            deep: true,
-            immediate: false,
-            handler(newData, oldData) {
-                if (this.isCreation) {
-                    this.saveOrderDataToLocalStorage();
-                }
-            }
+        order() {
+            this.initOrder();
+            this.loading = false;
+            this.orderUpdating = false;
+            this.snackColor = 'success';
+            this.snackText = 'Сохранено';
+            this.snack = true;
         },
         selectedPrices(newVal) {
             this.orderData.prices = this.orderData.prices.map(prices => ({
@@ -1270,12 +1279,17 @@ export default {
         },
         addOptionalService() {
             this.orderData.optional_services.push({ name: '', price: '', comment: '' });
+            this.saveOrderDataToLocalStorage();
         },
         deleteOptionalService(index) {
             this.orderData.optional_services.splice(index, 1);
+            this.saveOrderDataToLocalStorage();
         },
         saveOrderDataToLocalStorage() {
-            localStorage.setItem('orderData', JSON.stringify(this.orderData));
+            if (this.isCreation) {
+                localStorage.setItem('orderData', JSON.stringify(this.orderData));
+                console.log('SAVED TO LOCAL STORAGE');
+            }
         },
         deleteOrderDataFromLocalStorage() {
             localStorage.removeItem('orderData');
@@ -1392,6 +1406,7 @@ export default {
                 .then(({data}) => {
                     this.orderData.dollar_rate = data[0].rate;
                     this.showSnackbar('success', 'Курс доллара установлен');
+                    this.saveOrderDataToLocalStorage();
                 })
                 .catch(err => {
                     console.log(err);
@@ -1432,6 +1447,7 @@ export default {
                     this.selectedPrices = data;
                     this.loading = false;
                     this.showSnackbar('success', 'Цены были успешно пересчитаны');
+                    this.saveOrderDataToLocalStorage();
                 })
                 .catch(err => {
                     console.log(err);
@@ -1449,10 +1465,12 @@ export default {
             this.clients.push(updatedClient);
             this.orderData.client = updatedClient.id;
             this.isClientCreation = false;
+            this.saveOrderDataToLocalStorage();
         },
         selectExistingClient(client) {
             this.orderData.client = client.id;
             this.isClientCreation = false;
+            this.saveOrderDataToLocalStorage();
         },
         getClientWithTextValue(client) {
             return { ...client, text: `${client.person_full_name} (${client.company_name})` }
@@ -1466,14 +1484,17 @@ export default {
                     this.addCache(path, val);
                 }
             }
+            this.saveOrderDataToLocalStorage();
             this.showSnackbar('success', 'Данные сохранены!');
         },
         addNestedDataInOrderGPSData(row, column) {
             this.orderData.GPSData[row][column].push(undefined);
+            this.saveOrderDataToLocalStorage();
             this.showSnackbar('success', 'Данные сохранены!');
         },
         deleteNestedDataInOrderGPSData(row, column, index) {
             this.orderData.GPSData[row][column].splice(index, 1);
+            this.saveOrderDataToLocalStorage();
             this.showSnackbar('success', 'Данные сохранены!');
         },
         copySelectedInOrderGPSData(copyList) {
@@ -1488,6 +1509,7 @@ export default {
                     }
                 }
             }
+            this.saveOrderDataToLocalStorage();
             this.showSnackbar('success', 'Данные сохранены!');
         },
         addRowToOrderGPSData(count = 1) {
@@ -1503,6 +1525,7 @@ export default {
                 ++this.initialGPSRowData.order;
             }
             if (count > 0) {
+                this.saveOrderDataToLocalStorage();
                 this.showSnackbar('info', `${this.declOfNum(count, ['Добавлен', 'Добавлено', 'Добавлены'])} ${count} ${this.declOfNum(count, ['ряд', 'ряда', 'рядов'])}`);
             }
         },
@@ -1519,10 +1542,12 @@ export default {
                 ++this.initialGPSRowData.order;
             }
             this.resetRowsOrderValues();
+            this.saveOrderDataToLocalStorage();
             this.showSnackbar('info', `Ряд был разложен на ${count + 1}`);
         },
         deleteRowsFromOrderGPSData(indices) {
             this.orderData.GPSData = this.orderData.GPSData.filter((_, index) => !indices.includes(index));
+            this.saveOrderDataToLocalStorage();
             if (indices.length > 0) {
                 this.showSnackbar('info', `${this.declOfNum(indices.length, ['Удален', 'Удалено', 'Удалены'])} ${indices.length} ${this.declOfNum(indices.length, ['ряд', 'ряда', 'рядов'])}`);
             }
@@ -1531,6 +1556,7 @@ export default {
             const rowSelected = this.orderData.GPSData.splice(oldIndex, 1)[0];
             this.orderData.GPSData.splice(newIndex, 0, rowSelected);
             this.resetRowsOrderValues();
+            this.saveOrderDataToLocalStorage();
             this.showSnackbar('info', `Ряд был перемещён`);
         },
         resetRowsOrderValues() {
@@ -1639,6 +1665,10 @@ export default {
                 .then(isValid => {
                     if (!isValid) {
                         this.showSnackbar('error', this.errors.items[0].msg);
+                        return;
+                    }
+                    if (!this.validateServices()) {
+                        this.showSnackbar('error', 'Не была выбрана ни одна услуга!');
                         return;
                     }
                     if (!this.validateImages()) {
