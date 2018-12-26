@@ -37,7 +37,7 @@
                 <img src="{{ $transportImage }}" alt="transport">
             </div>
             <div>
-                <p class="transport-name">{{ $transportName }}</p>
+                <p class="transport-name">{{ $transportName }} {{ $multiplier }}шт.</p>
             </div>
         </div>
         <div class="secondary-data-list-wrapper" style="{{ count($secondaryList) <= 2 ? 'margin-top:30px' : '' }}">

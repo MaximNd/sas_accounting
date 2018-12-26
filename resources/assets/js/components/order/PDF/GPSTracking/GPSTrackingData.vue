@@ -25,7 +25,7 @@
                                     </div>
                                 </v-flex>
                                 <v-flex style="flex-grow: 2;" d-flex justify-center align-center>
-                                    <p class="transport-name">{{ transportName }}</p>
+                                    <p class="transport-name">{{ transportName }} {{ multiplier }}шт.</p>
                                 </v-flex>
                             </v-layout>
                         </v-flex>
@@ -74,6 +74,10 @@ export default {
         },
         transportName: {
             type: String,
+            required: true
+        },
+        multiplier: {
+            type: Number,
             required: true
         }
     },
