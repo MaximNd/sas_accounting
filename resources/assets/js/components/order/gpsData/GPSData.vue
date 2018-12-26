@@ -1726,8 +1726,15 @@ export default {
                 }
             }
         },
+        checkNumeric(columnName, data) {
+            if (columnName === 'multiplier') {
+                return parseInt(data, 10);
+            }
+            return data;
+        },
         setCellValue(data, row, cell, name, td, nestedPath = false, forceSwitchMode = true) {
             this.checkImageReplacement(row, name, data);
+            data = this.checkNumeric(name, data);
             this.$emit('update:orderGPSData', data, row, name, nestedPath);
             if (forceSwitchMode) this.switchCellMode(row, cell, false);
             if (td) {
@@ -1791,6 +1798,10 @@ export default {
 <style>
     .gps-data-table-no-select-text table {
         user-select: none;
+    }
+    #gps-data-table {
+        max-height: 1400px;
+        overflow-y: scroll;
     }
     #gps-data-table .v-table__overflow {
         position: relative;
