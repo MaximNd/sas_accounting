@@ -519,7 +519,7 @@
                     </v-layout>
                 </v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center class="mb-4">
+                    <v-layout justify-center>
                         <v-flex v-if="isCreation" xs12 sm11 md3>
                             <v-btn
                                 block large color="primary"
@@ -585,11 +585,18 @@
                                             block
                                             :disabled="loading"
                                             :loading="loading">
-                                                Скачать PDF <v-icon right>get_app</v-icon>
+                                                Создать PDF <v-icon right>get_app</v-icon>
                                         </v-btn>
                                     </v-flex>
                                 </v-layout>
                             </v-container>
+                        </v-flex>
+                    </v-layout>
+                </v-card-actions>
+                <v-card-actions>
+                    <v-layout justify-center class="mb-4">
+                        <v-flex xs12 sm8 md6>
+                            <appOrderPDF :orderID="order.id"></appOrderPDF>
                         </v-flex>
                     </v-layout>
                 </v-card-actions>
@@ -661,6 +668,7 @@ import CreateClient from './../client/createClient/CreateClient';
 import GPSData from './gpsData/GPSData';
 import EquipmentData from './EquipmentData/EquipmentData';
 import PDF from './PDF/PDF';
+import OrderPDF from './OrderPDF/OrderPDF';
 import dcopy from 'deep-copy';
 import utils from './../../mixins/utils.js';
 import setStyles from './../../mixins/stylesMixins.js'
@@ -1920,7 +1928,7 @@ export default {
         },
         createPDF() {
             this.loading = true;
-            this.pdfLoading = true;
+            // this.pdfLoading = true;
             const formatterSettings = {
                 symbol: '',
                 precision: 2,
@@ -1973,37 +1981,15 @@ export default {
                 pdfData.optionalServices = this.orderData.optional_services;
             }
 
-            this.axios.post('/orders/pdf', pdfData, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/pdf'
-                    },
-                    responseType: 'blob',
-                    onDownloadProgress: (progressEvent) => {
-                        this.pdfLoadStatus = 'Загрузка документа';
-                        this.pdfLoaded = ((progressEvent.loaded / 1024) / 1024).toFixed(2);
-                    }
-                })
-                .then(({ data }) => {
-                    const pdf = new Blob([data], { type: 'application/pdf' });
-                    const link = document.createElement('a');
-                    link.setAttribute('href', window.URL.createObjectURL(pdf));
-                    link.setAttribute('download', `${this.orderData.name}.pdf`);
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+            pdfData.pdf_name = this.orderData.name;
+
+            this.$store.dispatch('createPDFFile', { orderID: this.order.id, pdfData })
+                .then(() => {
                     this.loading = false;
-                    this.pdfLoading = false;
-                    this.pdfLoadStatus = 'Создание Документа';
-                    this.pdfLoaded = 0;
                 })
                 .catch(err => {
                     console.log(err);
                     this.loading = false;
-                    this.pdfLoading = false;
-                    this.pdfLoadStatus = 'Создание Документа';
-                    this.pdfLoaded = 0;
                 });
         }
     },
@@ -2019,7 +2005,8 @@ export default {
         appCreateClient: CreateClient,
         appGPSData: GPSData,
         appEquipmentData: EquipmentData,
-        appPDF: PDF
+        appPDF: PDF,
+        appOrderPDF: OrderPDF
     }
 }
 </script>

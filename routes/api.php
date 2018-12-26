@@ -78,13 +78,18 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::post('/orders', 'OrderController@createOrder');
 
-    Route::post('/orders/pdf', 'OrderController@createPDF');
-
     Route::put('/orders/{id}', 'OrderController@updateOrder');
 
     Route::put('/orders/{id}/restore', 'OrderController@restoreOrder');
 
     Route::delete('/orders/{id}', 'OrderController@deleteOrder');
+
+    // ORDERS PDF
+    Route::get('/orders_pdf/{order_id}', 'OrderPDFController@getOrderPDF');
+
+    Route::post('/orders_pdf/{order_id}', 'OrderPDFController@createPDF');
+
+    Route::delete('/orders_pdf/{id}', 'OrderPDFController@deletePDF');
 
     // ORDERS_LOGS
     Route::get('/orders/logs', 'OrderLogController@getLogs');
