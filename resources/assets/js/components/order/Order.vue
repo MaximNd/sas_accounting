@@ -968,32 +968,33 @@ export default {
         },
         gruppedEquipment() {
             const countEquipment = this.orderData.GPSData.reduce((grupped, row) => {
+                const multiplier = (row.multiplier < 1) ? 1 : row.multiplier;
                 Object.keys(row).forEach((key) => {
                     const value = row[key];
                     if (this.isObject(value)) {
                         if (!grupped[row[key].id]) {
                             grupped[row[key].id] = {
                                 type: row[key].name,
-                                price: parseFloat(row[key].price),
-                                count: 1
+                                price: this.multiplyTwoFloats(multiplier, parseFloat(row[key].price)),
+                                count: multiplier
                             };
                         } else {
-                            ++grupped[row[key].id].count;
-                            grupped[row[key].id].price = this.addTwoFloats(grupped[row[key].id].price, row[key].price);
+                            grupped[row[key].id].count += multiplier;
+                            grupped[row[key].id].price = this.addTwoFloats(grupped[row[key].id].price, this.multiplyTwoFloats(multiplier, row[key].price));
                         }
                     } else if (Array.isArray(value)) {
                         value
                             .forEach((el, index) => {
-                                if (this.isUndefined(el) || this.isNull(el) ) return;
+                                if (this.isUndefined(el) || this.isNull(el)) return;
                                 if (!grupped[el.id]) {
                                     grupped[el.id] = {
                                         type: el.name,
-                                        price: parseFloat(el.price),
-                                        count: 1
+                                        price: this.multiplyTwoFloats(multiplier, parseFloat(el.price)),
+                                        count: multiplier
                                     };
                                 } else {
-                                    ++grupped[el.id].count;
-                                    grupped[el.id].price = this.addTwoFloats(grupped[el.id].price, el.price);
+                                    grupped[el.id].count += multiplier;
+                                    grupped[el.id].price = this.addTwoFloats(grupped[el.id].price, this.multiplyTwoFloats(multiplier, el.price));
                                 }
                             })
                     }
