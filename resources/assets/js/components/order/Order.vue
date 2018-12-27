@@ -925,31 +925,37 @@ export default {
         },
         gpsTrackingData() {
             return this.orderData.GPSData.map(gpsRow => {
+                const multiplier = (gpsRow.multiplier < 1) ? 1 : gpsRow.multiplier;
                 return {
                     equipment: Object.keys(gpsRow).reduce((equipment, key) => {
                         if (Object.keys(this.mappedColumnNames).indexOf(key) !== -1) {
                             if (Array.isArray(gpsRow[key])) {
-                                let count = 0;
-                                let gpsRowArray = gpsRow[key].slice().filter(row => this.isObject(row));
+                                let gpsRowArray = gpsRow[key].filter(row => this.isObject(row));
                                 if (gpsRowArray.length === 0) return equipment;
-                                const equipmentData = {
-                                    image: ``,
-                                    name: ``,
-                                    price: 0
-                                };
-                                for (let i = 0; i < gpsRowArray.length; ++i) {
-                                    for (let j = 0; j < gpsRowArray.length; ++j) {
-                                        if (gpsRowArray[i].id === gpsRowArray[j].id) {
-                                            ++count;
-                                        }
-                                    }
-                                    equipmentData.image = `storage/${gpsRowArray[i].image}`;
-                                    equipmentData.name = `${this.mappedColumnNames[key]} ${count}шт ${gpsRowArray[i].name}`;
-                                    equipmentData.price = this.multiplyTwoFloats(gpsRowArray[i].price, count);
-                                    gpsRowArray = gpsRowArray.filter(row => row.id !== gpsRowArray[i].id);
-                                }
+                                const equipmentMap = {};
 
-                                equipment.push(equipmentData);
+                                for (let i = 0; i < gpsRowArray.length; ++i) {
+                                    if (!equipmentMap[gpsRowArray[i].id]) {
+                                        equipmentMap[gpsRowArray[i].id] = {
+                                            image: `storage/${gpsRowArray[i].image}`,
+                                            name: gpsRowArray[i].name,
+                                            count: 1,
+                                            price: gpsRowArray[i].price
+                                        };
+                                    } else {
+                                        ++equipmentMap[gpsRowArray[i].id].count;
+                                    }
+                                }
+                                const equipmentData = Object.keys(equipmentMap).reduce((data, id) => {
+                                    data.push({
+                                        image: equipmentMap[id].image,
+                                        name: `${this.mappedColumnNames[key]} ${equipmentMap[id].count}шт ${equipmentMap[id].name}`,
+                                        price: this.multiplyTwoFloats(equipmentMap[id].price, equipmentMap[id].count)
+                                    });
+                                    return data;
+                                }, []);
+
+                                equipment.push(...equipmentData);
                             } else if (this.isObject(gpsRow[key])) {
                                 equipment.push({
                                     image: `storage/${gpsRow[key].image}`,
@@ -960,7 +966,7 @@ export default {
                         }
                         return equipment;
                     }, []),
-                    multiplier: gpsRow.multiplier,
+                    multiplier: multiplier,
                     transportImage: gpsRow.image.slice(1),
                     transportName: `${(this.isNull(gpsRow.mark) || this.isUndefined(gpsRow.mark)) ? '' : gpsRow.mark}${(this.isNull(gpsRow.model) || this.isUndefined(gpsRow.model)) ? '' : ` ${gpsRow.model}`}`
                 };
@@ -1069,30 +1075,36 @@ export default {
                         }
                     } else if (Array.isArray(value)) {
                         prices.equipmentPrices[index][priceKey] = 0.00;
-                        value
-                            .filter(el => !this.isUndefined(el) && !this.isNull(el))
-                            .forEach((el, _, arr) => {
-                                prices.equipmentPrices[index][priceKey] = this.addTwoFloats(prices.equipmentPrices[index][priceKey], el.price);
-                                if (!isValidManualInstallationPrice || !isInstallationPriceManuallySet) {
-                                    const arrLen = arr.length;
-                                    if (arrLen >= 3) {
-                                        if (el.installation_price_for_three) {
-                                            prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_three);
-                                        } else if (el.installation_price_for_two) {
-                                            prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_two);
-                                        } else {
-                                            prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
-                                        }
-                                    } else if (arrLen === 2) {
-                                        if (el.installation_price_for_two) {
-                                            prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_two);
-                                        } else {
-                                            prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
-                                        }
-                                    } else if (arrLen === 1) {
+                        const filteredEquipment = value.filter(el => !this.isUndefined(el) && !this.isNull(el));
+                        if ((!isValidManualInstallationPrice || !isInstallationPriceManuallySet) && filteredEquipment.length > 0) {
+                            const el = filteredEquipment[0];
+                            switch (filteredEquipment.length) {
+                                case 1:
+                                    prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
+                                    break;
+                                case 2:
+                                    if (el.installation_price_for_two) {
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_two);
+                                    } else {
                                         prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
                                     }
-                                }
+                                    break;
+                                case 3:
+                                    if (el.installation_price_for_three) {
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_three);
+                                    } else if (el.installation_price_for_two) {
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_two);
+                                    } else {
+                                        prices.installationPrices[index] = this.addTwoFloats(prices.installationPrices[index], el.installation_price_for_one);
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        filteredEquipment
+                            .forEach((el) => {
+                                prices.equipmentPrices[index][priceKey] = this.addTwoFloats(prices.equipmentPrices[index][priceKey], el.price);
                             });
                     }
                 });
@@ -1100,14 +1112,14 @@ export default {
             }, defaultPrices);
         },
         allEquipmentPrice() {
-            const price = this.multiplyTwoFloats(this.pricesForEquipment.equipmentPrices.reduce((price, el) => {
-                return this.addTwoFloats(price, Object.keys(el).reduce((price, key) => this.addTwoFloats(price, el[key]), 0.00));
+            const price = this.multiplyTwoFloats(this.pricesForEquipment.equipmentPrices.reduce((price, el, index) => {
+                return this.addTwoFloats(price, Object.keys(el).reduce((price, key) => this.addTwoFloats(price, this.multiplyTwoFloats(this.orderData.GPSData[index].multiplier, el[key])), 0.00));
             }, 0.00), this.orderData.dollar_rate);
             const discount = this.multiplyTwoFloats(price, this.divideTwoFloats(parseFloat(this.orderData.equipment_discount), 100));
             return this.subtractTwoFloats(price, discount);
         },
         allInstallationPrice() {
-            const price = this.pricesForEquipment.installationPrices.reduce((price, el) => this.addTwoFloats(price, el), 0.00);
+            const price = this.pricesForEquipment.installationPrices.reduce((price, el, index) => this.addTwoFloats(price, this.multiplyTwoFloats(this.orderData.GPSData[index].multiplier, el)), 0.00);
             const discount = this.multiplyTwoFloats(price, this.divideTwoFloats(parseFloat(this.orderData.installation_discount), 100));
             return this.subtractTwoFloats(price, discount);
         },

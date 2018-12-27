@@ -290,31 +290,37 @@ export default {
     computed: {
         gpsTrackingData() {
             return this.gpsData.map(gpsRow => {
+                const multiplier = (gpsRow.multiplier < 1) ? 1 : gpsRow.multiplier;
                 return {
                     equipment: Object.keys(gpsRow).reduce((equipment, key) => {
                         if (Object.keys(this.mappedColumnNames).indexOf(key) !== -1) {
                             if (Array.isArray(gpsRow[key])) {
-                                let count = 0;
-                                let gpsRowArray = gpsRow[key].slice().filter(row => this.isObject(row));
+                                const gpsRowArray = gpsRow[key].filter(row => this.isObject(row));
                                 if (gpsRowArray.length === 0) return equipment;
-                                const equipmentData = {
-                                    image: ``,
-                                    name: ``,
-                                    price: 0
-                                };
-                                for (let i = 0; i < gpsRowArray.length; ++i) {
-                                    for (let j = 0; j < gpsRowArray.length; ++j) {
-                                        if (gpsRowArray[i].id === gpsRowArray[j].id) {
-                                            ++count;
-                                        }
-                                    }
-                                    equipmentData.image = `/storage/${gpsRowArray[i].image}`;
-                                    equipmentData.name = `${this.mappedColumnNames[key]} ${count}шт ${gpsRowArray[i].name}`;
-                                    equipmentData.price = this.multiplyTwoFloats(gpsRowArray[i].price, count);
-                                    gpsRowArray = gpsRowArray.filter(row => row.id !== gpsRowArray[i].id);
-                                }
+                                const equipmentMap = {};
 
-                                equipment.push(equipmentData);
+                                for (let i = 0; i < gpsRowArray.length; ++i) {
+                                    if (!equipmentMap[gpsRowArray[i].id]) {
+                                        equipmentMap[gpsRowArray[i].id] = {
+                                            image: `/storage/${gpsRowArray[i].image}`,
+                                            name: gpsRowArray[i].name,
+                                            count: 1,
+                                            price: gpsRowArray[i].price
+                                        };
+                                    } else {
+                                        ++equipmentMap[gpsRowArray[i].id].count;
+                                    }
+                                }
+                                const equipmentData = Object.keys(equipmentMap).reduce((data, id) => {
+                                    data.push({
+                                        image: equipmentMap[id].image,
+                                        name: `${this.mappedColumnNames[key]} ${equipmentMap[id].count}шт ${equipmentMap[id].name}`,
+                                        price: this.multiplyTwoFloats(equipmentMap[id].price, equipmentMap[id].count)
+                                    });
+                                    return data;
+                                }, []);
+
+                                equipment.push(...equipmentData);
                             } else if (this.isObject(gpsRow[key])) {
                                 equipment.push({
                                     image: `/storage/${gpsRow[key].image}`,
@@ -325,7 +331,7 @@ export default {
                         }
                         return equipment;
                     }, []),
-                    multiplier: gpsRow.multiplier,
+                    multiplier,
                     transportImage: gpsRow.image,
                     transportName: `${(this.isNull(gpsRow.mark) || this.isUndefined(gpsRow.mark)) ? '' : gpsRow.mark}${(this.isNull(gpsRow.model) || this.isUndefined(gpsRow.model)) ? '' : ` ${gpsRow.model}`}`
                 };
