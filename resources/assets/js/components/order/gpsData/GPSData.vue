@@ -118,7 +118,7 @@
                         <template v-else>
                             <v-combobox
                                 :ref="`type-${props.index}-${2}`"
-                                :value="props.item.type"
+                                :value="getTypeText(props.item.type)"
                                 @change="setCellValue($event, props.index, 2, 'type', `td-${props.index}-${2}`)"
                                 :items="transportTypesWithCache"
                                 item-text="name"
@@ -1222,7 +1222,7 @@ export default {
             },
             headers: [
                 { text: '#', align: 'left', sortable: false },
-                { text: 'X', value: 'multiplier', align: 'left', sortable: false },
+                { text: 'шт.', value: 'multiplier', align: 'left', sortable: false },
                 { text: 'Изображение', align: 'left', sortable: false, value: 'image' },
                 { text: 'Тип', value: 'type', sortable: false },
                 { text: 'Марка', value: 'mark', sortable: false },

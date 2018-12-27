@@ -6,6 +6,16 @@
         disable-initial-sort
         class="gps-data-table elevation-1">
         <template slot="items" slot-scope="props">
+            <td
+                class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('order') }">
+                {{ props.item.order }}
+            </td>
+            <td
+                class="text-xs-center"
+                :class="{ [props.index % 2 === 0 ? 'red--text darken-4--text' : 'success--text']: withChanged && props.item.changedKeys.includes('multiplier') }">
+                {{ props.item.multiplier }}
+            </td>
             <td class="text-xs-center">
                 <img style="max-width: 100%;" :src="props.item.image" alt="img">
             </td>
@@ -241,6 +251,8 @@ export default {
     data() {
         return {
             gpsDataHeaders: [
+                { text: 'Порядок', align: 'left', sortable: false, value: 'order' },
+                { text: 'шт.', align: 'left', sortable: false, value: 'multiplier' },
                 { text: 'Изображение', align: 'left', sortable: false, value: 'image' },
                 { text: 'Тип', align: 'center', value: 'type', sortable: false },
                 { text: 'Марка', align: 'center', value: 'mark', sortable: false },
