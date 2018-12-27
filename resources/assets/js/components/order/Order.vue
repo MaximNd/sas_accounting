@@ -519,7 +519,7 @@
                     </v-layout>
                 </v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center>
+                    <v-layout justify-center :class="{ 'mb-4': isCreation }">
                         <v-flex v-if="isCreation" xs12 sm11 md3>
                             <v-btn
                                 block large color="primary"
@@ -593,7 +593,7 @@
                         </v-flex>
                     </v-layout>
                 </v-card-actions>
-                <v-card-actions>
+                <v-card-actions v-if="!isCreation">
                     <v-layout justify-center class="mb-4">
                         <v-flex xs12 sm8 md6>
                             <appOrderPDF :orderID="order.id"></appOrderPDF>
