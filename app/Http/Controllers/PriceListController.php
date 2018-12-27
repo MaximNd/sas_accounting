@@ -83,7 +83,7 @@ class PriceListController extends Controller
                 'installation_price_for_one' => 'required|numeric',
                 'installation_price_for_two' => 'nullable|numeric',
                 'installation_price_for_three' => 'nullable|numeric',
-                'description' => 'string'
+                'description' => 'nullable|string'
             ]);
         }
 
