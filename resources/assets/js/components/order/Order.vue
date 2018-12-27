@@ -675,8 +675,6 @@ import setStyles from './../../mixins/stylesMixins.js'
 import forms from './../../mixins/forms.js';
 import formatter from 'accounting';
 import diff from 'deep-diff';
-import html2pdf from 'html2pdf.js';
-import jsPDF from 'jspdf';
 import pdfLayoutNames from './../../constants/ServicesPreviewNames.js';
 import { uploadImage } from './../../constants/images';
 
@@ -717,6 +715,7 @@ export default {
                 order: 1,
                 multiplier: 1,
                 image: '',
+                type: '',
                 mark: '',
                 model: '',
                 year_of_issue: '',
@@ -1338,6 +1337,7 @@ export default {
                 order: 1,
                 multiplier: 1,
                 image: '',
+                type: '',
                 mark: '',
                 model: '',
                 year_of_issue: '',

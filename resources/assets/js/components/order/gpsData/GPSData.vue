@@ -125,7 +125,8 @@
                                 item-value="value"
                                 :return-object="false"
                                 label="Вибирете тип"
-                                single-line>
+                                single-line
+                                clearable>
                                 <template slot="no-data">
                                     <v-list-tile>
                                         <v-list-tile-content>
@@ -179,7 +180,8 @@
                                 item-value="name"
                                 :return-object="false"
                                 label="Вибирете марку"
-                                single-line>
+                                single-line
+                                clearable>
                                 <template slot="no-data">
                                     <v-list-tile>
                                         <v-list-tile-content>
@@ -233,7 +235,8 @@
                                 item-value="value"
                                 :return-object="false"
                                 label="Вибирете модель"
-                                single-line>
+                                single-line
+                                clearable>
                                 <template slot="no-data">
                                     <v-list-tile>
                                         <v-list-tile-content>
@@ -285,7 +288,8 @@
                                 :items="Array.apply(null, { length: 100 }).map((_, i) => 1950 + i)"
                                 label="Вибирете год выпуска"
                                 auto
-                                single-line>
+                                single-line
+                                clearable>
                             </v-autocomplete>
                             <v-btn color="info" small @click="switchCellMode(props.index, 5, false, `year_of_issue-${props.index}-${5}`, $event, false)">
                                 Закрыть редактирование
@@ -313,7 +317,8 @@
                                 item-value="value"
                                 :return-object="false"
                                 label="Вибирете Тип топлива"
-                                single-line>
+                                single-line
+                                clearable>
                                 <template slot="no-data">
                                     <v-list-tile>
                                         <v-list-tile-content>
@@ -366,9 +371,9 @@
                                 item-text="value"
                                 item-value="value"
                                 :return-object="false"
-                                hide-selected
                                 label="Вибирете мощность"
-                                single-line>
+                                single-line
+                                clearable>
                                 <template slot="no-data">
                                     <v-list-tile>
                                         <v-list-tile-content>
@@ -421,9 +426,9 @@
                                 item-text="value"
                                 item-value="value"
                                 :return-object="false"
-                                hide-selected
                                 label="Вибирете гос. номер"
-                                single-line>
+                                single-line
+                                clearable>
                                 <template slot="no-data">
                                     <v-list-tile>
                                         <v-list-tile-content>
@@ -474,10 +479,10 @@
                                 @change="setCellValue($event, props.index, 9, 'gps_tracker', `td-${props.index}-${9}`)"
                                 :items="gpsTrackersWithHeader"
                                 item-text="name"
-                                hide-selected
                                 label="Вибирете GPS-трекер"
                                 single-line
-                                return-object>
+                                return-object
+                                clearable>
                             </v-autocomplete>
                             <v-btn color="info" small @click="switchCellMode(props.index, 9, false, `gps_tracker-${props.index}-${9}`, $event, false)">
                                 Закрыть редактирование
@@ -531,7 +536,6 @@
                                             :items="fuelLevelSensorsWithHeader"
                                             item-text="name"
                                             clearable
-                                            hide-selected
                                             label="Вибирете ДУТ"
                                             single-line
                                             return-object>
@@ -585,10 +589,10 @@
                                 @change="setCellValue($event, props.index, 13, 'counter', `td-${props.index}-${13}`)"
                                 :items="fuelFlowmetersWithHeader"
                                 item-text="name"
-                                hide-selected
                                 label="Вибирете счетчик"
                                 single-line
-                                return-object>
+                                return-object
+                                clearable>
                             </v-autocomplete>
                             <v-btn color="info" small @click="switchCellMode(props.index, 13, false, `counter-${props.index}-${13}`, $event, false)">
                                 Закрыть редактирование
@@ -617,14 +621,14 @@
                         <template v-else>
                             <v-autocomplete
                                 :ref="`rf_id-${props.index}-${15}`"
-                                :value="props.item.counter"
+                                :value="props.item.rf_id"
                                 @change="setCellValue($event, props.index, 15, 'rf_id', `td-${props.index}-${15}`)"
                                 :items="identificationWithHeader"
                                 item-text="name"
-                                hide-selected
                                 label="Вибирете RFID"
                                 single-line
-                                return-object>
+                                return-object
+                                clearable>
                             </v-autocomplete>
                             <v-btn color="info" small @click="switchCellMode(props.index, 15, false, `rf_id-${props.index}-${15}`, $event, false)">
                                 Закрыть редактирование
@@ -657,10 +661,10 @@
                                 @change="setCellValue($event, props.index, 17, 'reader_of_trailed_equipment', `td-${props.index}-${17}`)"
                                 :items="identificationWithHeader"
                                 item-text="name"
-                                hide-selected
                                 label="Вибирете считыватель прицепного оборудования"
                                 single-line
-                                return-object>
+                                return-object
+                                clearable>
                             </v-autocomplete>
                             <v-btn color="info" small @click="switchCellMode(props.index, 17, false, `reader_of_trailed_equipment-${props.index}-${17}`, $event, false)">
                                 Закрыть редактирование
@@ -723,10 +727,10 @@
                                 @change="setCellValue($event, props.index, 19, 'can_reader', `td-${props.index}-${19}`)"
                                 :items="optionalEquipment"
                                 item-text="name"
-                                hide-selected
                                 label="Вибирете CAN"
                                 single-line
-                                return-object>
+                                return-object
+                                clearable>
                             </v-autocomplete>
                             <v-btn color="info" small @click="switchCellMode(props.index, 19, false, `can_reader-${props.index}-${19}`, $event, false)">
                                 Закрыть редактирование
@@ -759,10 +763,10 @@
                                 @change="setCellValue($event, props.index, 21, 'deaerator_small', `td-${props.index}-${21}`)"
                                 :items="fuelFlowmetersWithHeader"
                                 item-text="name"
-                                hide-selected
                                 label="Вибирете деаэратор"
                                 single-line
-                                return-object>
+                                return-object
+                                clearable>
                             </v-autocomplete>
                             <v-btn color="info" small @click="switchCellMode(props.index, 21, false, `deaerator_small-${props.index}-${21}`, $event, false)">
                                 Закрыть редактирование
@@ -795,10 +799,10 @@
                                 @change="setCellValue($event, props.index, 23, 'deaerator_large', `td-${props.index}-${23}`)"
                                 :items="fuelFlowmetersWithHeader"
                                 item-text="name"
-                                hide-selected
                                 label="Вибирете деаэратор"
                                 single-line
-                                return-object>
+                                return-object
+                                clearable>
                             </v-autocomplete>
                             <v-btn color="info" small @click="switchCellMode(props.index, 23, false, `deaerator_large-${props.index}-${23}`, $event, false)">
                                 Закрыть редактирование
@@ -852,7 +856,6 @@
                                             :items="optionalEquipmentWithHeader"
                                             item-text="name"
                                             clearable
-                                            hide-selected
                                             label="Вибирете CN03"
                                             single-line
                                             return-object>
@@ -927,7 +930,6 @@
                                             :items="identificationWithHeader"
                                             item-text="name"
                                             clearable
-                                            hide-selected
                                             label="Вибирете RS01"
                                             single-line
                                             return-object>
@@ -1002,7 +1004,6 @@
                                             :items="optionalEquipment"
                                             item-text="name"
                                             clearable
-                                            hide-selected
                                             label="Вибирете доп. оборудование"
                                             single-line
                                             return-object>
@@ -1058,7 +1059,8 @@
                                 :value="props.item.manual_installation_price"
                                 @change="setCellValue($event, props.index, 31, 'manual_installation_price', `td-${props.index}-${31}`)"
                                 label="Цена монтажа"
-                                single-line>
+                                single-line
+                                clearable>
                             </v-text-field>
                             <v-btn color="info" small @click="switchCellMode(props.index, 31, false, `manual_installation_price-${props.index}-${31}`, $event, false)">
                                 Закрыть редактирование
@@ -1256,7 +1258,30 @@ export default {
                 { text: 'Монтаж оборудования ₴', value: 'manual_installation_price', sortable: false },
             ],
             uploadImage,
-            cellsPosition: []
+            GPSRowTypesMap: {
+                order: [1],
+                multiplier: [1],
+                image: [''],
+                type: [''],
+                mark: [''],
+                model: [''],
+                year_of_issue: ['', 1990],
+                fuel_type: [''],
+                power: [''],
+                number: [''],
+                gps_tracker: ['', {}],
+                fuel_gauge: [undefined, '', {}],
+                counter: ['', {}],
+                rf_id: ['', {}],
+                reader_of_trailed_equipment: ['', {}],
+                can_reader: ['', {}],
+                deaerator_small: ['', {}],
+                deaerator_large: ['', {}],
+                cn03: [undefined, '', {}],
+                rs01: [undefined, '', {}],
+                additional_equipment: [undefined, '', {}],
+                manual_installation_price: [0]
+            }
         };
     },
     computed: {
@@ -1726,17 +1751,35 @@ export default {
                 }
             }
         },
-        checkNumeric(columnName, data) {
+        fixCellData(columnName, data) {
             if (columnName === 'multiplier') {
                 return parseInt(data, 10);
+            } else if (columnName !== 'manual_installation_price'
+                && (this.isNull(data)
+                || this.isUndefined(data)
+                || this.GPSRowTypesMap[columnName].every(initVal => {
+                    if (Array.isArray(initVal)) {
+                        return !Array.isArray(data);
+                    }
+                    return typeof data !== typeof initVal;
+                }))) {
+                return this.GPSRowTypesMap[columnName][0];
             }
             return data;
         },
         setCellValue(data, row, cell, name, td, nestedPath = false, forceSwitchMode = true) {
-            this.checkImageReplacement(row, name, data);
-            data = this.checkNumeric(name, data);
-            this.$emit('update:orderGPSData', data, row, name, nestedPath);
-            if (forceSwitchMode) this.switchCellMode(row, cell, false);
+            const validData = this.fixCellData(name, data);
+            // validData = this.checkNumeric(name, validData);
+            this.checkImageReplacement(row, name, validData);
+
+            this.$emit('update:orderGPSData', validData, row, name, nestedPath);
+            console.log('SET CELL VALUE {COLUMN_NAME}: ', name);
+            console.log('SET CELL VALUE {DATA}: ', data);
+            console.log('SET CELL VALUE {VALID_DATA}: ', validData);
+            if (!this.isUndefined(data) && forceSwitchMode) {
+                console.log('FORCE EXIT');
+                this.switchCellMode(row, cell, false);
+            }
             if (td) {
                 this.clickOnTD(this.$refs[td]);
             }
