@@ -91,6 +91,9 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::delete('/orders_pdf/{id}', 'OrderPDFController@deletePDF');
 
+    // ORDERS EXCEL
+    Route::post('/orders_excel', 'OrderExcelController@createExcel');
+
     // ORDERS_LOGS
     Route::get('/orders/logs', 'OrderLogController@getLogs');
 

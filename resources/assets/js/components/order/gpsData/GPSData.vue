@@ -1,36 +1,39 @@
 <template>
     <v-card class="elevation-0">
-         <v-card-title>
-            <v-card flat>
-                <v-layout wrap align-start>
-                    <v-flex xs12 sm3>
-                        <v-text-field
-                            v-model="count"
-                            :error-messages="countErrors"
-                            label="Количество"
-                            type="number"
-                            min="1">
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm3>
+        <v-card-title>
+            <v-layout wrap  :column="$vuetify.breakpoint.xsOnly">
+                <v-flex xs12 md2>
+                    <v-text-field
+                        v-model="count"
+                        :error-messages="countErrors"
+                        label="Количество"
+                        type="number"
+                        min="1">
+                    </v-text-field>
+                </v-flex>
+                <v-flex xs12 md10>
+                    <v-layout wrap :column="$vuetify.breakpoint.xsOnly">
                         <v-btn
                             @click="addRow(count)"
                             color="info"
                             :block="$vuetify.breakpoint.xsOnly">
                             Добавить
                         </v-btn>
-                    </v-flex>
-                    <v-flex xs12 sm5>
                         <v-btn
                             @click="deleteSelected"
                             color="error"
                             :block="$vuetify.breakpoint.xsOnly">
                             Удалить выбранные
                         </v-btn>
-                    </v-flex>
-                </v-layout>
-            </v-card>
-            <v-spacer></v-spacer>
+                        <v-btn
+                            @click="createExcel"
+                            color="success"
+                            :block="$vuetify.breakpoint.xsOnly">
+                            Скачать EXCEL
+                        </v-btn>
+                    </v-layout>
+                </v-flex>
+            </v-layout>
         </v-card-title>
         <v-card-text id="text-test" class="ma-0 pa-0">
             <v-data-table
@@ -1124,6 +1127,58 @@ export default {
         pricesForEquipment: {
             type: Object,
             required: true
+        },
+        equipmentDiscount: {
+            type: Number,
+            required: true
+        },
+        installationDiscount: {
+            type: Number,
+            required: true
+        },
+        allEquipmentPrice: {
+            type: Number,
+            required: true
+        },
+        allInstallationPrice: {
+            type: Number,
+            required: true
+        },
+        pricePerDay: {
+            type: Number,
+            required: true
+        },
+        days: {
+            type: Number,
+            required: true
+        },
+        priceForDays: {
+            type: Number,
+            required: true
+        },
+        priceForTransportationPerKm: {
+            type: Number,
+            required: true
+        },
+        transportationKms: {
+            type: Number,
+            required: true
+        },
+        numberOfTrips: {
+            type: Number,
+            required: true
+        },
+        route: {
+            type: Number,
+            required: true
+        },
+        transportationPrice: {
+            type: Number,
+            required: true
+        },
+        finalPrice: {
+            type: Number,
+            required: true
         }
     },
     data() {
@@ -1791,6 +1846,126 @@ export default {
         deleteOrderNestedData(event, row, column, index) {
             this.$emit('delete-nested-data:orderGPSData', row, column, index);
             this.clickOnTD(this.findTDEl(event));
+        },
+        createExcel() {
+            const pricesPerEquipment = this.pricesForEquipment.equipmentPrices.reduce((prices, row, index) => {
+                const multiplier = this.orderGPSData[index].multiplier;
+                Object.keys(row).forEach((key) => {
+                    if (prices[key]) {
+                        prices[key] = this.addTwoFloats(prices[key], this.multiplyTwoFloats(
+                                                                row[key],
+                                                                multiplier
+                                                            )
+                                                        );
+                    } else {
+                        prices[key] = this.multiplyTwoFloats(row[key], multiplier);
+                    }
+                });
+                return prices;
+            }, {});
+            const excelData = {
+                gpsData: this.orderGPSData.map((row, index) => [
+                    row.multiplier,
+                    this.getTypeText(row.type),
+                    row.mark,
+                    row.model,
+                    row.year_of_issue,
+                    row.fuel_type,
+                    row.power,
+                    row.number,
+                    row.gps_tracker.name,
+                    this.pricesForEquipment.equipmentPrices[index]['gps_tracker_price'] || 0,
+                    (!Array.isArray(row.fuel_gauge) ? '' : row.fuel_gauge
+                        .filter(item => (!this.isUndefined(item) && !this.isNull(item)))
+                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '')),
+                    this.pricesForEquipment.equipmentPrices[index]['fuel_gauge_price'] || 0,
+                    row.counter.name,
+                    this.pricesForEquipment.equipmentPrices[index]['counter_price'] || 0,
+                    row.rf_id.name,
+                    this.pricesForEquipment.equipmentPrices[index]['rf_id_price'] || 0,
+                    row.reader_of_trailed_equipment.name,
+                    this.pricesForEquipment.equipmentPrices[index]['reader_of_trailed_equipment_price'] || 0,
+                    row.can_reader.name,
+                    this.pricesForEquipment.equipmentPrices[index]['can_reader_price'] || 0,
+                    row.deaerator_small.name,
+                    this.pricesForEquipment.equipmentPrices[index]['deaerator_small_price'] || 0,
+                    row.deaerator_large.name,
+                    this.pricesForEquipment.equipmentPrices[index]['deaerator_large_price'] || 0,
+                    (!Array.isArray(row.cn03) ? '' : row.cn03
+                        .filter(item => (!this.isUndefined(item) && !this.isNull(item)))
+                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '')),
+                    this.pricesForEquipment.equipmentPrices[index]['cn03_price'] || 0,
+                    (!Array.isArray(row.rs01) ? '' : row.rs01
+                        .filter(item => (!this.isUndefined(item) && !this.isNull(item)))
+                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '')),
+                    this.pricesForEquipment.equipmentPrices[index]['rs01_price'] || 0,
+                    (!Array.isArray(row.additional_equipment) ? '' : row.additional_equipment
+                        .filter(item => (!this.isUndefined(item) && !this.isNull(item)))
+                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '')),
+                    this.pricesForEquipment.equipmentPrices[index]['additional_equipment_price'] || 0,
+                    this.pricesForEquipment.installationPrices[index]
+                ]),
+                pricesPerEquipmentAndInstallation: [
+                    'Сума:',
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    pricesPerEquipment.gps_tracker_price || 0,
+                    null,
+                    pricesPerEquipment.fuel_gauge_price || 0,
+                    null,
+                    pricesPerEquipment.counter_price || 0,
+                    null,
+                    pricesPerEquipment.rf_id_price || 0,
+                    null,
+                    pricesPerEquipment.reader_of_trailed_equipment_price || 0,
+                    null,
+                    pricesPerEquipment.can_reader_price || 0,
+                    null,
+                    pricesPerEquipment.deaerator_small_price || 0,
+                    null,
+                    pricesPerEquipment.deaerator_large_price || 0,
+                    null,
+                    pricesPerEquipment.cn03_price || 0,
+                    null,
+                    pricesPerEquipment.rs01_price || 0,
+                    null,
+                    pricesPerEquipment.additional_equipment_price || 0,
+                    this.allInstallationPrice
+                ],
+                priceForAll: [
+                    'СУМА ВСЬОГО:',
+                    null,
+                    this.finalPrice
+                ],
+                // TODO make data for grupped equipment and for rest prices
+            }
+
+            this.axios.post('/orders_excel', excelData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/xlsx'
+                },
+                responseType: 'blob'
+            })
+            .then(({ data }) => {
+                const excel = new Blob([data], { type: 'application/xlsx' });
+                const link = document.createElement('a');
+                link.setAttribute('href', this.createObjectURL(excel));
+                link.setAttribute('download', `test_excel.xlsx`);
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(err => {
+                console.log(err);
+            });
         },
         close(ref) {
             this.$refs[ref].blur()

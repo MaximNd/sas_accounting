@@ -37,6 +37,15 @@ export default {
         },
         getTodaysDate() {
             return new Date().toISOString().slice(0, 10);
+        },
+        createObjectURL(file) {
+            if (window.URL && window.URL.createObjectURL) {
+                return window.URL.createObjectURL(file);
+            } else if (window.webkitURL && window.webkitURL.createObjectURL) {
+                return window.webkitURL.createObjectURL(file);
+            } else {
+                return null;
+            }
         }
     }
 };
