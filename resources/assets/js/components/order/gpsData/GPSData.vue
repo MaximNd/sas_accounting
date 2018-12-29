@@ -28,7 +28,9 @@
                         <v-btn
                             @click="createExcel"
                             color="success"
-                            :block="$vuetify.breakpoint.xsOnly">
+                            :block="$vuetify.breakpoint.xsOnly"
+                            :loading="excelLoading"
+                            :disabled="excelLoading">
                             Скачать EXCEL
                         </v-btn>
                     </v-layout>
@@ -1092,6 +1094,10 @@ export default {
             type: Object,
             required: true
         },
+        dollarRate: {
+            type: Number,
+            required: true
+        },
         defaultRowCount: {
             type: Number,
             required: true
@@ -1124,6 +1130,10 @@ export default {
             type: Array,
             required: true
         },
+        gruppedEquipment: {
+            type: Array,
+            required: true
+        },
         pricesForEquipment: {
             type: Object,
             required: true
@@ -1136,23 +1146,11 @@ export default {
             type: Number,
             required: true
         },
-        allEquipmentPrice: {
-            type: Number,
-            required: true
-        },
-        allInstallationPrice: {
-            type: Number,
-            required: true
-        },
         pricePerDay: {
             type: Number,
             required: true
         },
         days: {
-            type: Number,
-            required: true
-        },
-        priceForDays: {
             type: Number,
             required: true
         },
@@ -1169,21 +1167,14 @@ export default {
             required: true
         },
         route: {
-            type: Number,
-            required: true
-        },
-        transportationPrice: {
-            type: Number,
-            required: true
-        },
-        finalPrice: {
-            type: Number,
+            type: String,
             required: true
         }
     },
     data() {
         return {
             count: 1,
+            excelLoading: false,
             tableBody: null,
             bordersWrapper: null,
             bordersSelectData: {
@@ -1848,102 +1839,133 @@ export default {
             this.clickOnTD(this.findTDEl(event));
         },
         createExcel() {
-            const pricesPerEquipment = this.pricesForEquipment.equipmentPrices.reduce((prices, row, index) => {
-                const multiplier = this.orderGPSData[index].multiplier;
-                Object.keys(row).forEach((key) => {
-                    if (prices[key]) {
-                        prices[key] = this.addTwoFloats(prices[key], this.multiplyTwoFloats(
-                                                                row[key],
-                                                                multiplier
-                                                            )
-                                                        );
-                    } else {
-                        prices[key] = this.multiplyTwoFloats(row[key], multiplier);
-                    }
-                });
-                return prices;
-            }, {});
+            this.excelLoading = true;
+            const pricesTable = [
+                [
+                    'Знижка на обладнання(%):',
+                    null,
+                    null,
+                    this.equipmentDiscount
+                ],
+                [
+                    'Знижка на монтаж обладнання(%):',
+                    null,
+                    null,
+                    this.installationDiscount
+                ],
+                [
+                    'Монтаж обладнання:',
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    'Обладнання:',
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    'Ціна за 1 день відрядження:',
+                    null,
+                    null,
+                    this.pricePerDay
+                ],
+                [
+                    'Кількість днів:',
+                    null,
+                    null,
+                    this.days
+                ],
+                [
+                    `Відрядження/проживання:`,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    'Ціна за 1км:',
+                    null,
+                    null,
+                    this.priceForTransportationPerKm
+                ],
+                [
+                    'Відстань (км.):',
+                    null,
+                    null,
+                    this.transportationKms
+                ],
+                [
+                    'Кількість поїздок:',
+                    null,
+                    null,
+                    this.numberOfTrips
+                ],
+                [
+                    'Транспортні витрати:',
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    'Маршрут:',
+                    null,
+                    null,
+                    this.route
+                ]
+            ];
+
             const excelData = {
+                dollarRate: this.dollarRate,
                 gpsData: this.orderGPSData.map((row, index) => [
-                    row.multiplier,
-                    this.getTypeText(row.type),
-                    row.mark,
-                    row.model,
-                    row.year_of_issue,
-                    row.fuel_type,
-                    row.power,
-                    row.number,
-                    row.gps_tracker.name,
+                    row.multiplier || '-',
+                    this.getTypeText(row.type) || '-',
+                    row.mark || '-',
+                    row.model || '-',
+                    row.year_of_issue || '-',
+                    row.fuel_type || '-',
+                    row.power || '-',
+                    row.number || '-',
+                    row.gps_tracker.name || '-',
                     this.pricesForEquipment.equipmentPrices[index]['gps_tracker_price'] || 0,
-                    (!Array.isArray(row.fuel_gauge) ? '' : row.fuel_gauge
+                    (!Array.isArray(row.fuel_gauge) ? '-' : row.fuel_gauge
                         .filter(item => (!this.isUndefined(item) && !this.isNull(item)))
-                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '')),
+                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '') || '-'),
                     this.pricesForEquipment.equipmentPrices[index]['fuel_gauge_price'] || 0,
-                    row.counter.name,
+                    row.counter.name || '-',
                     this.pricesForEquipment.equipmentPrices[index]['counter_price'] || 0,
-                    row.rf_id.name,
+                    row.rf_id.name || '-',
                     this.pricesForEquipment.equipmentPrices[index]['rf_id_price'] || 0,
-                    row.reader_of_trailed_equipment.name,
+                    row.reader_of_trailed_equipment.name || '-',
                     this.pricesForEquipment.equipmentPrices[index]['reader_of_trailed_equipment_price'] || 0,
-                    row.can_reader.name,
+                    row.can_reader.name || '-',
                     this.pricesForEquipment.equipmentPrices[index]['can_reader_price'] || 0,
-                    row.deaerator_small.name,
+                    row.deaerator_small.name || '-',
                     this.pricesForEquipment.equipmentPrices[index]['deaerator_small_price'] || 0,
-                    row.deaerator_large.name,
+                    row.deaerator_large.name || '-',
                     this.pricesForEquipment.equipmentPrices[index]['deaerator_large_price'] || 0,
-                    (!Array.isArray(row.cn03) ? '' : row.cn03
+                    (!Array.isArray(row.cn03) ? '-' : row.cn03
                         .filter(item => (!this.isUndefined(item) && !this.isNull(item)))
-                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '')),
+                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '') || '-'),
                     this.pricesForEquipment.equipmentPrices[index]['cn03_price'] || 0,
-                    (!Array.isArray(row.rs01) ? '' : row.rs01
+                    (!Array.isArray(row.rs01) ? '-' : row.rs01
                         .filter(item => (!this.isUndefined(item) && !this.isNull(item)))
-                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '')),
+                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '') || '-'),
                     this.pricesForEquipment.equipmentPrices[index]['rs01_price'] || 0,
-                    (!Array.isArray(row.additional_equipment) ? '' : row.additional_equipment
+                    (!Array.isArray(row.additional_equipment) ? '-' : row.additional_equipment
                         .filter(item => (!this.isUndefined(item) && !this.isNull(item)))
-                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '')),
+                        .reduce((str, item, index) => `${str}${index===0?'':','}${item.name}` , '') || '-'),
                     this.pricesForEquipment.equipmentPrices[index]['additional_equipment_price'] || 0,
-                    this.pricesForEquipment.installationPrices[index]
-                ]),
+                    this.pricesForEquipment.installationPrices[index] || 0
+                ]).sort((r1, r2) => (r1[1] < r2[1] ? -1 : (r1[1] > r2[1] ? 1 : 0))),
                 pricesPerEquipmentAndInstallation: [
-                    'Сума:',
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    pricesPerEquipment.gps_tracker_price || 0,
-                    null,
-                    pricesPerEquipment.fuel_gauge_price || 0,
-                    null,
-                    pricesPerEquipment.counter_price || 0,
-                    null,
-                    pricesPerEquipment.rf_id_price || 0,
-                    null,
-                    pricesPerEquipment.reader_of_trailed_equipment_price || 0,
-                    null,
-                    pricesPerEquipment.can_reader_price || 0,
-                    null,
-                    pricesPerEquipment.deaerator_small_price || 0,
-                    null,
-                    pricesPerEquipment.deaerator_large_price || 0,
-                    null,
-                    pricesPerEquipment.cn03_price || 0,
-                    null,
-                    pricesPerEquipment.rs01_price || 0,
-                    null,
-                    pricesPerEquipment.additional_equipment_price || 0,
-                    this.allInstallationPrice
+                    'СУМА:'
                 ],
                 priceForAll: [
-                    'СУМА ВСЬОГО:',
-                    null,
-                    this.finalPrice
+                    'СУМА ВСЬОГО:'
                 ],
-                // TODO make data for grupped equipment and for rest prices
+                pricesTable,
+                gruppedEquipment: this.gruppedEquipment
             }
 
             this.axios.post('/orders_excel', excelData, {
@@ -1962,9 +1984,11 @@ export default {
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+                this.excelLoading = false;
             })
             .catch(err => {
                 console.log(err);
+                this.excelLoading = false;
             });
         },
         close(ref) {
