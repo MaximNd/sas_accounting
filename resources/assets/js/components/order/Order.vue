@@ -277,6 +277,7 @@
                             :validator="$validator"
                             :orderGPSData="orderData.GPSData"
                             :dollarRate="orderData.dollar_rate"
+                            :orderName="orderData.name"
                             :gpsTrackers="gpsTrackers"
                             :fuelLevelSensors="fuelLevelSensors"
                             :fuelFlowmeters="fuelFlowmeters"

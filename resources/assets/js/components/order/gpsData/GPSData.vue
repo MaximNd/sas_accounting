@@ -1098,6 +1098,10 @@ export default {
             type: Number,
             required: true
         },
+        orderName: {
+            type: String,
+            required: true
+        },
         defaultRowCount: {
             type: Number,
             required: true
@@ -1979,7 +1983,7 @@ export default {
                 const excel = new Blob([data], { type: 'application/xlsx' });
                 const link = document.createElement('a');
                 link.setAttribute('href', this.createObjectURL(excel));
-                link.setAttribute('download', `test_excel.xlsx`);
+                link.setAttribute('download', `${this.orderName}.xlsx`);
                 link.style.display = 'none';
                 document.body.appendChild(link);
                 link.click();
