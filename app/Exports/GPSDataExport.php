@@ -58,7 +58,7 @@ class GPSDataExport implements FromCollection, ShouldAutoSize, WithHeadings, Wit
                 $pricesTableAndGruppedEquipment,
                 array_map(function ($row) {
                     return [
-                        null, null, null, null, null,
+                        null, null, null, null, null, null, null,
                         $row['type'],
                         $row['count'],
                         $row['price']
@@ -256,7 +256,8 @@ class GPSDataExport implements FromCollection, ShouldAutoSize, WithHeadings, Wit
     }
 
     private function setStylesToPricesPerEquipmentAndInstallation(Sheet $sheet) {
-        $rowIndex = count($this->gpsData) + 2;
+        $gpsDataLength = count($this->gpsData);
+        $rowIndex = $gpsDataLength + 2;
         $columns = ['J', 'L', 'N', 'P', 'R', 'T', 'V', 'X', 'Z', 'AB', 'AD'];
         $sheet->getDelegate()->mergeCells('A'.$rowIndex.':B'.$rowIndex);
         $sheet->getDelegate()->getStyle('A'.$rowIndex.':AE'.$rowIndex)->applyFromArray([
@@ -317,13 +318,14 @@ class GPSDataExport implements FromCollection, ShouldAutoSize, WithHeadings, Wit
         }
         $sheet->getDelegate()->setCellValueExplicit(
             'AE'.$rowIndex,
-            '=SUMPRODUCT(A2:A'.($rowIndex-1).',AE2:AE'.($rowIndex-1).')*(100-D29)%',
+            '=SUMPRODUCT(A2:A'.($rowIndex-1).',AE2:AE'.($rowIndex-1).')*(100-D'.($gpsDataLength + 8).')%',
             \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA
         );
     }
 
     private function setStylesToPriceForAll(Sheet $sheet) {
-        $rowIndex = count($this->gpsData) + 3;
+        $gpsDataLength = count($this->gpsData);
+        $rowIndex = $gpsDataLength + 3;
         $sheet->getDelegate()->mergeCells('A'.$rowIndex.':C'.$rowIndex);
         $sheet->getDelegate()->mergeCells('D'.$rowIndex.':AD'.$rowIndex);
         $sheet->getDelegate()->getStyle('A'.$rowIndex.':B'.$rowIndex)->applyFromArray([
@@ -364,7 +366,7 @@ class GPSDataExport implements FromCollection, ShouldAutoSize, WithHeadings, Wit
         ]);
         $sheet->getDelegate()->setCellValueExplicit(
             'AE'.$rowIndex,
-            '=SUM(D30:D31,D34,D38)',
+            '=SUM(D'.($gpsDataLength+9).':D'.($gpsDataLength+10).',D'.($gpsDataLength+13).',D'.($gpsDataLength+17).')',
             \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA
         );
     }
@@ -409,23 +411,23 @@ class GPSDataExport implements FromCollection, ShouldAutoSize, WithHeadings, Wit
             ]
         ]);
         $sheet->getDelegate()->setCellValueExplicit(
-            'D30',
+            'D'.($gpsDataLength+9),
             '=AE'.($gpsDataLength + 2),
             \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA
         );
         $sheet->getDelegate()->setCellValueExplicit(
-            'D31',
-            '=(SUM(J'.$sumsRowIndex.':AD'.$sumsRowIndex.')*(100-D28)%)*'.$this->dollarRate,
+            'D'.($gpsDataLength+10),
+            '=(SUM(J'.$sumsRowIndex.':AD'.$sumsRowIndex.')*(100-D'.($gpsDataLength+7).')%)*'.$this->dollarRate,
             \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA
         );
         $sheet->getDelegate()->setCellValueExplicit(
-            'D34',
-            '=D32*D33',
+            'D'.($gpsDataLength+13),
+            '=D'.($gpsDataLength+11).'*D'.($gpsDataLength+12),
             \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA
         );
         $sheet->getDelegate()->setCellValueExplicit(
-            'D38',
-            '=(D35*D36)*D37',
+            'D'.($gpsDataLength+17),
+            '=(D'.($gpsDataLength+14).'*D'.($gpsDataLength+15).')*D'.($gpsDataLength+16),
             \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA
         );
     }
