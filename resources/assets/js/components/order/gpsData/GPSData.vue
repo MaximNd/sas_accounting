@@ -26,6 +26,7 @@
                             Удалить выбранные
                         </v-btn>
                         <v-btn
+                            v-if="!isCreation"
                             @click="createExcel"
                             color="success"
                             :block="$vuetify.breakpoint.xsOnly"
@@ -1092,6 +1093,10 @@ export default {
     props: {
         validator: {
             type: Object,
+            required: true
+        },
+        isCreation: {
+            type: Boolean,
             required: true
         },
         dollarRate: {
