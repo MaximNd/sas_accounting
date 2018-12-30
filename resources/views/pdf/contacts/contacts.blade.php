@@ -1,4 +1,5 @@
 <div id="contacts" class="page">
+    @include('pdf.backgroundImage.BackgroundImage', ['image' => 'storage/image5____s.jpg'])
     <div class="contacts-title">
         <p>Зв’яжіться з нами</p>
     </div>
@@ -80,10 +81,10 @@
 </div>
 
 <style>
-    #contacts {
-        background-image: url('/storage/image5____s.jpg');
-        background-repeat: no-repeat;
-    }
+    /*#contacts {*/
+        /*background-image: url('/storage/image5____s.jpg');*/
+        /*background-repeat: no-repeat;*/
+    /*}*/
 
     #contacts .contacts-title {
         padding-top: 175px;

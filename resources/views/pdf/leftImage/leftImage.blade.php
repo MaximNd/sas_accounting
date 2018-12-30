@@ -1,5 +1,9 @@
-<div class="left-img" style="background-image: url('{{ $image }}');"></div>
-<div class="left-img-shadow"></div>
+<div class="left-img">
+    @include('pdf.backgroundImage.BackgroundImage', ['image' => $image])
+</div>
+<div class="left-img-shadow">
+    @include('pdf.backgroundImage.BackgroundImage', ['image' => 'storage/shadow.png'])
+</div>
 
 <style>
     .left-img {
@@ -12,7 +16,6 @@
 
     .left-img-shadow {
         position: absolute;
-        background: url('/storage/shadow.png') repeat-y;
         top: 0px;
         left: 380px;
         width: 23px;

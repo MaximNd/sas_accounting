@@ -1,4 +1,5 @@
 <div id="connection-to-platform-title" class="page">
+    @include('pdf.backgroundImage.BackgroundImage', ['image' => 'storage/image12_s.jpg'])
     @include('pdf.serviceTitle.serviceTitle', ['title' => 'Підключення <br/> до платформи SASAGRO.COM', 'styles' => 'top: 24%;transform: translateY(-24%);'])
     @php
         $str_price = strval($price);
@@ -33,11 +34,3 @@
     ])
 </div>
 <div class="page-break"></div>
-
-<style>
-    #connection-to-platform-title {
-        background-image: url('/storage/image12_s.jpg');
-        background-size: 102% 101%;
-        background-position-x: 100%;
-    }
-</style>

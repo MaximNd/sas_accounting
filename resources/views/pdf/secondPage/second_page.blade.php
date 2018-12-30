@@ -1,4 +1,5 @@
 <div id="page-2" class="page">
+    @include('pdf.backgroundImage.BackgroundImage', ['image' => 'storage/image11_s.jpg'])
     <div class="logo">
         <img src="storage/image8_s.png" alt="logo">
     </div>
@@ -13,12 +14,12 @@
 
 
 <style>
-    #page-2 {
-        background-image: url("/storage/image11_s.jpg");
-        background-repeat: no-repeat;
-        background-position: 100% 50%;
-        background-size: 124%;
-    }
+    /*#page-2 {*/
+        /*background-image: url("/storage/image11_s.jpg");*/
+        /*background-repeat: no-repeat;*/
+        /*background-position: 100% 50%;*/
+        /*background-size: 124%;*/
+    /*}*/
 
     #page-2 .logo {
         width: 100%;

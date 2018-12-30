@@ -16,7 +16,7 @@
                     <img class="bottom-imgs agrosphera-img" src="storage/image7.png" alt="">
                 </div>
                 <div class="col-xs-2">
-                    <img class="dnipro-img bottom-imgs" src="storage/image9.png" alt="">
+                        <img class="dnipro-img bottom-imgs" src="storage/image9.png" alt="">
                 </div>
             </div>
         </div>

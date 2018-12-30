@@ -1,5 +1,5 @@
 <div id="patrol" class="page">
-    @include('pdf.leftImage.leftImage', ['image' => '/storage/image46_s.png'])
+    @include('pdf.leftImage.leftImage', ['image' => 'storage/image46_s.png'])
     @php
         $str_price = strval($price);
         $margin_left = 20;

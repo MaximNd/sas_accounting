@@ -1,5 +1,5 @@
 <div id="aero-visual-review-data-first-page" class="page">
-    @include('pdf.leftImage.leftImage', ['image' => '/storage/image65_s.jpg'])
+    @include('pdf.leftImage.leftImage', ['image' => 'storage/image65_s.jpg'])
     <div class="aero-data">
         <div class="data-block">
             <div class="aero-data-title">

@@ -1,5 +1,5 @@
 <div id="soil-hardness-measuring" class="page">
-    @include('pdf.leftImage.leftImage', ['image' => '/storage/image84_s.jpg'])
+    @include('pdf.leftImage.leftImage', ['image' => 'storage/image84_s.jpg'])
     @php
         $str_price = strval($price);
         $margin_left = 25;

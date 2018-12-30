@@ -1,5 +1,5 @@
 <div id="fields-mapping-by-drones" class="page">
-    @include('pdf.leftImage.leftImage', ['image' => '/storage/image22_s.jpg'])
+    @include('pdf.leftImage.leftImage', ['image' => 'storage/image22_s.jpg'])
     @php
         $str_price = strval($price);
         $margin_left = 20;

@@ -1,4 +1,5 @@
 <div id="aero-visual-review-title" class="page">
+    @include('pdf.backgroundImage.BackgroundImage', ['image' => 'storage/image60_s.png'])
     @include('pdf.serviceTitle.serviceTitle', ['title' => 'Аеровізуальний<br> огляд', 'styles' => 'top: 34%;transform: translateY(-34%);'])
     @php
         $str_price = strval($price);
@@ -35,8 +36,8 @@
 <div class="page-break"></div>
 
 <style>
-    #aero-visual-review-title {
-        background-image: url('/storage/image60_s.png');
-        background-repeat: no-repeat;
-    }
+    /*#aero-visual-review-title {*/
+        /*background-image: url('/storage/image60_s.png');*/
+        /*background-repeat: no-repeat;*/
+    /*}*/
 </style>

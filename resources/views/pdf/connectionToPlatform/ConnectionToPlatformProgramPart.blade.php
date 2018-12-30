@@ -1,5 +1,5 @@
 <div id="connection-to-platform-program-part" class="page">
-    @include('pdf.leftImage.leftImage', ['image' => '/storage/image20____s.jpg'])
+    @include('pdf.leftImage.leftImage', ['image' => 'storage/image20____s.jpg'])
     @include('pdf.serviceData.serviceData', [
         'grid' => false,
         'data' => [

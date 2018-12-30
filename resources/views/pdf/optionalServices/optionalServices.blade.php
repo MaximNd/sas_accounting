@@ -1,5 +1,5 @@
 <div id="optional-service" class="page">
-    @include('pdf.leftImage.leftImage', ['image' => '/storage/image98_s.jpg'])
+    @include('pdf.leftImage.leftImage', ['image' => 'storage/image98_s.jpg'])
     @php
         $str_price = strval($optionalService['price']);
         $margin_left = 20;

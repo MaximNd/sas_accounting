@@ -695,10 +695,6 @@
         .row:after {
             clear: both;
         }
-
-        @-ms-viewport {
-            width: device-width;
-        }
         .visible-xs,
         .visible-sm,
         .visible-md,
@@ -911,21 +907,21 @@
         @page { size: 1137.5px 807.9px; }
         @font-face {
             font-family: ProximaNova;
-            src: url({{ storage_path("fonts/Proxima Nova Regular.otf") }});
+            src: url({{ storage_path("app/public/fonts/pdf_fonts/ProximaNova-Regular.ttf") }});
             font-weight: normal;
             font-style: normal;
         }
 
         @font-face {
             font-family: ProximaNovaBold;
-            src: url({{ storage_path('fonts/Proxima Nova Bold.otf') }});
+            src: url({{ storage_path('app/public/fonts/pdf_fonts/ProximaNova-Bold.ttf') }});
             font-weight: normal;
             font-style: normal;
         }
 
         @font-face {
             font-family: ProximaNovaBlack;
-            src: url({{ storage_path('fonts/Proxima Nova Black.otf') }});
+            src: url({{ storage_path('app/public/fonts/pdf_fonts/ProximaNova-Black.ttf') }});
             font-weight: normal;
             font-style: normal;
         }

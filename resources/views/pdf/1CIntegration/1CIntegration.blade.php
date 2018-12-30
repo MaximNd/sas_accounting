@@ -1,5 +1,5 @@
 <div id="integration-1c" class="page">
-    @include('pdf.leftImage.leftImage', ['image' => '/storage/image89_s.jpg'])
+    @include('pdf.leftImage.leftImage', ['image' => 'storage/image89_s.jpg'])
     @include('pdf.serviceData.serviceData', [
         'grid' => true,
         'data' => [

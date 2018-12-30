@@ -1,5 +1,5 @@
 <div id="land-bank-accounting-list" class="page">
-    @include('pdf.leftImage.leftImage', ['image' => '/storage/image31_s.jpg'])
+    @include('pdf.leftImage.leftImage', ['image' => 'storage/image31_s.jpg'])
     @php
         $str_price = strval($price);
         $margin_left = 20;

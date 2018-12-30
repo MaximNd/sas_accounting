@@ -1,5 +1,5 @@
 <div id="counting-seealings" class="page">
-    @include('pdf.leftImage.leftImage', ['image' => '/storage/image57_s.jpg'])
+    @include('pdf.leftImage.leftImage', ['image' => 'storage/image57_s.jpg'])
     @php
         $str_price = strval($price);
         $margin_left = 20;
