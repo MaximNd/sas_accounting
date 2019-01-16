@@ -286,13 +286,13 @@
                             :optionalEquipment="optionalEquipment"
                             :gruppedEquipment="gruppedEquipment"
                             :pricesForEquipment="pricesForEquipment"
-                            :equipmentDiscount="parseFloat(orderData.equipment_discount)"
-                            :installationDiscount="parseFloat(orderData.installation_discount)"
-                            :pricePerDay="parseFloat(orderData.price_for_day)"
-                            :days="parseFloat(orderData.days)"
-                            :priceForTransportationPerKm="parseFloat(orderData.price_for_transportation_per_km)"
-                            :transportationKms="parseFloat(orderData.transportation_kms, 10)"
-                            :numberOfTrips="parseFloat(orderData.number_of_trips)"
+                            :equipmentDiscount="parseFloat(orderData.equipment_discount) || 0"
+                            :installationDiscount="parseFloat(orderData.installation_discount) || 0"
+                            :pricePerDay="parseFloat(orderData.price_for_day) || 0"
+                            :days="parseFloat(orderData.days) || 0"
+                            :priceForTransportationPerKm="parseFloat(orderData.price_for_transportation_per_km) || 0"
+                            :transportationKms="parseFloat(orderData.transportation_kms, 10) || 0"
+                            :numberOfTrips="parseFloat(orderData.number_of_trips) || 0"
                             :route="orderData.route"
                             :cachedData="groupedCachedData"
                             :defaultRowCount="defaultRowCount"
@@ -2005,7 +2005,6 @@ export default {
             }
 
             pdfData.pdf_name = this.orderData.name;
-
             this.$store.dispatch('createPDFFile', { orderID: this.order.id, pdfData })
                 .then(() => {
                     this.loading = false;

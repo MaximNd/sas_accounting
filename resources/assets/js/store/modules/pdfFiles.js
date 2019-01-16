@@ -14,7 +14,9 @@ const getters = {
 const mutations = {
     SET_PDF_FILES(state, payload) {
         state.pdf_files = payload;
-        state.fakeID = state.pdf_files[0].id + 1;
+        if (state.pdf_files.length > 0) {
+            state.fakeID = state.pdf_files[0].id + 1;
+        }
     },
     ADD_PDF_FILE(state, payload) {
         if (!payload.real) {

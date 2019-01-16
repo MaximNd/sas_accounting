@@ -1,5 +1,5 @@
 <template>
-    <v-card class="elevation-2 pdf_files">
+    <v-card v-if="loading || pdf_files.length > 0" class="elevation-2 pdf_files">
         <v-card-text>
             <v-progress-linear v-if="loading" indeterminate></v-progress-linear>
             <v-list v-else dense>

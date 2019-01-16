@@ -68,6 +68,7 @@
                         @mouseover="selectCellToCopyList($event, { index: props.index, column: 'multiplier', columnIndex: 0, value: props.item.multiplier })">
                         <v-text-field
                             :ref="`multiplier-${props.index}-${0}`"
+                            mask="###"
                             v-validate="'required|min_value:1|numeric'"
                             :data-vv-name="`multiplier-${props.index}`"
                             data-vv-as=" "
@@ -77,7 +78,6 @@
                             label="Умножитель"
                             required
                             single-line
-                            type="number"
                             min="1"
                         ></v-text-field>
                         <v-btn
@@ -98,7 +98,7 @@
                         <img
                             @dblclick="onPickFile(`image-${props.index}`)"
                             v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && onPickFile(`image-${props.index}`)"
-                            :style="{cursor: 'pointer', 'margin-top': props.item.image === '' ? '6px' : false, 'max-width': props.item.image === '' ? '40%' : '80%'}"
+                            :style="{cursor: 'pointer', 'margin-top': props.item.image === '' ? '6px' : false, 'max-width': props.item.image === '' ? '40%' : '100%'}"
                             :src="props.item.image === '' ? uploadImage : props.item.image"
                             alt="image">
                         <input
@@ -144,7 +144,7 @@
                                 </template>
                                 <template
                                     slot="item"
-                                    slot-scope="{ index, item, parent }">
+                                    slot-scope="{ index, item }">
                                     <v-list-tile-content>
                                         <v-list-tile-title>
                                             {{ item.name }}
@@ -199,7 +199,7 @@
                                 </template>
                                 <template
                                     slot="item"
-                                    slot-scope="{ index, item, parent }">
+                                    slot-scope="{ index, item }">
                                     <v-list-tile-content>
                                         <v-list-tile-title>
                                             {{ item.name }}
@@ -254,7 +254,7 @@
                                 </template>
                                 <template
                                     slot="item"
-                                    slot-scope="{ index, item, parent }">
+                                    slot-scope="{ index, item }">
                                     <v-list-tile-content>
                                         <v-list-tile-title>
                                             {{ item.value }}
@@ -291,9 +291,8 @@
                                 :ref="`year_of_issue-${props.index}-${5}`"
                                 :value="props.item.year_of_issue"
                                 @change="setCellValue($event, props.index, 5, 'year_of_issue', `td-${props.index}-${5}`)"
-                                :items="Array.apply(null, { length: 100 }).map((_, i) => 1950 + i)"
+                                :items="Array.apply(null, { length: (new Date()).getFullYear() - 1949 }).map((_, i) => (new Date()).getFullYear() - i)"
                                 label="Вибирете год выпуска"
-                                auto
                                 single-line
                                 clearable>
                             </v-autocomplete>
@@ -336,7 +335,7 @@
                                 </template>
                                 <template
                                     slot="item"
-                                    slot-scope="{ index, item, parent }">
+                                    slot-scope="{ index, item }">
                                     <v-list-tile-content>
                                         <v-list-tile-title>
                                             {{ item.value }}
@@ -391,7 +390,7 @@
                                 </template>
                                 <template
                                     slot="item"
-                                    slot-scope="{ index, item, parent }">
+                                    slot-scope="{ index, item }">
                                     <v-list-tile-content>
                                         <v-list-tile-title>
                                             {{ item.value }}
@@ -446,7 +445,7 @@
                                 </template>
                                 <template
                                     slot="item"
-                                    slot-scope="{ index, item, parent }">
+                                    slot-scope="{ index, item }">
                                     <v-list-tile-content>
                                         <v-list-tile-title>
                                             {{ item.value }}
@@ -1187,21 +1186,9 @@ export default {
             tableBody: null,
             bordersWrapper: null,
             bordersSelectData: {
-                top: {
+                borders: {
                     el: null,
-                    styles: { height: '2px', width: '0px', display: 'block', top: '0px', left: '0px' }
-                },
-                left: {
-                    el: null,
-                    styles: { height: '0px', width: '2px', display: 'block', top: '0px', left: '0px' }
-                },
-                bottom: {
-                    el: null,
-                    styles: { height: '2px', width: '0px', display: 'block', top: '0px', left: '0px' }
-                },
-                right: {
-                    el: null,
-                    styles: { height: '0px', width: '2px', display: 'block', top: '0px', left: '0px' }
+                    styles: { width: '0px', height: '0px', display: 'block', top: '0px', left: '0px' }
                 },
                 corner: {
                     el: null,
@@ -1268,6 +1255,7 @@ export default {
             isMobileDevice: false,
             cachedDataTest: ['number1', 'number2', 'number3', 'number4'],
             isCornerFocused: false,
+            currentTD: null,
             copyList: [],
             selected: [],
             editModCells: [],
@@ -1426,7 +1414,7 @@ export default {
         },
         spreadRow(index) {
             const rowToSpread = this.orderGPSData[index];
-            if (rowToSpread.multiplier <= 1) return;
+            if (this.errors.has(`multiplier-${index}`) || rowToSpread.multiplier <= 1) return;
             this.addEditModCells(rowToSpread.multiplier - 1, index + 1);
             this.$emit('row:spread', index, rowToSpread);
         },
@@ -1453,16 +1441,23 @@ export default {
             this.$refs[ref].click();
         },
         onFilePicked(event, index) {
+            const td = this.$refs[`td-${index}-1`];
             const formData = new FormData();
             formData.append('image', event.target.files[0]);
             this.axios.post('/orders/image', formData)
                 .then(({ data }) => {
-                    this.setPreview(index, `/storage/${data}`);
+                    this.setPreview(index, `/storage/${data}`, td);
+                    this.$refs[`image-${index}`].value = null;
                 });
-            this.$refs[`td-${index}-0`].click();
+            this.clickOnTD(td);
         },
-        setPreview(index, imageName) {
-            this.$emit('update:orderGPSData', imageName, index, 'image');
+        setPreview(index, imageName, td) {
+            const img = new Image();
+            img.src = imageName;
+            img.onload = () => {
+                this.$emit('update:orderGPSData', imageName, index, 'image');
+                this.clickOnTD(td);
+            };
         },
         cornerFocused(event) {
             if (this.isMobileDevice) {
@@ -1497,46 +1492,46 @@ export default {
                         this.checkImageReplacement(this.copyList[i][j].index, this.copyList[i][j].column, newData);
                     }
                 }
-                this.clickOnTD(this.findTDEl(event));
+                const td = this.findTDEl(event);
+                this.currentTD = td;
+                this.clickOnTD(td);
             }
             console.log('Blurred');
         },
         hideBordersAndCorner() {
-            if (this.bordersSelectData.top.el &&
-                this.bordersSelectData.left.el &&
-                this.bordersSelectData.bottom.el &&
-                this.bordersSelectData.right.el &&
-                this.bordersSelectData.corner.el) {
-                    this.bordersSelectData.top.styles.display = 'none';
-                    this.bordersSelectData.left.styles.display = 'none';
-                    this.bordersSelectData.bottom.styles.display = 'none';
-                    this.bordersSelectData.right.styles.display = 'none';
-                    this.bordersSelectData.corner.styles.display = 'none';
-                    this.normalizeStylesSelectBordersAndCorner();
-                }
-        },
-        createBorder(position, isCorner) {
-            this.bordersSelectData[position].el = document.createElement('div');
-            this.bordersSelectData[position].el.classList.add('border');
-            this.bordersSelectData[position].el.classList.add('current');
-            if (isCorner) {
-                this.bordersSelectData[position].el.classList.add('corner');
-                if (this.isMobileDevice) {
-                    this.bordersSelectData[position].el.addEventListener('touchstart', this.cornerFocused, false);
-                    this.bordersSelectData[position].el.addEventListener('touchmove', (event) => {
-                        event.preventDefault();
-                        const realTarget = this.findTDEl(event);
-                        if (realTarget !== null) {
-                            const data = JSON.parse(realTarget.dataset.formobile);
-                            this.selectCellToCopyList(null, data, realTarget);
-                        }
-                    }, false);
-                } else {
-                    this.bordersSelectData[position].el.addEventListener('mousedown', this.cornerFocused, false);
-                }
+            if (this.bordersSelectData.borders.el
+                && this.bordersSelectData.corner.el) {
+                this.bordersSelectData.borders.styles.display = 'none';
+                this.bordersSelectData.corner.styles.display = 'none';
+                this.normalizeStylesSelectBordersAndCorner();
             }
-            this.bordersWrapper.appendChild(this.bordersSelectData[position].el);
-            this.setStyles(this.bordersSelectData[position].el, this.bordersSelectData[position].styles);
+        },
+        createBorders() {
+            this.bordersSelectData.borders.el = document.createElement('div');
+            this.bordersSelectData.borders.el.classList.add('borders');
+            this.bordersSelectData.borders.el.classList.add('current');
+            this.setStyles(this.bordersSelectData.borders.el, this.bordersSelectData.borders.styles);
+            this.bordersWrapper.appendChild(this.bordersSelectData.borders.el);
+        },
+        createCorner() {
+            this.bordersSelectData.corner.el = document.createElement('div');
+            this.bordersSelectData.corner.el.classList.add('corner');
+            this.bordersSelectData.corner.el.classList.add('current');
+            if (this.isMobileDevice) {
+                this.bordersSelectData.corner.el.addEventListener('touchstart', this.cornerFocused, false);
+                this.bordersSelectData.corner.el.addEventListener('touchmove', (event) => {
+                    event.preventDefault();
+                    const realTarget = this.findTDEl(event);
+                    if (realTarget !== null) {
+                        const data = JSON.parse(realTarget.dataset.formobile);
+                        this.selectCellToCopyList(null, data, realTarget);
+                    }
+                }, false);
+            } else {
+                this.bordersSelectData.corner.el.addEventListener('mousedown', this.cornerFocused, false);
+            }
+            this.setStyles(this.bordersSelectData.corner.el, this.bordersSelectData.corner.styles);
+            this.bordersWrapper.appendChild(this.bordersSelectData.corner.el);
         },
         getCoords(elem) {
             const box = elem.getBoundingClientRect();
@@ -1557,56 +1552,27 @@ export default {
             this.bordersSelectData.corner.styles.display = 'block';
         },
         normalizeSelectBorders(anchorCoords, anchor) {
-            this.bordersSelectData.top.styles.top = `${anchorCoords.top - this.bordersSelectData.top.el.offsetHeight}px`;
-            this.bordersSelectData.top.styles.left = `${anchorCoords.left}px`;
-            this.bordersSelectData.top.styles.width = `${anchorCoords.width}px`;
-            this.bordersSelectData.top.styles.display = 'block';
-
-            this.bordersSelectData.left.styles.top = `${anchorCoords.top}px`;
-            this.bordersSelectData.left.styles.left = `${anchorCoords.left}px`;
-            this.bordersSelectData.left.styles.height = `${anchorCoords.height}px`;
-            this.bordersSelectData.left.styles.display = 'block';
-
-            this.bordersSelectData.bottom.styles.top = `${anchorCoords.top + anchor.offsetHeight}px`;
-            this.bordersSelectData.bottom.styles.left = `${anchorCoords.left}px`;
-            this.bordersSelectData.bottom.styles.width = `${anchorCoords.width}px`;
-            this.bordersSelectData.bottom.styles.display = 'block';
-
-            this.bordersSelectData.right.styles.top = `${anchorCoords.top}px`;
-            this.bordersSelectData.right.styles.left = `${anchorCoords.left + anchor.offsetWidth-2}px`;
-            this.bordersSelectData.right.styles.height = `${anchorCoords.height}px`;
-            this.bordersSelectData.right.styles.display = 'block';
+            this.bordersSelectData.borders.styles.width = `${anchorCoords.width}px`;
+            this.bordersSelectData.borders.styles.height = `${anchorCoords.height}px`;
+            this.bordersSelectData.borders.styles.top = `${anchorCoords.top}px`;
+            this.bordersSelectData.borders.styles.left = `${anchorCoords.left}px`;
+            this.bordersSelectData.borders.styles.display = 'block';
         },
         normalizeStylesSelectBordersAndCorner() {
-            this.setStyles(this.bordersSelectData.top.el, this.bordersSelectData.top.styles);
-            this.setStyles(this.bordersSelectData.left.el, this.bordersSelectData.left.styles);
-            this.setStyles(this.bordersSelectData.bottom.el, this.bordersSelectData.bottom.styles);
-            this.setStyles(this.bordersSelectData.right.el, this.bordersSelectData.right.styles);
+            this.setStyles(this.bordersSelectData.borders.el, this.bordersSelectData.borders.styles);
             this.setStyles(this.bordersSelectData.corner.el, this.bordersSelectData.corner.styles);
         },
         positionBorders(anchor) {
             const anchorCoords = this.getCoords(anchor);
-            if (this.bordersSelectData.top.el === null) {
-                this.createBorder('top');
-            }
-            if (this.bordersSelectData.left.el === null) {
-                this.createBorder('left');
-            }
-            if (this.bordersSelectData.bottom.el === null) {
-                this.createBorder('bottom');
-            }
-            if (this.bordersSelectData.right.el === null) {
-                this.createBorder('right');
+            if (this.bordersSelectData.borders.el === null) {
+                this.createBorders();
             }
             if (this.bordersSelectData.corner.el === null) {
-                this.createBorder('corner', true);
+                this.createCorner();
             }
-            console.log('ANCHOR_COORDS: ', anchorCoords);
-            console.log('ANCHOR: ', anchor);
             this.normalizeSelectBorders(anchorCoords, anchor);
             this.normalizeCorner(anchorCoords, anchor);
             this.normalizeStylesSelectBordersAndCorner();
-
         },
         findTDEl(event) {
             if (event instanceof TouchEvent) {
@@ -1635,9 +1601,17 @@ export default {
             return index === 0 ? event.target : path[index];
         },
         clickOnTD(td) {
-            if (td) {
+            if (td && this.currentTD === td) {
                 this.$nextTick(() => {
-                    td.click();
+                    setTimeout(() => {
+                        td.click();
+                    }, 0);
+                });
+            } else if (this.currentTD) {
+                this.$nextTick(() => {
+                    setTimeout(() => {
+                        this.currentTD.click();
+                    }, 0);
                 });
             }
         },
@@ -1646,6 +1620,7 @@ export default {
         },
         selectCell(event, data) {
             const cell = this.findTDEl(event);
+            this.currentTD = cell;
             this.positionBorders(cell);
             this.resetCopyList({ ...data, value: (this.isUndefined(data.value) || this.isNull(data.value)) ? '' : data.value });
         },
@@ -1672,18 +1647,16 @@ export default {
                     for (let i = 0; i < this.copyList.length; ++i) {
                         this.copyList[i] = [this.copyList[i][0]];
                     }
-                    this.bordersSelectData.bottom.styles.top = `${currentCellCoords.top + currentCell.offsetHeight}px`;
-                    this.bordersSelectData.left.styles.height = `${currentCellCoords.height}px`;
-                    this.bordersSelectData.right.styles.height = `${currentCellCoords.height}px`;
+                    this.bordersSelectData.borders.styles.height = `${currentCellCoords.height}px`;
+
                     // Create start data
                     let columnIndex = this.copyList[this.copyList.length - 1][0].columnIndex + 1;
                     while (columnIndex <= newCell.columnIndex) {
                         // set styles
                         let currentCell = this.$refs[`td-${newCell.index}-${columnIndex}`];
                         let currentCellCoords = this.getCoords(currentCell);
-                        this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) + currentCellCoords.width}px`;
-                        this.bordersSelectData.right.styles.left = `${currentCellCoords.left + currentCell.offsetWidth-2}px`;
-                        this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) + currentCellCoords.width}px`;
+                        this.bordersSelectData.borders.styles.width = `${parseInt(this.bordersSelectData.borders.styles.width) + currentCellCoords.width}px`;
+
                         // fill with values
                         let column = this.headers[columnIndex + 1].value;
                         let value = this.orderGPSData[newCell.index][column];
@@ -1693,7 +1666,6 @@ export default {
                 } else if (isMoreToAllIndicesOfStartData) {
                     if (isColumnExist) {
                         let isLeftAndRightStylesSet = false;
-                        this.bordersSelectData.bottom.styles.top = `${currentCellCoords.top + currentCell.offsetHeight}px`;
                         // Cells in which need to insert the copy value
                         for (let i = 0; i < this.copyList.length; ++i) {
                             let index = this.copyList[i][this.copyList[i].length-1].index + 1;
@@ -1702,15 +1674,13 @@ export default {
                                 if (!isLeftAndRightStylesSet) {
                                     let currentCell = this.$refs[`td-${index}-${newCell.columnIndex}`];
                                     let currentCellCoords = this.getCoords(currentCell);
-                                    this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) + currentCellCoords.height}px`;
-                                    this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) + currentCellCoords.height}px`;
+                                    this.bordersSelectData.borders.styles.height = `${parseInt(this.bordersSelectData.borders.styles.height) + currentCellCoords.height}px`;
                                 }
                                 ++index;
                             }
                             isLeftAndRightStylesSet = true;
                         }
                     } else {
-                        this.bordersSelectData.right.styles.left = `${currentCellCoords.left + currentCell.offsetWidth-2}px`;
                         // Create start data
                         let columnIndex = this.copyList[this.copyList.length-1][0].columnIndex + 1;
                         while (columnIndex <= newCell.columnIndex) {
@@ -1718,8 +1688,7 @@ export default {
                             let column = this.headers[columnIndex + 1].value;
                             let currentCell = this.$refs[`td-${index}-${columnIndex}`];
                             let currentCellCoords = this.getCoords(currentCell);
-                            this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) + currentCellCoords.width}px`;
-                            this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) + currentCellCoords.width}px`;
+                            this.bordersSelectData.borders.styles.width = `${parseInt(this.bordersSelectData.borders.styles.width) + currentCellCoords.width}px`;
                             let value = this.orderGPSData[index][column];
                             this.copyList.push([{ index, column, columnIndex, value: (this.isUndefined(value) || this.isNull(value)) ? '' : value }]);
                             for (let i = 1; i < this.copyList[0].length; ++i) {
@@ -1729,14 +1698,12 @@ export default {
                             ++columnIndex;
                         }
                         if (newCell.index > this.copyList[0][this.copyList[0].length-1].index) {
-                            this.bordersSelectData.bottom.styles.top = `${currentCellCoords.top + currentCell.offsetHeight}px`;
                             // Cells in which need to insert the copy value
                             let index = this.copyList[0][this.copyList[0].length-1].index + 1;
                             while (index <= newCell.index) {
                                 let currentCell = this.$refs[`td-${index}-${newCell.columnIndex}`];
                                 let currentCellCoords = this.getCoords(currentCell);
-                                this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) + currentCellCoords.height}px`;
-                                this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) + currentCellCoords.height}px`;
+                                this.bordersSelectData.borders.styles.height = `${parseInt(this.bordersSelectData.borders.styles.height) + currentCellCoords.height}px`;
                                 for (let i = 0; i < this.copyList.length; ++i) {
                                     this.copyList[i].push({ index, column: this.copyList[i][0].column });
                                 }
@@ -1748,14 +1715,11 @@ export default {
             }
             if (isDeleteion) {
                 if (newCell.index < this.copyList[0][this.copyList[0].length-1].index) {
-                    this.bordersSelectData.bottom.styles.top = `${currentCellCoords.top + currentCell.offsetHeight}px`;
-
                     let index = this.copyList[0][this.copyList[0].length-1].index;
                     while (index > newCell.index) {
                         let currentCell = this.$refs[`td-${index}-${newCell.columnIndex}`];
                         let currentCellCoords = this.getCoords(currentCell);
-                        this.bordersSelectData.left.styles.height = `${parseInt(this.bordersSelectData.left.styles.height) - currentCellCoords.height}px`;
-                        this.bordersSelectData.right.styles.height = `${parseInt(this.bordersSelectData.right.styles.height) - currentCellCoords.height}px`;
+                        this.bordersSelectData.borders.styles.height = `${parseInt(this.bordersSelectData.borders.styles.height) - currentCellCoords.height}px`;
                         for (let i = 0; i < this.copyList.length; ++i) {
                             this.copyList[i].splice(this.copyList[i].length-1, 1);
                         }
@@ -1763,15 +1727,12 @@ export default {
                     }
                 }
                 if (newCell.columnIndex < this.copyList[this.copyList.length - 1][0].columnIndex) {
-                    this.bordersSelectData.right.styles.left = `${currentCellCoords.left + currentCell.offsetWidth-2}px`;
                     // Delete column
-                    // const indexForDeletion = this.copyList.findIndex((copies) => copies[0].columnIndex === newCell.columnIndex + 1);
                     let columnIndex = this.copyList[this.copyList.length - 1][0].columnIndex;
                     while (columnIndex > newCell.columnIndex) {
                         let currentCell = this.$refs[`td-${newCell.index}-${columnIndex}`];
                         let currentCellCoords = this.getCoords(currentCell);
-                        this.bordersSelectData.top.styles.width = `${parseInt(this.bordersSelectData.top.styles.width) - currentCellCoords.width}px`;
-                        this.bordersSelectData.bottom.styles.width = `${parseInt(this.bordersSelectData.bottom.styles.width) - currentCellCoords.width}px`;
+                        this.bordersSelectData.borders.styles.width = `${parseInt(this.bordersSelectData.borders.styles.width) - currentCellCoords.width}px`;
                         this.copyList.splice(this.copyList.length - 1, 1);
                         --columnIndex;
                     }
@@ -1790,28 +1751,48 @@ export default {
                 this.clickOnTD(this.findTDEl(event));
             }
         },
-        checkImageReplacement(row, columnName, data) {
+        checkImageReplacement(row, columnName, data, td) {
             if (columnName === 'type') {
                 if (this.transport[data] && this.transport[data].some(t => t.name === this.orderGPSData[row].mark) && !this.isNull(this.orderGPSData[row].mark) && !this.isUndefined(this.orderGPSData[row].mark) && this.orderGPSData[row].mark !== '') {
                     const transport = this.transport[data].find(t => t.name === this.orderGPSData[row].mark);
-                    const transportImg = transport ? transport.image : '';
-                    this.$emit('update:orderGPSData', `/storage/transport${transportImg}`, row, 'image', false);
+                    const transportImg = `/storage/transport${transport ? transport.image : ''}`;
+                    const img = new Image();
+                    img.src = transportImg;
+                    img.onload = () => {
+                        this.$emit('update:orderGPSData', transportImg, row, 'image', false);
+                        if (td) {
+                            this.clickOnTD(td);
+                        }
+                    };
                 }
             }
             if (columnName === 'mark') {
                 if (this.transport[this.orderGPSData[row].type] && this.transport[this.orderGPSData[row].type].some(t => t.name === data) && !this.isNull(this.orderGPSData[row].type) && !this.isUndefined(this.orderGPSData[row].type) && this.orderGPSData[row].type !== '') {
                     const transport = this.transport[this.orderGPSData[row].type].find(t => t.name === data);
-                    const transportImg = transport ? transport.image : '';
-                    this.$emit('update:orderGPSData', `/storage/transport${transportImg}`, row, 'image', false);
+                    const transportImg = `/storage/transport${transport ? transport.image : ''}`;
+                    const img = new Image();
+                    img.src = transportImg;
+                    img.onload = () => {
+                        this.$emit('update:orderGPSData', transportImg, row, 'image', false);
+                        if (td) {
+                            this.clickOnTD(td);
+                        }
+                    };
                 }
             }
         },
         fixCellData(columnName, data) {
             if (columnName === 'multiplier') {
-                return parseInt(data, 10);
+                if (data === '') return data;
+                const multiplier = parseInt(data, 10);
+                if (this.isNull(multiplier) || this.isUndefined(multiplier) || Number.isNaN(multiplier) || multiplier < 1) {
+                    return 1;
+                }
+                return multiplier;
             } else if (columnName !== 'manual_installation_price'
                 && (this.isNull(data)
                 || this.isUndefined(data)
+                || Number.isNaN(data)
                 || this.GPSRowTypesMap[columnName].every(initVal => {
                     if (Array.isArray(initVal)) {
                         return !Array.isArray(data);
@@ -1824,15 +1805,9 @@ export default {
         },
         setCellValue(data, row, cell, name, td, nestedPath = false, forceSwitchMode = true) {
             const validData = this.fixCellData(name, data);
-            // validData = this.checkNumeric(name, validData);
-            this.checkImageReplacement(row, name, validData);
-
+            this.checkImageReplacement(row, name, validData, (td && this.$refs[td]));
             this.$emit('update:orderGPSData', validData, row, name, nestedPath);
-            console.log('SET CELL VALUE {COLUMN_NAME}: ', name);
-            console.log('SET CELL VALUE {DATA}: ', data);
-            console.log('SET CELL VALUE {VALID_DATA}: ', validData);
             if (!this.isUndefined(data) && forceSwitchMode) {
-                console.log('FORCE EXIT');
                 this.switchCellMode(row, cell, false);
             }
             if (td) {
@@ -2038,10 +2013,10 @@ export default {
         });
         const tableOverflow = document.querySelector('#gps-data-table .v-table__overflow');
 
-        const borders = document.createElement('div');
-        this.setStyles(borders, { position: 'absolute', top: 0, left: 0 });
-        this.bordersWrapper = borders;
-        tableOverflow.appendChild(borders)
+        const bordersWrapper = document.createElement('div');
+        this.setStyles(bordersWrapper, { position: 'absolute', top: 0, left: 0 });
+        this.bordersWrapper = bordersWrapper;
+        tableOverflow.appendChild(bordersWrapper);
     }
 };
 </script>
@@ -2092,23 +2067,29 @@ export default {
         height: 20px;
         padding: 0;
     }
-    .border {
+    .borders,
+    .corner {
         position: absolute;
         font-size: 0;
-        background-color: rgb(75, 135, 255);
         transition-property: left, top, width, height;
         transition-duration: 0.1s, 0.1s, 0.1s, 0.1s;
         transition-timing-function: cubic-bezier(.89,1.2,.85,.94);
         user-select: none;
     }
-    .border .current {
-        z-index: 10;
+    .borders {
+        border: 2px solid rgb(75, 135, 255);
+        pointer-events: none;
     }
     .corner {
         font-size: 0;
         cursor: crosshair;
         user-select: contain;
+        background-color: rgb(75, 135, 255);
         border: 1px solid rgb(255, 255, 255);
+    }
+    .borders .current,
+    .corner .current {
+        z-index: 10;
     }
     .handle {
         cursor: move;
