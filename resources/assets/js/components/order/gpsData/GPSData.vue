@@ -1,1081 +1,1104 @@
 <template>
-    <v-card class="elevation-0">
-        <v-card-title>
-            <v-layout wrap  :column="$vuetify.breakpoint.xsOnly">
-                <v-flex xs12 md2>
-                    <v-text-field
-                        v-model="count"
-                        :error-messages="countErrors"
-                        label="Количество"
-                        type="number"
-                        min="1">
-                    </v-text-field>
-                </v-flex>
-                <v-flex xs12 md10>
-                    <v-layout wrap :column="$vuetify.breakpoint.xsOnly">
-                        <v-btn
-                            @click="addRow(count)"
-                            color="info"
-                            :block="$vuetify.breakpoint.xsOnly">
-                            Добавить
-                        </v-btn>
-                        <v-btn
-                            @click="deleteSelected"
-                            color="error"
-                            :block="$vuetify.breakpoint.xsOnly">
-                            Удалить выбранные
-                        </v-btn>
-                        <v-btn
-                            v-if="!isCreation"
-                            @click="createExcel"
-                            color="success"
-                            :block="$vuetify.breakpoint.xsOnly"
-                            :loading="excelLoading"
-                            :disabled="excelLoading">
-                            Скачать EXCEL
-                        </v-btn>
-                    </v-layout>
-                </v-flex>
-            </v-layout>
-        </v-card-title>
-        <v-card-text id="text-test" class="ma-0 pa-0">
-            <v-data-table
-                v-model="selected"
-                item-key="id"
-                id="gps-data-table"
-                :class="{ 'gps-data-table-no-select-text': isCornerFocused }"
-                :headers="headers"
-                :items="orderGPSData"
-                disable-initial-sort
-                select-all
-                hide-actions>
-                <template slot="items" slot-scope="props">
-                    <td @mousedown="hideBordersAndCorner">
-                        <v-checkbox
-                            v-model="props.selected"
-                            primary
-                            hide-details>
-                        </v-checkbox>
-                    </td>
-                    <td @mousedown="hideBordersAndCorner" class="handle">
-                        ::
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${0}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'multiplier', columnIndex: 0, value: props.item.multiplier })"
-                        @click="selectCell($event, { index: props.index, column: 'multiplier', columnIndex: 0, value: props.item.multiplier })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'multiplier', columnIndex: 0, value: props.item.multiplier })">
+    <v-container fluid class="pa-0" :class="{ 'under-fullscreen-mode': isFullScreenMode }">
+        <v-card ref="gps-data-container" class="elevation-0" :class="{ 'over-fullscreen-mode': isFullScreenMode }">
+            <v-card-title>
+                <v-layout wrap  :column="$vuetify.breakpoint.xsOnly">
+                    <v-flex v-if="$vuetify.breakpoint.xsOnly" xs12>
+                        <v-layout>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                @click="changeScreenMode"
+                                icon>
+                                <v-icon v-if="isFullScreenMode">fullscreen_exit</v-icon>
+                                <v-icon v-else>fullscreen</v-icon>
+                            </v-btn>
+                        </v-layout>
+                    </v-flex>
+                    <v-flex xs12 md2>
                         <v-text-field
-                            :ref="`multiplier-${props.index}-${0}`"
-                            mask="###"
-                            v-validate="'required|min_value:1|numeric'"
-                            :data-vv-name="`multiplier-${props.index}`"
-                            data-vv-as=" "
-                            :error-messages="errors.collect(`multiplier-${props.index}`)"
-                            :value="props.item.multiplier"
-                            @input="setCellValue($event, props.index, 0, 'multiplier', `td-${props.index}-${0}`)"
-                            label="Умножитель"
-                            required
-                            single-line
-                            min="1"
-                        ></v-text-field>
-                        <v-btn
-                            class="spread-row-btn"
-                            color="info"
-                            small
-                            @click.stop="spreadRow(props.index)">
-                            Разложить
-                        </v-btn>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :class="{ 'error-cell': errors.has(`transport-image-${props.index}`) }"
-                        :ref="`td-${props.index}-${1}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'image', columnIndex: 1, value: props.item.image })"
-                        @click="selectCell($event, { index: props.index, column: 'image', columnIndex: 1, value: props.item.image })"
-                        @mouseenter="selectCellToCopyList($event, { index: props.index, column: 'image', columnIndex: 1, value: props.item.image })">
-                        <img
-                            @dblclick="onPickFile(`image-${props.index}`)"
-                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && onPickFile(`image-${props.index}`)"
-                            :style="{cursor: 'pointer', 'margin-top': props.item.image === '' ? '6px' : false, 'max-width': props.item.image === '' ? '40%' : '100%'}"
-                            :src="props.item.image === '' ? uploadImage : props.item.image"
-                            alt="image">
-                        <input
-                            :ref="`image-${props.index}`"
-                            v-validate="'image'"
-                            data-vv-as=" "
-                            :data-vv-name="`image-${props.index}`"
-                            @change="onFilePicked($event, props.index)"
-                            style="display:none;"
-                            type="file">
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${2}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'type', columnIndex: 2, value: props.item.type })"
-                        @click="selectCell($event, { index: props.index, column: 'type', columnIndex: 2, value: props.item.type })"
-                        @dblclick="switchCellMode(props.index, 2, true, `type-${props.index}-${2}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 2, true, `type-${props.index}-${2}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'type', columnIndex: 2, value: props.item.type })">
-                        <template v-if="!editModCells[props.index][2]">
-                            {{ getTypeText(props.item.type) }}
-                        </template>
-                        <template v-else>
-                            <v-combobox
-                                :ref="`type-${props.index}-${2}`"
-                                :value="getTypeText(props.item.type)"
-                                @change="setCellValue($event, props.index, 2, 'type', `td-${props.index}-${2}`)"
-                                :items="transportTypesWithCache"
-                                item-text="name"
-                                item-value="value"
-                                :return-object="false"
-                                label="Вибирете тип"
-                                single-line
-                                clearable>
-                                <template slot="no-data">
-                                    <v-list-tile>
-                                        <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
-                                        </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile>
-                                </template>
-                                <template
-                                    slot="item"
-                                    slot-scope="{ index, item }">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            {{ item.name }}
-                                        </v-list-tile-title>
-                                    </v-list-tile-content>
-                                    <v-spacer></v-spacer>
-                                    <v-list-tile-action @click.stop v-if="item.isCache">
-                                        <v-btn
-                                            icon
-                                            @click.stop.prevent="$emit('delete:cache', item.id)">
-                                        <v-icon>clear</v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                </template>
-                            </v-combobox>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 2, false, `type-${props.index}-${2}`, $event, false)">
-                                Закрыть редактирование
+                            v-model="count"
+                            :error-messages="countErrors"
+                            label="Количество"
+                            type="number"
+                            min="1">
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex xs12 md10>
+                        <v-layout wrap :column="$vuetify.breakpoint.xsOnly">
+                            <v-btn
+                                @click="addRow(count)"
+                                color="info"
+                                :block="$vuetify.breakpoint.xsOnly">
+                                Добавить
                             </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${3}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'mark', columnIndex: 3, value: props.item.mark })"
-                        @click="selectCell($event, { index: props.index, column: 'mark', columnIndex: 3, value: props.item.mark })"
-                        @dblclick="switchCellMode(props.index, 3, true, `mark-${props.index}-${3}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 3, true, `mark-${props.index}-${3}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'mark', columnIndex: 3, value: props.item.mark })">
-                        <template v-if="!editModCells[props.index][3]">
-                            {{ props.item.mark }}
-                        </template>
-                        <template v-else>
-                            <v-combobox
-                                :ref="`mark-${props.index}-${3}`"
-                                :value="props.item.mark"
-                                @change="setCellValue($event, props.index, 3, 'mark', `td-${props.index}-${3}`)"
-                                :items="[...(isUndefined(transport[props.item.type]) ? Object.keys(transport).reduce((marks, type) => [...marks, ...transport[type]], []) : transport[props.item.type]), ...markCache]"
-                                item-text="name"
-                                item-value="name"
-                                :return-object="false"
-                                label="Вибирете марку"
-                                single-line
-                                clearable>
-                                <template slot="no-data">
-                                    <v-list-tile>
-                                        <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
-                                        </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile>
-                                </template>
-                                <template
-                                    slot="item"
-                                    slot-scope="{ index, item }">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            {{ item.name }}
-                                        </v-list-tile-title>
-                                    </v-list-tile-content>
-                                    <v-spacer></v-spacer>
-                                    <v-list-tile-action @click.stop v-if="item.isCache">
-                                        <v-btn
-                                            icon
-                                            @click.stop.prevent="$emit('delete:cache', item.id)">
-                                        <v-icon>clear</v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                </template>
-                            </v-combobox>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 3, false, `mark-${props.index}-${3}`, $event, false)">
-                                Закрыть редактирование
+                            <v-btn
+                                @click="deleteSelected"
+                                color="error"
+                                :block="$vuetify.breakpoint.xsOnly">
+                                Удалить выбранные
                             </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${4}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'model', columnIndex: 4, value: props.item.model })"
-                        @click="selectCell($event, { index: props.index, column: 'model', columnIndex: 4, value: props.item.model })"
-                        @dblclick="switchCellMode(props.index, 4, true, `model-${props.index}-${4}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 4, true, `model-${props.index}-${4}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'model', columnIndex: 4, value: props.item.model })">
-                        <template v-if="!editModCells[props.index][4]">
-                            {{ props.item.model }}
-                        </template>
-                        <template v-else>
-                            <v-combobox
-                                :ref="`model-${props.index}-${4}`"
-                                :value="props.item.model"
-                                @change="setCellValue($event, props.index, 4, 'model', `td-${props.index}-${4}`)"
-                                :items="cachedData.model"
-                                item-text="value"
-                                item-value="value"
-                                :return-object="false"
-                                label="Вибирете модель"
-                                single-line
-                                clearable>
-                                <template slot="no-data">
-                                    <v-list-tile>
-                                        <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
-                                        </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile>
-                                </template>
-                                <template
-                                    slot="item"
-                                    slot-scope="{ index, item }">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            {{ item.value }}
-                                        </v-list-tile-title>
-                                    </v-list-tile-content>
-                                    <v-spacer></v-spacer>
-                                    <v-list-tile-action @click.stop>
-                                        <v-btn
-                                            icon
-                                            @click.stop.prevent="$emit('delete:cache', item.id)">
-                                        <v-icon>clear</v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                </template>
-                            </v-combobox>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 4, false, `model-${props.index}-${4}`, $event, false)">
-                                Закрыть редактирование
+                            <v-btn
+                                v-if="!isCreation"
+                                @click="createExcel"
+                                color="success"
+                                :block="$vuetify.breakpoint.xsOnly"
+                                :loading="excelLoading"
+                                :disabled="excelLoading">
+                                Скачать EXCEL
                             </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${5}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'year_of_issue', columnIndex: 5, value: props.item.year_of_issue })"
-                        @click="selectCell($event, { index: props.index, column: 'year_of_issue', columnIndex: 5, value: props.item.year_of_issue })"
-                        @dblclick="switchCellMode(props.index, 5, true, `year_of_issue-${props.index}-${5}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 5, true, `year_of_issue-${props.index}-${5}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'year_of_issue', columnIndex: 5, value: props.item.year_of_issue })">
-                        <template v-if="!editModCells[props.index][5]">
-                            {{ props.item.year_of_issue }}
-                        </template>
-                        <template v-else>
-                            <v-autocomplete
-                                :ref="`year_of_issue-${props.index}-${5}`"
-                                :value="props.item.year_of_issue"
-                                @change="setCellValue($event, props.index, 5, 'year_of_issue', `td-${props.index}-${5}`)"
-                                :items="Array.apply(null, { length: (new Date()).getFullYear() - 1949 }).map((_, i) => (new Date()).getFullYear() - i)"
-                                label="Вибирете год выпуска"
-                                single-line
-                                clearable>
-                            </v-autocomplete>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 5, false, `year_of_issue-${props.index}-${5}`, $event, false)">
-                                Закрыть редактирование
-                            </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${6}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'fuel_type', columnIndex: 6, value: props.item.fuel_type })"
-                        @click="selectCell($event, { index: props.index, column: 'fuel_type', columnIndex: 6, value: props.item.fuel_type })"
-                        @dblclick="switchCellMode(props.index, 6, true, `fuel_type-${props.index}-${6}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 6, true, `fuel_type-${props.index}-${6}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_type', columnIndex: 6, value: props.item.fuel_type })">
-                        <template v-if="!editModCells[props.index][6]">
-                            {{ props.item.fuel_type }}
-                        </template>
-                        <template v-else>
-                            <v-combobox
-                                :ref="`fuel_type-${props.index}-${6}`"
-                                :value="props.item.fuel_type"
-                                @change="setCellValue($event, props.index, 6, 'fuel_type', `td-${props.index}-${6}`)"
-                                :items="cachedData.fuel_type"
-                                item-text="value"
-                                item-value="value"
-                                :return-object="false"
-                                label="Вибирете Тип топлива"
-                                single-line
-                                clearable>
-                                <template slot="no-data">
-                                    <v-list-tile>
-                                        <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
-                                        </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile>
-                                </template>
-                                <template
-                                    slot="item"
-                                    slot-scope="{ index, item }">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            {{ item.value }}
-                                        </v-list-tile-title>
-                                    </v-list-tile-content>
-                                    <v-spacer></v-spacer>
-                                    <v-list-tile-action @click.stop>
-                                        <v-btn
-                                            icon
-                                            @click.stop.prevent="$emit('delete:cache', item.id)">
-                                        <v-icon>clear</v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                </template>
-                            </v-combobox>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 6, false, `fuel_type-${props.index}-${6}`, $event, false)">
-                                Закрыть редактирование
-                            </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${7}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'power', columnIndex: 7, value: props.item.power })"
-                        @click="selectCell($event, { index: props.index, column: 'power', columnIndex: 7, value: props.item.power })"
-                        @dblclick="switchCellMode(props.index, 7, true, `power-${props.index}-${7}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 7, true, `power-${props.index}-${7}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'power', columnIndex: 7, value: props.item.power })">
-                        <template v-if="!editModCells[props.index][7]">
-                            {{ props.item.power }}
-                        </template>
-                        <template v-else>
-                            <v-combobox
-                                :ref="`power-${props.index}-${7}`"
-                                :value="props.item.power"
-                                @change="setCellValue($event, props.index, 7, 'power', `td-${props.index}-${7}`)"
-                                :items="cachedData.power"
-                                item-text="value"
-                                item-value="value"
-                                :return-object="false"
-                                label="Вибирете мощность"
-                                single-line
-                                clearable>
-                                <template slot="no-data">
-                                    <v-list-tile>
-                                        <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
-                                        </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile>
-                                </template>
-                                <template
-                                    slot="item"
-                                    slot-scope="{ index, item }">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            {{ item.value }}
-                                        </v-list-tile-title>
-                                    </v-list-tile-content>
-                                    <v-spacer></v-spacer>
-                                    <v-list-tile-action @click.stop>
-                                        <v-btn
-                                            icon
-                                            @click.stop.prevent="$emit('delete:cache', item.id)">
-                                        <v-icon>clear</v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                </template>
-                            </v-combobox>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 7, false, `power-${props.index}-${7}`, $event, false)">
-                                Закрыть редактирование
-                            </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${8}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'number', columnIndex: 8, value: props.item.number })"
-                        @click="selectCell($event, { index: props.index, column: 'number', columnIndex: 8, value: props.item.number })"
-                        @dblclick="switchCellMode(props.index, 8, true, `number-${props.index}-${8}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 8, true, `number-${props.index}-${8}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'number', columnIndex: 8, value: props.item.number })">
-                        <template v-if="!editModCells[props.index][8]">
-                            {{ props.item.number }}
-                        </template>
-                        <template v-else>
-                            <v-combobox
-                                :ref="`number-${props.index}-${8}`"
-                                :value="props.item.number"
-                                @change="setCellValue($event, props.index, 8, 'number', `td-${props.index}-${8}`)"
-                                :items="cachedData.number"
-                                item-text="value"
-                                item-value="value"
-                                :return-object="false"
-                                label="Вибирете гос. номер"
-                                single-line
-                                clearable>
-                                <template slot="no-data">
-                                    <v-list-tile>
-                                        <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
-                                        </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile>
-                                </template>
-                                <template
-                                    slot="item"
-                                    slot-scope="{ index, item }">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            {{ item.value }}
-                                        </v-list-tile-title>
-                                    </v-list-tile-content>
-                                    <v-spacer></v-spacer>
-                                    <v-list-tile-action @click.stop>
-                                        <v-btn
-                                            icon
-                                            @click.stop.prevent="$emit('delete:cache', item.id)">
-                                        <v-icon>clear</v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                </template>
-                            </v-combobox>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 8, false, `number-${props.index}-${8}`, $event, false)">
-                                Закрыть редактирование
-                            </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${9}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'gps_tracker', columnIndex: 9, value: props.item.gps_tracker })"
-                        @click="selectCell($event, { index: props.index, column: 'gps_tracker', columnIndex: 9, value: props.item.gps_tracker })"
-                        @dblclick="switchCellMode(props.index, 9, true, `gps_tracker-${props.index}-${9}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 9, true, `gps_tracker-${props.index}-${9}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker', columnIndex: 9, value: props.item.gps_tracker })">
-                        <template v-if="!editModCells[props.index][9]">
-                            {{ props.item.gps_tracker.name }}
-                        </template>
-                        <template v-else>
-                            <v-autocomplete
-                                :ref="`gps_tracker-${props.index}-${9}`"
-                                :value="props.item.gps_tracker"
-                                @change="setCellValue($event, props.index, 9, 'gps_tracker', `td-${props.index}-${9}`)"
-                                :items="gpsTrackersWithHeader"
-                                item-text="name"
-                                label="Вибирете GPS-трекер"
-                                single-line
-                                return-object
-                                clearable>
-                            </v-autocomplete>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 9, false, `gps_tracker-${props.index}-${9}`, $event, false)">
-                                Закрыть редактирование
-                            </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${10}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'gps_tracker_price', columnIndex: 10, value: false })"
-                        @click="selectCell($event, { index: props.index, column: 'gps_tracker_price', columnIndex: 10, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker_price', columnIndex: 10, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['gps_tracker_price'] || 0 : 0 }}$
-                    </td>
-                    <td
-                        :class="{ 'text-xs-center': !editModCells[props.index][11] }"
-                        :ref="`td-${props.index}-${11}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'fuel_gauge', columnIndex: 11, value: props.item.fuel_gauge })"
-                        :style="{ 'min-width': editModCells[props.index][11] ? '300px' : '11px' }"
-                        @click="selectCell($event, { index: props.index, column: 'fuel_gauge', columnIndex: 11, value: props.item.fuel_gauge })"
-                        @dblclick="switchCellMode(props.index, 11, true, `fuel_gauge-${props.index}-${11}`, $event, false)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 11, true, `fuel_gauge-${props.index}-${11}`, event.srcEvent, false)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_gauge', columnIndex: 11, value: props.item.fuel_gauge })">
-                        <template v-if="!editModCells[props.index][11]">
-                            <v-list v-if="props.item.fuel_gauge.some(el => !isUndefined(el) && !isNull(el))">
-                                <template v-for="(item, textIndex) in props.item.fuel_gauge">
-                                    <v-list-tile
-                                        v-if="!isUndefined(item) && !isNull(item)"
-                                        :key="`fuel_gauge_text-${textIndex}`">
-                                        <v-list-tile-content>
-                                            <v-list-tile-title>
-                                                {{ item.name }}
-                                            </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile>
-                                    <v-divider
-                                        v-if="isShowDivider(textIndex, props.item.fuel_gauge)"
-                                        :key="`fuel_gauge_divider-${textIndex}`"
-                                    ></v-divider>
-                                </template>
-                            </v-list>
-                        </template>
-                        <template v-else>
-                            <v-layout wrap>
-                                <template v-for="(_, inputIndex) in props.item.fuel_gauge.length">
-                                    <v-flex xs10 :key="`fuel_gauge_input-${inputIndex}`">
-                                        <v-autocomplete
-                                            :ref="`fuel_gauge-${props.index}-${11}`"
-                                            :value="props.item.fuel_gauge[inputIndex]"
-                                            @change="setCellValue($event, props.index, 11, 'fuel_gauge', `td-${props.index}-${11}`, inputIndex, false)"
-                                            :items="fuelLevelSensorsWithHeader"
-                                            item-text="name"
-                                            clearable
-                                            label="Вибирете ДУТ"
-                                            single-line
-                                            return-object>
-                                        </v-autocomplete>
-                                    </v-flex>
-                                    <v-flex xs2 class="layout align-center justify-center"  :key="`fuel_gauge_delete_btn-${inputIndex}`">
-                                        <v-btn
-                                            small
-                                            icon
-                                            @click="deleteOrderNestedData($event, props.index, 'fuel_gauge', inputIndex)">
-                                            <v-icon>delete</v-icon>
-                                        </v-btn>
-                                    </v-flex>
-                                </template>
-                                <v-flex xs12>
-                                    <v-btn color="success" small @click="addNestedData($event, props.index, 'fuel_gauge')">
-                                        Добавить
-                                    </v-btn>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-btn color="info" small @click="switchCellMode(props.index, 11, false, `fuel_gauge-${props.index}-${11}`, $event, false)">
-                                        Закрыть редактирование
-                                    </v-btn>
-                                </v-flex>
-                            </v-layout>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${12}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'fuel_gauge_price', columnIndex: 12, value: false })"
-                        @click="selectCell($event, { index: props.index, column: 'fuel_gauge_price', columnIndex: 12, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_gauge_price', columnIndex: 12, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['fuel_gauge_price'] || 0 : 0 }}$
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${13}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'counter', columnIndex: 13, value: props.item.counter })"
-                        @click="selectCell($event, { index: props.index, column: 'counter', columnIndex: 13, value: props.item.counter })"
-                        @dblclick="switchCellMode(props.index, 13, true, `counter-${props.index}-${13}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 13, true, `counter-${props.index}-${13}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'counter', columnIndex: 13, value: props.item.counter })">
-                        <template v-if="!editModCells[props.index][13]">
-                            {{ props.item.counter.name }}
-                        </template>
-                        <template v-else>
-                            <v-autocomplete
-                                :ref="`counter-${props.index}-${13}`"
-                                :value="props.item.counter"
-                                @change="setCellValue($event, props.index, 13, 'counter', `td-${props.index}-${13}`)"
-                                :items="fuelFlowmetersWithHeader"
-                                item-text="name"
-                                label="Вибирете счетчик"
-                                single-line
-                                return-object
-                                clearable>
-                            </v-autocomplete>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 13, false, `counter-${props.index}-${13}`, $event, false)">
-                                Закрыть редактирование
-                            </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${14}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'counter_price', columnIndex: 14, value: false })"
-                        @click="selectCell($event, { index: props.index, column: 'counter_price', columnIndex: 14, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'counter_price', columnIndex: 14, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['counter_price'] || 0 : 0 }}$
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${15}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rf_id', columnIndex: 15, value: props.item.rf_id })"
-                        @click="selectCell($event, { index: props.index, column: 'rf_id', columnIndex: 15, value: props.item.rf_id })"
-                        @dblclick="switchCellMode(props.index, 15, true, `rf_id-${props.index}-${15}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 15, true, `rf_id-${props.index}-${15}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rf_id', columnIndex: 15, value: props.item.rf_id })">
-                        <template v-if="!editModCells[props.index][15]">
-                            {{ props.item.rf_id.name }}
-                        </template>
-                        <template v-else>
-                            <v-autocomplete
-                                :ref="`rf_id-${props.index}-${15}`"
-                                :value="props.item.rf_id"
-                                @change="setCellValue($event, props.index, 15, 'rf_id', `td-${props.index}-${15}`)"
-                                :items="identificationWithHeader"
-                                item-text="name"
-                                label="Вибирете RFID"
-                                single-line
-                                return-object
-                                clearable>
-                            </v-autocomplete>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 15, false, `rf_id-${props.index}-${15}`, $event, false)">
-                                Закрыть редактирование
-                            </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${16}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rf_id_price', columnIndex: 16, value: false })"
-                        @click="selectCell($event, { index: props.index, column: 'rf_id_price', columnIndex: 16, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rf_id_price', columnIndex: 16, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['rf_id_price'] || 0 : 0 }}$
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${17}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 17, value: props.item.reader_of_trailed_equipment })"
-                        @click="selectCell($event, { index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 17, value: props.item.reader_of_trailed_equipment })"
-                        @dblclick="switchCellMode(props.index, 17, true, `reader_of_trailed_equipment-${props.index}-${17}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 17, true, `reader_of_trailed_equipment-${props.index}-${17}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 17, value: props.item.reader_of_trailed_equipment })">
-                        <template v-if="!editModCells[props.index][17]">
-                            {{ props.item.reader_of_trailed_equipment.name }}
-                        </template>
-                        <template v-else>
-                            <v-autocomplete
-                                :ref="`reader_of_trailed_equipment-${props.index}-${17}`"
-                                :value="props.item.reader_of_trailed_equipment"
-                                @change="setCellValue($event, props.index, 17, 'reader_of_trailed_equipment', `td-${props.index}-${17}`)"
-                                :items="identificationWithHeader"
-                                item-text="name"
-                                label="Вибирете считыватель прицепного оборудования"
-                                single-line
-                                return-object
-                                clearable>
-                            </v-autocomplete>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 17, false, `reader_of_trailed_equipment-${props.index}-${17}`, $event, false)">
-                                Закрыть редактирование
-                            </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${18}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 18, value: false })"
-                        @click="selectCell($event, { index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 18, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 18, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['reader_of_trailed_equipment_price'] || 0 : 0 }}$
-                    </td>
-                    <!-- <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${17}`"
-                        @click="selectCell($event, { index: props.index, column: 'connect_module', columnIndex: 17, value: props.item.connect_module })"
-                        @dblclick="switchCellMode(props.index, 17, true, `connect_module-${props.index}-${17}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'connect_module', columnIndex: 17, value: props.item.connect_module })">
-                        <template v-if="!editModCells[props.index][17]">
-                            {{ props.item.connect_module.name }}
-                        </template>
-                        <template v-else>
-                            <v-autocomplete
-                                :ref="`connect_module-${props.index}-${17}`"
-                                :value="props.item.connect_module"
-                                @change="setCellValue($event, props.index, 17, 'connect_module', `td-${props.index}-${17}`)"
-                                :items="allEquipment"
-                                item-text="name"
-                                hide-selected
-                                label="Вибирете модуль конект"
-                                single-line
-                                return-object>
-                            </v-autocomplete>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${18}`"
-                        @click="selectCell($event, { index: props.index, column: 'connect_module_price', columnIndex: 18, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'connect_module_price', columnIndex: 18, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['connect_module_price'] || 0 : 0 }}$
-                    </td> -->
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${19}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })"
-                        @click="selectCell($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })"
-                        @dblclick="switchCellMode(props.index, 19, true, `can_reader-${props.index}-${19}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 19, true, `can_reader-${props.index}-${19}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })">
-                        <template v-if="!editModCells[props.index][19]">
-                            {{ props.item.can_reader.name }}
-                        </template>
-                        <template v-else>
-                            <v-autocomplete
-                                :ref="`can_reader-${props.index}-${19}`"
-                                :value="props.item.can_reader"
-                                @change="setCellValue($event, props.index, 19, 'can_reader', `td-${props.index}-${19}`)"
-                                :items="optionalEquipment"
-                                item-text="name"
-                                label="Вибирете CAN"
-                                single-line
-                                return-object
-                                clearable>
-                            </v-autocomplete>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 19, false, `can_reader-${props.index}-${19}`, $event, false)">
-                                Закрыть редактирование
-                            </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${20}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })"
-                        @click="selectCell($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['can_reader_price'] || 0 : 0 }}$
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${21}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_small', columnIndex: 21, value: props.item.deaerator_small })"
-                        @click="selectCell($event, { index: props.index, column: 'deaerator_small', columnIndex: 21, value: props.item.deaerator_small })"
-                        @dblclick="switchCellMode(props.index, 21, true, `deaerator_small-${props.index}-${21}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 21, true, `deaerator_small-${props.index}-${21}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_small', columnIndex: 21, value: props.item.deaerator_small })">
-                        <template v-if="!editModCells[props.index][21]">
-                            {{ props.item.deaerator_small.name }}
-                        </template>
-                        <template v-else>
-                            <v-autocomplete
-                                :ref="`deaerator_small-${props.index}-${21}`"
-                                :value="props.item.deaerator_small"
-                                @change="setCellValue($event, props.index, 21, 'deaerator_small', `td-${props.index}-${21}`)"
-                                :items="fuelFlowmetersWithHeader"
-                                item-text="name"
-                                label="Вибирете деаэратор"
-                                single-line
-                                return-object
-                                clearable>
-                            </v-autocomplete>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 21, false, `deaerator_small-${props.index}-${21}`, $event, false)">
-                                Закрыть редактирование
-                            </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${22}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_small_price', columnIndex: 22, value: false })"
-                        @click="selectCell($event, { index: props.index, column: 'deaerator_small_price', columnIndex: 22, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_small_price', columnIndex: 22, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['deaerator_small_price'] || 0 : 0 }}$
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${23}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_large', columnIndex: 23, value: props.item.deaerator_large })"
-                        @click="selectCell($event, { index: props.index, column: 'deaerator_large', columnIndex: 23, value: props.item.deaerator_large })"
-                        @dblclick="switchCellMode(props.index, 23, true, `deaerator_large-${props.index}-${23}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 23, true, `deaerator_large-${props.index}-${23}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_large', columnIndex: 23, value: props.item.deaerator_large })">
-                        <template v-if="!editModCells[props.index][23]">
-                            {{ props.item.deaerator_large.name }}
-                        </template>
-                        <template v-else>
-                            <v-autocomplete
-                                :ref="`deaerator_large-${props.index}-${23}`"
-                                :value="props.item.deaerator_large"
-                                @change="setCellValue($event, props.index, 23, 'deaerator_large', `td-${props.index}-${23}`)"
-                                :items="fuelFlowmetersWithHeader"
-                                item-text="name"
-                                label="Вибирете деаэратор"
-                                single-line
-                                return-object
-                                clearable>
-                            </v-autocomplete>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 23, false, `deaerator_large-${props.index}-${23}`, $event, false)">
-                                Закрыть редактирование
-                            </v-btn>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${24}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_large_price', columnIndex: 24, value: false })"
-                        @click="selectCell($event, { index: props.index, column: 'deaerator_large_price', columnIndex: 24, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_large_price', columnIndex: 24, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['deaerator_large_price'] || 0 : 0 }}$
-                    </td>
-                    <td
-                        :class="{ 'text-xs-center': !editModCells[props.index][25] }"
-                        :ref="`td-${props.index}-${25}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'cn03', columnIndex: 25, value: props.item.cn03 })"
-                        :style="{ 'min-width': editModCells[props.index][25] ? '300px' : '10px' }"
-                        @click="selectCell($event, { index: props.index, column: 'cn03', columnIndex: 25, value: props.item.cn03 })"
-                        @dblclick="switchCellMode(props.index, 25, true, `cn03-${props.index}-${25}`, $event, false)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 25, true, `cn03-${props.index}-${25}`, event.srcEvent, false)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03', columnIndex: 25, value: props.item.cn03 })">
-                        <template v-if="!editModCells[props.index][25]">
-                            <v-list v-if="props.item.cn03.some(el => !isUndefined(el) && !isNull(el))">
-                                <template v-for="(item, textIndex) in props.item.cn03">
-                                    <v-list-tile
-                                        v-if="!isUndefined(item) && !isNull(item)"
-                                        :key="`cn03_text-${textIndex}`">
-                                        <v-list-tile-content>
-                                            <v-list-tile-title>
-                                                {{ item.name }}
-                                            </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile>
-                                    <v-divider
-                                        v-if="isShowDivider(textIndex, props.item.cn03)"
-                                        :key="`cn03_divider-${textIndex}`"
-                                    ></v-divider>
-                                </template>
-                            </v-list>
-                        </template>
-                        <template v-else>
-                            <v-layout wrap>
-                                <template v-for="(_, inputIndex) in props.item.cn03.length">
-                                    <v-flex xs10 :key="`cn03_input-${inputIndex}`">
-                                        <v-autocomplete
-                                            :ref="`cn03-${props.index}-${25}`"
-                                            :value="props.item.cn03[inputIndex]"
-                                            @change="setCellValue($event, props.index, 25, 'cn03', `td-${props.index}-${25}`, inputIndex, false)"
-                                            :items="optionalEquipmentWithHeader"
-                                            item-text="name"
-                                            clearable
-                                            label="Вибирете CN03"
-                                            single-line
-                                            return-object>
-                                        </v-autocomplete>
-                                    </v-flex>
-                                    <v-flex xs2 class="layout align-center justify-center"  :key="`cn03_delete_btn-${inputIndex}`">
-                                        <v-btn
-                                            small
-                                            icon
-                                            @click="deleteOrderNestedData($event, props.index, 'cn03', inputIndex)">
-                                            <v-icon>delete</v-icon>
-                                        </v-btn>
-                                    </v-flex>
-                                </template>
-                                <v-flex xs12>
-                                    <v-btn color="success" small @click="addNestedData($event, props.index, 'cn03')">
-                                        Добавить
-                                    </v-btn>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-btn color="info" small @click="switchCellMode(props.index, 25, false, `cn03-${props.index}-${25}`, $event, false)">
-                                        Закрыть редактирование
-                                    </v-btn>
-                                </v-flex>
-                            </v-layout>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${26}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'cn03_price', columnIndex: 26, value: false })"
-                        @click="selectCell($event, { index: props.index, column: 'cn03_price', columnIndex: 26, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03_price', columnIndex: 26, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['cn03_price'] || 0 : 0 }}$
-                    </td>
-                    <td
-                        :class="{ 'text-xs-center': !editModCells[props.index][27] }"
-                        :ref="`td-${props.index}-${27}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rs01', columnIndex: 27, value: props.item.rs01 })"
-                        :style="{ 'min-width': editModCells[props.index][27] ? '300px' : '10px' }"
-                        @click="selectCell($event, { index: props.index, column: 'rs01', columnIndex: 27, value: props.item.rs01 })"
-                        @dblclick="switchCellMode(props.index, 27, true, `rs01-${props.index}-${27}`, $event, false)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 27, true, `rs01-${props.index}-${27}`, event.srcEvent, false)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01', columnIndex: 27, value: props.item.rs01 })">
-                        <template v-if="!editModCells[props.index][27]">
-                            <v-list v-if="props.item.rs01.some(el => !isUndefined(el) && !isNull(el))">
-                                <template v-for="(item, textIndex) in props.item.rs01">
-                                    <v-list-tile
-                                        v-if="!isUndefined(item) && !isNull(item)"
-                                        :key="`rs01_text-${textIndex}`">
-                                        <v-list-tile-content>
-                                            <v-list-tile-title>
-                                                {{ item.name }}
-                                            </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile>
-                                    <v-divider
-                                        v-if="isShowDivider(textIndex, props.item.rs01)"
-                                        :key="`rs01_divider-${textIndex}`"
-                                    ></v-divider>
-                                </template>
-                            </v-list>
-                        </template>
-                        <template v-else>
-                            <v-layout wrap>
-                                <template v-for="(_, inputIndex) in props.item.rs01.length">
-                                    <v-flex xs10 :key="`rs01_input-${inputIndex}`">
-                                        <v-autocomplete
-                                            :ref="`rs01-${props.index}-${27}`"
-                                            :value="props.item.rs01[inputIndex]"
-                                            @change="setCellValue($event, props.index, 27, 'rs01', `td-${props.index}-${27}`, inputIndex, false)"
-                                            :items="identificationWithHeader"
-                                            item-text="name"
-                                            clearable
-                                            label="Вибирете RS01"
-                                            single-line
-                                            return-object>
-                                        </v-autocomplete>
-                                    </v-flex>
-                                    <v-flex xs2 class="layout align-center justify-center"  :key="`rs01_delete_btn-${inputIndex}`">
-                                        <v-btn
-                                            small
-                                            icon
-                                            @click="deleteOrderNestedData($event, props.index, 'rs01', inputIndex)">
-                                            <v-icon>delete</v-icon>
-                                        </v-btn>
-                                    </v-flex>
-                                </template>
-                                <v-flex xs12>
-                                    <v-btn color="success" small @click="addNestedData($event, props.index, 'rs01')">
-                                        Добавить
-                                    </v-btn>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-btn color="info" small @click="switchCellMode(props.index, 27, false, `rs01-${props.index}-${27}`, $event, false)">
-                                        Закрыть редактирование
-                                    </v-btn>
-                                </v-flex>
-                            </v-layout>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${28}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rs01_price', columnIndex: 28, value: false })"
-                        @click="selectCell($event, { index: props.index, column: 'rs01_price', columnIndex: 28, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01_price', columnIndex: 28, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['rs01_price'] || 0 : 0 }}$
-                    </td>
-                    <td
-                        :class="{ 'text-xs-center': !editModCells[props.index][29] }"
-                        :ref="`td-${props.index}-${29}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'additional_equipment', columnIndex: 29, value: props.item.additional_equipment })"
-                        :style="{ 'min-width': editModCells[props.index][29] ? '300px' : '10px' }"
-                        @click="selectCell($event, { index: props.index, column: 'additional_equipment', columnIndex: 29, value: props.item.additional_equipment })"
-                        @dblclick="switchCellMode(props.index, 29, true, `additional_equipment-${props.index}-${29}`, $event, false)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 29, true, `additional_equipment-${props.index}-${29}`, event.srcEvent, false)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment', columnIndex: 29, value: props.item.additional_equipment })">
-                        <template v-if="!editModCells[props.index][29]">
-                            <v-list v-if="props.item.additional_equipment.some(el => !isUndefined(el) && !isNull(el))">
-                                <template v-for="(item, textIndex) in props.item.additional_equipment">
-                                    <v-list-tile
-                                        v-if="!isUndefined(item) && !isNull(item)"
-                                        :key="`additional_equipment_text-${textIndex}`">
-                                        <v-list-tile-content>
-                                            <v-list-tile-title>
-                                                {{ item.name }}
-                                            </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile>
-                                    <v-divider
-                                        v-if="isShowDivider(textIndex, props.item.additional_equipment)"
-                                        :key="`additional_equipment_divider-${textIndex}`"
-                                    ></v-divider>
-                                </template>
-                            </v-list>
-                        </template>
-                        <template v-else>
-                            <v-layout wrap>
-                                <template v-for="(_, inputIndex) in props.item.additional_equipment.length">
-                                    <v-flex xs10 :key="`additional_equipment_input-${inputIndex}`">
-                                        <v-autocomplete
-                                            :ref="`additional_equipment-${props.index}-${29}`"
-                                            :value="props.item.additional_equipment[inputIndex]"
-                                            @change="setCellValue($event, props.index, 29, 'additional_equipment', `td-${props.index}-${29}`, inputIndex, false)"
-                                            :items="optionalEquipment"
-                                            item-text="name"
-                                            clearable
-                                            label="Вибирете доп. оборудование"
-                                            single-line
-                                            return-object>
-                                        </v-autocomplete>
-                                    </v-flex>
-                                    <v-flex xs2 class="layout align-center justify-center"  :key="`additional_equipment_delete_btn-${inputIndex}`">
-                                        <v-btn
-                                            small
-                                            icon
-                                            @click="deleteOrderNestedData($event, props.index, 'additional_equipment', inputIndex)">
-                                            <v-icon>delete</v-icon>
-                                        </v-btn>
-                                    </v-flex>
-                                </template>
-                                <v-flex xs12>
-                                    <v-btn color="success" small @click="addNestedData($event, props.index, 'additional_equipment')">
-                                        Добавить
-                                    </v-btn>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-btn color="info" small @click="switchCellMode(props.index, 29, false, `additional_equipment-${props.index}-${29}`, $event, false)">
-                                        Закрыть редактирование
-                                    </v-btn>
-                                </v-flex>
-                            </v-layout>
-                        </template>
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${30}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'additional_equipment_price', columnIndex: 30, value: false })"
-                        @click="selectCell($event, { index: props.index, column: 'additional_equipment_price', columnIndex: 30, value: false })"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment_price', columnIndex: 30, value: false })">
-                        {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['additional_equipment_price'] || 0 : 0 }}$
-                    </td>
-                    <td
-                        class="text-xs-center"
-                        :ref="`td-${props.index}-${31}`"
-                        :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'manual_installation_price', columnIndex: 31, value: props.item.manual_installation_price })"
-                        @click="selectCell($event, { index: props.index, column: 'manual_installation_price', columnIndex: 31, value: props.item.manual_installation_price })"
-                        @dblclick="switchCellMode(props.index, 31, true, `manual_installation_price-${props.index}-${31}`)"
-                        v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 31, true, `manual_installation_price-${props.index}-${31}`)"
-                        @mouseover="selectCellToCopyList($event, { index: props.index, column: 'manual_installation_price', columnIndex: 31, value: props.item.manual_installation_price })">
-                        <template v-if="!editModCells[props.index][31]">
-                            {{ pricesForEquipment.installationPrices[props.index] }}₴
-                        </template>
-                        <template v-else>
+                            <template v-if="$vuetify.breakpoint.smAndUp">
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    @click="changeScreenMode"
+                                    icon>
+                                    <v-icon v-if="isFullScreenMode">fullscreen_exit</v-icon>
+                                    <v-icon v-else>fullscreen</v-icon>
+                                </v-btn>
+                            </template>
+                        </v-layout>
+                    </v-flex>
+                </v-layout>
+            </v-card-title>
+            <v-card-text id="text-test" class="ma-0 pa-0" :class="{ 'gps-data-table-fullscrean-mode': isFullScreenMode }">
+                <v-data-table
+                    v-model="selected"
+                    item-key="id"
+                    id="gps-data-table"
+                    :style="{ maxHeight: isFullScreenMode ? '' : '1400px' }"
+                    :class="{ 'gps-data-table-no-select-text': isCornerFocused }"
+                    :headers="headers"
+                    :items="orderGPSData"
+                    disable-initial-sort
+                    select-all
+                    hide-actions>
+                    <template slot="items" slot-scope="props">
+                        <td @mousedown="hideBordersAndCorner">
+                            <v-checkbox
+                                v-model="props.selected"
+                                primary
+                                hide-details>
+                            </v-checkbox>
+                        </td>
+                        <td @mousedown="hideBordersAndCorner" class="handle">
+                            ::
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${0}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'multiplier', columnIndex: 0, value: props.item.multiplier })"
+                            @click="selectCell($event, { index: props.index, column: 'multiplier', columnIndex: 0, value: props.item.multiplier })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'multiplier', columnIndex: 0, value: props.item.multiplier })">
                             <v-text-field
-                                v-validate="'decimal:2|min_value:0'"
-                                :data-vv-name="`manual_installation_price-${props.index}`"
-                                :error="errors.has(`manual_installation_price-${props.index}`)"
-                                :ref="`manual_installation_price-${props.index}-${31}`"
-                                :value="props.item.manual_installation_price"
-                                @change="setCellValue($event, props.index, 31, 'manual_installation_price', `td-${props.index}-${31}`)"
-                                label="Цена монтажа"
+                                :ref="`multiplier-${props.index}-${0}`"
+                                mask="###"
+                                v-validate="'required|min_value:1|numeric'"
+                                :data-vv-name="`multiplier-${props.index}`"
+                                data-vv-as=" "
+                                :error-messages="errors.collect(`multiplier-${props.index}`)"
+                                :value="props.item.multiplier"
+                                @input="setCellValue($event, props.index, 0, 'multiplier', `td-${props.index}-${0}`)"
+                                label="Умножитель"
+                                required
                                 single-line
-                                clearable>
-                            </v-text-field>
-                            <v-btn color="info" small @click="switchCellMode(props.index, 31, false, `manual_installation_price-${props.index}-${31}`, $event, false)">
-                                Закрыть редактирование
+                                min="1"
+                            ></v-text-field>
+                            <v-btn
+                                class="spread-row-btn"
+                                color="info"
+                                small
+                                @click.stop="spreadRow(props.index)">
+                                Разложить
                             </v-btn>
-                        </template>
-                    </td>
-                </template>
-            </v-data-table>
-        </v-card-text>
-    </v-card>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :class="{ 'error-cell': errors.has(`transport-image-${props.index}`) }"
+                            :ref="`td-${props.index}-${1}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'image', columnIndex: 1, value: props.item.image })"
+                            @click="selectCell($event, { index: props.index, column: 'image', columnIndex: 1, value: props.item.image })"
+                            @mouseenter="selectCellToCopyList($event, { index: props.index, column: 'image', columnIndex: 1, value: props.item.image })">
+                            <img
+                                @dblclick="onPickFile(`image-${props.index}`)"
+                                v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && onPickFile(`image-${props.index}`)"
+                                :style="{cursor: 'pointer', 'margin-top': props.item.image === '' ? '6px' : false, 'max-width': props.item.image === '' ? '40%' : '100%'}"
+                                :src="props.item.image === '' ? uploadImage : props.item.image"
+                                alt="image">
+                            <input
+                                :ref="`image-${props.index}`"
+                                v-validate="'image'"
+                                data-vv-as=" "
+                                :data-vv-name="`image-${props.index}`"
+                                @change="onFilePicked($event, props.index)"
+                                style="display:none;"
+                                type="file">
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${2}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'type', columnIndex: 2, value: props.item.type })"
+                            @click="selectCell($event, { index: props.index, column: 'type', columnIndex: 2, value: props.item.type })"
+                            @dblclick="switchCellMode(props.index, 2, true, `type-${props.index}-${2}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 2, true, `type-${props.index}-${2}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'type', columnIndex: 2, value: props.item.type })">
+                            <template v-if="!editModCells[props.index][2]">
+                                {{ getTypeText(props.item.type) }}
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`type-${props.index}-${2}`"
+                                    :value="getTypeText(props.item.type)"
+                                    @change="setCellValue($event, props.index, 2, 'type', `td-${props.index}-${2}`)"
+                                    :items="transportTypesWithCache"
+                                    item-text="name"
+                                    item-value="value"
+                                    :return-object="false"
+                                    label="Вибирете тип"
+                                    single-line
+                                    clearable>
+                                    <template slot="no-data">
+                                        <v-list-tile>
+                                            <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
+                                            </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                    </template>
+                                    <template
+                                        slot="item"
+                                        slot-scope="{ index, item }">
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                {{ item.name }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                        <v-spacer></v-spacer>
+                                        <v-list-tile-action @click.stop v-if="item.isCache">
+                                            <v-btn
+                                                icon
+                                                @click.stop.prevent="$emit('delete:cache', item.id)">
+                                            <v-icon>clear</v-icon>
+                                            </v-btn>
+                                        </v-list-tile-action>
+                                    </template>
+                                </v-combobox>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 2, false, `type-${props.index}-${2}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${3}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'mark', columnIndex: 3, value: props.item.mark })"
+                            @click="selectCell($event, { index: props.index, column: 'mark', columnIndex: 3, value: props.item.mark })"
+                            @dblclick="switchCellMode(props.index, 3, true, `mark-${props.index}-${3}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 3, true, `mark-${props.index}-${3}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'mark', columnIndex: 3, value: props.item.mark })">
+                            <template v-if="!editModCells[props.index][3]">
+                                {{ props.item.mark }}
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`mark-${props.index}-${3}`"
+                                    :value="props.item.mark"
+                                    @change="setCellValue($event, props.index, 3, 'mark', `td-${props.index}-${3}`)"
+                                    :items="[...(isUndefined(transport[props.item.type]) ? Object.keys(transport).reduce((marks, type) => [...marks, ...transport[type]], []) : transport[props.item.type]), ...markCache]"
+                                    item-text="name"
+                                    item-value="name"
+                                    :return-object="false"
+                                    label="Вибирете марку"
+                                    single-line
+                                    clearable>
+                                    <template slot="no-data">
+                                        <v-list-tile>
+                                            <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
+                                            </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                    </template>
+                                    <template
+                                        slot="item"
+                                        slot-scope="{ index, item }">
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                {{ item.name }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                        <v-spacer></v-spacer>
+                                        <v-list-tile-action @click.stop v-if="item.isCache">
+                                            <v-btn
+                                                icon
+                                                @click.stop.prevent="$emit('delete:cache', item.id)">
+                                            <v-icon>clear</v-icon>
+                                            </v-btn>
+                                        </v-list-tile-action>
+                                    </template>
+                                </v-combobox>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 3, false, `mark-${props.index}-${3}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${4}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'model', columnIndex: 4, value: props.item.model })"
+                            @click="selectCell($event, { index: props.index, column: 'model', columnIndex: 4, value: props.item.model })"
+                            @dblclick="switchCellMode(props.index, 4, true, `model-${props.index}-${4}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 4, true, `model-${props.index}-${4}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'model', columnIndex: 4, value: props.item.model })">
+                            <template v-if="!editModCells[props.index][4]">
+                                {{ props.item.model }}
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`model-${props.index}-${4}`"
+                                    :value="props.item.model"
+                                    @change="setCellValue($event, props.index, 4, 'model', `td-${props.index}-${4}`)"
+                                    :items="cachedData.model"
+                                    item-text="value"
+                                    item-value="value"
+                                    :return-object="false"
+                                    label="Вибирете модель"
+                                    single-line
+                                    clearable>
+                                    <template slot="no-data">
+                                        <v-list-tile>
+                                            <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
+                                            </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                    </template>
+                                    <template
+                                        slot="item"
+                                        slot-scope="{ index, item }">
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                {{ item.value }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                        <v-spacer></v-spacer>
+                                        <v-list-tile-action @click.stop>
+                                            <v-btn
+                                                icon
+                                                @click.stop.prevent="$emit('delete:cache', item.id)">
+                                            <v-icon>clear</v-icon>
+                                            </v-btn>
+                                        </v-list-tile-action>
+                                    </template>
+                                </v-combobox>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 4, false, `model-${props.index}-${4}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${5}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'year_of_issue', columnIndex: 5, value: props.item.year_of_issue })"
+                            @click="selectCell($event, { index: props.index, column: 'year_of_issue', columnIndex: 5, value: props.item.year_of_issue })"
+                            @dblclick="switchCellMode(props.index, 5, true, `year_of_issue-${props.index}-${5}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 5, true, `year_of_issue-${props.index}-${5}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'year_of_issue', columnIndex: 5, value: props.item.year_of_issue })">
+                            <template v-if="!editModCells[props.index][5]">
+                                {{ props.item.year_of_issue }}
+                            </template>
+                            <template v-else>
+                                <v-autocomplete
+                                    :ref="`year_of_issue-${props.index}-${5}`"
+                                    :value="props.item.year_of_issue"
+                                    @change="setCellValue($event, props.index, 5, 'year_of_issue', `td-${props.index}-${5}`)"
+                                    :items="Array.apply(null, { length: (new Date()).getFullYear() - 1949 }).map((_, i) => (new Date()).getFullYear() - i)"
+                                    label="Вибирете год выпуска"
+                                    single-line
+                                    clearable>
+                                </v-autocomplete>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 5, false, `year_of_issue-${props.index}-${5}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${6}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'fuel_type', columnIndex: 6, value: props.item.fuel_type })"
+                            @click="selectCell($event, { index: props.index, column: 'fuel_type', columnIndex: 6, value: props.item.fuel_type })"
+                            @dblclick="switchCellMode(props.index, 6, true, `fuel_type-${props.index}-${6}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 6, true, `fuel_type-${props.index}-${6}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_type', columnIndex: 6, value: props.item.fuel_type })">
+                            <template v-if="!editModCells[props.index][6]">
+                                {{ props.item.fuel_type }}
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`fuel_type-${props.index}-${6}`"
+                                    :value="props.item.fuel_type"
+                                    @change="setCellValue($event, props.index, 6, 'fuel_type', `td-${props.index}-${6}`)"
+                                    :items="cachedData.fuel_type"
+                                    item-text="value"
+                                    item-value="value"
+                                    :return-object="false"
+                                    label="Вибирете Тип топлива"
+                                    single-line
+                                    clearable>
+                                    <template slot="no-data">
+                                        <v-list-tile>
+                                            <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
+                                            </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                    </template>
+                                    <template
+                                        slot="item"
+                                        slot-scope="{ index, item }">
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                {{ item.value }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                        <v-spacer></v-spacer>
+                                        <v-list-tile-action @click.stop>
+                                            <v-btn
+                                                icon
+                                                @click.stop.prevent="$emit('delete:cache', item.id)">
+                                            <v-icon>clear</v-icon>
+                                            </v-btn>
+                                        </v-list-tile-action>
+                                    </template>
+                                </v-combobox>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 6, false, `fuel_type-${props.index}-${6}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${7}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'power', columnIndex: 7, value: props.item.power })"
+                            @click="selectCell($event, { index: props.index, column: 'power', columnIndex: 7, value: props.item.power })"
+                            @dblclick="switchCellMode(props.index, 7, true, `power-${props.index}-${7}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 7, true, `power-${props.index}-${7}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'power', columnIndex: 7, value: props.item.power })">
+                            <template v-if="!editModCells[props.index][7]">
+                                {{ props.item.power }}
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`power-${props.index}-${7}`"
+                                    :value="props.item.power"
+                                    @change="setCellValue($event, props.index, 7, 'power', `td-${props.index}-${7}`)"
+                                    :items="cachedData.power"
+                                    item-text="value"
+                                    item-value="value"
+                                    :return-object="false"
+                                    label="Вибирете мощность"
+                                    single-line
+                                    clearable>
+                                    <template slot="no-data">
+                                        <v-list-tile>
+                                            <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
+                                            </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                    </template>
+                                    <template
+                                        slot="item"
+                                        slot-scope="{ index, item }">
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                {{ item.value }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                        <v-spacer></v-spacer>
+                                        <v-list-tile-action @click.stop>
+                                            <v-btn
+                                                icon
+                                                @click.stop.prevent="$emit('delete:cache', item.id)">
+                                            <v-icon>clear</v-icon>
+                                            </v-btn>
+                                        </v-list-tile-action>
+                                    </template>
+                                </v-combobox>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 7, false, `power-${props.index}-${7}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${8}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'number', columnIndex: 8, value: props.item.number })"
+                            @click="selectCell($event, { index: props.index, column: 'number', columnIndex: 8, value: props.item.number })"
+                            @dblclick="switchCellMode(props.index, 8, true, `number-${props.index}-${8}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 8, true, `number-${props.index}-${8}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'number', columnIndex: 8, value: props.item.number })">
+                            <template v-if="!editModCells[props.index][8]">
+                                {{ props.item.number }}
+                            </template>
+                            <template v-else>
+                                <v-combobox
+                                    :ref="`number-${props.index}-${8}`"
+                                    :value="props.item.number"
+                                    @change="setCellValue($event, props.index, 8, 'number', `td-${props.index}-${8}`)"
+                                    :items="cachedData.number"
+                                    item-text="value"
+                                    item-value="value"
+                                    :return-object="false"
+                                    label="Вибирете гос. номер"
+                                    single-line
+                                    clearable>
+                                    <template slot="no-data">
+                                        <v-list-tile>
+                                            <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                Нет результатов. Нажмите <kbd>enter</kbd> чтоб создать новый.
+                                            </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                    </template>
+                                    <template
+                                        slot="item"
+                                        slot-scope="{ index, item }">
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                {{ item.value }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                        <v-spacer></v-spacer>
+                                        <v-list-tile-action @click.stop>
+                                            <v-btn
+                                                icon
+                                                @click.stop.prevent="$emit('delete:cache', item.id)">
+                                            <v-icon>clear</v-icon>
+                                            </v-btn>
+                                        </v-list-tile-action>
+                                    </template>
+                                </v-combobox>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 8, false, `number-${props.index}-${8}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${9}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'gps_tracker', columnIndex: 9, value: props.item.gps_tracker })"
+                            @click="selectCell($event, { index: props.index, column: 'gps_tracker', columnIndex: 9, value: props.item.gps_tracker })"
+                            @dblclick="switchCellMode(props.index, 9, true, `gps_tracker-${props.index}-${9}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 9, true, `gps_tracker-${props.index}-${9}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker', columnIndex: 9, value: props.item.gps_tracker })">
+                            <template v-if="!editModCells[props.index][9]">
+                                {{ props.item.gps_tracker.name }}
+                            </template>
+                            <template v-else>
+                                <v-autocomplete
+                                    :ref="`gps_tracker-${props.index}-${9}`"
+                                    :value="props.item.gps_tracker"
+                                    @change="setCellValue($event, props.index, 9, 'gps_tracker', `td-${props.index}-${9}`)"
+                                    :items="gpsTrackersWithHeader"
+                                    item-text="name"
+                                    label="Вибирете GPS-трекер"
+                                    single-line
+                                    return-object
+                                    clearable>
+                                </v-autocomplete>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 9, false, `gps_tracker-${props.index}-${9}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${10}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'gps_tracker_price', columnIndex: 10, value: false })"
+                            @click="selectCell($event, { index: props.index, column: 'gps_tracker_price', columnIndex: 10, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'gps_tracker_price', columnIndex: 10, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['gps_tracker_price'] || 0 : 0 }}$
+                        </td>
+                        <td
+                            :class="{ 'text-xs-center': !editModCells[props.index][11] }"
+                            :ref="`td-${props.index}-${11}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'fuel_gauge', columnIndex: 11, value: props.item.fuel_gauge })"
+                            :style="{ 'min-width': editModCells[props.index][11] ? '300px' : '11px' }"
+                            @click="selectCell($event, { index: props.index, column: 'fuel_gauge', columnIndex: 11, value: props.item.fuel_gauge })"
+                            @dblclick="switchCellMode(props.index, 11, true, `fuel_gauge-${props.index}-${11}`, $event, false)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 11, true, `fuel_gauge-${props.index}-${11}`, event.srcEvent, false)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_gauge', columnIndex: 11, value: props.item.fuel_gauge })">
+                            <template v-if="!editModCells[props.index][11]">
+                                <v-list v-if="props.item.fuel_gauge.some(el => !isUndefined(el) && !isNull(el))">
+                                    <template v-for="(item, textIndex) in props.item.fuel_gauge">
+                                        <v-list-tile
+                                            v-if="!isUndefined(item) && !isNull(item)"
+                                            :key="`fuel_gauge_text-${textIndex}`">
+                                            <v-list-tile-content>
+                                                <v-list-tile-title>
+                                                    {{ item.name }}
+                                                </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                        <v-divider
+                                            v-if="isShowDivider(textIndex, props.item.fuel_gauge)"
+                                            :key="`fuel_gauge_divider-${textIndex}`"
+                                        ></v-divider>
+                                    </template>
+                                </v-list>
+                            </template>
+                            <template v-else>
+                                <v-layout wrap>
+                                    <template v-for="(_, inputIndex) in props.item.fuel_gauge.length">
+                                        <v-flex xs10 :key="`fuel_gauge_input-${inputIndex}`">
+                                            <v-autocomplete
+                                                :ref="`fuel_gauge-${props.index}-${11}`"
+                                                :value="props.item.fuel_gauge[inputIndex]"
+                                                @change="setCellValue($event, props.index, 11, 'fuel_gauge', `td-${props.index}-${11}`, inputIndex, false)"
+                                                :items="fuelLevelSensorsWithHeader"
+                                                item-text="name"
+                                                clearable
+                                                label="Вибирете ДУТ"
+                                                single-line
+                                                return-object>
+                                            </v-autocomplete>
+                                        </v-flex>
+                                        <v-flex xs2 class="layout align-center justify-center"  :key="`fuel_gauge_delete_btn-${inputIndex}`">
+                                            <v-btn
+                                                small
+                                                icon
+                                                @click="deleteOrderNestedData($event, props.index, 'fuel_gauge', inputIndex)">
+                                                <v-icon>delete</v-icon>
+                                            </v-btn>
+                                        </v-flex>
+                                    </template>
+                                    <v-flex xs12>
+                                        <v-btn color="success" small @click="addNestedData($event, props.index, 'fuel_gauge')">
+                                            Добавить
+                                        </v-btn>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-btn color="info" small @click="switchCellMode(props.index, 11, false, `fuel_gauge-${props.index}-${11}`, $event, false)">
+                                            Закрыть редактирование
+                                        </v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${12}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'fuel_gauge_price', columnIndex: 12, value: false })"
+                            @click="selectCell($event, { index: props.index, column: 'fuel_gauge_price', columnIndex: 12, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'fuel_gauge_price', columnIndex: 12, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['fuel_gauge_price'] || 0 : 0 }}$
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${13}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'counter', columnIndex: 13, value: props.item.counter })"
+                            @click="selectCell($event, { index: props.index, column: 'counter', columnIndex: 13, value: props.item.counter })"
+                            @dblclick="switchCellMode(props.index, 13, true, `counter-${props.index}-${13}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 13, true, `counter-${props.index}-${13}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'counter', columnIndex: 13, value: props.item.counter })">
+                            <template v-if="!editModCells[props.index][13]">
+                                {{ props.item.counter.name }}
+                            </template>
+                            <template v-else>
+                                <v-autocomplete
+                                    :ref="`counter-${props.index}-${13}`"
+                                    :value="props.item.counter"
+                                    @change="setCellValue($event, props.index, 13, 'counter', `td-${props.index}-${13}`)"
+                                    :items="fuelFlowmetersWithHeader"
+                                    item-text="name"
+                                    label="Вибирете счетчик"
+                                    single-line
+                                    return-object
+                                    clearable>
+                                </v-autocomplete>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 13, false, `counter-${props.index}-${13}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${14}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'counter_price', columnIndex: 14, value: false })"
+                            @click="selectCell($event, { index: props.index, column: 'counter_price', columnIndex: 14, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'counter_price', columnIndex: 14, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['counter_price'] || 0 : 0 }}$
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${15}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rf_id', columnIndex: 15, value: props.item.rf_id })"
+                            @click="selectCell($event, { index: props.index, column: 'rf_id', columnIndex: 15, value: props.item.rf_id })"
+                            @dblclick="switchCellMode(props.index, 15, true, `rf_id-${props.index}-${15}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 15, true, `rf_id-${props.index}-${15}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rf_id', columnIndex: 15, value: props.item.rf_id })">
+                            <template v-if="!editModCells[props.index][15]">
+                                {{ props.item.rf_id.name }}
+                            </template>
+                            <template v-else>
+                                <v-autocomplete
+                                    :ref="`rf_id-${props.index}-${15}`"
+                                    :value="props.item.rf_id"
+                                    @change="setCellValue($event, props.index, 15, 'rf_id', `td-${props.index}-${15}`)"
+                                    :items="identificationWithHeader"
+                                    item-text="name"
+                                    label="Вибирете RFID"
+                                    single-line
+                                    return-object
+                                    clearable>
+                                </v-autocomplete>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 15, false, `rf_id-${props.index}-${15}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${16}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rf_id_price', columnIndex: 16, value: false })"
+                            @click="selectCell($event, { index: props.index, column: 'rf_id_price', columnIndex: 16, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rf_id_price', columnIndex: 16, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['rf_id_price'] || 0 : 0 }}$
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${17}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 17, value: props.item.reader_of_trailed_equipment })"
+                            @click="selectCell($event, { index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 17, value: props.item.reader_of_trailed_equipment })"
+                            @dblclick="switchCellMode(props.index, 17, true, `reader_of_trailed_equipment-${props.index}-${17}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 17, true, `reader_of_trailed_equipment-${props.index}-${17}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'reader_of_trailed_equipment', columnIndex: 17, value: props.item.reader_of_trailed_equipment })">
+                            <template v-if="!editModCells[props.index][17]">
+                                {{ props.item.reader_of_trailed_equipment.name }}
+                            </template>
+                            <template v-else>
+                                <v-autocomplete
+                                    :ref="`reader_of_trailed_equipment-${props.index}-${17}`"
+                                    :value="props.item.reader_of_trailed_equipment"
+                                    @change="setCellValue($event, props.index, 17, 'reader_of_trailed_equipment', `td-${props.index}-${17}`)"
+                                    :items="identificationWithHeader"
+                                    item-text="name"
+                                    label="Вибирете считыватель прицепного оборудования"
+                                    single-line
+                                    return-object
+                                    clearable>
+                                </v-autocomplete>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 17, false, `reader_of_trailed_equipment-${props.index}-${17}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${18}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 18, value: false })"
+                            @click="selectCell($event, { index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 18, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'reader_of_trailed_equipment_price', columnIndex: 18, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['reader_of_trailed_equipment_price'] || 0 : 0 }}$
+                        </td>
+                        <!-- <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${17}`"
+                            @click="selectCell($event, { index: props.index, column: 'connect_module', columnIndex: 17, value: props.item.connect_module })"
+                            @dblclick="switchCellMode(props.index, 17, true, `connect_module-${props.index}-${17}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'connect_module', columnIndex: 17, value: props.item.connect_module })">
+                            <template v-if="!editModCells[props.index][17]">
+                                {{ props.item.connect_module.name }}
+                            </template>
+                            <template v-else>
+                                <v-autocomplete
+                                    :ref="`connect_module-${props.index}-${17}`"
+                                    :value="props.item.connect_module"
+                                    @change="setCellValue($event, props.index, 17, 'connect_module', `td-${props.index}-${17}`)"
+                                    :items="allEquipment"
+                                    item-text="name"
+                                    hide-selected
+                                    label="Вибирете модуль конект"
+                                    single-line
+                                    return-object>
+                                </v-autocomplete>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${18}`"
+                            @click="selectCell($event, { index: props.index, column: 'connect_module_price', columnIndex: 18, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'connect_module_price', columnIndex: 18, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['connect_module_price'] || 0 : 0 }}$
+                        </td> -->
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${19}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })"
+                            @click="selectCell($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })"
+                            @dblclick="switchCellMode(props.index, 19, true, `can_reader-${props.index}-${19}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 19, true, `can_reader-${props.index}-${19}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader', columnIndex: 19, value: props.item.can_reader })">
+                            <template v-if="!editModCells[props.index][19]">
+                                {{ props.item.can_reader.name }}
+                            </template>
+                            <template v-else>
+                                <v-autocomplete
+                                    :ref="`can_reader-${props.index}-${19}`"
+                                    :value="props.item.can_reader"
+                                    @change="setCellValue($event, props.index, 19, 'can_reader', `td-${props.index}-${19}`)"
+                                    :items="optionalEquipment"
+                                    item-text="name"
+                                    label="Вибирете CAN"
+                                    single-line
+                                    return-object
+                                    clearable>
+                                </v-autocomplete>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 19, false, `can_reader-${props.index}-${19}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${20}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })"
+                            @click="selectCell($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'can_reader_price', columnIndex: 20, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['can_reader_price'] || 0 : 0 }}$
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${21}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_small', columnIndex: 21, value: props.item.deaerator_small })"
+                            @click="selectCell($event, { index: props.index, column: 'deaerator_small', columnIndex: 21, value: props.item.deaerator_small })"
+                            @dblclick="switchCellMode(props.index, 21, true, `deaerator_small-${props.index}-${21}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 21, true, `deaerator_small-${props.index}-${21}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_small', columnIndex: 21, value: props.item.deaerator_small })">
+                            <template v-if="!editModCells[props.index][21]">
+                                {{ props.item.deaerator_small.name }}
+                            </template>
+                            <template v-else>
+                                <v-autocomplete
+                                    :ref="`deaerator_small-${props.index}-${21}`"
+                                    :value="props.item.deaerator_small"
+                                    @change="setCellValue($event, props.index, 21, 'deaerator_small', `td-${props.index}-${21}`)"
+                                    :items="fuelFlowmetersWithHeader"
+                                    item-text="name"
+                                    label="Вибирете деаэратор"
+                                    single-line
+                                    return-object
+                                    clearable>
+                                </v-autocomplete>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 21, false, `deaerator_small-${props.index}-${21}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${22}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_small_price', columnIndex: 22, value: false })"
+                            @click="selectCell($event, { index: props.index, column: 'deaerator_small_price', columnIndex: 22, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_small_price', columnIndex: 22, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['deaerator_small_price'] || 0 : 0 }}$
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${23}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_large', columnIndex: 23, value: props.item.deaerator_large })"
+                            @click="selectCell($event, { index: props.index, column: 'deaerator_large', columnIndex: 23, value: props.item.deaerator_large })"
+                            @dblclick="switchCellMode(props.index, 23, true, `deaerator_large-${props.index}-${23}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 23, true, `deaerator_large-${props.index}-${23}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_large', columnIndex: 23, value: props.item.deaerator_large })">
+                            <template v-if="!editModCells[props.index][23]">
+                                {{ props.item.deaerator_large.name }}
+                            </template>
+                            <template v-else>
+                                <v-autocomplete
+                                    :ref="`deaerator_large-${props.index}-${23}`"
+                                    :value="props.item.deaerator_large"
+                                    @change="setCellValue($event, props.index, 23, 'deaerator_large', `td-${props.index}-${23}`)"
+                                    :items="fuelFlowmetersWithHeader"
+                                    item-text="name"
+                                    label="Вибирете деаэратор"
+                                    single-line
+                                    return-object
+                                    clearable>
+                                </v-autocomplete>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 23, false, `deaerator_large-${props.index}-${23}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${24}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'deaerator_large_price', columnIndex: 24, value: false })"
+                            @click="selectCell($event, { index: props.index, column: 'deaerator_large_price', columnIndex: 24, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'deaerator_large_price', columnIndex: 24, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['deaerator_large_price'] || 0 : 0 }}$
+                        </td>
+                        <td
+                            :class="{ 'text-xs-center': !editModCells[props.index][25] }"
+                            :ref="`td-${props.index}-${25}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'cn03', columnIndex: 25, value: props.item.cn03 })"
+                            :style="{ 'min-width': editModCells[props.index][25] ? '300px' : '10px' }"
+                            @click="selectCell($event, { index: props.index, column: 'cn03', columnIndex: 25, value: props.item.cn03 })"
+                            @dblclick="switchCellMode(props.index, 25, true, `cn03-${props.index}-${25}`, $event, false)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 25, true, `cn03-${props.index}-${25}`, event.srcEvent, false)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03', columnIndex: 25, value: props.item.cn03 })">
+                            <template v-if="!editModCells[props.index][25]">
+                                <v-list v-if="props.item.cn03.some(el => !isUndefined(el) && !isNull(el))">
+                                    <template v-for="(item, textIndex) in props.item.cn03">
+                                        <v-list-tile
+                                            v-if="!isUndefined(item) && !isNull(item)"
+                                            :key="`cn03_text-${textIndex}`">
+                                            <v-list-tile-content>
+                                                <v-list-tile-title>
+                                                    {{ item.name }}
+                                                </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                        <v-divider
+                                            v-if="isShowDivider(textIndex, props.item.cn03)"
+                                            :key="`cn03_divider-${textIndex}`"
+                                        ></v-divider>
+                                    </template>
+                                </v-list>
+                            </template>
+                            <template v-else>
+                                <v-layout wrap>
+                                    <template v-for="(_, inputIndex) in props.item.cn03.length">
+                                        <v-flex xs10 :key="`cn03_input-${inputIndex}`">
+                                            <v-autocomplete
+                                                :ref="`cn03-${props.index}-${25}`"
+                                                :value="props.item.cn03[inputIndex]"
+                                                @change="setCellValue($event, props.index, 25, 'cn03', `td-${props.index}-${25}`, inputIndex, false)"
+                                                :items="optionalEquipmentWithHeader"
+                                                item-text="name"
+                                                clearable
+                                                label="Вибирете CN03"
+                                                single-line
+                                                return-object>
+                                            </v-autocomplete>
+                                        </v-flex>
+                                        <v-flex xs2 class="layout align-center justify-center"  :key="`cn03_delete_btn-${inputIndex}`">
+                                            <v-btn
+                                                small
+                                                icon
+                                                @click="deleteOrderNestedData($event, props.index, 'cn03', inputIndex)">
+                                                <v-icon>delete</v-icon>
+                                            </v-btn>
+                                        </v-flex>
+                                    </template>
+                                    <v-flex xs12>
+                                        <v-btn color="success" small @click="addNestedData($event, props.index, 'cn03')">
+                                            Добавить
+                                        </v-btn>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-btn color="info" small @click="switchCellMode(props.index, 25, false, `cn03-${props.index}-${25}`, $event, false)">
+                                            Закрыть редактирование
+                                        </v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${26}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'cn03_price', columnIndex: 26, value: false })"
+                            @click="selectCell($event, { index: props.index, column: 'cn03_price', columnIndex: 26, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'cn03_price', columnIndex: 26, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['cn03_price'] || 0 : 0 }}$
+                        </td>
+                        <td
+                            :class="{ 'text-xs-center': !editModCells[props.index][27] }"
+                            :ref="`td-${props.index}-${27}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rs01', columnIndex: 27, value: props.item.rs01 })"
+                            :style="{ 'min-width': editModCells[props.index][27] ? '300px' : '10px' }"
+                            @click="selectCell($event, { index: props.index, column: 'rs01', columnIndex: 27, value: props.item.rs01 })"
+                            @dblclick="switchCellMode(props.index, 27, true, `rs01-${props.index}-${27}`, $event, false)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 27, true, `rs01-${props.index}-${27}`, event.srcEvent, false)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01', columnIndex: 27, value: props.item.rs01 })">
+                            <template v-if="!editModCells[props.index][27]">
+                                <v-list v-if="props.item.rs01.some(el => !isUndefined(el) && !isNull(el))">
+                                    <template v-for="(item, textIndex) in props.item.rs01">
+                                        <v-list-tile
+                                            v-if="!isUndefined(item) && !isNull(item)"
+                                            :key="`rs01_text-${textIndex}`">
+                                            <v-list-tile-content>
+                                                <v-list-tile-title>
+                                                    {{ item.name }}
+                                                </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                        <v-divider
+                                            v-if="isShowDivider(textIndex, props.item.rs01)"
+                                            :key="`rs01_divider-${textIndex}`"
+                                        ></v-divider>
+                                    </template>
+                                </v-list>
+                            </template>
+                            <template v-else>
+                                <v-layout wrap>
+                                    <template v-for="(_, inputIndex) in props.item.rs01.length">
+                                        <v-flex xs10 :key="`rs01_input-${inputIndex}`">
+                                            <v-autocomplete
+                                                :ref="`rs01-${props.index}-${27}`"
+                                                :value="props.item.rs01[inputIndex]"
+                                                @change="setCellValue($event, props.index, 27, 'rs01', `td-${props.index}-${27}`, inputIndex, false)"
+                                                :items="identificationWithHeader"
+                                                item-text="name"
+                                                clearable
+                                                label="Вибирете RS01"
+                                                single-line
+                                                return-object>
+                                            </v-autocomplete>
+                                        </v-flex>
+                                        <v-flex xs2 class="layout align-center justify-center"  :key="`rs01_delete_btn-${inputIndex}`">
+                                            <v-btn
+                                                small
+                                                icon
+                                                @click="deleteOrderNestedData($event, props.index, 'rs01', inputIndex)">
+                                                <v-icon>delete</v-icon>
+                                            </v-btn>
+                                        </v-flex>
+                                    </template>
+                                    <v-flex xs12>
+                                        <v-btn color="success" small @click="addNestedData($event, props.index, 'rs01')">
+                                            Добавить
+                                        </v-btn>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-btn color="info" small @click="switchCellMode(props.index, 27, false, `rs01-${props.index}-${27}`, $event, false)">
+                                            Закрыть редактирование
+                                        </v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${28}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'rs01_price', columnIndex: 28, value: false })"
+                            @click="selectCell($event, { index: props.index, column: 'rs01_price', columnIndex: 28, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'rs01_price', columnIndex: 28, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['rs01_price'] || 0 : 0 }}$
+                        </td>
+                        <td
+                            :class="{ 'text-xs-center': !editModCells[props.index][29] }"
+                            :ref="`td-${props.index}-${29}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'additional_equipment', columnIndex: 29, value: props.item.additional_equipment })"
+                            :style="{ 'min-width': editModCells[props.index][29] ? '300px' : '10px' }"
+                            @click="selectCell($event, { index: props.index, column: 'additional_equipment', columnIndex: 29, value: props.item.additional_equipment })"
+                            @dblclick="switchCellMode(props.index, 29, true, `additional_equipment-${props.index}-${29}`, $event, false)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 29, true, `additional_equipment-${props.index}-${29}`, event.srcEvent, false)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment', columnIndex: 29, value: props.item.additional_equipment })">
+                            <template v-if="!editModCells[props.index][29]">
+                                <v-list v-if="props.item.additional_equipment.some(el => !isUndefined(el) && !isNull(el))">
+                                    <template v-for="(item, textIndex) in props.item.additional_equipment">
+                                        <v-list-tile
+                                            v-if="!isUndefined(item) && !isNull(item)"
+                                            :key="`additional_equipment_text-${textIndex}`">
+                                            <v-list-tile-content>
+                                                <v-list-tile-title>
+                                                    {{ item.name }}
+                                                </v-list-tile-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                        <v-divider
+                                            v-if="isShowDivider(textIndex, props.item.additional_equipment)"
+                                            :key="`additional_equipment_divider-${textIndex}`"
+                                        ></v-divider>
+                                    </template>
+                                </v-list>
+                            </template>
+                            <template v-else>
+                                <v-layout wrap>
+                                    <template v-for="(_, inputIndex) in props.item.additional_equipment.length">
+                                        <v-flex xs10 :key="`additional_equipment_input-${inputIndex}`">
+                                            <v-autocomplete
+                                                :ref="`additional_equipment-${props.index}-${29}`"
+                                                :value="props.item.additional_equipment[inputIndex]"
+                                                @change="setCellValue($event, props.index, 29, 'additional_equipment', `td-${props.index}-${29}`, inputIndex, false)"
+                                                :items="optionalEquipment"
+                                                item-text="name"
+                                                clearable
+                                                label="Вибирете доп. оборудование"
+                                                single-line
+                                                return-object>
+                                            </v-autocomplete>
+                                        </v-flex>
+                                        <v-flex xs2 class="layout align-center justify-center"  :key="`additional_equipment_delete_btn-${inputIndex}`">
+                                            <v-btn
+                                                small
+                                                icon
+                                                @click="deleteOrderNestedData($event, props.index, 'additional_equipment', inputIndex)">
+                                                <v-icon>delete</v-icon>
+                                            </v-btn>
+                                        </v-flex>
+                                    </template>
+                                    <v-flex xs12>
+                                        <v-btn color="success" small @click="addNestedData($event, props.index, 'additional_equipment')">
+                                            Добавить
+                                        </v-btn>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-btn color="info" small @click="switchCellMode(props.index, 29, false, `additional_equipment-${props.index}-${29}`, $event, false)">
+                                            Закрыть редактирование
+                                        </v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            </template>
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${30}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'additional_equipment_price', columnIndex: 30, value: false })"
+                            @click="selectCell($event, { index: props.index, column: 'additional_equipment_price', columnIndex: 30, value: false })"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'additional_equipment_price', columnIndex: 30, value: false })">
+                            {{ pricesForEquipment.equipmentPrices[props.index] ? pricesForEquipment.equipmentPrices[props.index]['additional_equipment_price'] || 0 : 0 }}$
+                        </td>
+                        <td
+                            class="text-xs-center"
+                            :ref="`td-${props.index}-${31}`"
+                            :data-formobile="isMobileDevice && JSON.stringify({ index: props.index, column: 'manual_installation_price', columnIndex: 31, value: props.item.manual_installation_price })"
+                            @click="selectCell($event, { index: props.index, column: 'manual_installation_price', columnIndex: 31, value: props.item.manual_installation_price })"
+                            @dblclick="switchCellMode(props.index, 31, true, `manual_installation_price-${props.index}-${31}`)"
+                            v-hammer:tap="event => isMobileDevice && event.tapCount == 2 && switchCellMode(props.index, 31, true, `manual_installation_price-${props.index}-${31}`)"
+                            @mouseover="selectCellToCopyList($event, { index: props.index, column: 'manual_installation_price', columnIndex: 31, value: props.item.manual_installation_price })">
+                            <template v-if="!editModCells[props.index][31]">
+                                {{ pricesForEquipment.installationPrices[props.index] }}₴
+                            </template>
+                            <template v-else>
+                                <v-text-field
+                                    v-validate="'decimal:2|min_value:0'"
+                                    :data-vv-name="`manual_installation_price-${props.index}`"
+                                    :error="errors.has(`manual_installation_price-${props.index}`)"
+                                    :ref="`manual_installation_price-${props.index}-${31}`"
+                                    :value="props.item.manual_installation_price"
+                                    @change="setCellValue($event, props.index, 31, 'manual_installation_price', `td-${props.index}-${31}`)"
+                                    label="Цена монтажа"
+                                    single-line
+                                    clearable>
+                                </v-text-field>
+                                <v-btn color="info" small @click="switchCellMode(props.index, 31, false, `manual_installation_price-${props.index}-${31}`, $event, false)">
+                                    Закрыть редактирование
+                                </v-btn>
+                            </template>
+                        </td>
+                    </template>
+                </v-data-table>
+            </v-card-text>
+        </v-card>
+    </v-container>
 </template>
 
 <script>
@@ -1182,6 +1205,7 @@ export default {
     data() {
         return {
             count: 1,
+            isFullScreenMode: false,
             excelLoading: false,
             tableBody: null,
             bordersWrapper: null,
@@ -1399,6 +1423,25 @@ export default {
         }
     },
     methods: {
+        changeScreenMode() {
+            this.isFullScreenMode = !this.isFullScreenMode;
+            if (this.isFullScreenMode) {
+                document.body.classList.add('body-noscroll');
+                const under = document.createElement('div');
+                under.id = 'under-fullscreen-mode';
+                document.body.appendChild(under);
+            } else {
+                document.body.classList.remove('body-noscroll');
+                const under = document.getElementById('under-fullscreen-mode');
+                under.remove();
+                this.$nextTick(() => {
+                    this.$vuetify.goTo('#gps-data-table', {
+                        offset: -200,
+                        duration: 0
+                    });
+                });
+            }
+        },
         getTypeText(type) {
             if (this.isNull(type) || this.isUndefined(type) || type === '') return '';
             const transport = this.transportTypesWithCache.find(t => t.value === type);
@@ -1999,6 +2042,7 @@ export default {
         }
     },
     mounted() {
+        const table = document.querySelector('#gps-data-table table');
         const tableBody = document.querySelector('#gps-data-table .v-datatable tbody');
         this.tableBody = tableBody;
         tableBody.classList.add('gps-data-tbody');
@@ -2022,28 +2066,72 @@ export default {
 </script>
 
 <style>
+    .under-fullscreen-mode {
+        position: fixed;
+        display: block;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        background-color: transparent !important;
+        z-index: 4;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        width: 100vw;
+        height: 100vh;
+    }
+    .over-fullscreen-mode {
+        position: relative;
+        display: block;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+        background-color: transparent !important;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 100vh;
+    }
+    .gps-data-table-fullscrean-mode {
+        /* max-height: 85%; */
+        height: 100vh;
+        /* overflow-y: scroll; */
+    }
+    .gps-data-table-fullscrean-mode table {
+        background-color: transparent !important;
+        height: 100vh;
+        /* height: 100vh; */
+    }
+    /* .gps-data-table-fullscrean-mode table tr:hover {
+        background-color: transparent !important;
+    } */
     .gps-data-table-no-select-text table {
         user-select: none;
     }
     #gps-data-table {
-        max-height: 1400px;
         overflow-y: scroll;
     }
     #gps-data-table .v-table__overflow {
         position: relative;
     }
     #gps-data-table table {
-        border-collapse: separate;
+        /* border-collapse: separate; */
         border-spacing: 0;
         margin: 0;
         margin-bottom: 10px;
         border-width: 0;
-        width: 0;
+        width: 100%;
         outline-width: 0;
         cursor: default;
         max-width: none;
         max-height: none;
     }
+    /* #gps-data-table table thead {
+        position: fixed;
+        top: 0px;
+        display:none;
+        background-color:white;
+    } */
     #gps-data-table table tr:first-child td {
         border-top: 1px solid rgba(202, 202, 202, 0.5);
     }

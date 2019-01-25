@@ -50,6 +50,27 @@ export default {
 
 
 <style>
+    .body-noscroll {
+        position: fixed;
+        z-index: -10;
+        max-height: 100%;
+        overflow: hidden;
+    }
+
+    #under-fullscreen-mode {
+        position: fixed;
+        display: block;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        background-color: #FFF;
+        z-index: 3;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        width: 100vw;
+        height: 100vh;
+    }
 
     .bg-primary {
         width: 100%;
