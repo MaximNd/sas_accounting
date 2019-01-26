@@ -1,6 +1,6 @@
 <template>
     <v-container fluid class="pa-0" :class="{ 'under-fullscreen-mode': isFullScreenMode }">
-        <v-card ref="gps-data-container" class="elevation-0" :class="{ 'over-fullscreen-mode': isFullScreenMode }">
+        <v-card v-scroll="onScroll" ref="gps-data-over" class="elevation-0 gps-data-over-card" :class="{ 'over-fullscreen-mode': isFullScreenMode }">
             <v-card-title>
                 <v-layout wrap  :column="$vuetify.breakpoint.xsOnly">
                     <v-flex v-if="$vuetify.breakpoint.xsOnly" xs12>
@@ -64,7 +64,7 @@
                     v-model="selected"
                     item-key="id"
                     id="gps-data-table"
-                    :style="{ maxHeight: isFullScreenMode ? '' : '1400px' }"
+                    :style="{ maxHeight: isFullScreenMode ? '' : '1400px', 'overflow-y': isFullScreenMode ? '' : 'scroll' }"
                     :class="{ 'gps-data-table-no-select-text': isCornerFocused }"
                     :headers="headers"
                     :items="orderGPSData"
@@ -1207,6 +1207,14 @@ export default {
             count: 1,
             isFullScreenMode: false,
             excelLoading: false,
+            gpsDataTable: null,
+            tableOverflow: null,
+            tableHead: null,
+            fixedTableHeader: {
+                el: null,
+                menuItems: [],
+                styles: { left: '0px', top: '0px', width: '0px', height: '0px' }
+            },
             tableBody: null,
             bordersWrapper: null,
             bordersSelectData: {
@@ -1352,6 +1360,9 @@ export default {
         };
     },
     computed: {
+        fixedHeaderOffset() {
+            return this.isMobileDevice ? 48 : 64;
+        },
         transportTypesWithCache() {
             let cachedTypes = [];
             if (this.cachedData.type) {
@@ -1423,6 +1434,47 @@ export default {
         }
     },
     methods: {
+        onScroll() {
+            const tableHeadData = this.tableHead.getBoundingClientRect();
+            const tableHeadOffsetTop = tableHeadData.top;
+            if (this.isFullScreenMode) {
+                if (tableHeadOffsetTop <= 0) {
+                    this.fixedTableHeader.el.classList.add('fixed-gps-data-table-header-visible');
+                    this.fixedTableHeader.styles.top = `${(tableHeadData.top * -1)}px`;
+                    this.normalizeFixedHeader();
+                } else {
+                    this.fixedTableHeader.el.classList.remove('fixed-gps-data-table-header-visible');
+                }
+            } else {
+                const gpsDataTableHeight = this.gpsDataTable.getBoundingClientRect().height;
+                if ((tableHeadOffsetTop + this.gpsDataTable.scrollTop <= this.fixedHeaderOffset
+                    && -tableHeadOffsetTop <= gpsDataTableHeight + this.gpsDataTable.scrollTop)) {
+                    this.fixedTableHeader.el.classList.add('fixed-gps-data-table-header-visible');
+                    this.fixedTableHeader.styles.top = `${(tableHeadData.top * -1) + this.fixedHeaderOffset}px`;
+                    this.normalizeFixedHeader();
+                } else if (this.gpsDataTable.scrollTop > 0) {
+                    this.fixedTableHeader.styles.top = `${this.gpsDataTable.scrollTop}px`;
+                    this.normalizeFixedHeader();
+                } else if (this.gpsDataTable.scrollTop <= 0) {
+                    this.fixedTableHeader.el.classList.remove('fixed-gps-data-table-header-visible');
+                }
+            }
+        },
+        onInnerScroll() {
+            const tableHeadData = this.tableHead.getBoundingClientRect();
+            const tableHeadOffsetTop = tableHeadData.top;
+            if (!this.isFullScreenMode && this.gpsDataTable.scrollTop > 0) {
+                this.fixedTableHeader.el.classList.add('fixed-gps-data-table-header-visible');
+                if (tableHeadOffsetTop + this.gpsDataTable.scrollTop <= this.fixedHeaderOffset) {
+                    this.fixedTableHeader.styles.top = `${(tableHeadData.top * -1) + this.fixedHeaderOffset}px`;
+                } else {
+                    this.fixedTableHeader.styles.top = `${this.gpsDataTable.scrollTop}px`;
+                }
+                this.normalizeFixedHeader();
+            } else if (this.gpsDataTable.scrollTop <= 0 && tableHeadOffsetTop + this.gpsDataTable.scrollTop > this.fixedHeaderOffset) {
+                this.fixedTableHeader.el.classList.remove('fixed-gps-data-table-header-visible');
+            }
+        },
         changeScreenMode() {
             this.isFullScreenMode = !this.isFullScreenMode;
             if (this.isFullScreenMode) {
@@ -1604,6 +1656,19 @@ export default {
         normalizeStylesSelectBordersAndCorner() {
             this.setStyles(this.bordersSelectData.borders.el, this.bordersSelectData.borders.styles);
             this.setStyles(this.bordersSelectData.corner.el, this.bordersSelectData.corner.styles);
+        },
+        normalizeFixedHeader() {
+            const tableHeadData = this.tableHead.getBoundingClientRect();
+            const tableHeadMenuItems = this.tableHead.childNodes[0].childNodes;
+            this.fixedTableHeader.menuItems.forEach((menuItem, i) => {
+                const menuItemData = tableHeadMenuItems[i].getBoundingClientRect();
+                menuItem.styles.width = `${menuItemData.width}px`;
+                menuItem.styles.height = `${menuItemData.height}px`;
+                this.setStyles(menuItem.el, menuItem.styles);
+            });
+            this.fixedTableHeader.styles.width = `${tableHeadData.width}px`;
+            this.fixedTableHeader.styles.height = `${tableHeadData.height}px`;
+            this.setStyles(this.fixedTableHeader.el, this.fixedTableHeader.styles);
         },
         positionBorders(anchor) {
             const anchorCoords = this.getCoords(anchor);
@@ -1793,6 +1858,9 @@ export default {
             } else if (!autofocus && event) {
                 this.clickOnTD(this.findTDEl(event));
             }
+            this.$nextTick(() => {
+                this.normalizeFixedHeader();
+            });
         },
         checkImageReplacement(row, columnName, data, td) {
             if (columnName === 'type') {
@@ -2042,10 +2110,16 @@ export default {
         }
     },
     mounted() {
+        const gpsDataTable = document.getElementById('gps-data-table');
+        this.gpsDataTable = gpsDataTable;
         const table = document.querySelector('#gps-data-table table');
         const tableBody = document.querySelector('#gps-data-table .v-datatable tbody');
-        this.tableBody = tableBody;
+        const tableHead = document.querySelector('#gps-data-table .v-datatable thead');
+
         tableBody.classList.add('gps-data-tbody');
+        this.tableBody = tableBody;
+        this.tableHead = tableHead;
+
         const _self = this;
 
         Sortable.create(tableBody, {
@@ -2056,16 +2130,126 @@ export default {
             }
         });
         const tableOverflow = document.querySelector('#gps-data-table .v-table__overflow');
-
+        this.tableOverflow = tableOverflow;
         const bordersWrapper = document.createElement('div');
         this.setStyles(bordersWrapper, { position: 'absolute', top: 0, left: 0 });
         this.bordersWrapper = bordersWrapper;
         tableOverflow.appendChild(bordersWrapper);
+
+        // FIXED HEADER INITIALIZATION
+        const tableHeaderWrapper = document.createElement('div');
+        this.setStyles(tableHeaderWrapper, { position: 'absolute', top: 0, left: 0 });
+
+        const tableHeader = document.createElement('div');
+        this.fixedTableHeader.el = tableHeader;
+
+        const firstHeaderMenuItem = document.createElement('div');
+        firstHeaderMenuItem.classList.add('fixed-gps-data-table-header-menu-item');
+
+        const vInput = document.createElement('div');
+        const vInputClasses = ['v-input', 'v-input--selection-controls', 'v-input--checkbox', 'v-input--hide-details', 'theme--light'];
+        vInputClasses.forEach(vInputClass => vInput.classList.add(vInputClass));
+        this.setStyles(vInput, { 'margin-top': '0px', 'padding-top': '7px' })
+
+        const vInputControl = document.createElement('div');
+        vInputControl.classList.add('v-input__control');
+        this.setStyles(vInputControl, { top: '10px' })
+
+        const vInputSlot = document.createElement('div');
+        vInputSlot.classList.add('v-input__slot');
+
+        const vInputSelectionControls = document.createElement('div');
+        vInputSelectionControls.classList.add('v-input--selection-controls__input');
+
+        const input = document.createElement('input');
+        input.setAttribute('aria-checked', false);
+        input.setAttribute('role', 'checkbox');
+        input.setAttribute('type', 'checkbox');
+
+        const vInputRipple = document.createElement('div');
+        vInputRipple.classList.add('v-input--selection-controls__ripple');
+
+        const iElement = document.createElement('i');
+        const iElementClasses = ['v-icon', 'material-icons', 'theme--light'];
+        iElementClasses.forEach(iElementClass => iElement.classList.add(iElementClass));
+        iElement.setAttribute('aria-hidden', true);
+        iElement.textContent = 'check_box_outline_blank';
+
+        vInputSelectionControls.appendChild(input);
+        vInputSelectionControls.appendChild(vInputRipple);
+        vInputSelectionControls.appendChild(iElement);
+
+        vInputSlot.appendChild(vInputSelectionControls);
+
+        vInputControl.appendChild(vInputSlot);
+
+        vInput.appendChild(vInputControl);
+
+        firstHeaderMenuItem.appendChild(vInput);
+
+        const selectAllCheckbox = document.querySelector('#gps-data-table table thead tr th div.v-input input');
+        firstHeaderMenuItem.addEventListener('click', () => {
+            selectAllCheckbox.click();
+            vInput.classList.toggle('v-input--is-label-active');
+            vInput.classList.toggle('v-input--is-dirty');
+            input.setAttribute('aria-checked', !input.getAttribute('aria-checked'))
+            input.value = !input.value;
+            input.checked = !input.checked;
+            iElement.textContent = iElement.textContent === 'check_box' ? 'check_box_outline_blank' : 'check_box';
+        });
+
+        this.fixedTableHeader.menuItems.push({
+            el: firstHeaderMenuItem,
+            styles: { width: '0px', height: '0px' }
+        });
+
+        const tableHeaderMenuItems = this.headers.map(({ text }) => {
+            const headerMenuItem = document.createElement('div');
+            headerMenuItem.classList.add('fixed-gps-data-table-header-menu-item');
+            headerMenuItem.textContent = text;
+            this.fixedTableHeader.menuItems.push({
+                el: headerMenuItem,
+                styles: { width: '0px', height: '0px' }
+            });
+            return headerMenuItem;
+        });
+        tableHeader.classList.add('fixed-gps-data-table-header');
+
+        tableHeader.appendChild(firstHeaderMenuItem);
+        tableHeaderMenuItems.forEach(menuItem => {
+            tableHeader.appendChild(menuItem);
+        });
+        tableHeaderWrapper.appendChild(tableHeader);
+        tableOverflow.appendChild(tableHeaderWrapper);
+
+        this.$refs['gps-data-over'].$el.addEventListener('scroll', this.onScroll, false);
+        this.gpsDataTable.addEventListener('scroll', this.onInnerScroll, false);
+        this.normalizeFixedHeader();
     }
 };
 </script>
 
 <style>
+    .fixed-gps-data-table-header {
+        position: absolute;
+        display: none;
+        border-bottom: 2px solid #c5c5c5;
+    }
+    .fixed-gps-data-table-header-visible {
+        display: block;
+    }
+    .fixed-gps-data-table-header-menu-item {
+        display: inline-block;
+        padding: 0 24px;
+        background-color: #fff;
+        color: rgba(0,0,0,.54);
+        font-size: 12px;
+        font-weight: 500;
+        transition: .3s cubic-bezier(.25,.8,.5,1);
+        user-select: none;
+        white-space: nowrap;
+        line-height: 4.6;
+    }
     .under-fullscreen-mode {
         position: fixed;
         display: block;
@@ -2093,29 +2277,19 @@ export default {
         height: 100vh;
     }
     .gps-data-table-fullscrean-mode {
-        /* max-height: 85%; */
         height: 100vh;
-        /* overflow-y: scroll; */
     }
     .gps-data-table-fullscrean-mode table {
         background-color: transparent !important;
         height: 100vh;
-        /* height: 100vh; */
     }
-    /* .gps-data-table-fullscrean-mode table tr:hover {
-        background-color: transparent !important;
-    } */
     .gps-data-table-no-select-text table {
         user-select: none;
-    }
-    #gps-data-table {
-        overflow-y: scroll;
     }
     #gps-data-table .v-table__overflow {
         position: relative;
     }
     #gps-data-table table {
-        /* border-collapse: separate; */
         border-spacing: 0;
         margin: 0;
         margin-bottom: 10px;
@@ -2126,12 +2300,6 @@ export default {
         max-width: none;
         max-height: none;
     }
-    /* #gps-data-table table thead {
-        position: fixed;
-        top: 0px;
-        display:none;
-        background-color:white;
-    } */
     #gps-data-table table tr:first-child td {
         border-top: 1px solid rgba(202, 202, 202, 0.5);
     }
@@ -2183,3 +2351,4 @@ export default {
         cursor: move;
     }
 </style>
+
